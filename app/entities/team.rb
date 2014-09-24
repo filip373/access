@@ -1,2 +1,2 @@
-class Team < Struct.new(:name, :members)
+class Team < Struct.new(:name, :members, :repos)
 end
