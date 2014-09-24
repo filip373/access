@@ -146,5 +146,6 @@ DEPENDENCIES
   konf
   omniauth
   omniauth-github
+  pry
   pry-rails
   rails

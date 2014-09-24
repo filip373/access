@@ -15,3 +15,7 @@ gem 'konf'
 gem 'hipchat'
 gem 'git'
 gem 'pry-rails'
+
+group :development do
+  gem 'pry'
+end
