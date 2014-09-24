@@ -5,7 +5,7 @@ class GhApi < Struct.new(:token, :company_name)
   end
 
   def create_team(team_name)
-    client.organizations.teams.create(company_name, { name: team_name })
+    client.organizations.teams.create(company_name, { name: team_name, permission: 'push' })
   end
 
   def sync_members(team, members_names)
