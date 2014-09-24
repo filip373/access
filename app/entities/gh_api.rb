@@ -5,7 +5,7 @@ class GhApi < Struct.new(:token, :company_name)
   end
 
   def create_team(team_name)
-    client.organizations.teams.create(company_name, {name: team_name})
+    client.organizations.teams.create(company_name, { name: team_name })
   end
 
   def sync_members(team, members_names)
@@ -14,17 +14,32 @@ class GhApi < Struct.new(:token, :company_name)
     add_members = members_names - current_members
     remove_members = current_members - members_names
 
-    add_members.each{|m|  client.orgs.teams.add_member(team.id, m) }
-    remove_members.each{|m| client.orgs.teams.remove_member(team.id, m)  }
+    add_members.each { |m|  client.orgs.teams.add_member(team.id, m) }
+    remove_members.each { |m| client.orgs.teams.remove_member(team.id, m) }
+  end
+
+  def sync_repos(team, repos_names)
+    current_repos = list_team_repos(team['id'])
+    
+    add_repos = repos_names - current_repos
+    remove_repos = current_repos - repos_names
+
+    add_repos.each { |r|  client.orgs.teams.add_repo(team.id, company_name, r) }
+    remove_repos.each { |r| client.orgs.teams.remove_repo(team.id, company_name, r) }
   end
 
   def get_team(team_name)
-    teams.find{|t| t.name == team_name }
+    teams.find { |t| t.name == team_name }
   end
 
   def list_team_members(team_id)
     r = client.organizations.teams.list_members(team_id, per_page: 100)
-    r.map{|e| e['login'] }
+    r.map { |e| e['login'] }
+  end
+
+  def list_team_repos(team_id)
+    repos = client.organizations.teams.list_repos(team_id)
+    repos.map { |e| e['name'] }
   end
 
   private
