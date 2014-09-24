@@ -15,4 +15,4 @@
 /log/*.log
 /tmp
 
-config/sec_config.yml
+/config/sec_config.yml
