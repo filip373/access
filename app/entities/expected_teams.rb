@@ -1,9 +1,7 @@
 class ExpectedTeams
 
   def load!
-    data.map do |name, members|
-      Team.new(name, members)
-    end
+    data
   end
 
   def all
@@ -17,7 +15,16 @@ class ExpectedTeams
       else
         clone
       end
-      YAML.load(File.read("#{permissions_repo_path}/teams.yml"))
+      
+      teams = []
+      Dir.glob("#{permissions_repo_path}/teams/*.yml") do |file_path|
+        team_name = File.basename(file_path, '.yml')
+        file_data = YAML.load(File.read(file_path))
+
+        teams << Team.new(team_name, file_data['members'])
+      end
+
+      teams
     end
   end
 
