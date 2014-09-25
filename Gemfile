@@ -19,3 +19,7 @@ gem 'pry-rails'
 group :development do
   gem 'pry'
 end
+
+group :development, :test do
+  gem 'rspec-rails'
+end
