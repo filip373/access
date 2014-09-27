@@ -10,14 +10,9 @@ class ExpectedTeams
 
   def data
     @data ||= begin
-      if File.exists? permissions_repo_path
-        update
-      else
-        clone
-      end
-      
       teams = []
-      Dir.glob("#{permissions_repo_path}/teams/*.yml") do |file_path|
+      
+      Dir.glob("#{teams_repo_path}/*.yml") do |file_path|
         team_name = File.basename(file_path, '.yml')
         file_data = YAML.load(File.read(file_path))
 
@@ -28,17 +23,9 @@ class ExpectedTeams
     end
   end
 
-  def clone
-    FileUtils.mkdir_p(permissions_repo_path)
-    Git.clone(AppConfig.permissions_repo.git, 'permissions', path: "#{Rails.root}/tmp")
-  end
+  private
 
-  def update
-    Git.open(permissions_repo_path).pull
+  def teams_repo_path
+    "#{Rails.root}/tmp/permissions/teams"
   end
-
-  def permissions_repo_path
-    "#{Rails.root}/tmp/permissions"
-  end
-
 end

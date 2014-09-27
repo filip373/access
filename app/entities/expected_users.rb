@@ -11,7 +11,8 @@ class ExpectedUsers
   def data
     @data ||= begin
       users = {}
-      Dir.glob("#{permissions_repo_path}/users/*.yml") do |file_path|
+      
+      Dir.glob("#{users_repo_path}/*.yml") do |file_path|
         user_name = File.basename(file_path, '.yml')
         file_data = YAML.load(File.read(file_path))
 
@@ -22,8 +23,9 @@ class ExpectedUsers
     end
   end
 
-  def permissions_repo_path
-    "#{Rails.root}/tmp/permissions"
-  end
+  private
 
+  def users_repo_path
+    "#{Rails.root}/tmp/permissions/users"
+  end
 end
