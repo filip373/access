@@ -8,12 +8,12 @@ class GithubController < ApplicationController
   expose(:sync) { Actions::SyncTeams.new(expected_teams, expected_users, gh_api) }
 
   def do_sync
-    sync_permissions.now!
     sync.now!
 
     render
-	end
+  end
 
   def index
+    sync_permissions.now!
   end
 end
