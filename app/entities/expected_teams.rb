@@ -19,7 +19,8 @@ class ExpectedTeams
         teams << Team.new(
           team_name,
           file_data['members'],
-          file_data['repos']
+          file_data['repos'],
+          file_data['permission'] || default_permission
         )
       end
 
@@ -31,5 +32,9 @@ class ExpectedTeams
 
   def teams_repo_path
     "#{Rails.root}/tmp/permissions/teams"
+  end
+
+  def default_permission
+    'push'
   end
 end

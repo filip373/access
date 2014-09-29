@@ -4,8 +4,8 @@ class GhApi < Struct.new(:token, :company_name)
     @client ||= Github.new(oauth_token: token)
   end
 
-  def create_team(team_name)
-    client.organizations.teams.create(company_name, { name: team_name, permission: 'push' })
+  def create_team(team_name, permission)
+    client.organizations.teams.create(company_name, { name: team_name, permission: permission } )
   end
 
   def sync_members(team, members_names)
