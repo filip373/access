@@ -15,6 +15,7 @@ gem 'konf'
 gem 'hipchat'
 gem 'git'
 gem 'pry-rails'
+gem 'netguru_theme'
 
 group :development do
   gem 'pry'
