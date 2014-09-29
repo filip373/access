@@ -52,7 +52,7 @@ class GhApi < Struct.new(:token, :company_name)
       @teams << res
       break if res.empty?
     end
-    @teams = @teams.flatten.reject{|e| e.name == 'owners'}
+    @teams = @teams.flatten.reject { |e| e.name == 'owners' }
     @teams
   end
 

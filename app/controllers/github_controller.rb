@@ -1,5 +1,5 @@
 class GithubController < ApplicationController
-  expose(:gh_api) {  GhApi.new(session[:token], AppConfig.company) }
+  expose(:gh_api) { GhApi.new(session[:token], AppConfig.company) }
 
   expose(:expected_teams) { ExpectedTeams.new.all }
   expose(:expected_users) { ExpectedUsers.new.all }
@@ -11,7 +11,7 @@ class GithubController < ApplicationController
     sync_permissions.now!
     sync.now!
 
-  	render
+    render
 	end
 
   def index

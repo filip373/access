@@ -16,7 +16,11 @@ class ExpectedTeams
         team_name = File.basename(file_path, '.yml')
         file_data = YAML.load(File.read(file_path))
 
-        teams << Team.new(team_name, file_data['members'], file_data['repos'])
+        teams << Team.new(
+          team_name,
+          file_data['members'],
+          file_data['repos']
+        )
       end
 
       teams
