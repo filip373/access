@@ -13,6 +13,7 @@ module Actions
         gh_team = find_or_create_gh_team(et)
         gh_api.sync_members(gh_team, members)
         gh_api.sync_repos(gh_team, et.repos)
+        gh_api.sync_team_permission(gh_team, et.permission)
       end
     end
 

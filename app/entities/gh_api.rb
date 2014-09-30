@@ -42,6 +42,11 @@ class GhApi < Struct.new(:token, :company_name)
     repos.map { |e| e['name'] }
   end
 
+  def sync_team_permission(team, expected_permission)
+    return if team.permission == expected_permission
+    client.organizations.teams.edit(team.id, { name: team.name, permission: expected_permission })
+  end
+
   private
 
   def teams
