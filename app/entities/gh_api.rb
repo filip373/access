@@ -1,7 +1,7 @@
 class GhApi < Struct.new(:token, :company_name)
 
   def client
-    @client ||= Github.new(oauth_token: token)
+    @client ||= Github.new(oauth_token: token, org: company_name)
   end
 
   def create_team(team_name, permission)
@@ -24,7 +24,10 @@ class GhApi < Struct.new(:token, :company_name)
     add_repos = repos_names - current_repos
     remove_repos = current_repos - repos_names
 
-    add_repos.each { |r|  client.orgs.teams.add_repo(team.id, company_name, r) }
+    add_repos.each do |repo_name|
+      find_or_create_repo(repo_name)
+      client.orgs.teams.add_repo(team.id, company_name, repo_name)
+    end
     remove_repos.each { |r| client.orgs.teams.remove_repo(team.id, company_name, r) }
   end
 
@@ -61,5 +64,17 @@ class GhApi < Struct.new(:token, :company_name)
     @teams
   end
 
+  def find_or_create_repo(repo_name)
+    get_repo(repo_name) || create_repo(repo_name)
+  end
+
+  def get_repo(repo_name)
+    client.repos.get(company_name, repo_name)
+  rescue
+    nil
+  end
+
+  def create_repo(repo_name)
+  end
 end
 
