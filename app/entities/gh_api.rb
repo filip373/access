@@ -70,7 +70,7 @@ class GhApi < Struct.new(:token, :company_name)
 
   def get_repo(repo_name)
     client.repos.get(company_name, repo_name)
-  rescue
+  rescue Github::Error::NotFound
     nil
   end
 
