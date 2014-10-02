@@ -75,6 +75,6 @@ class GhApi < Struct.new(:token, :company_name)
   end
 
   def create_repo(repo_name)
+    client.repos.create(org: company_name, name: repo_name)
   end
 end
-
