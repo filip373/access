@@ -1,4 +1,5 @@
-class ExpectedUsers
+class Users
+
 
   def load!
     data
@@ -11,7 +12,7 @@ class ExpectedUsers
   def data
     @data ||= begin
       users = {}
-      
+
       Dir.glob("#{users_repo_path}/*.yml") do |file_path|
         user_name = File.basename(file_path, '.yml')
         file_data = YAML.load(File.read(file_path))
