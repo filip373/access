@@ -6,6 +6,11 @@ module GithubIntegration
         sync_members
       end
 
+      def dry_run!
+        gh_api.dry_run = true
+        sync_members
+      end
+
       def sync_members
 
         expected_teams.each do |expected_team|

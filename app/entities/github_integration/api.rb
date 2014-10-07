@@ -1,5 +1,15 @@
 module GithubIntegration
-  class Api < Struct.new(:token, :company_name)
+  class Api
+    attr_accessor :token, :company_name, :dry_run, :log
+
+    def initialize(token, company_name)
+      self.token = token
+      self.company_name = company_name
+      self.dry_run = true
+      self.log = []
+    end
+
+    alias_method :dry_run?, :dry_run
 
     def client
       @client ||= Github.new(oauth_token: token, org: company_name, auto_pagination: true)
@@ -7,9 +17,12 @@ module GithubIntegration
 
     def create_team(team_name, permission)
 
-      Rails.logger.info "[api] create team #{team_name}"
-      #client.organizations.teams.create(company_name, { name: team_name, permission: permission } )
-      team = Hashie::Mash.new members: [], name: team_name, permission: permission, fake: true
+      @log << "[api] create team #{team_name}"
+      if dry_run?
+        team = Hashie::Mash.new members: [], name: team_name, permission: permission, fake: true
+      else
+        client.organizations.teams.create(company_name, { name: team_name, permission: permission } )
+      end
     end
 
     def sync_members(team, members_names)
@@ -19,12 +32,12 @@ module GithubIntegration
       remove_members = current_members - members_names
 
       add_members.each { |m|
-        Rails.logger.info "[api] add member #{m} to team #{team.name}"
-        #client.orgs.teams.add_member(team.id, m)
+        @log << "[api] add member #{m} to team #{team.name}"
+        client.orgs.teams.add_member(team.id, m) unless dry_run?
       }
       remove_members.each { |m|
-        Rails.logger.info "[api] remove member #{m} from team #{team.name}"
-        #client.orgs.teams.remove_member(team.id, m)
+        @log << "[api] remove member #{m} from team #{team.name}"
+        client.orgs.teams.remove_member(team.id, m) unless dry_run?
       }
     end
 
@@ -36,16 +49,17 @@ module GithubIntegration
 
       add_repos.each do |repo_name|
         find_or_create_repo(repo_name)
-        Rails.logger.info "[api] add repo #{repo_name} to team #{team.name}"
-        #client.orgs.teams.add_repo(team.id, company_name, repo_name)
+        @log << "[api] add repo #{repo_name} to team #{team.name}"
+        client.orgs.teams.add_repo(team.id, company_name, repo_name) unless dry_run?
       end
       remove_repos.each { |r|
-        Rails.logger.info "[api] remove repo #{repo_name} from team #{team.name}"
-        #client.orgs.teams.remove_repo(team.id, company_name, r)
+        @log << "[api] remove repo #{repo_name} from team #{team.name}"
+        client.orgs.teams.remove_repo(team.id, company_name, r) unless dry_run?
       }
     end
 
     def get_team(team_name)
+      binding.pry
       teams.find { |t| t.name == team_name }
     end
 
@@ -61,15 +75,15 @@ module GithubIntegration
 
     def sync_team_permission(team, expected_permission)
       return if team.permission == expected_permission
-      Rails.logger.info "[api] change permission #{team.name} - #{expected_permission}"
-      #client.organizations.teams.edit(team.id, { name: team.name, permission: expected_permission })
+      @log << "[api] change permission #{team.name} - #{expected_permission}"
+      client.organizations.teams.edit(team.id, { name: team.name, permission: expected_permission }) unless dry_run?
     end
 
     private
 
     def teams
       @teams ||= begin
-        teams =  client.organizations.teams.list(company_name)
+        teams =  client.organizations.teams.list(company_name, auto_pagination: true)
         teams.flatten.reject { |e| e.name == 'owners' }
       end
     end
@@ -85,8 +99,8 @@ module GithubIntegration
     end
 
     def create_repo(repo_name)
-      Rails.logger.info "[api] create repo #{repo_name}"
-      #client.repos.create(org: company_name, name: repo_name)
+      @log << "[api] create repo #{repo_name}"
+      client.repos.create(org: company_name, name: repo_name) unless dry_run?
     end
   end
 

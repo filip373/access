@@ -1,2 +1,6 @@
 %h1
-  SUCCESS!!
+  Syncing done! Here is some logs:
+
+%ul
+  - gh_api.log.each do |log_line|
+    %li #{log_line}
