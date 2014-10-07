@@ -3,6 +3,7 @@ defaults: &defaults
   permissions_repo:
     url: http://url-to-repo-with-permissions
     git: git@address.to.repo.with.permissions
+    checkout_dir: 'tmp/permissions'
   secret_key_base: "i-m-so-overriden-in-the-sec-config"
 
 development:
