@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails'
+gem 'rails', '~> 4.1'
 gem 'jquery-rails', '~> 2.1'
 
 gem 'haml'
@@ -11,14 +11,17 @@ gem 'omniauth-github'
 gem 'github_api'
 gem 'decent_exposure'
 gem 'konf'
-#gem 'httplog'
+gem 'httplog'
 gem 'hipchat'
 gem 'git'
 gem 'pry-rails'
 gem 'netguru_theme'
 
+
 group :development do
   gem 'pry'
+  gem 'binding_of_caller'
+  gem 'better_errors'
 end
 
 group :development, :test do
