@@ -3,7 +3,7 @@ GithubApp::Application.configure do
   config.eager_load = false
   config.action_controller.perform_caching = false
   config.active_support.deprecation = :log
-
+  config.consider_all_requests_local = true
   config.assets.debug = true
-
+  config.assets.compile = true
 end
