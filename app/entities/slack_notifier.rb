@@ -14,6 +14,6 @@ class SlackNotifier < Struct.new(:token, :room, :compare_url, :app_url)
   def client
     @client ||= Slack::Notifier.new "netguru", token,
                                channel: room,
-                               username: 'gh-permissions'
+                               username: 'Permissions update'
   end
 end

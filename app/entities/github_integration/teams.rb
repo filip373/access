@@ -1,16 +1,12 @@
 class GithubIntegration
   class Teams
 
-    def load!
-      data
+    def self.all
+      @@all ||= data
     end
 
-    def all
-      @all ||= load!
-    end
-
-    def data
-      @data ||= begin
+    def self.data
+      @@data ||= begin
         teams = []
 
         Dir.glob("#{teams_repo_path}/*.yml") do |file_path|
@@ -31,7 +27,7 @@ class GithubIntegration
 
     private
 
-    def teams_repo_path
+    def self.teams_repo_path
       "#{Rails.root}/tmp/permissions/github_teams"
     end
 

@@ -1,16 +1,11 @@
 class Users
 
-
-  def load!
-    data
+  def self.all
+    @@all ||= data!
   end
 
-  def all
-    @all ||= load!
-  end
-
-  def data
-    @data ||= begin
+  def self.data
+    @@data ||= begin
       users = {}
 
       Dir.glob("#{users_repo_path}/*.yml") do |file_path|
@@ -26,7 +21,7 @@ class Users
 
   private
 
-  def users_repo_path
+  def self.users_repo_path
     "#{Rails.root}/tmp/permissions/users"
   end
 end

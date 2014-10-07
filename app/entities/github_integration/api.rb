@@ -2,7 +2,7 @@ module GithubIntegration
   class Api < Struct.new(:token, :company_name)
 
     def client
-      @client ||= Github.new(oauth_token: token, org: company_name)
+      @client ||= Github.new(oauth_token: token, org: company_name, auto_pagination: true)
     end
 
     def create_team(team_name, permission)
