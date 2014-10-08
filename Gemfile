@@ -18,6 +18,7 @@ gem 'pry-rails'
 gem 'netguru_theme'
 
 gem 'capistrano'
+gem 'capistrano-rvm'
 gem 'capistrano-rails'
 gem 'capistrano-bundler'
 gem 'capistrano-passenger'
