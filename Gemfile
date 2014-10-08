@@ -17,6 +17,11 @@ gem 'git'
 gem 'pry-rails'
 gem 'netguru_theme'
 
+gem 'capistrano'
+gem 'capistrano-rails'
+gem 'capistrano-bundler'
+gem 'capistrano-passenger'
+
 
 group :development do
   gem 'pry'
