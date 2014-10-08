@@ -2,16 +2,12 @@ module GithubIntegration
   class Teams
 
     def self.all
-      @@all ||= data
-    end
-
-    def self.data
-      @@data ||=  raw_data.map do |team_name, team_data|
+      raw_data.map do |team_name, team_data|
         Team.new(
           team_name,
           team_data.members,
           team_data.repos,
-          team_data.premission || default_permission
+          team_data.permission || default_permission
         )
       end
     end

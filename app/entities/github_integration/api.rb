@@ -59,7 +59,6 @@ module GithubIntegration
     end
 
     def get_team(team_name)
-      binding.pry
       teams.find { |t| t.name == team_name }
     end
 
@@ -83,7 +82,7 @@ module GithubIntegration
 
     def teams
       @teams ||= begin
-        teams =  client.organizations.teams.list(company_name, auto_pagination: true)
+        teams =  client.organizations.teams.list(org: company_name)
         teams.flatten.reject { |e| e.name == 'owners' }
       end
     end
