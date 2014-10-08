@@ -3,10 +3,10 @@ deployment:
   master:
     branch: master
     commands:
-      - cap deploy staging
+      - bundle exec cap deploy staging
       - RAILS_ENV=staging rake notify
   production:
     branch: production
     commands:
-      - cap deploy production
+      - bundle exec cap deploy production
       - RAILS_ENV=production rake notify
