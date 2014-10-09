@@ -15,6 +15,7 @@ gem 'httplog'
 gem 'hipchat'
 gem 'git'
 gem 'pry-rails'
+gem 'slack-notifier'
 gem 'netguru_theme'
 
 gem 'capistrano'

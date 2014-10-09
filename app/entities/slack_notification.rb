@@ -1,4 +1,5 @@
-class SlackNotifier < Struct.new(:token, :room, :compare_url, :app_url)
+require 'slack-notifier'
+class SlackNotication < Struct.new(:token, :room, :compare_url, :app_url)
   def notify_on_change
     client.ping message
   end
