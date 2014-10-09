@@ -12,6 +12,9 @@ development:
     client_id: a
     client_secret: b
 
+staging:
+  <<: *defaults
+
 production:
   <<: *defaults
   github:
