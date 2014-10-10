@@ -1,7 +1,7 @@
 class UpdateRepo
 
   def now!
-    if File.exists? permissions_checkout_dir
+    if File.exist? permissions_checkout_dir
       update
     else
       clone
