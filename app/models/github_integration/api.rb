@@ -78,6 +78,14 @@ module GithubIntegration
       client.organizations.teams.edit(team.id, { name: team.name, permission: expected_permission }) unless dry_run?
     end
 
+    def list_org_members(org_name)
+      client.organizations.members.all(org_name)
+    end
+
+    def get_user(login)
+      client.users.get(user: login).body
+    end
+
     private
 
     def teams
