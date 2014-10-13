@@ -14,10 +14,6 @@ class Storage
   end
 
   def data
-    @data ||= scan_directory
-  end
-
-  def scan_directory
     # http://www.dzone.com/snippets/build-hash-tree-array-file
     # https://gist.github.com/awesome/3842062
     hash = files_list.inject({}) do |hash, path|
