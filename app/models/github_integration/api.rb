@@ -91,7 +91,7 @@ module GithubIntegration
     def teams
       @teams ||= begin
         teams =  client.organizations.teams.list(org: company_name)
-        teams.flatten.reject { |e| e.name == 'owners' }
+        teams.flatten.reject { |e| e.name == 'Owners' }
       end
     end
 
