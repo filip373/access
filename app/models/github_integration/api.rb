@@ -52,9 +52,9 @@ module GithubIntegration
         @log << "[api] add repo #{repo_name} to team #{team.name}"
         client.orgs.teams.add_repo(team.id, company_name, repo_name) unless dry_run?
       end
-      remove_repos.each { |r|
+      remove_repos.each { |repo_name|
         @log << "[api] remove repo #{repo_name} from team #{team.name}"
-        client.orgs.teams.remove_repo(team.id, company_name, r) unless dry_run?
+        client.orgs.teams.remove_repo(team.id, company_name, repo_name) unless dry_run?
       }
     end
 
