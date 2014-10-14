@@ -26,18 +26,25 @@ module GithubIntegration
     end
 
     def sync_members(team, members_names)
-      current_members = team.fake ? [] : list_team_members(team['id'])
+      current_members = team.respond_to?(:fake) ? [] : list_team_members(team['id'])
 
       add_members = members_names - current_members
       remove_members = current_members - members_names
 
       add_members.each { |m|
-        @log << "[api] add member #{m} to team #{team.name}"
-        client.orgs.teams.add_member(team.id, m) unless dry_run?
+        already_invited = begin
+          !!client.get_request("/teams/#{team.id}/memberships/#{m}")
+        rescue Github::Error::NotFound
+          false
+        end
+        unless already_invited
+          @log << "[api] add member #{m} to team #{team.name}"
+          client.put_request("/teams/#{team.id}/memberships/#{m}") unless dry_run?
+        end
       }
       remove_members.each { |m|
         @log << "[api] remove member #{m} from team #{team.name}"
-        client.orgs.teams.remove_member(team.id, m) unless dry_run?
+        client.delete_request("/teams/#{team.id}/memberships/#{m}") unless dry_run?
       }
     end
 
@@ -69,7 +76,13 @@ module GithubIntegration
 
     def list_team_repos(team_id)
       repos = client.organizations.teams.list_repos(team_id)
-      repos.map { |e| e['name'] }
+      repos = repos.group_by{|e| e['name'] }.map{|name, repos|
+        # the api returns both original repos and it's forks - but we want to manage only the main repo
+        # hence we will drop the forks if there are any
+        repos.reject!{|e| e['fork'] } if repos.size > 1
+        repos
+      }.flatten
+      repos.map { |e| e['name']  }.compact
     end
 
     def sync_team_permission(team, expected_permission)
