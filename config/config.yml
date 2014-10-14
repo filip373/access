@@ -1,4 +1,5 @@
 defaults: &defaults
+  rollbar_token: fake-token
   company: netguru
   permissions_repo:
     url: http://url-to-repo-with-permissions
