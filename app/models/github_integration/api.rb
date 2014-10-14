@@ -5,7 +5,7 @@ module GithubIntegration
     def initialize(token, company_name)
       self.token = token
       self.company_name = company_name
-      self.dry_run = true
+      self.dry_run = false
       self.log = []
     end
 
