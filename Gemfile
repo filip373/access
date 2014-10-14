@@ -23,6 +23,8 @@ gem 'capistrano-rails'
 gem 'capistrano-bundler'
 gem 'capistrano-passenger'
 
+gem 'rollbar'
+
 
 group :development do
   gem 'pry'
