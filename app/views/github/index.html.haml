@@ -5,3 +5,8 @@
   = link_to "Review last changes in permissions", AppConfig.permissions_repo.url, target: "_blank"
 %hr
   = link_to "CONFIRM", do_sync_github_index_path, method: "post"
+
+- if missing_teams.size > 0
+  %hr
+  %h3 Missing teams...
+  This teams are on github, but were not added to permissions repo: #{missing_teams.join(", ")}

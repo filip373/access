@@ -5,6 +5,7 @@ class GithubController < ApplicationController
 
   expose(:update_repo) { UpdateRepo.new }
   expose(:sync_github) { GithubIntegration::Actions::SyncTeams.new(expected_teams, gh_api) }
+  expose(:missing_teams){ gh_api.teams.map(&:name) - Storage.data.github_teams.keys }
 
   def do_sync
     update_repo.now!

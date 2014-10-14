@@ -86,14 +86,14 @@ module GithubIntegration
       client.users.get(user: login).body
     end
 
-    private
-
     def teams
       @teams ||= begin
         teams =  client.organizations.teams.list(org: company_name)
         teams.flatten.reject { |e| e.name == 'Owners' }
       end
     end
+
+    private
 
     def find_or_create_repo(repo_name)
       get_repo(repo_name) || create_repo(repo_name)
