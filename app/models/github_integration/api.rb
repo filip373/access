@@ -26,7 +26,7 @@ module GithubIntegration
 
     def remove_team(team)
       @log << "[api] remove team #{team.name}"
-      client.organizations.teams.destroy(team.id) unless dry_run?
+      client.organizations.teams.delete(team.id) unless dry_run?
     end
 
     def sync_members(team, members_names)

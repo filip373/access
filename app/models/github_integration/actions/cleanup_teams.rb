@@ -3,7 +3,6 @@ module GithubIntegration
     class CleanupTeams < Struct.new(:expected_teams, :gh_api)
 
       def now!
-        gh_api.dry_run = true
         remove_stranded_teams
       end
 
