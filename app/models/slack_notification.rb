@@ -9,12 +9,12 @@ class SlackNotication < Struct.new(:token, :channel, :compare_url, :app_url)
   end
 
   def name
-    "Github Access"
+    "Access app"
   end
 
   def client
-    @client ||= Slack::Notifier.new "netguru", token,
+    @client ||= Slack::Notifier.new AppConfig.company, token,
                                channel: channel,
-                               username: 'permissions'
+                               username: name
   end
 end
