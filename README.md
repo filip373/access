@@ -8,32 +8,38 @@ This makes managing access on github very easy, and also makes it possible for y
 
 Sample permissions directory looks like this: https://github.com/netguru/access-permissions-sample
 
-### Managing users
+### Adding / editing users
 
-When you are about to add new user to your organization, you should first define his data file. Data files are stored in permission repo in users directory and should be named following `first_name.last_name.yml` pattern. Here is a sample user file:
-https://github.com/netguru/access-permissions-sample/blob/master/users/jane.doe.yml
+- define new user data file in 'users' directory named 'first_name.last_name.yml'
+- add users name to the file
+- add users github handle to the file
 
-### Adding new team to github
+Sample user file: https://github.com/netguru/access-permissions-sample/blob/master/users/jane.doe.yml
+
+### Adding / editing github teams
 
 Team data files include:
 - team name
 - team permission level
 - team members list
 
-Sample team file looks like so: https://github.com/netguru/access-permissions-sample/blob/master/github_teams/team-a.yml
+Sample team file: https://github.com/netguru/access-permissions-sample/blob/master/github_teams/team-a.yml
 
 Once such file is pushed to the permissions repository a team-a will be created with jane and john as members. All members are going to be given push access to ‘sample-repo’.
 
 ### Note on users
 
-Users in teams files are referenced by their data file name (first_name.last_name) instead of being referenced by github handles. This makes it’s easy to read the team file and actually see who has access where without confusion. Very useful from security perspective in larger organizations.
+Users in teams files are referenced by their data file name (first_name.last_name) instead of being referenced by github handles. This makes it’s easy to read the team file and actually see who has access where without confusion - this is also very useful from security perspective in larger organizations.
+
+Remember you have to first add user to users directory before adding him to a team
 
 ### Note on new repos
 
 Adding a repository that does not exist in to the team file will create an empty repository with that name.
 
-
 ## Flow for applying the changes.
+
+Once you are done editing / creating the files you should apply new permissions:
 
 - push the changes to permissions directory
 - have somebody from owners team visit the access app and review the changes
