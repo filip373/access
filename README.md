@@ -27,13 +27,13 @@ Sample team file: https://github.com/netguru/access-permissions-sample/blob/mast
 
 Once such file is pushed to the permissions repository a team-a will be created with jane and john as members. All members are going to be given push access to ‘sample-repo’.
 
-### Note on users
+### User naming within permissions repo
 
 Users in teams files are referenced by their data file name (first_name.last_name) instead of being referenced by github handles. This makes it’s easy to read the team file and actually see who has access where without confusion - this is also very useful from security perspective in larger organizations.
 
 Remember you have to first add user to users directory before adding him to a team
 
-### Note on new repos
+### Adding new repositories
 
 Adding a repository that does not exist in to the team file will create an empty repository with that name.
 
