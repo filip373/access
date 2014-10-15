@@ -8,5 +8,8 @@
 
 - if missing_teams.size > 0
   %hr
-  %h3 Missing teams...
-  This teams are on github, but were not added to permissions repo: #{missing_teams.join(", ")}
+  %h2 Validations
+  %h3 This teams are on github, but can't be found in permissions repository - they most likely should be deleted.
+  %ul
+    - missing_teams.each do |team|
+      %li= link_to team, github_team_path(team)
