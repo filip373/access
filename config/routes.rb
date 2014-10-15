@@ -5,6 +5,7 @@ GithubApp::Application.routes.draw do
   resources :github, only: [:index] do
     collection do
       post :do_sync
+      delete :cleanup_teams
     end
   end
 end

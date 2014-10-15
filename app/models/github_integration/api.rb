@@ -16,13 +16,17 @@ module GithubIntegration
     end
 
     def create_team(team_name, permission)
-
       @log << "[api] create team #{team_name}"
       if dry_run?
         team = Hashie::Mash.new members: [], name: team_name, permission: permission, fake: true
       else
         client.organizations.teams.create(company_name, { name: team_name, permission: permission } )
       end
+    end
+
+    def remove_team(team)
+      @log << "[api] remove team #{team.name}"
+      client.organizations.teams.destroy(team.id) unless dry_run?
     end
 
     def sync_members(team, members_names)

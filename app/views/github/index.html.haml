@@ -12,4 +12,5 @@
   %h3 This teams are on github, but can't be found in permissions repository - they most likely should be deleted.
   %ul
     - missing_teams.each do |team|
-      %li= link_to team, github_team_path(team)
+      %li= link_to team.name, github_team_path(team.name)
+  = link_to "Ok, it makes sense to remove those teams!", cleanup_teams_github_index_path, method: :delete
