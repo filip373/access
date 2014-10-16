@@ -53,7 +53,7 @@ module GithubIntegration
     end
 
     def sync_repos(team, repos_names)
-      current_repos = team.fake ? [] : list_team_repos(team['id'])
+      current_repos = team.respond_to?(:fake) ? [] : list_team_repos(team['id'])
 
       add_repos = repos_names - current_repos
       remove_repos = current_repos - repos_names
