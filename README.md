@@ -44,8 +44,6 @@ Adding a repository that does not exist in to the team file will create an empty
 ### Deleting teams
 - if you delete last user from the team don't forget to remove the team file from github teams
 
-### Deleting teams
-
 ## Flow for applying the changes.
 
 Once you are done editing / creating the files you should apply new permissions:
