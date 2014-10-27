@@ -37,6 +37,15 @@ Remember you have to first add user to users directory before adding him to a te
 
 Adding a repository that does not exist in to the team file will create an empty repository with that name.
 
+### Deleting users
+- remove john.doe from every group file and github teams file
+- remove john.doe file from users directory
+
+### Deleting teams
+- if you delete last user from the team don't forget to remove the team file from github teams
+
+### Deleting teams
+
 ## Flow for applying the changes.
 
 Once you are done editing / creating the files you should apply new permissions:
