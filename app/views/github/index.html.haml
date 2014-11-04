@@ -1,16 +1,18 @@
-%h2
-  Ready to sync github teams?
-%hr
-
+.jumbotron
+  %h2
+    Ready to sync github teams?
   = link_to "Review last changes in permissions", AppConfig.permissions_repo.url, target: "_blank"
-%hr
-  = link_to "CONFIRM", do_sync_github_index_path, method: "post"
+  %hr
+  = button_to "CONFIRM", do_sync_github_index_path, method: :post, class: 'btn btn-primary btn-lg'
 
 - if missing_teams.size > 0
-  %hr
-  %h2 Validations
-  %h3 This teams are on github, but can't be found in permissions repository - they most likely should be deleted.
-  %ul
-    - missing_teams.each do |team|
-      %li= link_to team.name, github_team_path(team.name)
-  = link_to "Ok, it makes sense to remove those teams!", cleanup_teams_github_index_path, method: :delete
+  .jumbotron
+    %h2 Validations
+    %h3 Following teams are on GitHub, but can't be found in permissions repository - they most likely should be deleted.
+    %ul.list-group
+      - missing_teams.each do |team|
+        = link_to team.name, github_team_path(team.name), class: 'list-group-item'
+    = button_to "Ok, it makes sense to remove these teams!",
+                cleanup_teams_github_index_path,
+                method: :delete,
+                class: 'btn btn-primary btn-lg'

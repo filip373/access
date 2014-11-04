@@ -1,6 +1,7 @@
-%h1
-  Syncing done! Review what was done:
+.jumbotron
+  %h2
+    Sync complete! Review what has been done:
 
-%ul
-  - gh_api.log.each do |log_line|
-    %li #{log_line}
+  %ul.list-group
+    - gh_api.log.each do |log_line|
+      %li.list-group-item #{log_line}

@@ -1,6 +1,7 @@
-%h1
-  Cleanup done. This is what happend:
+.jumbotron
+  %h2
+    Cleanup complete! This is what happened:
 
-%ul
+%ul.list-group
   - gh_api.log.each do |log_line|
-    %li #{log_line}
+    %li.list-group-item #{log_line}
