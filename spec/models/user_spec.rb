@@ -12,7 +12,8 @@ describe User do
       },
       "default_group" => {
         "parowka" => {"name" => "Parówka Nowak", "github" => "13art"}
-      }
+      },
+      "michal.nowak" => {"name" => "Michał Nowak", "github" => "mnowak"}
   } }
 
   let(:company_name) { 'default_group' }
@@ -32,7 +33,11 @@ describe User do
     expect(User.find('group_one/janusz')).to be
   end
 
-  it "does not find user if he is not in groups" do
+  it 'finds user defined outside groups' do
+    expect(User.find('michal.nowak')).to be
+  end
+
+  it "does not find user if he is not defined" do
     expect(User.find('herbatka')).not_to be
   end
 end

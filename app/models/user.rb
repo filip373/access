@@ -7,6 +7,8 @@ class User
       user_data = users_data[name]
       if user_data.nil? && users_data[company_name].present?
         users_data[company_name][name]
+      else
+        user_data
       end
     end
   end
