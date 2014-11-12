@@ -3,9 +3,15 @@
     Ready to sync github teams?
   = link_to "Review last changes in permissions", AppConfig.permissions_repo.url, target: "_blank"
   %hr
-  = button_to "CONFIRM", do_sync_github_index_path, method: :post, class: 'btn btn-primary btn-lg'
+  - if validation_errors.empty?
+    = button_to "CONFIRM", do_sync_github_index_path, method: :post, class: 'btn btn-primary btn-lg'
+  - else
+    %h3 Unable to parse following .yml files:
+    %ul.list-group
+    - validation_errors.each do |error|
+      = link_to error.message, github_file_path(error.file), class: 'list-group-item list-group-item-danger'
 
-- if missing_teams.size > 0
+- if validation_errors.empty? && missing_teams.size > 0
   .jumbotron
     %h2 Validations
     %h3 Following teams are on GitHub, but can't be found in permissions repository - they most likely should be deleted.
