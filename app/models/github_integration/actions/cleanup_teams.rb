@@ -18,6 +18,12 @@ module GithubIntegration
         remove_stranded_teams
       end
 
+      def stranded_teams
+        gh_teams = gh_api.teams
+        expected_names = expected_teams.map(&:name)
+        gh_teams.reject{ |e| e.name.in?(expected_names) }
+      end
+
       private
 
       def remove_stranded_teams
@@ -26,11 +32,7 @@ module GithubIntegration
         end
       end
 
-      def stranded_teams
-        gh_teams = gh_api.teams
-        expected_names = expected_teams.map(&:name)
-        gh_teams.reject{ |e| e.name.in?(expected_names) }
-      end
+
 
     end
   end
