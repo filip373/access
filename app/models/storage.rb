@@ -26,7 +26,7 @@ class Storage
       path_parts.each_with_index do |part, index|
         tree[part] ||= {}
         if index == (path_parts.size - 1) # last element
-          tree[part] = YAML.load_file(path)
+          tree[part] = YAMLReader.new(file_path: path, validation: validation).call
         end
         tree = tree[part]
       end
@@ -43,4 +43,12 @@ class Storage
     path.gsub(dir, "").gsub(".yml", "").split("/").reject(&:empty?)
   end
 
+  def self.validation_errors
+    data
+    instance.validation.errors
+  end
+
+  def validation
+    @validation ||= YAMLValidation.new
+  end
 end
