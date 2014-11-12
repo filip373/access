@@ -5,6 +5,8 @@ class GithubController < ApplicationController
 
   expose(:expected_teams) { GithubIntegration::Teams.all }
 
+  expose(:validation_errors) { Storage.validation_errors }
+
   expose(:update_repo) { UpdateRepo.new }
   expose(:sync_github) { GithubIntegration::Actions::SyncTeams.new(expected_teams, gh_api) }
   expose(:teams_cleanup) { GithubIntegration::Actions::CleanupTeams.new(expected_teams, gh_api) }
