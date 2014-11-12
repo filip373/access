@@ -7,14 +7,12 @@ class YAMLReader
   end
 
   def call
-    begin
-      YAML.load_file(file_path)
-    rescue Psych::SyntaxError => ex
-      validation.add_error(
-        clear_local_path(file_path),
-        clear_local_path(ex.message)
-      )
-    end
+    YAML.load_file(file_path)
+  rescue Psych::SyntaxError => ex
+    validation.add_error(
+      clear_local_path(file_path),
+      clear_local_path(ex.message)
+    )
   end
 
   private
