@@ -8,7 +8,7 @@ class GithubController < ApplicationController
   expose(:update_repo) { UpdateRepo.new }
   expose(:sync_github) { GithubIntegration::Actions::SyncTeams.new(expected_teams, gh_api) }
   expose(:teams_cleanup) { GithubIntegration::Actions::CleanupTeams.new(expected_teams, gh_api) }
-  expose(:missing_teams){ teams_cleanup.stranded_teams }
+  expose(:missing_teams) { teams_cleanup.stranded_teams }
 
   def do_sync
     update_repo.now!
