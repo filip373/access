@@ -70,7 +70,7 @@ module GithubIntegration
     end
 
     def get_team(team_name)
-      teams.find { |t| t.name == team_name }
+      teams.find { |t| t.name.downcase == team_name.downcase }
     end
 
     def list_team_members(team_id)
