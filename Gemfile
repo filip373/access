@@ -14,6 +14,7 @@ gem 'konf'
 gem 'httplog'
 gem 'git'
 gem 'pry-rails'
+gem 'pry-byebug'
 gem 'slack-notifier'
 gem 'netguru_theme'
 

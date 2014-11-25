@@ -41,6 +41,10 @@ GEM
       sass (~> 3.3)
       thor
     builder (3.2.2)
+    byebug (3.5.1)
+      columnize (~> 0.8)
+      debugger-linecache (~> 1.2)
+      slop (~> 3.6)
     capistrano (3.2.1)
       i18n
       rake (>= 10.0.0)
@@ -55,7 +59,9 @@ GEM
       capistrano-bundler (~> 1.1)
     coderay (1.1.0)
     colorize (0.7.3)
+    columnize (0.8.9)
     debug_inspector (0.0.2)
+    debugger-linecache (1.2.0)
     decent_exposure (2.3.2)
     descendants_tracker (0.0.4)
       thread_safe (~> 0.3, >= 0.3.1)
@@ -123,6 +129,9 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
+    pry-byebug (2.0.0)
+      byebug (~> 3.4)
+      pry (~> 0.10)
     pry-rails (0.3.2)
       pry (>= 0.9.10)
     rack (1.5.2)
@@ -208,6 +217,7 @@ DEPENDENCIES
   omniauth
   omniauth-github
   pry
+  pry-byebug
   pry-rails
   rails (~> 4.1)
   rollbar
