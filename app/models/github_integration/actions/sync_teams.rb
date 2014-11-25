@@ -32,7 +32,7 @@ module GithubIntegration
       def map_users_to_members(members)
         members.map { |m|
           user = User.find(m)
-          raise "Uknown user #{m}" if user.nil?
+          raise "Unknown user #{m}" if user.nil?
           user.github
         }
       end
