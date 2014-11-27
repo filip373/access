@@ -1,12 +1,11 @@
 module GithubIntegration
   class Api
-    attr_accessor :token, :company_name, :dry_run, :log
+    attr_accessor :token, :company_name, :dry_run
 
     def initialize(token, company_name)
       self.token = token
       self.company_name = company_name
       self.dry_run = false
-      self.log = []
     end
 
     alias_method :dry_run?, :dry_run
@@ -16,7 +15,6 @@ module GithubIntegration
     end
 
     def create_team(team_name, permission)
-      @log << "[api] create team #{team_name}"
       if dry_run?
         team = Hashie::Mash.new members: [], name: team_name, permission: permission, fake: true
       else
@@ -42,12 +40,10 @@ module GithubIntegration
           false
         end
         unless already_invited
-          @log << "[api] add member #{m} to team #{team.name}"
           client.put_request("/teams/#{team.id}/memberships/#{m}") unless dry_run?
         end
       }
       remove_members.each { |m|
-        @log << "[api] remove member #{m} from team #{team.name}"
         client.delete_request("/teams/#{team.id}/memberships/#{m}") unless dry_run?
       }
     end
@@ -60,11 +56,9 @@ module GithubIntegration
 
       add_repos.each do |repo_name|
         find_or_create_repo(repo_name)
-        @log << "[api] add repo #{repo_name} to team #{team.name}"
         client.orgs.teams.add_repo(team.id, company_name, repo_name) unless dry_run?
       end
       remove_repos.each { |repo_name|
-        @log << "[api] remove repo #{repo_name} from team #{team.name}"
         client.orgs.teams.remove_repo(team.id, company_name, repo_name) unless dry_run?
       }
     end
@@ -92,7 +86,6 @@ module GithubIntegration
 
     def sync_team_permission(team, expected_permission)
       return if team.permission == expected_permission
-      @log << "[api] change permission #{team.name} - #{expected_permission}"
       client.organizations.teams.edit(team.id, { name: team.name, permission: expected_permission }) unless dry_run?
     end
 
@@ -124,7 +117,6 @@ module GithubIntegration
     end
 
     def create_repo(repo_name)
-      @log << "[api] create repo #{repo_name}"
       client.repos.create(org: company_name, name: repo_name, private: true) unless dry_run?
     end
   end
