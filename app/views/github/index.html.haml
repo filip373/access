@@ -4,7 +4,7 @@
   = link_to "Review last changes in permissions", AppConfig.permissions_repo.url, target: "_blank"
   %hr
   - if validation_errors.empty?
-    = button_to "CONFIRM", do_sync_github_index_path, method: :post, class: 'btn btn-primary btn-lg'
+    = link_to "Show diff", show_diff_github_index_path, class: 'btn btn-primary btn-lg'
   - else
     %h3 Unable to parse following .yml files:
     %ul.list-group
