@@ -18,58 +18,37 @@ module GithubIntegration
       if dry_run?
         team = Hashie::Mash.new members: [], name: team_name, permission: permission, fake: true
       else
-        client.organizations.teams.create(company_name, { name: team_name, permission: permission } )
+        response = client.organizations.teams.create(company_name, { name: team_name, permission: permission } )
+        yield(response) if block_given?
       end
     end
 
     def remove_team(team)
-      @log << "[api] remove team #{team.name}"
       client.organizations.teams.delete(team.id) unless dry_run?
     end
 
-    def sync_members(team, members_names)
-      current_members = team.respond_to?(:fake) ? [] : list_team_members(team['id'])
-
-      add_members = members_names - current_members
-      remove_members = current_members - members_names
-
-      add_members.each { |m|
-        already_invited = begin
-          !!client.get_request("/teams/#{team.id}/memberships/#{m}")
-        rescue Github::Error::NotFound
-          false
-        end
-        unless already_invited
-          client.put_request("/teams/#{team.id}/memberships/#{m}") unless dry_run?
-        end
-      }
-      remove_members.each { |m|
-        client.delete_request("/teams/#{team.id}/memberships/#{m}") unless dry_run?
-      }
-    end
-
-    def sync_repos(team, repos_names)
-      current_repos = team.respond_to?(:fake) ? [] : list_team_repos(team['id'])
-
-      add_repos = repos_names - current_repos
-      remove_repos = current_repos - repos_names
-
-      add_repos.each do |repo_name|
-        find_or_create_repo(repo_name)
-        client.orgs.teams.add_repo(team.id, company_name, repo_name) unless dry_run?
+    def add_member(member, team)
+      already_invited = begin
+        !!client.get_request("/teams/#{team.id}/memberships/#{member}")
+      rescue Github::Error::NotFound
+        false
       end
-      remove_repos.each { |repo_name|
-        client.orgs.teams.remove_repo(team.id, company_name, repo_name) unless dry_run?
-      }
+      unless already_invited
+        client.put_request("/teams/#{team.id}/memberships/#{member}") unless dry_run?
+      end
     end
 
-    def get_team(team_name)
-      teams.find { |t| t.name.downcase == team_name.downcase }
+    def remove_member(member, team)
+      client.delete_request("/teams/#{team.id}/memberships/#{member}") unless dry_run?
     end
 
-    def list_team_members(team_id)
-      r = client.organizations.teams.list_members(team_id)
-      r.map { |e| e['login'] }
+    def add_repo(repo, team)
+      find_or_create_repo(repo)
+      client.orgs.teams.add_repo(team.id, company_name, repo) unless dry_run?
+    end
+
+    def remove_repo(repo, team)
+      client.orgs.teams.remove_repo(team.id, company_name, repo) unless dry_run?
     end
 
     def list_team_repos(team_id)
@@ -84,9 +63,8 @@ module GithubIntegration
       repos.map { |e| e['name']  }.compact
     end
 
-    def sync_team_permission(team, expected_permission)
-      return if team.permission == expected_permission
-      client.organizations.teams.edit(team.id, { name: team.name, permission: expected_permission }) unless dry_run?
+    def new_permission(permissions, team)
+      client.organizations.teams.edit(team.id, { name: team.name, permission: permissions }) unless dry_run?
     end
 
     def list_org_members(org_name)
@@ -120,5 +98,4 @@ module GithubIntegration
       client.repos.create(org: company_name, name: repo_name, private: true) unless dry_run?
     end
   end
-
 end
