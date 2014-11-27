@@ -86,7 +86,6 @@ module GithubIntegration
             @log << "[api] remove repo #{r} from team #{team.name}"
           end
         end
-        # binding.pry
         @log << "There are no changes." if @log.size == 0
       end
 
