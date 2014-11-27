@@ -1,7 +1,5 @@
 .jumbotron
   %h2
-    Sync complete! Review what has been done:
+    Sync complete! Terrific job! You look very dashing today!
 
-  %ul.list-group
-    - gh_api.log.each do |log_line|
-      %li.list-group-item #{log_line}
+  = link_to "Take me back!", github_index_path, class: 'btn btn-primary btn-lg'
