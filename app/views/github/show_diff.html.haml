@@ -1,0 +1,11 @@
+.jumbotron
+  %h2 Please confirm changes below:
+
+  %ul.list-group
+    - diff.log.each do |line|
+      %li.list-group-item #{line}
+
+  - if diff.log[0] =~ /no changes/
+    = link_to "Wicked!", github_index_path, class: 'btn btn-primary btn-lg'
+  -else
+    = button_to "Confirm changes", do_sync_github_index_path, method: :post, class: 'btn btn-primary btn-lg'
