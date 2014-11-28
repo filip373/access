@@ -117,7 +117,7 @@ module GithubIntegration
       end
 
       def list_team_members(team_id)
-        r = gh_api.client.organizations.teams.list_members(team_id)
+        r = @gh_api.client.organizations.teams.list_members(team_id)
         r.map { |e| e['login'] }
       end
 
