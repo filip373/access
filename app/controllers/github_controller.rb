@@ -15,7 +15,6 @@ class GithubController < ApplicationController
   expose(:missing_teams) { teams_cleanup.stranded_teams }
 
   def show_diff
-    update_repo.now!
     @diff_hash = diff.now!
     @log = get_log.now!
     render
@@ -29,11 +28,11 @@ class GithubController < ApplicationController
 
   def cleanup_teams
     teams_cleanup.now!
-
     render
   end
 
   def index
+    update_repo.now!
   end
 
   def check_permissions
