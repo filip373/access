@@ -13,19 +13,17 @@ module GithubIntegration
           remove_repos: {},
           change_permissions: {}
         }
-        @log = []
-
       end
 
       def now!
         generate_diff
-        generate_log
         @diff_hash
       end
 
+      private
 
       def generate_diff
-        expected_teams.each do |expected_team|
+        @expected_teams.each do |expected_team|
           members = map_users_to_members(expected_team.members)
           gh_team = find_or_create_gh_team(expected_team)
 
@@ -34,54 +32,6 @@ module GithubIntegration
           team_permissions_diff(gh_team, expected_team.permission)
         end
       end
-
-      def generate_log
-        # TODO cut into tiny methods
-        @diff_hash[:create_teams].each do |team, h|
-          @log << "[api] create team #{team.name}"
-
-          h[:add_members].each do |m|
-            @log << "[api] add member #{m} to team #{team.name}"
-          end
-
-          h[:add_repos].each do |r|
-            @log << "[api] add repo #{r} to team #{team.name}"
-          end
-
-          @log << "[api] add permissions #{team.name} - #{h[:add_permissions]}" unless h[:add_permissions].empty?
-        end
-
-        @diff_hash[:change_permissions].each do |team, h|
-          @log << "[api] change permission #{team.name} - #{h[:permissions]}"
-        end
-
-        @diff_hash[:add_members].each do |team, h|
-          h[:members].each do |m|
-            @log << "[api] add member #{m} to team #{team.name}"
-          end
-        end
-
-        @diff_hash[:remove_members].each do |team, h|
-          h[:members].each do |m|
-            @log << "[api] remove member #{m} from team #{team.name}"
-          end
-        end
-
-        @diff_hash[:add_repos].each do |team, h|
-          h[:repos].each do |r|
-            @log << "[api] add repo #{r} to team #{team.name}"
-          end
-        end
-
-        @diff_hash[:remove_repos].each do |team, h|
-          h[:repos].each do |r|
-            @log << "[api] remove repo #{r} from team #{team.name}"
-          end
-        end
-        @log << "There are no changes." if @log.size == 0
-      end
-
-      private
 
       def team_permissions_diff(team, expected_permission)
         if team.respond_to?(:id)
