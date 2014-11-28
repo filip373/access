@@ -2,9 +2,6 @@ module GithubIntegration
   module Actions
     class GetDiff
 
-      attr_reader :expected_teams, :gh_api
-      attr_accessor :log
-
       def initialize(expected_teams, gh_api)
         @expected_teams = expected_teams
         @gh_api = gh_api
@@ -26,11 +23,6 @@ module GithubIntegration
         @diff_hash
       end
 
-      def dry_run!
-        @gh_api.dry_run = true
-        generate_diff
-        generate_log
-      end
 
       def generate_diff
         expected_teams.each do |expected_team|
