@@ -2,8 +2,6 @@ module GithubIntegration
   module Actions
     class SyncTeams
 
-      attr_reader :gh_api
-
       def initialize(gh_api)
         @gh_api = gh_api
       end
@@ -14,19 +12,7 @@ module GithubIntegration
 
       def dry_run!
         gh_api.dry_run = true
-        sync_members
-      end
-
-      def sync_members
-
-        expected_teams.each do |expected_team|
-          members = map_users_to_members(expected_team.members)
-
-          gh_team = find_or_create_gh_team(expected_team)
-          gh_api.sync_members(gh_team, members)
-          gh_api.sync_repos(gh_team, expected_team.repos)
-          gh_api.sync_team_permission(gh_team, expected_team.permission)
-        end
+        sync(diff)
       end
 
       private
