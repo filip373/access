@@ -11,11 +11,13 @@ class GithubController < ApplicationController
   expose(:diff) { GithubIntegration::Actions::GetDiff.new(expected_teams, gh_api) }
   expose(:sync_github) { GithubIntegration::Actions::SyncTeams.new(gh_api) }
   expose(:teams_cleanup) { GithubIntegration::Actions::CleanupTeams.new(expected_teams, gh_api) }
+  expose(:get_log) { GithubIntegration::Actions::GetLog.new(get_diff) }
   expose(:missing_teams) { teams_cleanup.stranded_teams }
 
   def show_diff
     update_repo.now!
     @diff_hash = diff.now!
+    @log = get_log.now!
     render
   end
 
