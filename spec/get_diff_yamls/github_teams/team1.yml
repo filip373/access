@@ -1,0 +1,5 @@
+members:
+  - second.member
+repos:
+  - second-repo
+permission: push

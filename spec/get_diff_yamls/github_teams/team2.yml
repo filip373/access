@@ -1,0 +1,5 @@
+members:
+  - first.member
+repos:
+  - first-repo
+permission: push
