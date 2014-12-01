@@ -51,18 +51,6 @@ module GithubIntegration
       client.orgs.teams.remove_repo(team.id, company_name, repo) unless dry_run?
     end
 
-    def list_team_repos(team_id)
-      repos = client.organizations.teams.list_repos(team_id)
-      repos = repos.group_by{|e| e['name'] }.map{|name, repos|
-        # strange corner case - api is returning something different than what's on the github page
-        # the api returns both original repos and it's forks - but we want to manage only the main repo
-        # hence we will drop the forks if there are any
-        repos.reject!{|e| e['fork'] } if repos.size > 1
-        repos
-      }.flatten
-      repos.map { |e| e['name']  }.compact
-    end
-
     def new_permission(permissions, team)
       client.organizations.teams.edit(team.id, { name: team.name, permission: permissions }) unless dry_run?
     end
@@ -97,6 +85,6 @@ module GithubIntegration
     def create_repo(repo_name)
       client.repos.create(org: company_name, name: repo_name, private: true) unless dry_run?
     end
-    
+
   end
 end
