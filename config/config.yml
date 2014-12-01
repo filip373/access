@@ -13,6 +13,8 @@ defaults: &defaults
 
 test:
   <<: *defaults
+  permissions_repo:
+    checkout_dir: 'spec/get_diff_yamls'
 
 development:
   <<: *defaults
