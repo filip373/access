@@ -11,4 +11,10 @@ class SessionController < ApplicationController
     redirect_to github_index_path
   end
 
+  def destroy
+    session[:token] = nil
+    session[:google_token] = nil
+    redirect_to root_path
+  end
+
 end
