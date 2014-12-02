@@ -9,6 +9,11 @@ defaults: &defaults
   github:
     client_id: a
     client_secret: b
+  email_domain: netguru.pl
+  google:
+    scope: 'email, profile, plus.me, https://www.googleapis.com/auth/admin.directory.user, https://www.googleapis.com/auth/admin.directory.group, https://www.googleapis.com/auth/admin.directory.user.security'
+    client_id: 'I couldnt possibly be any more in sec_config, than I am now. Just sayin'
+    client_secret: 'Same here, bro. Totally and utterly in sec_config. Chillin'
 
 
 test:
@@ -27,3 +32,6 @@ production:
   github:
     client_id: <%= ENV["GH_CLIENT_ID"] %>
     client_secret: <%= ENV["GH_CLIENT_SECRET"] %>
+  google:
+    client_id: <%= ENV["GOOGLE_CLIENT_ID"] %>
+    client_secret: <%= ENV["GOOGLE_CLIENT_SECRET"] %>
