@@ -8,6 +8,7 @@ gem 'haml'
 
 gem 'omniauth'
 gem 'omniauth-github'
+gem 'omniauth-google-oauth2'
 gem 'github_api'
 gem 'decent_exposure'
 gem 'konf'
