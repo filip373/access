@@ -1,6 +1,7 @@
 GithubApp::Application.routes.draw do
   root 'github#index'
-  get '/auth/github/callback' => 'session#create'
+  get '/auth/:provider/callback' => 'session#create'
+  get '/logout' => 'session#destroy', as: 'logout'
 
   resources :github, only: [:index] do
     collection do
