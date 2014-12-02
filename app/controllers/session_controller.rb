@@ -1,11 +1,13 @@
 class SessionController < ApplicationController
 
-  skip_before_filter :such_auth_required, only: [:create]
+  skip_before_filter :gh_auth_required, only: [:create, :destroy]
+  skip_before_filter :google_auth_required, only: [:create, :destroy]
 
   expose(:auth_hash){ request.env['omniauth.auth'].with_indifferent_access }
 
   def create
-    session[:token] = auth_hash[:credentials][:token]
+    session[:token] = auth_hash[:credentials][:token] if auth_hash[:provider] == 'github'
+    session[:google_token] = auth_hash[:credentials][:token] if auth_hash[:provider] == 'google_oauth2'
     redirect_to github_index_path
   end
 
