@@ -8,7 +8,7 @@ class SessionController < ApplicationController
   def create
     session[:token] = auth_hash[:credentials][:token] if auth_hash[:provider] == 'github'
     session[:google_token] = auth_hash[:credentials][:token] if auth_hash[:provider] == 'google_oauth2'
-    redirect_to github_index_path
+    redirect_to main_index_path
   end
 
   def destroy
