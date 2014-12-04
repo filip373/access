@@ -11,20 +11,20 @@ RSpec.describe GithubIntegration::Actions::GetDiff do
   let(:new_team) { GithubIntegration::Team.new('team2', ['first.member'], ['first-repo'], 'push') } # => spec/get_diff_ymls/github_teams/team2.yml
   let(:existing_teams) { [team1] }
   let(:gh_api) do
-    api = OpenStruct.new
-    api.client = {}
-    api.organizations = {}
-    api.teams = {}
-    api.stub_chain(:client, :organizations, :teams, :list_members) do |arg|
-      existing_teams[arg-1].members
-    end
+    OpenStruct.new.tap do |api|
+      api.client = {}
+      api.organizations = {}
+      api.teams = {}
+      api.stub_chain(:client, :organizations, :teams, :list_members) do |arg|
+        existing_teams[arg-1].members
+      end
 
-    api.stub_chain(:client, :organizations, :teams, :list_repos) do |arg|
-      existing_teams[arg-1].repos
-    end
+      api.stub_chain(:client, :organizations, :teams, :list_repos) do |arg|
+        existing_teams[arg-1].repos
+      end
 
-    api.stub(:teams).and_return(existing_teams)
-    api
+      api.stub(:teams).and_return(existing_teams)
+    end
   end
 
   subject { described_class.new(expected_teams, gh_api).now! }
