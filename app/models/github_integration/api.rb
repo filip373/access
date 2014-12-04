@@ -1,30 +1,23 @@
 module GithubIntegration
   class Api
-    attr_accessor :token, :company_name, :dry_run
+    attr_accessor :token, :company_name
 
     def initialize(token, company_name)
       self.token = token
       self.company_name = company_name
-      self.dry_run = false
     end
-
-    alias_method :dry_run?, :dry_run
 
     def client
       @client ||= Github.new(oauth_token: token, org: company_name, auto_pagination: true)
     end
 
     def create_team(team_name, permission)
-      if dry_run?
-        team = Hashie::Mash.new members: [], name: team_name, permission: permission, fake: true
-      else
-        response = client.organizations.teams.create(company_name, { name: team_name, permission: permission } )
-        yield(response) if block_given?
-      end
+      response = client.organizations.teams.create(company_name, { name: team_name, permission: permission } )
+      yield(response) if block_given?
     end
 
     def remove_team(team)
-      client.organizations.teams.delete(team.id) unless dry_run?
+      client.organizations.teams.delete(team.id)
     end
 
     def add_member(member, team)
@@ -34,25 +27,25 @@ module GithubIntegration
         false
       end
       unless already_invited
-        client.put_request("/teams/#{team.id}/memberships/#{member}") unless dry_run?
+        client.put_request("/teams/#{team.id}/memberships/#{member}")
       end
     end
 
     def remove_member(member, team)
-      client.delete_request("/teams/#{team.id}/memberships/#{member}") unless dry_run?
+      client.delete_request("/teams/#{team.id}/memberships/#{member}")
     end
 
     def add_repo(repo, team)
       find_or_create_repo(repo)
-      client.orgs.teams.add_repo(team.id, company_name, repo) unless dry_run?
+      client.orgs.teams.add_repo(team.id, company_name, repo)
     end
 
     def remove_repo(repo, team)
-      client.orgs.teams.remove_repo(team.id, company_name, repo) unless dry_run?
+      client.orgs.teams.remove_repo(team.id, company_name, repo)
     end
 
     def new_permission(permissions, team)
-      client.organizations.teams.edit(team.id, { name: team.name, permission: permissions }) unless dry_run?
+      client.organizations.teams.edit(team.id, { name: team.name, permission: permissions })
     end
 
     def list_org_members(org_name)
@@ -83,7 +76,7 @@ module GithubIntegration
     end
 
     def create_repo(repo_name)
-      client.repos.create(org: company_name, name: repo_name, private: true) unless dry_run?
+      client.repos.create(org: company_name, name: repo_name, private: true)
     end
 
   end

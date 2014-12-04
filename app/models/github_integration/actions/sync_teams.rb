@@ -10,11 +10,6 @@ module GithubIntegration
         sync(diff)
       end
 
-      def dry_run!
-        gh_api.dry_run = true
-        sync(diff)
-      end
-
       private
 
       def sync(diff)
