@@ -20,6 +20,7 @@ test:
   <<: *defaults
   permissions_repo:
     checkout_dir: 'spec/get_diff_yamls'
+  email_domain: example.com
 
 development:
   <<: *defaults
