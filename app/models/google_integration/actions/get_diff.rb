@@ -28,7 +28,7 @@ module GoogleIntegration
           google_group = find_or_create_google_group(expected_group)
 
           members_diff(google_group, members)
-          aliases_diff(google_group, group_data.aliases)
+          aliases_diff(google_group, expected_group.aliases)
         end
       end
 
