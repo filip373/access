@@ -2,8 +2,6 @@ require 'spec_helper'
 require 'rails_helper'
 require Rails.root.join 'app/models/google_integration/actions/get_diff'
 require Rails.root.join 'app/models/google_integration/groups'
-require 'ostruct'
-
 
 RSpec.describe GoogleIntegration::Actions::GetDiff do
   let(:expected_groups) { GoogleIntegration::Groups.all }
