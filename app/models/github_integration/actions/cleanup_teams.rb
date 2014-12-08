@@ -13,11 +13,6 @@ module GithubIntegration
         remove_stranded_teams
       end
 
-      def dry_run!
-        gh_api.dry_run = true
-        remove_stranded_teams
-      end
-
       def stranded_teams
         gh_teams = gh_api.teams
         expected_names = expected_teams.map(&:name)
@@ -31,9 +26,6 @@ module GithubIntegration
           gh_api.remove_team(team)
         end
       end
-
-
-
     end
   end
 end
