@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'rails_helper'
-require_relative '../../app/models/github_integration/actions/get_diff'
-require_relative '../../app/models/github_integration/teams'
+require Rails.root.join 'app/models/github_integration/actions/get_diff'
+require Rails.root.join 'app/models/github_integration/teams'
 require 'ostruct'
 
 
