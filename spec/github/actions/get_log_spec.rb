@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'rails_helper'
 require Rails.root.join 'app/models/github_integration/actions/get_log'
 
-RSpec.describe GithubIntegration::Actions::GetLog do
+RSpec.describe Log::Github do
   let(:team) { Hashie::Mash.new name: 'team1', permission: 'push', fake: true }
   let(:new_team) { Hashie::Mash.new name: 'new team', permission: 'push', fake: true }
   let(:diff) do
@@ -15,19 +15,19 @@ RSpec.describe GithubIntegration::Actions::GetLog do
         }
       },
       add_members: {
-        team => { members: ['first.dude'] }
+        team => ['first.dude']
       },
       remove_members: {
-        team => { members: ['second.dude'] }
+        team => ['second.dude']
       },
       add_repos: {
-        team => { repos: ['first_repo'] }
+        team => ['first_repo']
       },
       remove_repos: {
-        team => { repos: ['second_repo'] }
+        team => ['second_repo']
       },
       change_permissions: {
-        team => { permissions: 'push' }
+        team => 'push'
       }
     }
   end
@@ -51,12 +51,12 @@ RSpec.describe GithubIntegration::Actions::GetLog do
     it { is_expected.to include "[api] create team #{new_team.name}" }
     it { is_expected.to include "[api] add member #{diff[:create_teams][new_team][:add_members][0]} to team #{new_team.name}" }
     it { is_expected.to include "[api] add repo #{diff[:create_teams][new_team][:add_repos][0]} to team #{new_team.name}" }
-    it { is_expected.to include "[api] add permissions #{new_team.name} - #{diff[:create_teams][new_team][:add_permissions]}" }
-    it { is_expected.to include "[api] change permission #{team.name} - #{diff[:change_permissions][team][:permissions]}" }
-    it { is_expected.to include "[api] add member #{diff[:add_members][team][:members][0]} to team #{team.name}" }
-    it { is_expected.to include "[api] remove member #{diff[:remove_members][team][:members][0]} from team #{team.name}" }
-    it { is_expected.to include "[api] add repo #{diff[:add_repos][team][:repos][0]} to team #{team.name}" }
-    it { is_expected.to include "[api] remove repo #{diff[:remove_repos][team][:repos][0]} from team #{team.name}" }
+    it { is_expected.to include "[api] add permission #{diff[:create_teams][new_team][:add_permissions]} to team #{new_team.name}" }
+    it { is_expected.to include "[api] add member #{diff[:add_members][team][0]} to team #{team.name}" }
+    it { is_expected.to include "[api] remove member #{diff[:remove_members][team][0]} from team #{team.name}" }
+    it { is_expected.to include "[api] add repo #{diff[:add_repos][team][0]} to team #{team.name}" }
+    it { is_expected.to include "[api] remove repo #{diff[:remove_repos][team][0]} from team #{team.name}" }
+    it { is_expected.to include "[api] change permission #{team.name} - #{diff[:change_permissions][team]}" }
   end
 
   context 'without changes' do
