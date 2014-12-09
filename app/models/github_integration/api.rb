@@ -56,11 +56,19 @@ module GithubIntegration
       client.users.get(user: login).body
     end
 
-    def teams
+    def list_teams
       @teams ||= begin
         teams =  client.organizations.teams.list(org: company_name)
         teams.flatten.reject { |e| e.name == 'Owners' }
       end
+    end
+
+    def list_team_members(team_id)
+      client.organizations.teams.list_members(team_id)
+    end
+
+    def list_team_repos(team_id)
+      client.organizations.teams.list_repos(team_id)
     end
 
     private
