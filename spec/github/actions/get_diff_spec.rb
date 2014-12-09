@@ -2,28 +2,22 @@ require 'spec_helper'
 require 'rails_helper'
 require Rails.root.join 'app/models/github_integration/actions/get_diff'
 require Rails.root.join 'app/models/github_integration/teams'
-require 'ostruct'
 
-
-RSpec.describe GithubIntegration::Actions::GetDiff do
+RSpec.describe Diff::Github do
   let(:expected_teams) { GithubIntegration::Teams.all }
   let(:team1) { Hashie::Mash.new({ name: 'team1', id: 1, members: [login: 'frst.mbr'], repos: [name: 'first-repo'], permissions: 'pull' }) }
-  let(:new_team) { GithubIntegration::Team.new('team2', ['first.member'], ['first-repo'], 'push') } # => spec/get_diff_ymls/github_teams/team2.yml
+  let(:new_team) { GithubIntegration::Team.new('team2', ['first.member'], ['first-repo'], 'push') }
   let(:existing_teams) { [team1] }
   let(:gh_api) do
-    OpenStruct.new.tap do |api|
-      api.client = {}
-      api.organizations = {}
-      api.teams = {}
-      api.stub_chain(:client, :organizations, :teams, :list_members) do |arg|
+    double.tap do |api|
+      api.stub(:list_teams).and_return(existing_teams)
+      api.stub(:teams).and_return(existing_teams)
+      api.stub(:list_team_members) do |arg|
         existing_teams[arg-1].members
       end
-
-      api.stub_chain(:client, :organizations, :teams, :list_repos) do |arg|
+      api.stub(:list_team_repos) do |arg|
         existing_teams[arg-1].repos
       end
-
-      api.stub(:teams).and_return(existing_teams)
     end
   end
 
@@ -32,11 +26,11 @@ RSpec.describe GithubIntegration::Actions::GetDiff do
   it { is_expected.to be_a Hash }
 
   context 'existing team' do
-    it { expect(subject[:add_members][team1][:members]).to eq ['scnd.mbr'] }
-    it { expect(subject[:remove_members][team1][:members]).to eq ['frst.mbr'] }
-    it { expect(subject[:add_repos][team1][:repos]).to eq ['second-repo'] }
-    it { expect(subject[:remove_repos][team1][:repos]).to eq ['first-repo'] }
-    it { expect(subject[:change_permissions][team1][:permissions]).to eq 'push' }
+    it { expect(subject[:add_members][team1]).to eq ['scnd.mbr'] }
+    it { expect(subject[:remove_members][team1]).to eq ['frst.mbr'] }
+    it { expect(subject[:add_repos][team1]).to eq ['second-repo'] }
+    it { expect(subject[:remove_repos][team1]).to eq ['first-repo'] }
+    it { expect(subject[:change_permissions][team1]).to eq 'push' }
   end
 
   context 'new team' do
