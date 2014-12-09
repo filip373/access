@@ -14,7 +14,7 @@ module GithubIntegration
       end
 
       def stranded_teams
-        gh_teams = gh_api.teams
+        gh_teams = gh_api.list_teams
         expected_names = expected_teams.map(&:name)
         gh_teams.reject{ |e| e.name.in?(expected_names) }
       end
