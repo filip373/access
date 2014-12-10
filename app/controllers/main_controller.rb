@@ -30,7 +30,6 @@ class MainController < ApplicationController
     @google_diff = google_diff.now!
     @google_log = get_google_log.now!
     @google_log = []
-    render
   end
 
   def do_sync
@@ -38,12 +37,10 @@ class MainController < ApplicationController
     sync_google.now!(get_google_diff)
     @gh_diff = nil
     @google_diff = nil
-    render
   end
 
   def cleanup_teams
     teams_cleanup.now!
-    render
   end
 
   def index
