@@ -44,8 +44,8 @@ module GithubIntegration
       client.orgs.teams.remove_repo(team.id, company_name, repo)
     end
 
-    def new_permission(permissions, team)
-      client.organizations.teams.edit(team.id, { name: team.name, permission: permissions })
+    def add_permission(permission, team)
+      client.organizations.teams.edit(team.id, { name: team.name, permission: permission })
     end
 
     def list_org_members(org_name)
