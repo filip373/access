@@ -8,6 +8,7 @@ class MainController < ApplicationController
   require Rails.root.join("app/models/github_integration/actions/sync_teams")
   require Rails.root.join("app/models/google_integration/actions/get_log")
   require Rails.root.join("app/models/google_integration/actions/get_diff")
+  require Rails.root.join("app/models/google_integration/actions/sync_groups")
 
   expose(:gh_api) { GithubIntegration::Api.new(session[:token], AppConfig.company) }
   expose(:google_api) { GoogleIntegration::Api.new(session[:google_token]) }
@@ -25,7 +26,7 @@ class MainController < ApplicationController
   # expose(:get_google_log) { Log::Google.new(get_google_diff) }
 
   expose(:sync_github) { Sync::Github.new(gh_api) }
-  # expose(:sync_google) { GoogleIntegration::Actions::SyncGroups.new(google_api) }
+  # expose(:sync_google) { Sync::Google.new(google_api) }
 
   expose(:teams_cleanup) { GithubIntegration::Actions::CleanupTeams.new(expected_teams, gh_api) }
   expose(:missing_teams) { teams_cleanup.stranded_teams }
