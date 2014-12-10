@@ -2,6 +2,8 @@ module GoogleIntegration
   class Api
     attr_accessor :token
 
+    BASE_URL = "https://www.googleapis.com:443"
+
     def initialize token
       self.token = token
     end
@@ -84,7 +86,7 @@ module GoogleIntegration
         "kind" => "groupsSettings#groups",
         "spamModerationLevel" => "ALLOW"
       }
-      response = api.put "https://www.googleapis.com:443/groups/v1/groups/#{group_email}",
+      response = api.put "#{BASE_URL}/groups/v1/groups/#{group_email}",
       body: body.to_json,
       headers: {"Content-Type" => "application/json" }
       response.body.present? ? JSON.parse(response.body) : {}
@@ -93,7 +95,7 @@ module GoogleIntegration
     private
 
     def post path, body
-      response = api.post "https://www.googleapis.com:443/admin/directory/v1/#{path}",
+      response = api.post "#{BASE_URL}/admin/directory/v1/#{path}",
       body: body.to_json,
       headers: {"Content-Type" => "application/json" }
       response.body.present? ? JSON.parse(response.body) : {}
@@ -101,21 +103,21 @@ module GoogleIntegration
 
 
     def put path, body
-      response = api.put "https://www.googleapis.com:443/admin/directory/v1/#{path}",
+      response = api.put "#{BASE_URL}/admin/directory/v1/#{path}",
       body: body.to_json,
       headers: {"Content-Type" => "application/json" }
       response.body.present? ? JSON.parse(response.body) : {}
     end
 
     def get path, query = {}
-      response = api.get "https://www.googleapis.com:443/admin/directory/v1/#{path}",
+      response = api.get "#{BASE_URL}/admin/directory/v1/#{path}",
       params: query,
       headers: {"Content-Type" => "application/json" }
       JSON.parse response.body
     end
 
     def delete path
-      response = api.delete "https://www.googleapis.com:443/admin/directory/v1/#{path}",
+      response = api.delete "#{BASE_URL}/admin/directory/v1/#{path}",
       headers: {"Content-Type" => "application/json" }
       response.body.present? ? JSON.parse(response.body) : {}
     end
