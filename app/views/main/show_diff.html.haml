@@ -1,16 +1,10 @@
 .jumbotron
   %h2 Please confirm changes below:
 
-  - if @gh_log[0] =~ /no changes/ && @google_log[0] =~ /no changes/
+  - if logs_empty?
     %h3 Move along, nothing to see here.
     = link_to "Wicked!", main_index_path, class: 'btn btn-primary btn-lg'
   - else
-    %ul.list-group.gh_log
-      - @gh_log.each do |line|
-        %li.list-group-item #{line}
-
-    %ul.list-group.google_log
-      - @google_log.each do |line|
-        %li.list-group-item #{line}
-
+    = render "gh_log"
+    = render "google_log"
     = button_to "Confirm changes", do_sync_main_index_path, method: :post, class: 'btn btn-primary btn-lg'
