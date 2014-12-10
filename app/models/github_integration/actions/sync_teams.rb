@@ -20,36 +20,36 @@ module GithubIntegration
       end
 
       def sync_members(members_to_add, members_to_remove)
-        members_to_add.each do |team, h|
-          h[:members].each do |member|
+        members_to_add.each do |team, members|
+          members.each do |member|
             @gh_api.add_member(member, team)
           end
         end
 
-        members_to_remove.each do |team, h|
-          h[:members].each do |member|
+        members_to_remove.each do |team, members|
+          members.each do |member|
             @gh_api.remove_member(member, team)
           end
         end
       end
 
       def sync_repos(repos_to_add, repos_to_remove)
-        repos_to_add.each do |team, h|
-          h[:repos].each do |repo|
+        repos_to_add.each do |team, repos|
+          repos.each do |repo|
             @gh_api.add_repo(repo, team)
           end
         end
 
-        repos_to_remove.each do |team, h|
-          h[:repos].each do |repo|
+        repos_to_remove.each do |team, repos|
+          repos.each do |repo|
             @gh_api.remove_repo(repo, team)
           end
         end
       end
 
       def sync_teams_permissions(change_permissions)
-        change_permissions.each do |team, h|
-          @gh_api.new_permission(h[:permissions], team)
+        change_permissions.each do |team, permissions|
+          @gh_api.new_permission(permissions, team)
         end
       end
 
