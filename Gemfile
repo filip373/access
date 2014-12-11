@@ -27,6 +27,9 @@ gem 'capistrano-passenger'
 
 gem 'rollbar'
 
+group :development, :production do
+  gem 'delayed_job'
+end
 
 group :development do
   gem 'pry'
