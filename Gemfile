@@ -18,6 +18,7 @@ gem 'pry-rails'
 gem 'pry-byebug'
 gem 'slack-notifier'
 gem 'netguru_theme'
+gem 'sucker_punch'
 
 gem 'capistrano'
 gem 'rvm1-capistrano3', require: false
@@ -26,10 +27,6 @@ gem 'capistrano-bundler'
 gem 'capistrano-passenger'
 
 gem 'rollbar'
-
-group :development, :production do
-  gem 'delayed_job'
-end
 
 group :development do
   gem 'pry'
