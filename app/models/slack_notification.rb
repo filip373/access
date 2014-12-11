@@ -1,5 +1,5 @@
 require 'slack-notifier'
-class SlackNotication < Struct.new(:token, :channel, :compare_url, :app_url)
+class SlackNotification < Struct.new(:token, :channel, :compare_url, :app_url)
   def notify_on_change
     client.ping message
   end
