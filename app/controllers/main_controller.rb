@@ -25,8 +25,9 @@ class MainController < ApplicationController
   expose(:get_gh_log) { Log::Github.new(get_gh_diff) }
   # expose(:get_google_log) { Log::Google.new(get_google_diff) }
 
-  expose(:sync_github) { Sync::Github.new(gh_api) }
-  # expose(:sync_google) { Sync::Google.new(google_api) }
+
+  expose(:sync_github_job) { SyncGithubJob.new }
+  # expose(:sync_google_job) { SyncGoogleJob.new }
 
   expose(:teams_cleanup) { GithubIntegration::Actions::CleanupTeams.new(expected_teams, gh_api) }
   expose(:missing_teams) { teams_cleanup.stranded_teams }
@@ -40,8 +41,8 @@ class MainController < ApplicationController
   end
 
   def do_sync
-    sync_github.now!(get_gh_diff)
-    # sync_google.now!(get_google_diff)
+    sync_github_job.async.perform(gh_api, get_gh_diff)
+    # sync_google_job.async.perform(google_api, get_google_diff)
     reset_diffs
   end
 
