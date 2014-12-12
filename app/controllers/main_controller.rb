@@ -1,14 +1,7 @@
 class MainController < ApplicationController
   before_action :check_permissions
-  require Rails.root.join("app/models/actions/get_log")
-  require Rails.root.join("app/models/actions/get_diff")
-  require Rails.root.join("app/models/actions/sync")
-  require Rails.root.join("app/models/github_integration/actions/get_log")
-  require Rails.root.join("app/models/github_integration/actions/get_diff")
-  require Rails.root.join("app/models/github_integration/actions/sync_teams")
-  require Rails.root.join("app/models/google_integration/actions/get_log")
-  require Rails.root.join("app/models/google_integration/actions/get_diff")
-  require Rails.root.join("app/models/google_integration/actions/sync_groups")
+  Dir[File.join(Rails.root, "app/models/**/*.rb")].each {|file| require file.gsub(/\.rb$/,"") }
+  Dir[File.join(Rails.root, "app/jobs/*.rb")].each {|file| require file.gsub(/\.rb$/,"") }
 
   expose(:gh_api) { GithubIntegration::Api.new(session[:token], AppConfig.company) }
   expose(:google_api) { GoogleIntegration::Api.new(session[:google_token]) }
