@@ -1,12 +1,4 @@
 require 'slack-notifier'
-  def notify_on_change
-    client.ping message
-  end
-
-  def message
-    "Click here: #{compare_url} to review.\nClick here: #{app_url} to apply."
-  end
-
 class SlackNotification < Struct.new(:opts)
   def name
     "Access app"
