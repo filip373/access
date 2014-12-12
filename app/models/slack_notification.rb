@@ -13,6 +13,7 @@ class SlackNotification < Struct.new(:opts)
   end
 
   def ping!
+    return unless opts[:message].present?
     client.ping opts[:message]
   end
 
