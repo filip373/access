@@ -1,5 +1,4 @@
 require 'slack-notifier'
-class SlackNotification < Struct.new(:token, :channel, :compare_url, :app_url, :opts)
   def notify_on_change
     client.ping message
   end
@@ -8,6 +7,7 @@ class SlackNotification < Struct.new(:token, :channel, :compare_url, :app_url, :
     "Click here: #{compare_url} to review.\nClick here: #{app_url} to apply."
   end
 
+class SlackNotification < Struct.new(:opts)
   def name
     "Access app"
   end
@@ -17,8 +17,8 @@ class SlackNotification < Struct.new(:token, :channel, :compare_url, :app_url, :
   end
 
   def client
-    @client ||= Slack::Notifier.new AppConfig.company, token,
-                               channel: channel,
+    @client ||= Slack::Notifier.new AppConfig.slack.webhook_url,
+                               channel: ["#", AppConfig.slack.default_channel].join,
                                username: name
   end
 end

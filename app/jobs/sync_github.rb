@@ -22,7 +22,7 @@ class SyncGithubJob
   end
 
   def notification_ping! msg
-    notifier = SlackNotification.new(ENV['SLACK_TOKEN'], ENV['SLACK_CHANNEL'], ENV['REVIEW_PATH'], ENV['APP_URL'], message: msg)
+    notifier = SlackNotification.new(message: msg)
     notifier.ping!
   end
 end
