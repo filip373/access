@@ -3,7 +3,7 @@ require 'rails_helper'
 require Rails.root.join 'app/models/google_integration/actions/get_diff'
 require Rails.root.join 'app/models/google_integration/groups'
 
-RSpec.describe Diff::Google do
+RSpec.describe GoogleIntegration::Actions::Diff do
   let(:expected_groups) { GoogleIntegration::Groups.all }
   let(:group1) { Hashie::Mash.new(id: 1, name: 'group1', aliases: [{ alias: 'alias1' }]) }
   let(:new_group) { expected_groups.find { |g| g.name == 'new_group' } }

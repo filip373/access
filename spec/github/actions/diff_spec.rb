@@ -3,7 +3,7 @@ require 'rails_helper'
 require Rails.root.join 'app/models/github_integration/actions/get_diff'
 require Rails.root.join 'app/models/github_integration/teams'
 
-RSpec.describe Diff::Github do
+RSpec.describe GithubIntegration::Actions::Diff do
   let(:expected_teams) { GithubIntegration::Teams.all }
   let(:team1) { Hashie::Mash.new({ name: 'team1', id: 1, members: [login: 'frst.mbr'], repos: [name: 'first-repo'], permissions: 'pull' }) }
   let(:new_team) { GithubIntegration::Team.new('team2', ['first.member'], ['first-repo'], 'push') }
