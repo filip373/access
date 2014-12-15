@@ -1,6 +1,5 @@
 class MainController < ApplicationController
   before_action :check_permissions
-  Dir[File.join(Rails.root, "app/models/**/*.rb")].each {|file| require file.gsub(/\.rb$/,"") }
   Dir[File.join(Rails.root, "app/jobs/*.rb")].each {|file| require file.gsub(/\.rb$/,"") }
 
   expose(:gh_api) { GithubIntegration::Api.new(session[:token], AppConfig.company) }
@@ -12,15 +11,15 @@ class MainController < ApplicationController
   expose(:validation_errors) { Storage.validation_errors }
   expose(:update_repo) { UpdateRepo.new }
 
-  expose(:gh_diff) { Diff::Github.new(expected_teams, gh_api) }
-  # expose(:google_diff) { Diff::Google.new(expected_groups, google_api) }
+  expose(:gh_diff) { GithubIntegration::Actions::Diff.new(expected_teams, gh_api) }
+  # expose(:google_diff) { GoogleIntegration::Actions::Diff.new(expected_groups, google_api) }
 
-  expose(:get_gh_log) { Log::Github.new(get_gh_diff) }
-  # expose(:get_google_log) { Log::Google.new(get_google_diff) }
+  expose(:get_gh_log) { GithubIntegration::Actions::Log.new(get_gh_diff) }
+  # expose(:get_google_log) { GoogleIntegration::Actions::Log.new(get_google_diff) }
 
 
-  expose(:sync_github_job) { SyncGithubJob.new }
-  # expose(:sync_google_job) { SyncGoogleJob.new }
+  expose(:sync_github_job) { Jobs::SyncGithubJob.new }
+  # expose(:sync_google_job) { Jobs::SyncGoogleJob.new }
 
   expose(:teams_cleanup) { GithubIntegration::Actions::CleanupTeams.new(expected_teams, gh_api) }
   expose(:missing_teams) { teams_cleanup.stranded_teams }
