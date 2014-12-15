@@ -1,7 +1,4 @@
-require 'spec_helper'
 require 'rails_helper'
-require Rails.root.join 'app/models/google_integration/actions/get_diff'
-require Rails.root.join 'app/models/google_integration/groups'
 
 RSpec.describe GoogleIntegration::Actions::Diff do
   let(:expected_groups) { GoogleIntegration::Groups.all }

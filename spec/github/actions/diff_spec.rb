@@ -1,7 +1,4 @@
-require 'spec_helper'
 require 'rails_helper'
-require Rails.root.join 'app/models/github_integration/actions/get_diff'
-require Rails.root.join 'app/models/github_integration/teams'
 
 RSpec.describe GithubIntegration::Actions::Diff do
   let(:expected_teams) { GithubIntegration::Teams.all }

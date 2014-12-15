@@ -1,6 +1,4 @@
-require 'spec_helper'
 require 'rails_helper'
-require Rails.root.join 'app/models/google_integration/actions/get_log'
 
 RSpec.describe GoogleIntegration::Actions::Log do
   let(:group) { Hashie::Mash.new name: 'group1', email: 'group1', fake: true }

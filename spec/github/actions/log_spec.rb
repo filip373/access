@@ -1,6 +1,4 @@
-require 'spec_helper'
 require 'rails_helper'
-require Rails.root.join 'app/models/github_integration/actions/get_log'
 
 RSpec.describe GithubIntegration::Actions::Log do
   let(:team) { Hashie::Mash.new name: 'team1', permission: 'push', fake: true }
