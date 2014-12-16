@@ -1,9 +1,10 @@
 class GithubIntegrationController < ApplicationController
   Dir[File.join(Rails.root, "app/jobs/*.rb")].each {|file| require file.gsub(/\.rb$/,"") }
 
+  expose(:validation_errors) { Storage.validation_errors }
   expose(:gh_api) { GithubIntegration::Api.new(session[:token], AppConfig.company) }
   expose(:expected_teams) { GithubIntegration::Teams.all }
-  expose(:gh_diff) { GithubIntegration::Actions::Diff.new(expected_teams, gh_api)
+  expose(:gh_diff) { GithubIntegration::Actions::Diff.new(expected_teams, gh_api) }
   expose(:get_gh_log) { GithubIntegration::Actions::Log.new(get_gh_diff) }
   expose(:sync_github_job) { Jobs::SyncGithubJob.new }
   expose(:teams_cleanup) { GithubIntegration::Actions::CleanupTeams.new(expected_teams, gh_api) }
