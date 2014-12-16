@@ -24,7 +24,7 @@ class GithubIntegrationController < ApplicationController
 
   private
 
-  def reset_diffs
+  def reset_diff
     @gh_diff = nil
   end
 
