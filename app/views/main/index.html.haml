@@ -11,6 +11,9 @@
     - validation_errors.each do |error|
       = link_to error.message, github_file_path(error.file), class: 'list-group-item list-group-item-danger'
 
+  - if AppConfig.features.google_integration
+    = render "google_integration"
+
 - if validation_errors.empty? && missing_teams.size > 0
   .jumbotron
     %h2 Validations
