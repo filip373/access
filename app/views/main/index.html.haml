@@ -13,15 +13,3 @@
 
   - if AppConfig.features.google_integration
     = render "google_integration"
-
-- if validation_errors.empty? && missing_teams.size > 0
-  .jumbotron
-    %h2 Validations
-    %h3 Following teams are on GitHub, but can't be found in permissions repository - they most likely should be deleted.
-    %ul.list-group
-      - missing_teams.each do |team|
-        = link_to team.name, github_team_path(team.name), class: 'list-group-item'
-    = button_to "Ok, it makes sense to remove these teams!",
-                github_cleanup_teams_path,
-                method: :delete,
-                class: 'btn btn-primary btn-lg'
