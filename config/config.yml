@@ -17,6 +17,8 @@ defaults: &defaults
   slack:
     webhook_url: <%= ENV["SLACK_WEBHOOK_URL"] %>
     default_channel: <%= ENV["SLACK_DEFAULT_CHANNEL"] %>
+  features:
+    google_integration: false
 
 
 test:
