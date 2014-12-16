@@ -1,6 +1,4 @@
 class GithubIntegrationController < ApplicationController
-  Dir[File.join(Rails.root, "app/jobs/*.rb")].each {|file| require file.gsub(/\.rb$/,"") }
-
   expose(:validation_errors) { Storage.validation_errors }
   expose(:gh_api) { GithubIntegration::Api.new(session[:token], AppConfig.company) }
   expose(:expected_teams) { GithubIntegration::Teams.all }

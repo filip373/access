@@ -1,6 +1,4 @@
 class GithubIntegrationController < ApplicationController
-  Dir[File.join(Rails.root, "app/jobs/*.rb")].each {|file| require file.gsub(/\.rb$/,"") }
-
   expose(:google_api) { GoogleIntegration::Api.new(session[:google_token]) }
   expose(:expected_groups) { GoogleIntegration::Groups.all }
   expose(:google_diff) { GoogleIntegration::Actions::Diff.new(expected_groups, google_api) }
