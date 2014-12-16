@@ -71,6 +71,8 @@ GEM
     erubis (2.7.0)
     faraday (0.9.0)
       multipart-post (>= 1.2, < 3)
+    font-awesome-rails (4.2.0.0)
+      railties (>= 3.2, < 5.0)
     git (1.2.8)
     github_api (0.12.1)
       addressable (~> 2.3)
@@ -217,6 +219,7 @@ DEPENDENCIES
   capistrano-passenger
   capistrano-rails
   decent_exposure
+  font-awesome-rails
   git
   github_api
   haml

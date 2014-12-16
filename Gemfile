@@ -19,6 +19,7 @@ gem 'pry-byebug'
 gem 'slack-notifier'
 gem 'netguru_theme'
 gem 'sucker_punch'
+gem 'font-awesome-rails'
 
 gem 'capistrano'
 gem 'rvm1-capistrano3', require: false
