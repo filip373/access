@@ -5,7 +5,7 @@ class GithubIntegrationController < ApplicationController
   expose(:expected_groups) { GoogleIntegration::Groups.all }
   expose(:google_diff) { GoogleIntegration::Actions::Diff.new(expected_groups, google_api) }
   expose(:get_google_log) { GoogleIntegration::Actions::Log.new(get_google_diff) }
-  expose(:sync_google_job) { Jobs::SyncGoogleJob.new }
+  expose(:sync_google_job) { GoogleIntegration::SyncJob.new }
 
   def show_diff
     @google_diff = google_diff.now!

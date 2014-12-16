@@ -1,7 +1,5 @@
-require Rails.root.join("app/models/slack_notification")
-
-module Jobs
-  class SyncGoogleJob
+module GoogleIntegration
+  class SyncJob
     include SuckerPunch::Job
 
     def perform(api, diff)

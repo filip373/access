@@ -6,7 +6,7 @@ class GithubIntegrationController < ApplicationController
   expose(:expected_teams) { GithubIntegration::Teams.all }
   expose(:gh_diff) { GithubIntegration::Actions::Diff.new(expected_teams, gh_api) }
   expose(:get_gh_log) { GithubIntegration::Actions::Log.new(get_gh_diff) }
-  expose(:sync_github_job) { Jobs::SyncGithubJob.new }
+  expose(:sync_github_job) { GithubIntegration::SyncJob.new }
   expose(:teams_cleanup) { GithubIntegration::Actions::CleanupTeams.new(expected_teams, gh_api) }
   expose(:missing_teams) { teams_cleanup.stranded_teams }
 
