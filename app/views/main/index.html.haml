@@ -4,7 +4,7 @@
   = link_to "Review last changes in permissions", AppConfig.permissions_repo.url, target: "_blank"
   %hr
   - if validation_errors.empty?
-    = link_to "Show diff", show_diff_main_index_path, class: 'btn btn-primary btn-lg'
+    = link_to "Show diff", github_show_diff_path, class: 'btn btn-primary btn-lg'
   - else
     %h3 Unable to parse following .yml files:
     %ul.list-group
@@ -22,6 +22,6 @@
       - missing_teams.each do |team|
         = link_to team.name, github_team_path(team.name), class: 'list-group-item'
     = button_to "Ok, it makes sense to remove these teams!",
-                cleanup_teams_main_index_path,
+                github_cleanup_teams_path,
                 method: :delete,
                 class: 'btn btn-primary btn-lg'
