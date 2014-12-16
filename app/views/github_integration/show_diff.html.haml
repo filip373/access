@@ -7,7 +7,8 @@
     = link_to "Wicked!", root_path, class: 'btn btn-primary btn-lg'
   - else
     = render "gh_log"
-    = button_to "Confirm changes", github_sync_path, method: :post, class: 'btn btn-primary btn-lg'
+    = form_tag github_sync_path, method: :post do
+      = button_tag "Confirm changes", type: :submit, class: 'btn btn-primary btn-lg', 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> I\'m on it...".html_safe
 
   - if validation_errors.empty? && missing_teams.size > 0
     %h2 Stranded teams
@@ -15,7 +16,5 @@
     %ul.list-group
       - missing_teams.each do |team|
         = link_to team.name, github_team_path(team.name), class: 'list-group-item'
-    = button_to "Ok, it makes sense to remove these teams!",
-                github_cleanup_teams_path,
-                method: :delete,
-                class: 'btn btn-primary btn-lg'
+    = form_tag github_cleanup_teams_path, method: :delete do
+      = button_tag "Ok, it makes sense to remove these teams!", type: :submit, class: 'btn btn-primary btn-lg', 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> I\'m on it...".html_safe
