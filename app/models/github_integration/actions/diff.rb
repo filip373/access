@@ -91,13 +91,12 @@ module GithubIntegration
         repos.map { |e| e['name'] }.compact
       end
 
-      def get_teams
-        @gh_teams = @gh_api.list_teams
+      def get_team(team_name)
+        get_teams.find { |t| t.name.downcase == team_name.downcase }
       end
 
-      def get_team(team_name)
-        teams = @gh_teams || get_teams
-        teams.find { |t| t.name.downcase == team_name.downcase }
+      def get_teams
+        @teams ||= @gh_api.list_teams
       end
 
       def find_or_create_gh_team(expected_team)
