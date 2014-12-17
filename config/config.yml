@@ -15,8 +15,8 @@ defaults: &defaults
     client_id: 'I couldnt possibly be any more in sec_config, than I am now. Just sayin'
     client_secret: 'Same here, bro. Totally and utterly in sec_config. Chillin'
   slack:
-    webhook_url: <%= ENV["SLACK_WEBHOOK_URL"] %>
-    default_channel: <%= ENV["SLACK_DEFAULT_CHANNEL"] %>
+    webhook_url: "so much in sec config"
+    default_channel: "testing"
   features:
     google_integration: false
 
@@ -42,3 +42,6 @@ production:
     client_id: <%= ENV["GOOGLE_CLIENT_ID"] %>
     client_secret: <%= ENV["GOOGLE_CLIENT_SECRET"] %>
     scope: <%= ENV["GOOGLE_SCOPE"] %>
+  slack:
+    webhook_url: <%= ENV["SLACK_WEBHOOK_URL"] %>
+    default_channel: <%= ENV["SLACK_DEFAULT_CHANNEL"] %>
