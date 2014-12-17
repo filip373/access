@@ -49,12 +49,12 @@ RSpec.describe GithubIntegration::Actions::Log do
     it { is_expected.to include "[api] create team #{new_team.name}" }
     it { is_expected.to include "[api] add member #{diff[:create_teams][new_team][:add_members][0]} to team #{new_team.name}" }
     it { is_expected.to include "[api] add repo #{diff[:create_teams][new_team][:add_repos][0]} to team #{new_team.name}" }
-    it { is_expected.to include "[api] add permission #{diff[:create_teams][new_team][:add_permissions]} to team #{new_team.name}" }
+    it { is_expected.to include "[api] add permissions #{new_team.name} - #{diff[:create_teams][new_team][:add_permissions]}" }
     it { is_expected.to include "[api] add member #{diff[:add_members][team][0]} to team #{team.name}" }
     it { is_expected.to include "[api] remove member #{diff[:remove_members][team][0]} from team #{team.name}" }
     it { is_expected.to include "[api] add repo #{diff[:add_repos][team][0]} to team #{team.name}" }
     it { is_expected.to include "[api] remove repo #{diff[:remove_repos][team][0]} from team #{team.name}" }
-    it { is_expected.to include "[api] change permission #{team.name} - #{diff[:change_permissions][team]}" }
+    it { is_expected.to include "[api] change permissions #{team.name} - #{diff[:change_permissions][team]}" }
   end
 
   context 'without changes' do
