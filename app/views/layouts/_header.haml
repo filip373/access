@@ -2,6 +2,3 @@
   .container
     .navbar-header
       = link_to 'Access app', root_path, class: 'navbar-logo'
-    - if session[:gh_token].present?
-      %ul.nav.navbar-nav
-        %li= link_to 'Logout', logout_path
