@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
   before_filter :google_auth_required
 
   def gh_auth_required
-    redirect_to '/auth/github' unless session[:token].present?
+    redirect_to '/auth/github' unless session[:gh_token].present?
   end
 
   def google_auth_required
