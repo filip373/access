@@ -1,7 +1,7 @@
 module GoogleIntegration
   module Actions
     class Diff < BaseActions::Diff::Base
-      include GoogleIntegrationHelper
+      include MainHelper
 
       attr_accessor :model_name
       create_model_finder_method :group
