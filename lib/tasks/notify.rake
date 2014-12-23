@@ -1,6 +1,4 @@
 require_relative '../../app/models/slack_notification'
-require_relative '../../config/preinitializer'
-
 task :notify do
   notifier = SlackNotification.new(message: message)
   notifier.ping!
