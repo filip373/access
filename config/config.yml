@@ -41,7 +41,6 @@ production:
   google:
     client_id: <%= ENV["GOOGLE_CLIENT_ID"] %>
     client_secret: <%= ENV["GOOGLE_CLIENT_SECRET"] %>
-    scope: <%= ENV["GOOGLE_SCOPE"] %>
   slack:
     webhook_url: <%= ENV["SLACK_WEBHOOK_URL"] %>
     default_channel: <%= ENV["SLACK_DEFAULT_CHANNEL"] %>
