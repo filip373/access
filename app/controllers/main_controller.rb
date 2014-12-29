@@ -1,7 +1,7 @@
 class MainController < ApplicationController
   before_action :check_permissions
 
-  expose(:gh_api) { GithubIntegration::Api.new(session[:token], AppConfig.company) }
+  expose(:gh_api) { GithubIntegration::Api.new(session[:gh_token], AppConfig.company) }
   expose(:validation_errors) { Storage.validation_errors }
   expose(:update_repo) { UpdateRepo.new }
 
