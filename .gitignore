@@ -16,3 +16,6 @@
 /tmp
 
 /config/sec_config.yml
+
+# Ignore checker gem cache 
+/.checker-cache
