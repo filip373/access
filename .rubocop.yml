@@ -9,27 +9,8 @@ AllCops:
     - 'Rakefile'
 Documentation:
   Enabled: false
-AbcSize:
-  Max: 16
-  Enabled: true
-  Exclude:
-    - 'app/reports/*'
-Metrics/MethodLength:
-  Enabled: true
-  Exclude:
-    - 'app/reports/*'
-Metrics/CyclomaticComplexity:
-  Enabled: true
-  Exclude:
-    - 'app/reports/*'
 Metrics/ClassLength:
-  Enabled: true
-  Exclude:
-    - 'app/reports/*'
-Metrics/LineLength:
-  Enabled: true
-  Exclude:
-    - 'app/reports/*'
+  Max: 150
 Rails/ActionFilter:
   Enabled: false
 SignalException:
