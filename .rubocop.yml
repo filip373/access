@@ -1,0 +1,43 @@
+AllCops:
+  Exclude:
+    - 'bin/*'
+    - 'db/**/*'
+    - 'config/**/*'
+    - 'script/**/*'
+    - 'Gemfile'
+    - 'Guardfile'
+    - 'Rakefile'
+Documentation:
+  Enabled: false
+AbcSize:
+  Max: 16
+  Enabled: true
+  Exclude:
+    - 'app/reports/*'
+Metrics/MethodLength:
+  Enabled: true
+  Exclude:
+    - 'app/reports/*'
+Metrics/CyclomaticComplexity:
+  Enabled: true
+  Exclude:
+    - 'app/reports/*'
+Metrics/ClassLength:
+  Enabled: true
+  Exclude:
+    - 'app/reports/*'
+Metrics/LineLength:
+  Enabled: true
+  Exclude:
+    - 'app/reports/*'
+Rails/ActionFilter:
+  Enabled: false
+SignalException:
+  Enabled: false
+Style/PredicateName:
+  Enabled: true
+  Exclude:
+    - 'spec/support/pages/**/*'
+Style/TrailingComma:
+  EnforcedStyleForMultiline: comma
+  Enabled: true
