@@ -53,15 +53,6 @@ module GoogleIntegration
           changePasswordAtNextLogin: true
     end
 
-    def generate_codes(user_email)
-      post "users/#{user_email}/verificationCodes/generate", {}
-    end
-
-    def get_codes(user_email)
-      data = get("users/#{user_email}/verificationCodes")
-      data['items'].map { |e| e['verificationCode'] }
-    end
-
     def create_user(params)
       post 'users',
            name: {
@@ -70,27 +61,6 @@ module GoogleIntegration
            },
            primaryEmail: params[:email],
            password: params[:password]
-    end
-
-    def post_filters(email)
-      username = email.split('@').first
-      Dir.glob("#{Rails.root}/static_data/gmail_filters/*").each do |filter|
-        filter = File.read(filter)
-        api.post "#{EMAIL_SETTINGS_API}/netguru.pl/#{username}/filter",
-                 body: filter,
-                 headers: { 'Content-Type' => 'application/atom+xml' }
-      end
-    end
-
-    def put_spam(group_email)
-      body = {
-        'kind' => 'groupsSettings#groups',
-        'spamModerationLevel' => 'ALLOW',
-      }
-      response = api.put "#{BASE_URL}/groups/v1/groups/#{group_email}",
-                         body: body.to_json,
-                         headers: { 'Content-Type' => 'application/json' }
-      response.body.present? ? JSON.parse(response.body) : {}
     end
 
     private
