@@ -33,8 +33,8 @@ module GoogleIntegration
           current_members = list_group_members(group['id'])
           add = expected_members - current_members
           remove = current_members - expected_members
-          @diff_hash[:add_members][group] = add unless add.empty?
-          @diff_hash[:remove_members][group] = remove unless remove.empty?
+          @diff_hash[:add_members][group] = add if add.present?
+          @diff_hash[:remove_members][group] = remove if remove.present?
         else
           if expected_members.present?
             @diff_hash[:create_groups][group][:add_members] = expected_members
@@ -48,10 +48,10 @@ module GoogleIntegration
           current_aliases = list_group_aliases(group['name'])
           add = aliases - current_aliases
           remove = current_aliases - aliases
-          @diff_hash[:add_aliases][group] = add unless add.empty?
-          @diff_hash[:remove_aliases][group] = remove unless remove.empty?
+          @diff_hash[:add_aliases][group] = add if add.present?
+          @diff_hash[:remove_aliases][group] = remove if remove.present?
         else
-          if aliases.empty?
+          if aliases.present?
             @diff_hash[:create_groups][group][:add_aliases] = aliases
           end
         end
@@ -63,7 +63,8 @@ module GoogleIntegration
       end
 
       def list_group_aliases(name)
-        find_group(name)['aliases'] || []
+        aliases = find_group(name)['aliases'] || []
+        aliases.map { |e| Helpers::User.email_to_username(e) }
       end
 
       def find_group(group_name)

@@ -1,7 +1,7 @@
 module GoogleIntegration
   module Helpers
     class User
-      def self.email_to_name(email)
+      def self.email_to_username(email)
         email.sub(domains_regexp, '')
       end
 

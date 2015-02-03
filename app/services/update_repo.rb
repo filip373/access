@@ -1,5 +1,4 @@
 class UpdateRepo
-
   def now!
     if File.exist? permissions_checkout_dir
       update
@@ -10,7 +9,7 @@ class UpdateRepo
 
   def clone
     FileUtils.mkdir_p(permissions_checkout_dir)
-    Git.clone(AppConfig.permissions_repo.git, 'permissions', path: "#{Rails.root}/tmp")
+    Git.clone(repo_address, 'permissions', path: "#{Rails.root}/tmp")
   end
 
   def update
@@ -21,4 +20,7 @@ class UpdateRepo
     "#{Rails.root}/#{AppConfig.permissions_repo.checkout_dir}"
   end
 
+  def repo_address
+    AppConfig.permissions_repo.git
+  end
 end
