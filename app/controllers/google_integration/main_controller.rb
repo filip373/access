@@ -1,5 +1,6 @@
 module GoogleIntegration
   class MainController < ApplicationController
+
     expose(:google_api) { GoogleIntegration::Api.new(session[:google_token]) }
     expose(:expected_groups) { GoogleIntegration::Groups.all }
     expose(:google_diff) { GoogleIntegration::Actions::Diff.new(expected_groups, google_api) }

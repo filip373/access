@@ -9,8 +9,10 @@ defaults: &defaults
   github:
     client_id: a
     client_secret: b
-  email_domain: netguru.pl
   google:
+    main_domain: netguru.pl
+    other_domains:
+      - netguru.co
     scope: 'email, profile, plus.me, https://www.googleapis.com/auth/admin.directory.user, https://www.googleapis.com/auth/admin.directory.group, https://www.googleapis.com/auth/admin.directory.user.security'
     client_id: 'I couldnt possibly be any more in sec_config, than I am now. Just sayin'
     client_secret: 'Same here, bro. Totally and utterly in sec_config. Chillin'
@@ -25,10 +27,13 @@ test:
   <<: *defaults
   permissions_repo:
     checkout_dir: 'spec/get_diff_yamls'
-  email_domain: example.com
+  google:
+    main_domain: example.com
 
 development:
   <<: *defaults
+  features:
+    google_integration: true
 
 staging:
   <<: *defaults
