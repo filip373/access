@@ -14,7 +14,11 @@ class Storage
   end
 
   def data
-    @data ||= build_tree
+    if AppConfig.cache_data
+      @data ||= build_tree
+    else
+      build_tree
+    end
   end
 
   def build_tree
@@ -40,7 +44,7 @@ class Storage
   end
 
   def split_path(path)
-    path.gsub(dir, "").gsub(".yml", "").split("/").reject(&:empty?)
+    path.gsub(dir, '').gsub('.yml', '').split('/').reject(&:empty?)
   end
 
   def self.validation_errors

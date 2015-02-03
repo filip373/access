@@ -1,6 +1,7 @@
 defaults: &defaults
   rollbar_token: fake-token
   company: netguru
+  cache_data: true
   permissions_repo:
     url: http://url-to-repo-with-permissions
     git: git@address.to.repo.with.permissions
@@ -22,7 +23,6 @@ defaults: &defaults
   features:
     google_integration: false
 
-
 test:
   <<: *defaults
   permissions_repo:
@@ -34,6 +34,7 @@ development:
   <<: *defaults
   features:
     google_integration: true
+  cache_data: false
 
 staging:
   <<: *defaults
