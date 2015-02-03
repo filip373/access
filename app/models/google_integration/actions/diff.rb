@@ -23,7 +23,7 @@ module GoogleIntegration
       def generate_diff
         @expected_groups.each do |expected_group|
           google_group = find_or_create_google_group(expected_group)
-          members_diff(google_group, expected_group.members)
+          members_diff(google_group, expected_group.users)
           aliases_diff(google_group, expected_group.aliases)
         end
       end
@@ -33,8 +33,8 @@ module GoogleIntegration
           current_members = list_group_members(group['id'])
           add = expected_members - current_members
           remove = current_members - expected_members
-          @diff_hash[:add_members][group] = add if add.size > 0
-          @diff_hash[:remove_members][group] = remove if remove.size > 0
+          @diff_hash[:add_members][group] = add unless add.empty?
+          @diff_hash[:remove_members][group] = remove unless remove.empty?
         else
           if expected_members.present?
             @diff_hash[:create_groups][group][:add_members] = expected_members
@@ -48,8 +48,8 @@ module GoogleIntegration
           current_aliases = list_group_aliases(group['name'])
           add = aliases - current_aliases
           remove = current_aliases - aliases
-          @diff_hash[:add_aliases][group] = add if add.size > 0
-          @diff_hash[:remove_aliases][group] = remove if remove.size > 0
+          @diff_hash[:add_aliases][group] = add unless add.empty?
+          @diff_hash[:remove_aliases][group] = remove unless remove.empty?
         else
           if aliases.empty?
             @diff_hash[:create_groups][group][:add_aliases] = aliases
@@ -59,7 +59,7 @@ module GoogleIntegration
 
       def list_group_members(group_id)
         emails = @google_api.list_members(group_id).map { |m| m['email'] }
-        emails.map { |e| Helpers::User.email_to_name(e) }
+        emails.map { |e| Helpers::User.email_to_username(e) }
       end
 
       def list_group_aliases(name)

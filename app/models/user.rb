@@ -1,7 +1,6 @@
 class User
-
   def self.find(name)
-    if name.include?("/") #namespace lookup i.e netguru/marcin.stecki
+    if name.include?('/') # namespace lookup i.e netguru/marcin.stecki
       namespace_lookup(name)
     else
       user_data = users_data[name]
@@ -14,12 +13,21 @@ class User
   end
 
   def self.namespace_lookup(name)
-    parts = name.split("/")
+    parts = name.split('/')
     nick = parts.last
     parts = parts[0..-2]
     user_directory = users_data
-    parts.each{|part| user_directory = user_directory[part] }
+    parts.each { |part| user_directory = user_directory[part] }
     user_directory[nick]
+  end
+
+  def self.find_many(names)
+    users = names.map do |n|
+      user = User.find(n)
+      raise "Unknown user #{n}" if user.nil?
+      [n, user]
+    end
+    Hash[users]
   end
 
   def self.company_name
@@ -29,5 +37,4 @@ class User
   def self.users_data
     Storage.data.users
   end
-
 end

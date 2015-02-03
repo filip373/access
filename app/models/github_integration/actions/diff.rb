@@ -1,7 +1,6 @@
 module GithubIntegration
   module Actions
     class Diff
-
       def initialize(expected_teams, gh_api)
         @expected_teams = expected_teams
         @gh_api = gh_api
@@ -11,7 +10,7 @@ module GithubIntegration
           remove_members: {},
           add_repos: {},
           remove_repos: {},
-          change_permissions: {}
+          change_permissions: {},
         }
       end
 
@@ -72,16 +71,13 @@ module GithubIntegration
       end
 
       def map_users_to_members(members)
-        members.map do |m|
-          user = User.find(m)
-          raise "Unknown user #{m}" if user.nil?
-          user.github
-        end
+        users = User.find_many(members)
+        users.values.map(&:github)
       end
 
       def list_team_repos(team_id)
         repos = @gh_api.list_team_repos(team_id)
-        repos = repos.group_by { |e| e['name'] }.map do |name, repos|
+        repos = repos.group_by { |e| e['name'] }.map do |_name, repos|
           # strange corner case - api is returning something different than what's on the github page
           # the api returns both original repos and it's forks - but we want to manage only the main repo
           # hence we will drop the forks if there are any
@@ -105,7 +101,6 @@ module GithubIntegration
         @diff_hash[:create_teams][expected_team] = {}
         expected_team
       end
-
     end
   end
 end
