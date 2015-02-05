@@ -25,14 +25,19 @@ module GoogleIntegration
       @aliases = aliases
     end
 
+    def email
+      "#{name}@#{AppConfig.google.main_domain}"
+    end
+
     def users
+      return [] unless members.present?
       @users ||= begin
         u = User.find_many(members)
         u.map do |name, data|
           if data.email?
-            Helpers::User.email_to_username(data.email)
+            data.email
           else
-            name
+            "#{name}@#{AppConfig.google.main_domain}"
           end
         end
       end

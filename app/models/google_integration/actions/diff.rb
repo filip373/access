@@ -44,8 +44,8 @@ module GoogleIntegration
 
       def aliases_diff(group, aliases)
         aliases ||= []
-        if group.respond_to?(:id)
-          current_aliases = list_group_aliases(group['name'])
+        if group.respond_to?(:id) # persisted
+          current_aliases = list_group_aliases(group['email'])
           add = aliases - current_aliases
           remove = current_aliases - aliases
           @diff_hash[:add_aliases][group] = add if add.present?
@@ -58,17 +58,17 @@ module GoogleIntegration
       end
 
       def list_group_members(group_id)
-        emails = @google_api.list_members(group_id).map { |m| m['email'] }
-        emails.map { |e| Helpers::User.email_to_username(e) }
+        @google_api.list_members(group_id).map { |m| m['email'] }.compact
       end
 
       def list_group_aliases(name)
+        name = Helpers::User.email_to_username(name)
         aliases = find_group(name)['aliases'] || []
         aliases.map { |e| Helpers::User.email_to_username(e) }
       end
 
       def find_group(group_name)
-        api_groups.find { |g| g.name.downcase == group_name.downcase }
+        api_groups.find { |g| Helpers::User.email_to_username(g.email) == group_name.downcase }
       end
 
       def api_groups
