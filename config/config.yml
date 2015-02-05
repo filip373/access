@@ -32,7 +32,7 @@ development:
   <<: *defaults
   features:
     google_integration: true
-  cache_data: false
+  cache_data: true
 
 staging:
   <<: *defaults
