@@ -1,7 +1,6 @@
 module GoogleIntegration
   module Actions
     class Sync
-
       def initialize(google_api)
         @google_api = google_api
       end
@@ -19,14 +18,14 @@ module GoogleIntegration
       end
 
       def sync_members(members_to_add, members_to_remove)
-        members_to_add.each do |group, members|
-          add_members(group, members)
-        end
-
         members_to_remove.each do |group, members|
           members.each do |member|
-            @google_api.remove_from_group(group, member)
+            remove_member(group, member)
           end
+        end
+
+        members_to_add.each do |group, members|
+          add_members(group, members)
         end
       end
 
@@ -37,7 +36,7 @@ module GoogleIntegration
 
         aliases_to_remove.each do |group, aliases|
           aliases.each do |google_alias|
-            @google_api.remove_alias(group, google_alias)
+            remove_alias(group, google_alias)
           end
         end
       end
@@ -51,18 +50,25 @@ module GoogleIntegration
         end
       end
 
+      def remove_alias(group, google_alias)
+        @google_api.remove_alias(group.email, google_alias)
+      end
+
+      def remove_member(group, member)
+        @google_api.remove_member(group.email, member)
+      end
+
       def add_members(group, members)
         members.each do |member|
-          @google_api.add_member(group, member)
+          @google_api.add_member(group.email, member)
         end
       end
 
       def add_aliases(group, aliases)
         aliases.each do |google_alias|
-          @google_api.add_alias(group, google_alias)
+          @google_api.add_alias(group.email, google_alias)
         end
       end
-
     end
   end
 end

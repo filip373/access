@@ -42,7 +42,7 @@ module GoogleIntegration
     end
 
     def remove_alias(group, google_alias)
-      delete "groups/#{group.id}/aliases/#{google_alias}"
+      delete "groups/#{group}/aliases/#{google_alias}"
     end
 
     # user
