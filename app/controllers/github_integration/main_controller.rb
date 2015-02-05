@@ -8,8 +8,11 @@ module GithubIntegration
     expose(:sync_github_job) { GithubIntegration::SyncJob.new }
     expose(:teams_cleanup) { GithubIntegration::Actions::CleanupTeams.new(expected_teams, gh_api) }
     expose(:missing_teams) { teams_cleanup.stranded_teams }
+    expose(:update_repo) { UpdateRepo.new }
 
     def show_diff
+      update_repo.now!
+      Storage.reset_data
       @gh_diff = gh_diff.now!
       @gh_log = get_gh_log.now!
     end

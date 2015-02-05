@@ -9,8 +9,16 @@ class Storage
     instance.data
   end
 
+  def self.reset_data
+    instance.reset_data
+  end
+
   def initialize(dir)
     self.dir = dir
+  end
+
+  def reset_data
+    @data = nil
   end
 
   def data
