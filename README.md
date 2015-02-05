@@ -1,14 +1,13 @@
 # Access app
 
-## Goal
-
 This application introduces "push-style" management of permissions for github and google apps (todo).  The goal is to store yaml files that define our github teams and users, and apply the permissions once some changes are pushed to those files.
 
-This makes managing access on github very easy, and also makes it possible for your users to propose changes (via commit to permissions repo or pull request).
+This makes managing permissions very easy, and also makes it possible for your users to propose changes (via commit to permissions repo or pull request).
 
 Sample permissions directory looks like this: https://github.com/netguru/access-permissions-sample
 
 ### Adding / editing users
+Before you add team to google group or github team you have to first create a data file for this user:
 
 - define new user data file in 'users' directory named 'first_name.last_name.yml'
 - add users name to the file
@@ -16,7 +15,9 @@ Sample permissions directory looks like this: https://github.com/netguru/access-
 
 Sample user file: https://github.com/netguru/access-permissions-sample/blob/master/users/jane.doe.yml
 
-### Adding / editing github teams
+## Github
+
+#### Adding / editing github teams
 
 Team data files include:
 - team name
@@ -27,22 +28,29 @@ Sample team file: https://github.com/netguru/access-permissions-sample/blob/mast
 
 Once such file is pushed to the permissions repository a team-a will be created with jane and john as members. All members are going to be given push access to ‘sample-repo’.
 
-### User naming within permissions repo
+#### User naming within permissions repo
 
 Users in teams files are referenced by their data file name (first_name.last_name) instead of being referenced by github handles. This makes it’s easy to read the team file and actually see who has access where without confusion - this is also very useful from security perspective in larger organizations.
 
 Remember you have to first add user to users directory before adding him to a team
 
-### Adding new repositories
+#### Adding new repositories
 
 Adding a repository that does not exist in to the team file will create an empty repository with that name.
 
-### Deleting users
+#### Deleting users
 - remove john.doe from every group file and github teams file
 - remove john.doe file from users directory
 
-### Deleting teams
+#### Deleting teams
 - if you delete last user from the team don't forget to remove the team file from github teams
+
+
+## Google apps
+
+### Adding groups
+### Adding group aliases
+### Removing groups
 
 ## Flow for applying the changes.
 
