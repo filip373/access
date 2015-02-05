@@ -1,7 +1,6 @@
 module GoogleIntegration
   module Actions
     class Log
-
       def initialize(diff_hash)
         @diff_hash = diff_hash
         @log = []
@@ -19,7 +18,7 @@ module GoogleIntegration
         log_removing_members
         log_adding_aliases
         log_removing_aliases
-        @log << "There are no changes." if @log.size == 0
+        @log << 'There are no changes.' if @log.size == 0
         @log
       end
 
@@ -29,11 +28,11 @@ module GoogleIntegration
 
           h[:add_members].each do |m|
             @log << "[api] add member #{m} to group #{group.email}"
-          end
+          end if h[:add_members]
 
           h[:add_aliases].each do |r|
             @log << "[api] add alias #{r} to group #{group.email}"
-          end
+          end if h[:add_aliases]
         end
       end
 
@@ -42,7 +41,7 @@ module GoogleIntegration
           members.each do |m|
             @log << "[api] add member #{m} to group #{group.email}"
           end
-        end
+        end if @diff_hash[:add_members]
       end
 
       def log_removing_members
@@ -50,7 +49,7 @@ module GoogleIntegration
           members.each do |m|
             @log << "[api] remove member #{m} from group #{group.email}"
           end
-        end
+        end if @diff_hash[:remove_members]
       end
 
       def log_adding_aliases
@@ -58,7 +57,7 @@ module GoogleIntegration
           aliases.each do |a|
             @log << "[api] add alias #{a} to group #{group.email}"
           end
-        end
+        end if @diff_hash[:add_aliases]
       end
 
       def log_removing_aliases
@@ -66,9 +65,8 @@ module GoogleIntegration
           aliases.each do |a|
             @log << "[api] remove alias #{a} from group #{group.email}"
           end
-        end
+        end if @diff_hash[:remove_aliases]
       end
-
     end
   end
 end
