@@ -30,11 +30,13 @@ module GoogleIntegration
     end
 
     def create_group(name)
-      response = post 'groups',
-                      email: name,
-                      name: "Project group - #{name}",
-                      description: "Project group for #{name}"
-      yield(response) if block_given?
+      post 'groups',
+           email: name,
+           name: "Project group - #{name}"
+    end
+
+    def remove_group(group)
+      delete "groups/#{group.id}"
     end
 
     def add_alias(group, google_alias)

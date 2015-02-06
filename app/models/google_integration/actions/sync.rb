@@ -43,10 +43,9 @@ module GoogleIntegration
 
       def create_groups(groups_to_create)
         groups_to_create.each do |group, h|
-          @google_api.create_group(group.name) do |created_group|
-            add_members(h[:add_members], created_group)
-            add_aliases(h[:add_aliases], created_group)
-          end
+          @google_api.create_group(group.email)
+          add_members(group, h[:add_members])
+          add_aliases(group, h[:add_aliases])
         end
       end
 
