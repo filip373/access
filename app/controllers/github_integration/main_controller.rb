@@ -1,12 +1,12 @@
 module GithubIntegration
   class MainController < ApplicationController
     expose(:validation_errors) { Storage.validation_errors }
-    expose(:gh_api) { GithubIntegration::Api.new(session[:gh_token], AppConfig.company) }
-    expose(:expected_teams) { GithubIntegration::Teams.all }
-    expose(:gh_diff) { GithubIntegration::Actions::Diff.new(expected_teams, gh_api) }
-    expose(:get_gh_log) { GithubIntegration::Actions::Log.new(get_gh_diff) }
-    expose(:sync_github_job) { GithubIntegration::SyncJob.new }
-    expose(:teams_cleanup) { GithubIntegration::Actions::CleanupTeams.new(expected_teams, gh_api) }
+    expose(:gh_api) { Api.new(session[:gh_token], AppConfig.company) }
+    expose(:expected_teams) { Teams.all }
+    expose(:gh_diff) { Actions::Diff.new(expected_teams, gh_api) }
+    expose(:get_gh_log) { Actions::Log.new(get_gh_diff) }
+    expose(:sync_github_job) { SyncJob.new }
+    expose(:teams_cleanup) { Actions::CleanupTeams.new(expected_teams, gh_api) }
     expose(:missing_teams) { teams_cleanup.stranded_teams }
     expose(:update_repo) { UpdateRepo.new }
 
