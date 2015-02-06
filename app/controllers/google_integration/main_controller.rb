@@ -1,11 +1,13 @@
 module GoogleIntegration
   class MainController < ApplicationController
-    expose(:google_api) { GoogleIntegration::Api.new(session[:google_token]) }
-    expose(:expected_groups) { GoogleIntegration::Groups.all }
-    expose(:google_diff) { GoogleIntegration::Actions::Diff.new(expected_groups, google_api) }
-    expose(:get_google_log) { GoogleIntegration::Actions::Log.new(get_google_diff) }
-    expose(:sync_google_job) { GoogleIntegration::SyncJob.new }
+    expose(:google_api) { Api.new(session[:google_token]) }
+    expose(:expected_groups) { Groups.all }
+    expose(:google_diff) { Actions::Diff.new(expected_groups, google_api) }
+    expose(:get_google_log) { Actions::Log.new(get_google_diff) }
+    expose(:sync_google_job) { SyncJob.new }
     expose(:update_repo) { UpdateRepo.new }
+    expose(:groups_cleanup) { Actions::CleanupGroups.new(expected_groups, google_api) }
+    expose(:missing_groups) { groups_cleanup.stranded_groups }
 
     before_filter :google_auth_required, unless: :google_logged_in?
     rescue_from OAuth2::Error, with: :google_error
@@ -20,6 +22,10 @@ module GoogleIntegration
     def sync
       sync_google_job.perform(google_api, get_google_diff)
       reset_diff
+    end
+
+    def cleanup_groups
+      groups_cleanup.now!
     end
 
     private

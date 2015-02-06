@@ -9,4 +9,6 @@ GithubApp::Application.routes.draw do
 
   get 'google/show_diff' => 'google_integration/main#show_diff', as: 'google_show_diff'
   post 'google/sync' => 'google_integration/main#sync', as: 'google_sync'
+  delete 'github/cleanup_groups' => 'google_integration/main#cleanup_groups', as: 'google_cleanup_groups'
+
 end
