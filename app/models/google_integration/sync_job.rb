@@ -18,7 +18,7 @@ module GoogleIntegration
       notification_ping! msg
     end
 
-    def notification_ping!(_msg)
+    def notification_ping!(msg)
       notifier = SlackNotification.new(message: msg)
       notifier.ping!
     end
