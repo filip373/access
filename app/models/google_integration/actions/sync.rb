@@ -13,8 +13,8 @@ module GoogleIntegration
 
       def sync(diff)
         create_groups(diff[:create_groups])
-        sync_members(diff[:add_members], diff[:remove_members])
-        sync_aliases(diff[:add_aliases], diff[:remove_aliases])
+        sync_members(diff[:add_members], diff[:remove_members]) if diff[:remove_members]
+        sync_aliases(diff[:add_aliases], diff[:remove_aliases]) if diff[:remove_aliases]
       end
 
       def sync_members(members_to_add, members_to_remove)
@@ -44,8 +44,8 @@ module GoogleIntegration
       def create_groups(groups_to_create)
         groups_to_create.each do |group, h|
           @google_api.create_group(group.email)
-          add_members(group, h[:add_members])
-          add_aliases(group, h[:add_aliases])
+          add_members(group, h[:add_members]) if h[:add_members]
+          add_aliases(group, h[:add_aliases]) if h[:add_aliases]
         end
       end
 
