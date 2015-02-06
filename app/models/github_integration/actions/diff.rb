@@ -46,8 +46,8 @@ module GithubIntegration
           current_members = team.respond_to?(:fake) ? [] : list_team_members(team['id'])
           add = members_names - current_members
           remove = current_members - members_names
-          @diff_hash[:add_members][team] = add if add.size > 0
-          @diff_hash[:remove_members][team] = remove if remove.size > 0
+          @diff_hash[:add_members][team] = add if add.any?
+          @diff_hash[:remove_members][team] = remove if remove.any?
         else
           @diff_hash[:create_teams][team][:add_members] = members_names unless members_names.empty?
         end
@@ -58,8 +58,8 @@ module GithubIntegration
           current_repos = team.respond_to?(:fake) ? [] : list_team_repos(team['id'])
           add = repos_names - current_repos
           remove = current_repos - repos_names
-          @diff_hash[:add_repos][team] = add if add.size > 0
-          @diff_hash[:remove_repos][team] = remove if remove.size > 0
+          @diff_hash[:add_repos][team] = add if add.any?
+          @diff_hash[:remove_repos][team] = remove if remove.any?
         else
           @diff_hash[:create_teams][team][:add_repos] = repos_names unless repos_names.empty?
         end

@@ -36,8 +36,8 @@ module BaseActions
               current_items = method("list_#{model_name}_#{name.pluralize}").call(model)
               add = items - current_items
               remove = current_items - items
-              @diff["add_#{name}".to_sym][model] = add if add.size > 0
-              @diff["remove_#{name}".to_sym][model] = remove if remove.size > 0
+              @diff["add_#{name}".to_sym][model] = add if add.any?
+              @diff["remove_#{name}".to_sym][model] = remove if remove.any?
             else
               @diff["create_#{model_name.pluralize}".to_sym][model]["add_#{name}".to_sym] = items unless items.empty?
             end

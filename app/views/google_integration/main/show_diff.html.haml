@@ -9,7 +9,7 @@
     = form_tag google_sync_path, method: :post do
       = button_tag "Confirm changes", type: :submit, class: 'btn btn-primary btn-lg', 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> I\'m on it...".html_safe
 
-  - if missing_groups.size > 0
+  - if missing_groups.any?
     %h2 Stranded groups
     %h3 Following groups are in Google Apps, but can't be found in permissions repository - they most likely should be deleted.
     %ul.list-group
