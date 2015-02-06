@@ -12,7 +12,6 @@ gem 'omniauth-google-oauth2'
 gem 'github_api'
 gem 'decent_exposure'
 gem 'konf'
-gem 'httplog'
 gem 'git'
 gem 'pry-rails'
 gem 'pry-byebug'
@@ -32,6 +31,7 @@ gem 'rollbar'
 
 group :development do
   gem 'pry'
+  gem 'httplog'
   gem 'binding_of_caller'
   gem 'better_errors'
 end
