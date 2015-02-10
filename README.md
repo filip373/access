@@ -43,14 +43,27 @@ Adding a repository that does not exist in to the team file will create an empty
 - remove john.doe file from users directory
 
 #### Deleting teams
-- if you delete last user from the team don't forget to remove the team file from github teams
-
+Delete team file from repository and go to github/diff screen. It should display teams that do not have their files in permissions repository any more. You can confirm and delete them by pressing delete button under 'stranded' teams.
 
 ## Google apps
 
-### Adding groups
-### Adding group aliases
-### Removing groups
+#### Adding groups
+
+Adding google group is very similar to adding github team - just create group file in `google_groups` directory and sync your changes. The file name will be the name of the group.
+
+You can find sample group here: https://github.com/netguru/access-permissions-sample/blob/master/google_groups/sample-group.yml
+
+Remember that anywhere within the app, users are referened by their data file name and not emails or logins.
+
+#### Adding group aliases
+
+Special `aliases` key in group file allows you to controll group aliases.
+
+See example here: https://github.com/netguru/access-permissions-sample/blob/master/google_groups/sample-group.yml#L6
+
+#### Removing groups
+
+To remove google group just remove it's file from the google groups folder. The application should display "stranded" groups on diff screen. You can confirm the deletion there.
 
 ## Flow for applying the changes.
 
