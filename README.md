@@ -53,7 +53,7 @@ Adding google group is very similar to adding github team - just create group fi
 
 You can find sample group here: https://github.com/netguru/access-permissions-sample/blob/master/google_groups/sample-group.yml
 
-Remember that anywhere within the app, users are referened by their data file name and not emails or logins.
+Remember that anywhere within the app, users are referenced by their data file name and not emails or logins.
 
 #### Adding group aliases
 
