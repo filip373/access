@@ -5,6 +5,7 @@ class SlackNotification < Struct.new(:opts)
   end
 
   def ping!
+    return unless configured?
     return unless opts[:message].present?
     client.ping opts[:message]
   end
@@ -13,5 +14,9 @@ class SlackNotification < Struct.new(:opts)
     @client ||= Slack::Notifier.new AppConfig.slack.webhook_url,
                                channel: ["#", AppConfig.slack.default_channel].join,
                                username: name
+  end
+
+  def configured?
+    AppConfig.slack? and AppConfig.slack.webhook_url?
   end
 end
