@@ -11,16 +11,16 @@ module GoogleIntegration
 
     # groups
 
-    def add_member(group, user_email)
-      post "groups/#{group}/members", email: user_email, role: 'MEMBER'
+    def add_member(group_id, user_email)
+      post "groups/#{group_id}/members", email: user_email, role: 'MEMBER'
     end
 
-    def remove_member(group, user_email)
-      delete "groups/#{group}/members/#{user_email}"
+    def remove_member(group_id, user_email)
+      delete "groups/#{group_id}/members/#{user_email}"
     end
 
-    def list_members(group)
-      data = get "groups/#{group}/members"
+    def list_members(group_id)
+      data = get "groups/#{group_id}/members"
       (data['members'] || [])
     end
 
@@ -35,16 +35,16 @@ module GoogleIntegration
            name: "Project group - #{name}"
     end
 
-    def remove_group(group)
-      delete "groups/#{group.id}"
+    def remove_group(group_id)
+      delete "groups/#{group_id}"
     end
 
-    def add_alias(group, google_alias)
-      post "groups/#{group.id}/aliases", alias: google_alias
+    def add_alias(group_id, google_alias)
+      post "groups/#{group_id}/aliases", alias: google_alias
     end
 
-    def remove_alias(group, google_alias)
-      delete "groups/#{group}/aliases/#{google_alias}"
+    def remove_alias(group_id, google_alias)
+      delete "groups/#{group_id}/aliases/#{google_alias}"
     end
 
     # user

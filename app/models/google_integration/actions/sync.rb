@@ -43,14 +43,14 @@ module GoogleIntegration
 
       def create_groups(groups_to_create)
         groups_to_create.each do |group, h|
-          @google_api.create_group(group.email)
-          add_members(group, h[:add_members]) if h[:add_members]
-          add_aliases(group, h[:add_aliases]) if h[:add_aliases]
+          new_group = @google_api.create_group(group.email)
+          add_members(new_group, h[:add_members]) if h[:add_members]
+          add_aliases(new_group, h[:add_aliases]) if h[:add_aliases]
         end
       end
 
       def remove_alias(group, google_alias)
-        @google_api.remove_alias(group.email, google_alias)
+        @google_api.remove_alias(group.email, Helpers::User.username_to_email(google_alias))
       end
 
       def remove_member(group, member)
@@ -65,7 +65,7 @@ module GoogleIntegration
 
       def add_aliases(group, aliases)
         aliases.each do |google_alias|
-          @google_api.add_alias(group.email, google_alias)
+          @google_api.add_alias(group.email, Helpers::User.username_to_email(google_alias))
         end
       end
     end

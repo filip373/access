@@ -21,7 +21,7 @@ module GoogleIntegration
 
       def remove_stranded_groups
         stranded_groups.each do |group|
-          api.remove_group(group)
+          api.remove_group(group.email)
         end
       end
     end

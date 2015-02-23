@@ -5,6 +5,10 @@ module GoogleIntegration
         email.sub(domains_regexp, '')
       end
 
+      def self.username_to_email(username)
+        "#{username}@#{main_domain}"
+      end
+
       def self.domains_regexp # /@(one_domain.co$|anotherdomain.co$)/
         /@(#{main_domain}$|#{other_domains.join("$|")}$)/
       end
