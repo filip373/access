@@ -17,6 +17,6 @@ class SlackNotification < Struct.new(:opts)
   end
 
   def configured?
-    AppConfig.slack? and AppConfig.slack.webhook_url?
+    AppConfig.slack? && AppConfig.slack.webhook_url?
   end
 end
