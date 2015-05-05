@@ -12,7 +12,7 @@ module GithubIntegration
     end
 
     def create_team(team_name, permission)
-      response = client.organizations.teams.create(company_name, { name: team_name, permission: permission } )
+      response = client.organizations.teams.create(company_name, name: team_name, permission: permission)
       yield(response) if block_given?
     end
 
@@ -21,14 +21,11 @@ module GithubIntegration
     end
 
     def add_member(member, team)
-      already_invited = begin
-        !!client.get_request("/teams/#{team.id}/memberships/#{member}")
-      rescue Github::Error::NotFound
-        false
-      end
-      unless already_invited
+      if client.get_request("/teams/#{team.id}/memberships/#{member}")
         client.put_request("/teams/#{team.id}/memberships/#{member}")
       end
+    rescue Github::Error::NotFound
+      nil
     end
 
     def remove_member(member, team)
@@ -47,7 +44,7 @@ module GithubIntegration
     end
 
     def add_permission(permission, team)
-      client.organizations.teams.edit(team.id, { name: team.name, permission: permission })
+      client.organizations.teams.edit(team.id, name: team.name, permission: permission)
     end
 
     def list_org_members(org_name)

@@ -1,7 +1,6 @@
 module GithubIntegration
   module Actions
     class Sync
-
       def initialize(gh_api)
         @gh_api = gh_api
       end

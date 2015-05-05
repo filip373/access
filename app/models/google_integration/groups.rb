@@ -29,18 +29,20 @@ module GoogleIntegration
       "#{name}@#{AppConfig.google.main_domain}"
     end
 
-    def users
-      return [] unless members.present?
-      @users ||= begin
-        u = User.find_many(members)
-        u.map do |name, data|
-          if data.email?
-            data.email
-          else
-            "#{name}@#{AppConfig.google.main_domain}"
-          end
+    def build_users
+      u = User.find_many(members)
+      u.map do |name, data|
+        if data.email?
+          data.email
+        else
+          "#{name}@#{AppConfig.google.main_domain}"
         end
       end
+    end
+
+    def users
+      return [] unless members.present?
+      @users ||= build_users
     end
   end
 end

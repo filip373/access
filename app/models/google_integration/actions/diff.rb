@@ -50,10 +50,8 @@ module GoogleIntegration
           remove = current_aliases - aliases
           @diff_hash[:add_aliases][group] = add if add.present?
           @diff_hash[:remove_aliases][group] = remove if remove.present?
-        else
-          if aliases.present?
-            @diff_hash[:create_groups][group][:add_aliases] = aliases
-          end
+        elsif aliases.present?
+          @diff_hash[:create_groups][group][:add_aliases] = aliases
         end
       end
 

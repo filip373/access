@@ -9,16 +9,16 @@ module GithubIntegration
     end
 
     def before
-      msg = "Synchronizing github teams..."
+      msg = 'Synchronizing github teams...'
       notification_ping! msg
     end
 
     def after
-      msg = "Synchronization done! High Five!"
+      msg = 'Synchronization done! High Five!'
       notification_ping! msg
     end
 
-    def notification_ping! msg
+    def notification_ping!(msg)
       notifier = SlackNotification.new(message: msg)
       notifier.ping!
     end

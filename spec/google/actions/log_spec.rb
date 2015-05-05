@@ -8,21 +8,21 @@ RSpec.describe GoogleIntegration::Actions::Log do
       create_groups: {
         new_group => {
           add_members: ['first.member'],
-          add_aliases: ['alias1']
-        }
+          add_aliases: ['alias1'],
+        },
       },
       add_members: {
-        group => ['second.member']
+        group => ['second.member'],
       },
       remove_members: {
-        group => ['first.member']
+        group => ['first.member'],
       },
       add_aliases: {
-        group => ['alias2']
+        group => ['alias2'],
       },
       remove_aliases: {
-        group => ['alias1']
-      }
+        group => ['alias1'],
+      },
     }
   end
 
@@ -32,13 +32,14 @@ RSpec.describe GoogleIntegration::Actions::Log do
       add_members: {},
       remove_members: {},
       add_aliases: {},
-      remove_aliases: {}
+      remove_aliases: {},
     }
   end
 
   subject { described_class.new(diff).now! }
   it { is_expected.to be_a Array }
 
+  # rubocop:disable Metrics/LineLength
   context 'with changes' do
     it { is_expected.to satisfy { |log| log.size == 7 } }
     it { is_expected.to include "[api] create group #{new_group.name}" }
@@ -49,11 +50,12 @@ RSpec.describe GoogleIntegration::Actions::Log do
     it { is_expected.to include "[api] add alias #{diff[:add_aliases][group][0]} to group #{group.name}" }
     it { is_expected.to include "[api] remove alias #{diff[:remove_aliases][group][0]} from group #{group.name}" }
   end
+  # rubocop:enable Metrics/LineLength
 
   context 'without changes' do
     subject { described_class.new(empty_diff).now! }
 
     it { is_expected.to satisfy { |log| log.size == 1 } }
-    it { is_expected.to include "There are no changes." }
+    it { is_expected.to include 'There are no changes.' }
   end
 end

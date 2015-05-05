@@ -11,8 +11,6 @@ module GithubIntegration
       end
     end
 
-    private
-
     def self.raw_data
       Storage.data.github_teams
     end

@@ -1,7 +1,6 @@
 module GithubIntegration
   module Actions
     class Log
-
       def initialize(diff_hash)
         @diff_hash = diff_hash
         @log = []
@@ -20,7 +19,7 @@ module GithubIntegration
         log_adding_repos
         log_removing_repos
         log_changing_permissions
-        @log << "There are no changes." if @log.size == 0
+        @log << 'There are no changes.' if @log.size == 0
         @log
       end
 
@@ -36,7 +35,9 @@ module GithubIntegration
             @log << "[api] add repo #{r} to team #{team.name}"
           end
 
-          @log << "[api] add permissions #{team.name} - #{h[:add_permissions]}" unless h[:add_permissions].empty?
+          unless h[:add_permissions].empty?
+            @log << "[api] add permissions #{team.name} - #{h[:add_permissions]}"
+          end
         end
       end
 
@@ -77,7 +78,6 @@ module GithubIntegration
           end
         end
       end
-
     end
   end
 end
