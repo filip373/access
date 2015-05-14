@@ -26,7 +26,7 @@ module GoogleIntegration
 
     def list_groups
       data = get 'groups', domain: AppConfig.google.main_domain
-      data['groups'].map { |e| Hashie::Mash.new(e) }
+      data.fetch('groups', []).map { |e| Hashie::Mash.new(e) }
     end
 
     def create_group(name)
