@@ -63,7 +63,7 @@ module GoogleIntegration
 
       def list_group_aliases(name)
         name = Helpers::User.email_to_username(name)
-        aliases = find_group(name)['aliases'] || []
+        aliases = find_group(name).fetch('aliases', [])
         aliases.map { |e| Helpers::User.email_to_username(e) }
       end
 

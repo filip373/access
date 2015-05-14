@@ -21,7 +21,7 @@ module GoogleIntegration
 
     def list_members(group_id)
       data = get "groups/#{group_id}/members"
-      (data['members'] || [])
+      data.fetch('members', [])
     end
 
     def list_groups
