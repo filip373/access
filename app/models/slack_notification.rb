@@ -5,8 +5,7 @@ class SlackNotification < Struct.new(:opts)
   end
 
   def ping!
-    return unless configured?
-    return unless opts[:message].present?
+    return unless configured? && opts.has_key?(:message)
     client.ping opts[:message]
   end
 
