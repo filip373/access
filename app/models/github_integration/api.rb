@@ -40,8 +40,10 @@ module GithubIntegration
       client.orgs.teams.add_repo(team.id, company_name, repo)
     end
 
-    def remove_repo(repo, team)
-      client.orgs.teams.remove_repo(team.id, company_name, repo)
+    def remove_repo(repo_name, team)
+      list_team_repos(team.id).select { |e| e.name == repo_name }.each do |repo|
+        client.delete_request("/teams/#{team.id}/repos/#{repo.owner.login}/#{repo_name}")
+      end
     end
 
     def add_permission(permission, team)
