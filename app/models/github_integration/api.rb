@@ -71,7 +71,15 @@ module GithubIntegration
       client.organizations.teams.list_repos(team_id)
     end
 
+    def team_member_pending?(team_id, user_name)
+      find_team_membership(team_id, user_name)['state'] == 'pending'
+    end
+
     private
+
+    def find_team_membership(team_id, user_name)
+      client.get_request("/teams/#{team_id}/memberships/#{user_name}")
+    end
 
     def find_or_create_repo(repo_name)
       get_repo(repo_name) || create_repo(repo_name)
@@ -86,6 +94,5 @@ module GithubIntegration
     def create_repo(repo_name)
       client.repos.create(org: company_name, name: repo_name, private: true)
     end
-
   end
 end
