@@ -23,9 +23,11 @@ module GithubIntegration
 
       def generate_diff
         @expected_teams.each do |expected_team|
-          members = map_users_to_members(expected_team.members)
           gh_team = find_or_create_gh_team(expected_team)
-
+          members = map_users_to_members(expected_team.members)
+          if gh_team.respond_to?(:id)
+            members = exclude_pending_members(members, gh_team['id'])
+          end
           members_diff(gh_team, members)
           repos_diff(gh_team, expected_team.repos)
           team_permissions_diff(gh_team, expected_team.permission)
@@ -100,6 +102,14 @@ module GithubIntegration
         return team unless team.nil?
         @diff_hash[:create_teams][expected_team] = {}
         expected_team
+      end
+
+      private
+
+      def exclude_pending_members(members, team_id)
+        members.reject do |user_name|
+          @gh_api.team_member_pending?(team_id, user_name)
+        end
       end
     end
   end
