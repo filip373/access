@@ -10,10 +10,14 @@ RSpec.describe GithubIntegration::Actions::Diff do
       api.stub(:list_teams).and_return(existing_teams)
       api.stub(:teams).and_return(existing_teams)
       api.stub(:list_team_members) do |arg|
-        existing_teams[arg-1].members
+        existing_teams[arg - 1].members
       end
       api.stub(:list_team_repos) do |arg|
-        existing_teams[arg-1].repos
+        existing_teams[arg - 1].repos
+      end
+      api.stub(:team_member_pending?) do |team_id, user_name|
+        true if team_id == 1 && user_name == 'thrd.mbr'
+        false
       end
     end
   end
@@ -35,5 +39,4 @@ RSpec.describe GithubIntegration::Actions::Diff do
     it { expect(subject[:create_teams][new_team][:add_repos]).to eq ['first-repo'] }
     it { expect(subject[:create_teams][new_team][:add_permissions]).to eq 'push' }
   end
-
 end
