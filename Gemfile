@@ -34,6 +34,8 @@ group :development do
   gem 'httplog'
   gem 'binding_of_caller'
   gem 'better_errors'
+  gem 'spring'
+  gem 'spring-commands-rspec'
 end
 
 group :development, :test do
