@@ -25,9 +25,6 @@ module GithubIntegration
         @expected_teams.each do |expected_team|
           gh_team = find_or_create_gh_team(expected_team)
           members = map_users_to_members(expected_team.members)
-          if gh_team.respond_to?(:id)
-            members = exclude_pending_members(members, gh_team['id'])
-          end
           members_diff(gh_team, members)
           repos_diff(gh_team, expected_team.repos)
           team_permissions_diff(gh_team, expected_team.permission)
@@ -47,6 +44,7 @@ module GithubIntegration
         if team.respond_to?(:id)
           current_members = team.respond_to?(:fake) ? [] : list_team_members(team['id'])
           add = members_names - current_members
+          add = exclude_pending_members(add, team.id)
           remove = current_members - members_names
           @diff_hash[:add_members][team] = add if add.any?
           @diff_hash[:remove_members][team] = remove if remove.any?
@@ -104,8 +102,6 @@ module GithubIntegration
         @diff_hash[:create_teams][expected_team] = {}
         expected_team
       end
-
-      private
 
       def exclude_pending_members(members, team_id)
         members.reject do |user_name|
