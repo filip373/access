@@ -79,11 +79,12 @@ module GithubIntegration
 
       def list_team_repos(team_id)
         repos = @gh_api.list_team_repos(team_id)
+        organization_id = @gh_api.find_organization_id(team_id)
         repos = repos.group_by { |e| e['name'] }.map do |_name, repos|
           # strange corner case - api is returning something different than what's on the github page
           # the api returns both original repos and it's forks - but we want to manage only the main repo
           # hence we will drop the forks if there are any
-          repos.reject! { |e| e['fork'] } if repos.size > 1
+          repos.select! { |e| e['owner']['id'] == organization_id } if repos.size > 1
           repos
         end.flatten
         repos.map { |e| e['name'] }.compact

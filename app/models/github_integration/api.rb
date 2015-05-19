@@ -79,6 +79,12 @@ module GithubIntegration
         false
     end
 
+    def find_organization_id(team_id)
+      @organization_id ||= client.get_request("/teams/#{team_id}").organization[:id]
+      rescue Github::Error::NotFound
+        false
+    end
+
     private
 
     def find_team_membership(team_id, user_name)
