@@ -75,6 +75,8 @@ module GithubIntegration
 
     def team_member_pending?(team_id, user_name)
       find_team_membership(team_id, user_name)['state'] == 'pending'
+      rescue Github::Error::NotFound
+        false
     end
 
     private
