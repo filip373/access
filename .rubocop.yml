@@ -11,6 +11,8 @@ Documentation:
   Enabled: false
 Metrics/ClassLength:
   Max: 150
+Metrics/LineLength:
+  Max: 100
 Rails/ActionFilter:
   Enabled: false
 SignalException:

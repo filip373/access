@@ -47,5 +47,5 @@ RSpec.configure do |config|
   #     --seed 1234
   config.order = 'random'
 
-  #config.use_transactional_fixtures = false
+  # config.use_transactional_fixtures = false
 end

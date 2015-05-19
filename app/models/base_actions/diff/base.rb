@@ -45,7 +45,7 @@ module BaseActions
         end
       end
 
-      def self.create_model_finder_method model
+      def self.create_model_finder_method(model)
         models = model.pluralize
 
         define_method "find_or_create_#{model}" do |expected_model|

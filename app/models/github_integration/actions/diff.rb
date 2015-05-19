@@ -35,8 +35,8 @@ module GithubIntegration
         if team.respond_to?(:id)
           return if team.permission == expected_permission
           @diff_hash[:change_permissions][team] = expected_permission
-        else
-          @diff_hash[:create_teams][team][:add_permissions] = expected_permission unless expected_permission.empty?
+        elsif !expected_permission.blank?
+          @diff_hash[:create_teams][team][:add_permissions] = expected_permission
         end
       end
 
