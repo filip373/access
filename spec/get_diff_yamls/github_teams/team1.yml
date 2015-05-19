@@ -1,6 +1,6 @@
 members:
   - second.member
-#is pending  - third.member
+  - third.member
 repos:
   - second-repo
 permission: push

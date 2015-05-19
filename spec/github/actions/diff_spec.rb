@@ -32,8 +32,7 @@ RSpec.describe GithubIntegration::Actions::Diff do
       end
       api.stub(:list_team_repos) { |arg| existing_teams[arg - 1].repos }
       api.stub(:team_member_pending?) do |team_id, user_name|
-        true if team_id == 1 && user_name == 'thrd.mbr'
-        false
+        team_id == 1 && user_name == 'thrd.mbr'
       end
       api.stub(:find_organization_id).and_return(1)
     end
