@@ -2,8 +2,26 @@ require 'rails_helper'
 
 RSpec.describe GithubIntegration::Actions::Diff do
   let(:expected_teams) { GithubIntegration::Teams.all }
-  let(:team1) { Hashie::Mash.new({ name: 'team1', id: 1, members: [login: 'frst.mbr'], repos: [name: 'first-repo'], permissions: 'pull' }) }
-  let(:new_team) { GithubIntegration::Team.new('team2', ['first.member'], ['first-repo'], 'push') }
+  let(:team1) do
+    Hashie::Mash.new(
+      name: 'team1',
+      id: 1,
+      members: [login: 'frst.mbr'],
+      repos: [
+        { name: 'first-repo', owner: { id: 1 } },
+        { name: 'first-repo', owner: { id: 2 } },
+      ],
+      permissions: 'pull',
+    )
+  end
+  let(:new_team) do
+    GithubIntegration::Team.new(
+      'team2',
+      ['first.member'],
+      ['first-repo'],
+      'push',
+    )
+  end
   let(:existing_teams) { [team1] }
   let(:gh_api) do
     double.tap do |api|
@@ -12,13 +30,12 @@ RSpec.describe GithubIntegration::Actions::Diff do
       api.stub(:list_team_members) do |arg|
         existing_teams[arg - 1].members
       end
-      api.stub(:list_team_repos) do |arg|
-        existing_teams[arg - 1].repos
-      end
+      api.stub(:list_team_repos) { |arg| existing_teams[arg - 1].repos }
       api.stub(:team_member_pending?) do |team_id, user_name|
         true if team_id == 1 && user_name == 'thrd.mbr'
         false
       end
+      api.stub(:find_organization_id).and_return(1)
     end
   end
 
