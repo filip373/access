@@ -44,6 +44,12 @@ module GoogleIntegration
       def create_groups(groups_to_create)
         groups_to_create.each do |group, h|
           @google_api.create_group(group.email)
+
+          # Delay to allow group creation on the Google servers before adding
+          # members. To be refactored at a later stage. For more info please check:
+          # https://developers.google.com/admin-sdk/directory/v1/guides/manage-groups#create_group
+          sleep 5
+
           add_members(group, h[:add_members]) if h.has_key?(:add_members)
           add_aliases(group, h[:add_aliases]) if h.has_key?(:add_aliases)
         end
