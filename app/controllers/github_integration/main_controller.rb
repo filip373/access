@@ -10,6 +10,7 @@ module GithubIntegration
     expose(:update_repo) { UpdateRepo.new }
 
     def show_diff
+      reset_diff
       update_repo.now!
       Storage.reset_data
       @gh_diff = gh_diff.now!
