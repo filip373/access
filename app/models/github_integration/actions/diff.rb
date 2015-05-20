@@ -105,7 +105,9 @@ module GithubIntegration
 
       def exclude_pending_members(members, team_id)
         members.reject do |user_name|
-          @gh_api.team_member_pending?(team_id, user_name)
+          Rails.cache.fetch "pending_users/#{user_name}" do
+            @gh_api.team_member_pending?(team_id, user_name)
+          end
         end
       end
     end
