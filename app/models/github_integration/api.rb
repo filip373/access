@@ -18,7 +18,7 @@ module GithubIntegration
 
     def remove_team(team)
       # client.organizations.teams.delete(team.id)
-      logger.info "remove_team #{team.inspect}"
+      Rails.logger.info "remove_team #{team.inspect}"
     end
 
     def add_member(member, team)
@@ -31,7 +31,7 @@ module GithubIntegration
 
     def remove_member(member, team)
       # client.delete_request("/teams/#{team.id}/memberships/#{member}")
-      logger.info "remove_member member: #{member.inspect}, in team: #{team.inspect}"
+      Rails.logger.info "remove_member member: #{member.inspect}, in team: #{team.inspect}"
     end
 
     def add_repo(repo, team)
@@ -42,13 +42,13 @@ module GithubIntegration
     def remove_repo(repo_name, team)
       list_team_repos(team.id).select { |e| e.name == repo_name }.each do |repo|
         # client.delete_request("/teams/#{team.id}/repos/#{repo.owner.login}/#{repo_name}")
-        logger.info "remove_repo delete_request /teams/#{team.id}/repos/#{repo.owner.login}/#{repo_name}"
+        Rails.logger.info "remove_repo delete_request /teams/#{team.id}/repos/#{repo.owner.login}/#{repo_name}"
       end
     end
 
     def add_permission(permission, team)
       # client.organizations.teams.edit(team.id, { name: team.name, permission: permission })
-      logger.info "add_permission: #{permission.inspect} to team: #{team.inspect}"
+      Rails.logger.info "add_permission: #{permission.inspect} to team: #{team.inspect}"
     end
 
     def list_org_members(org_name)
