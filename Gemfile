@@ -18,6 +18,8 @@ gem "rollbar"
 gem "sass-rails"
 gem "slack-notifier"
 gem "sucker_punch"
+gem "pry-byebug"
+gem "pry-rails"
 
 # deployment
 
@@ -37,9 +39,4 @@ group :development do
   gem "rspec-rails"
   gem "spring"
   gem "spring-commands-rspec"
-end
-
-group :development, :test do
-  gem "pry-byebug"
-  gem "pry-rails"
 end
