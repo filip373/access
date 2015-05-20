@@ -12,7 +12,11 @@ module GithubIntegration
     end
 
     def create_team(team_name, permission)
-      response = client.organizations.teams.create(company_name, name: team_name, permission: permission)
+      response = client.organizations.teams.create(
+        company_name,
+        name: team_name,
+        permission: permission
+        )
       yield(response) if block_given?
     end
 
@@ -21,7 +25,7 @@ module GithubIntegration
     end
 
     def add_member(member, team)
-    client.put_request("/teams/#{team.id}/memberships/#{member}")
+      client.put_request("/teams/#{team.id}/memberships/#{member}")
     rescue Github::Error::NotFound
       nil
     end
