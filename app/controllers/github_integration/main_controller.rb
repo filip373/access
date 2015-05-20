@@ -28,6 +28,7 @@ module GithubIntegration
     private
 
     def reset_diff
+      Rails.cache.delete 'gh_diff'
     end
 
     def gh_diff
