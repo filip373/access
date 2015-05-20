@@ -18,6 +18,7 @@ gem "rollbar"
 gem "sass-rails"
 gem "slack-notifier"
 gem "sucker_punch"
+gem "sprockets", "~> 2.12.3"
 gem "pry-byebug"
 gem "pry-rails"
 
