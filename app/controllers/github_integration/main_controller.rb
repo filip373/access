@@ -3,7 +3,6 @@ module GithubIntegration
     expose(:validation_errors) { Storage.validation_errors }
     expose(:gh_api) { Api.new(session[:gh_token], AppConfig.company) }
     expose(:expected_teams) { Teams.all }
-    expose(:gh_diff) { Actions::Diff.new(expected_teams, gh_api) }
     expose(:get_gh_log) { Actions::Log.new(gh_diff) }
     expose(:sync_github_job) { SyncJob.new }
     expose(:teams_cleanup) { Actions::CleanupTeams.new(expected_teams, gh_api) }
