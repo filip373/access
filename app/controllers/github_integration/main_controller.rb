@@ -13,7 +13,6 @@ module GithubIntegration
       reset_diff
       update_repo.now!
       Storage.reset_data
-      @gh_diff = gh_diff.now!
       @gh_log = get_gh_log.now!
     end
 
@@ -29,7 +28,6 @@ module GithubIntegration
     private
 
     def reset_diff
-      @gh_diff = nil
     end
 
     def gh_diff
