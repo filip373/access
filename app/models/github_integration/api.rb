@@ -21,9 +21,7 @@ module GithubIntegration
     end
 
     def add_member(member, team)
-      if client.get_request("/teams/#{team.id}/memberships/#{member}")
-        client.put_request("/teams/#{team.id}/memberships/#{member}")
-      end
+    client.put_request("/teams/#{team.id}/memberships/#{member}")
     rescue Github::Error::NotFound
       nil
     end
