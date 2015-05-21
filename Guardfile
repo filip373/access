@@ -1,6 +1,3 @@
-# A sample Guardfile
-# More info at https://github.com/guard/guard#readme
-
 group :red_green_refactor, halt_on_fail: true do
 
   guard :rspec, cmd: 'bin/rspec' do
@@ -27,6 +24,8 @@ group :red_green_refactor, halt_on_fail: true do
 
   guard :rubocop, all_on_start: false, cli: ['--rails', '--auto-correct'] do
     watch(%r{.+\.rb$})
+    watch(%r{Capfile})
+    watch(%r{Gemfile$})
     watch(%r{(?:.+/)?\.rubocop\.yml$}) { |m| File.dirname(m[0]) }
   end
 end
