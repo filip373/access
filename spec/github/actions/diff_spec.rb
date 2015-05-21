@@ -25,16 +25,16 @@ RSpec.describe GithubIntegration::Actions::Diff do
   let(:existing_teams) { [team1] }
   let(:gh_api) do
     double.tap do |api|
-      api.stub(:list_teams).and_return(existing_teams)
-      api.stub(:teams).and_return(existing_teams)
-      api.stub(:list_team_members) do |arg|
+      allow(api).to receive(:list_teams) { existing_teams }
+      allow(api).to receive(:teams) { existing_teams }
+      allow(api).to receive(:list_team_members) do |arg|
         existing_teams[arg - 1].members
       end
-      api.stub(:list_team_repos) { |arg| existing_teams[arg - 1].repos }
-      api.stub(:team_member_pending?) do |team_id, user_name|
+      allow(api).to receive(:list_team_repos) { |arg| existing_teams[arg - 1].repos }
+      allow(api).to receive(:team_member_pending?) do |team_id, user_name|
         team_id == 1 && user_name == 'thrd.mbr'
       end
-      api.stub(:find_organization_id).and_return(1)
+      allow(api).to receive(:find_organization_id) { 1 }
     end
   end
 

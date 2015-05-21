@@ -50,8 +50,8 @@ module GoogleIntegration
           # https://developers.google.com/admin-sdk/directory/v1/guides/manage-groups#create_group
           sleep 5
 
-          add_members(group, h[:add_members]) if h.has_key?(:add_members)
-          add_aliases(group, h[:add_aliases]) if h.has_key?(:add_aliases)
+          add_members(group, h[:add_members]) if h.key?(:add_members)
+          add_aliases(group, h[:add_aliases]) if h.key?(:add_aliases)
         end
       end
 

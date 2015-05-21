@@ -15,8 +15,8 @@ module GithubIntegration
       response = client.organizations.teams.create(
         company_name,
         name: team_name,
-        permission: permission
-        )
+        permission: permission,
+      )
       yield(response) if block_given?
     end
 

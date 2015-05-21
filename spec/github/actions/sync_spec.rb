@@ -3,23 +3,24 @@ require 'rails_helper'
 RSpec.describe GithubIntegration::Actions::Sync do
   let(:gh_api) do
     double.tap do |api|
-      api.stub(:add_permission) do |permissions, team|
+      allow(api).to receive(:add_permission) do |permissions, team|
         team.permission = permissions
       end
-      api.stub(:remove_repo) do |repo_name, team|
+      allow(api).to receive(:remove_repo) do |repo_name, team|
         team.repos.delete_if { |r| r.name == repo_name }
       end
-      api.stub(:add_repo) do |repo_name, team|
+      allow(api).to receive(:add_repo) do |repo_name, team|
         team.repos.push(Hashie::Mash.new name: repo_name)
       end
-      api.stub(:add_member) do |member_login, team|
+      allow(api).to receive(:add_member) do |member_login, team|
         team.members.push(Hashie::Mash.new login: member_login)
       end
-      api.stub(:remove_member) do |member_login, team|
+      allow(api).to receive(:remove_member) do |member_login, team|
         team.members.delete_if { |m| m.login == member_login }
       end
-
-      api.stub(:create_team) { existing_teams.push(new_team) }.and_yield(new_team)
+      allow(api).to receive(:create_team) do
+        existing_teams.push(new_team)
+      end.and_yield(new_team)
     end
   end
   let(:team) do

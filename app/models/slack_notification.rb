@@ -12,7 +12,7 @@ class SlackNotification
   end
 
   def ping!
-    return unless configured? && opts.has_key?(:message)
+    return unless configured? && opts.key?(:message)
     client.ping opts[:message]
   end
 

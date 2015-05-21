@@ -8,10 +8,10 @@ RSpec.describe GoogleIntegration::Actions::Diff do
   let(:new_group) { expected_groups.find { |g| g.name == 'new_group' } }
   let(:google_api) do
     double.tap do |api|
-      api.stub(:list_groups).and_return [group1]
-      api.stub(:list_members).and_return(
-        [Hashie::Mash.new(name: 'first.member', email: 'first.member@netguru.pl')],
-      )
+      allow(api).to receive(:list_groups) { [group1] }
+      allow(api).to receive(:list_members) do
+        [Hashie::Mash.new(name: 'first.member', email: 'first.member@netguru.pl')]
+      end
     end
   end
 

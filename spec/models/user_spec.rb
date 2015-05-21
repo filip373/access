@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe User do
-  let(:user_data) do
+  let(:users_data) do
     {
       'group_one' => {
         'janusz' => { 'name' => 'Janusz Nowak', 'github' => '13art' },
@@ -20,10 +20,8 @@ describe User do
   let(:company_name) { 'default_group' }
 
   before do
-    User.stub(
-      company_name: company_name,
-      users_data: user_data,
-    )
+    allow(User).to receive(:company_name) { company_name }
+    allow(User).to receive(:users_data) { users_data }
   end
 
   it 'finds user in default group' do
