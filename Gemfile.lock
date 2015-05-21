@@ -300,6 +300,7 @@ DEPENDENCIES
   capistrano-bundler
   capistrano-passenger
   capistrano-rails
+  celluloid
   decent_exposure
   font-awesome-rails
   git
