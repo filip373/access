@@ -4,7 +4,6 @@ AllCops:
     - 'db/**/*'
     - 'config/**/*'
     - 'script/**/*'
-    - 'Gemfile'
     - 'Guardfile'
     - 'Rakefile'
 Documentation:
@@ -17,10 +16,8 @@ Rails/ActionFilter:
   Enabled: false
 SignalException:
   Enabled: false
-Style/PredicateName:
-  Enabled: true
-  Exclude:
-    - 'spec/support/pages/**/*'
+Style/StringLiterals:
+  EnforcedStyle: single_quotes
 Style/TrailingComma:
   EnforcedStyleForMultiline: comma
   Enabled: true
