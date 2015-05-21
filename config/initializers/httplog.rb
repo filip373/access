@@ -1,3 +1,1 @@
-require 'httplog'
-
-HttpLog.options[:log_headers] = true
+HttpLog.options[:log_headers] = true if Rails.env.development?
