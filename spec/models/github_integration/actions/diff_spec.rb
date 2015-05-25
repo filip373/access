@@ -78,5 +78,10 @@ RSpec.describe GithubIntegration::Actions::Diff do
     it { expect(empty_members).to be_a Array }
     it { expect(empty_members).to be_empty }
   end
+
+  context 'repos in yml is empty' do
+    let(:empty_repos) { expected_teams.find { |t| t.name == 'team_empty' }.repos }
+    it { expect(empty_repos).to be_a Array }
+    it { expect(empty_repos).to be_empty }
   end
 end
