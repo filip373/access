@@ -13,6 +13,7 @@ module GoogleIntegration
 
       def sync(diff)
         create_groups(diff[:create_groups])
+        sync_domain_memberships(diff[:add_membership], diff[:remove_membership]) if diff[:remove_membership]
         sync_members(diff[:add_members], diff[:remove_members]) if diff[:remove_members]
         sync_aliases(diff[:add_aliases], diff[:remove_aliases]) if diff[:remove_aliases]
       end
@@ -41,6 +42,16 @@ module GoogleIntegration
         end
       end
 
+      def sync_domain_memberships(memberships_to_add, memberships_to_remove)
+        memberships_to_add.each do |group, membership|
+          add_domain_membership(group.id)
+        end
+
+        memberships_to_remove.each do |group, membership|
+          remove_domain_membership(group.id)
+        end
+      end
+
       def create_groups(groups_to_create)
         groups_to_create.each do |group, h|
           @google_api.create_group(group.email)
@@ -63,6 +74,10 @@ module GoogleIntegration
         @google_api.remove_member(group.email, member)
       end
 
+      def remove_domain_membership(group_id)
+        @google_api.unset_domain_membership(group_id)
+      end
+
       def add_members(group, members)
         members.each do |member|
           @google_api.add_member(group.email, member)
@@ -73,6 +88,10 @@ module GoogleIntegration
         aliases.each do |google_alias|
           @google_api.add_alias(group.email, Helpers::User.username_to_email(google_alias))
         end
+      end
+
+      def add_domain_membership(group_id)
+        @google_api.set_domain_membership(group_id)
       end
     end
   end
