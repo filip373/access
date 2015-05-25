@@ -6,6 +6,7 @@ module GoogleIntegration
           group_name,
           group_data.members,
           group_data.aliases,
+          group_data.domain_membership
         )
       end
     end
@@ -18,11 +19,13 @@ module GoogleIntegration
   end
 
   class Group
-    attr_reader :name, :members, :aliases
-    def initialize(name, members, aliases)
+    attr_reader :name, :members, :aliases, :domain_membership
+
+    def initialize(name, members, aliases, domain_membership)
       @name = name
       @members = members
       @aliases = aliases
+      @domain_membership = domain_membership
     end
 
     def email
