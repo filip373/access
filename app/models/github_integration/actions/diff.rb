@@ -1,6 +1,8 @@
 module GithubIntegration
   module Actions
     class Diff
+      include Celluloid
+
       def initialize(expected_teams, gh_teams, gh_api)
         @expected_teams = expected_teams
         @gh_teams = gh_teams
