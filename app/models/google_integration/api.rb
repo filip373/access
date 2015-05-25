@@ -19,6 +19,16 @@ module GoogleIntegration
       delete "groups/#{group_id}/members/#{user_email}"
     end
 
+    def set_domain_membership(group_id)
+      post "groups/#{group_id}/members",
+        id: AppConfig.google.domain_member_id,
+        role: 'MEMBER'
+    end
+
+    def unset_domain_membership(group_id)
+      delete "groups/#{group_id}/members/#{AppConfig.google.domain_member_id}"
+    end
+
     def list_members(group_id)
       data = get "groups/#{group_id}/members"
       data.fetch('members', [])
