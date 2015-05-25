@@ -3,9 +3,10 @@ module GithubIntegration
     class CleanupTeams
       attr_accessor :expected_teams, :gh_api
 
-      def initialize(expected_teams, gh_api)
+      def initialize(expected_teams, gh_teams, gh_api)
         self.expected_teams = expected_teams
         self.gh_api = gh_api
+        @gh_teams = gh_teams
       end
 
       def now!
@@ -13,9 +14,8 @@ module GithubIntegration
       end
 
       def stranded_teams
-        gh_teams = gh_api.list_teams
         expected_names = expected_teams.map(&:name)
-        gh_teams.reject { |e| e.name.in?(expected_names) }
+        @gh_teams.reject { |e| e.name.in?(expected_names) }
       end
 
       private
