@@ -1,8 +1,9 @@
 module GithubIntegration
   module Actions
     class Diff
-      def initialize(expected_teams, gh_api)
+      def initialize(expected_teams, gh_teams, gh_api)
         @expected_teams = expected_teams
+        @gh_teams = gh_teams
         @gh_api = gh_api
         @diff_hash = {
           create_teams: {},
@@ -87,16 +88,12 @@ module GithubIntegration
         repos.map { |e| e['name'] }.compact
       end
 
-      def get_team(team_name)
-        get_teams.find { |t| t.name.downcase == team_name.downcase }
-      end
-
-      def get_teams
-        @teams ||= @gh_api.list_teams
+      def get_gh_team(team_name)
+        @gh_teams.find { |t| t.name.downcase == team_name.downcase }
       end
 
       def find_or_create_gh_team(expected_team)
-        team = get_team(expected_team.name)
+        team = get_gh_team(expected_team.name)
         return team unless team.nil?
         @diff_hash[:create_teams][expected_team] = {}
         expected_team
