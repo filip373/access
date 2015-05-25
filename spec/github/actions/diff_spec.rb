@@ -38,6 +38,11 @@ RSpec.describe GithubIntegration::Actions::Diff do
     end
   end
 
+  before(:each) do
+    Celluloid.shutdown
+    Celluloid.boot
+  end
+
   subject { described_class.new(expected_teams, existing_teams, gh_api).now! }
 
   it { is_expected.to be_a Hash }
