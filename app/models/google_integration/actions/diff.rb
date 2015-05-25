@@ -10,6 +10,8 @@ module GoogleIntegration
           remove_members: {},
           add_aliases: {},
           remove_aliases: {},
+          add_membership: {},
+          remove_membership: {}
         }
       end
 
@@ -25,6 +27,7 @@ module GoogleIntegration
           google_group = find_or_create_google_group(expected_group)
           members_diff(google_group, expected_group.users)
           aliases_diff(google_group, expected_group.aliases)
+          domain_memberships_diff(google_group, expected_group.domain_membership)
         end
       end
 
@@ -42,6 +45,20 @@ module GoogleIntegration
         end
       end
 
+      def domain_memberships_diff(group, expected_membership)
+        if group.respond_to?(:id)
+          domain_membership = check_domain_membership(group['id'])
+
+          if expected_membership && expected_membership != domain_membership
+            @diff_hash[:add_membership][group] = expected_membership
+          elsif domain_membership && expected_membership != domain_membership
+            @diff_hash[:remove_membership][group] = expected_membership
+          end
+        elsif expected_membership.present?
+          @diff_hash[:create_groups][group][:add_membership] = expected_membership
+        end
+      end
+
       def aliases_diff(group, aliases)
         aliases ||= []
         if group.respond_to?(:id) # persisted
@@ -52,6 +69,12 @@ module GoogleIntegration
           @diff_hash[:remove_aliases][group] = remove if remove.present?
         elsif aliases.present?
           @diff_hash[:create_groups][group][:add_aliases] = aliases
+        end
+      end
+
+      def check_domain_membership(group_id)
+        return true if @google_api.list_members(group_id).find do |member|
+          member['id'] == AppConfig.google.domain_member_id
         end
       end
 
