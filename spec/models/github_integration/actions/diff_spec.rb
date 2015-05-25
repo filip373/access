@@ -14,6 +14,18 @@ RSpec.describe GithubIntegration::Actions::Diff do
       permissions: 'pull',
     )
   end
+  let(:team_empty) do
+    Hashie::Mash.new(
+      name: 'team_empty',
+      id: 1,
+      members: [login: 'frst.mbr'],
+      repos: [
+        { name: 'first-repo', owner: { id: 1 } },
+        { name: 'first-repo', owner: { id: 2 } },
+      ],
+      permissions: 'pull',
+    )
+  end
   let(:new_team) do
     GithubIntegration::Team.new(
       'team2',
@@ -22,7 +34,7 @@ RSpec.describe GithubIntegration::Actions::Diff do
       'push',
     )
   end
-  let(:existing_teams) { [team1] }
+  let(:existing_teams) { [team1, team_empty] }
   let(:gh_api) do
     double.tap do |api|
       allow(api).to receive(:list_teams) { existing_teams }
@@ -59,5 +71,10 @@ RSpec.describe GithubIntegration::Actions::Diff do
     it { expect(subject[:create_teams][new_team][:add_members]).to eq ['frst.mbr'] }
     it { expect(subject[:create_teams][new_team][:add_repos]).to eq ['first-repo'] }
     it { expect(subject[:create_teams][new_team][:add_permissions]).to eq 'push' }
+  end
+
+  context 'members in yml is empty' do
+    it { expect(expected_teams.last.members).to be_a Array }
+    it { expect(expected_teams.last.members).to be_empty }
   end
 end
