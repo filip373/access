@@ -73,13 +73,19 @@ module GoogleIntegration
       end
 
       def check_domain_membership(group_id)
-        return true if @google_api.list_members(group_id).find do |member|
+        return true if members_list(group_id).find do |member|
           member['id'] == AppConfig.google.domain_member_id
         end
       end
 
       def list_group_members(group_id)
-        @google_api.list_members(group_id).map { |m| m['email'] }.compact
+        members_list(group_id).map { |m| m['email'] }.compact
+      end
+
+      def members_list(group_id)
+        return @members_list if @group_id == group_id
+        @group_id = group_id
+        @members_list = @google_api.list_members(group_id)
       end
 
       def list_group_aliases(name)
