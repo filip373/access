@@ -36,7 +36,7 @@ module GoogleIntegration
             @log << "[api] add alias #{r} to group #{group.email}"
           end if h[:add_aliases]
 
-          unless h[:add_memberships].empty?
+          unless h[:add_membership].nil?
             @log << "[api] add domain membership to group #{group.email}"
           end
         end
