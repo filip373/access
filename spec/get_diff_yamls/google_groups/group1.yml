@@ -1,3 +1,4 @@
+domain_membership: false
 members:
   - second.member
 aliases:

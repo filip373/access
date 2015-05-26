@@ -10,7 +10,8 @@ RSpec.describe GoogleIntegration::Actions::Diff do
     double.tap do |api|
       allow(api).to receive(:list_groups) { [group1] }
       allow(api).to receive(:list_members) do
-        [Hashie::Mash.new(name: 'first.member', email: 'first.member@netguru.pl')]
+        [Hashie::Mash.new(name: 'first.member', email: 'first.member@netguru.pl'),
+         Hashie::Mash.new(id: AppConfig.google.domain_member_id)]
       end
     end
   end
@@ -24,6 +25,7 @@ RSpec.describe GoogleIntegration::Actions::Diff do
     it { expect(subject[:remove_members][group1]).to eq ['first.member@netguru.pl'] }
     it { expect(subject[:add_aliases][group1]).to eq ['alias2'] }
     it { expect(subject[:remove_aliases][group1]).to eq ['alias1'] }
+    it { expect(subject[:remove_membership][group1]).to eq(false) }
   end
 
   context 'new group' do
@@ -32,5 +34,6 @@ RSpec.describe GoogleIntegration::Actions::Diff do
       expect(subject[:create_groups][new_group][:add_members]).to eq(expected_members)
     end
     it { expect(subject[:create_groups][new_group][:add_aliases]).to eq %w(alias1 alias2) }
+    it { expect(subject[:create_groups][new_group][:add_membership]).to eq(true) }
   end
 end
