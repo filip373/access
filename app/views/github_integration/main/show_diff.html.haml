@@ -1,5 +1,7 @@
 .jumbotron
   %h2 Github teams
+  - if diff_errors.present?
+    = render 'errors'
 
   - if log_empty?(gh_log)
     %h3 Move along, nothing to see here.

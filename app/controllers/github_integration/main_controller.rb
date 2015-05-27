@@ -9,6 +9,7 @@ module GithubIntegration
     expose(:teams_cleanup) { Actions::CleanupTeams.new(expected_teams, gh_teams, gh_api) }
     expose(:missing_teams) { teams_cleanup.stranded_teams }
     expose(:update_repo) { UpdateRepo.new }
+    expose(:diff_errors) { @diff.errors }
 
     def show_diff
       reset_diff

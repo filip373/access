@@ -24,7 +24,7 @@ RSpec.describe GithubIntegration::TeamDiff do
   describe '#diff' do
     context 'run asyncronisouly' do
       let(:blk) do
-        lambda do |diff|
+        lambda do |diff, _errors|
           condition.signal(diff)
         end
       end
@@ -51,6 +51,17 @@ RSpec.describe GithubIntegration::TeamDiff do
         expect(diff_hash[:add_members]).to be_empty
         wait_diff_result = condition.wait
         expect(wait_diff_result).to_not be_empty
+      end
+
+      it 'returns errors if there are users which not exist in users dir' do
+        blk = lambda do |_diff, errors|
+          condition.signal(errors)
+        end
+        team_diff = GithubIntegration::TeamDiff.new(expected_team1, team1, gh_api, diff_hash, blk)
+        team_diff.async.diff
+        errors = condition.wait
+        expect(errors).to_not be_empty
+        expect(errors.count).to eq(1)
       end
     end
   end

@@ -48,4 +48,10 @@ class User
   def self.users_data
     Storage.data.users
   end
+
+  def self.shift_errors
+    tmp_errors = @errors.clone
+    @errors = []
+    tmp_errors
+  end
 end

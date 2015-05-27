@@ -3,6 +3,8 @@ module GithubIntegration
     class Diff
       include Celluloid
 
+      attr_reader :errors
+
       def initialize(expected_teams, gh_teams, gh_api)
         @expected_teams = expected_teams
         @gh_teams = gh_teams
@@ -15,6 +17,7 @@ module GithubIntegration
           remove_repos: {},
           change_permissions: {},
         }
+        @errors = []
       end
 
       def now!
@@ -29,9 +32,10 @@ module GithubIntegration
       def generate_diff
         diffed_count = 0
         @expected_teams.each do |expected_team|
-          blk = lambda do |diff|
+          blk = lambda do |diff, errors|
             diffed_count += 1
             @condition.signal(diff) if diffed_count == @expected_teams.size
+            @errors.push(*errors)
           end
           gh_team = find_or_create_gh_team(expected_team)
           TeamDiff.new(expected_team, gh_team, @gh_api, @diff_hash, blk).async.diff

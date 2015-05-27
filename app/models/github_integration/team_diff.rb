@@ -8,6 +8,7 @@ module GithubIntegration
       @gh_api = gh_api
       @diff_hash = diff_hash
       @blk = blk
+      @errors = []
     end
 
     def diff
@@ -15,7 +16,7 @@ module GithubIntegration
       members_diff(@gh_team, members)
       repos_diff(@gh_team, @expected_team.repos)
       team_permissions_diff(@gh_team, @expected_team.permission)
-      @blk.call(@diff_hash)
+      @blk.call(@diff_hash, @errors)
     end
 
     private
@@ -57,6 +58,7 @@ module GithubIntegration
 
     def map_users_to_members
       users = User.find_many(@expected_team.members)
+      @errors.push(*User.shift_errors) if User.errors.present?
       users.values.map(&:github)
     end
 
