@@ -1,15 +1,11 @@
 class User
   def self.find(name)
-    if name.include?('/') # namespace lookup i.e netguru/marcin.stecki
-      namespace_lookup(name)
+    if name.include?('/')
+      user = namespace_lookup(name)
     else
-      user_data = users_data[name]
-      if user_data.nil? && users_data[company_name].present?
-        users_data[company_name][name]
-      else
-        user_data
-      end
+      user = users_data[name] || users_data.try(:[], company_name).try(:[], name)
     end
+    user || raise("Unknown user #{name}. It's not in directory users or it is in wrong directory")
   end
 
   def self.namespace_lookup(name)
