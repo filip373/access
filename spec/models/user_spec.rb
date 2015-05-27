@@ -24,19 +24,23 @@ describe User do
     allow(User).to receive(:users_data) { users_data }
   end
 
-  it 'finds user in default group' do
-    expect(User.find('parowka')).to be
+  describe '.find(name)' do
+    it 'finds user in default group' do
+      expect(User.find('parowka')).to be
+    end
+
+    it 'finds user nested in other group' do
+      expect(User.find('group_one/janusz')).to be
+    end
+
+    it 'finds user defined outside groups' do
+      expect(User.find('michal.nowak')).to be
+    end
+
+    it 'raise exception if user is not in users_data' do
+      expect { User.find('herbatka') }.to raise_error
+    end
   end
 
-  it 'finds user nested in other group' do
-    expect(User.find('group_one/janusz')).to be
-  end
-
-  it 'finds user defined outside groups' do
-    expect(User.find('michal.nowak')).to be
-  end
-
-  it 'does not find user if he is not defined' do
-    expect(User.find('herbatka')).not_to be
   end
 end
