@@ -50,4 +50,12 @@ RSpec.describe GithubIntegration::MainController do
       expect(response).to render_template('sync')
     end
   end
+
+  describe 'DELETE cleanup_teams' do
+    it 'initialize CleanupTeams class' do
+      allow_any_instance_of(GithubIntegration::Actions::CleanupTeams).to receive(:now!)
+      delete :cleanup_teams
+      expect(controller.teams_cleanup).to have_received(:now!)
+    end
+  end
 end
