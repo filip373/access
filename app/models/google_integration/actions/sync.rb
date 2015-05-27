@@ -63,6 +63,7 @@ module GoogleIntegration
 
           add_members(group, h[:add_members]) if h.key?(:add_members)
           add_aliases(group, h[:add_aliases]) if h.key?(:add_aliases)
+          add_membership(group, h[:add_membership]) if h.key?(:add_membership)
         end
       end
 
