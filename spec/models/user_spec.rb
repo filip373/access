@@ -42,5 +42,44 @@ describe User do
     end
   end
 
+  describe '.find_many(names)' do
+    context 'all users are present in users_data' do
+      let(:names) { %w(michal.nowak parowka group_one/janusz) }
+      let(:expected_return) do
+        {
+          'michal.nowak' => { 'name' => 'Michał Nowak', 'github' => 'mnowak' },
+          'parowka' => { 'name' => 'Parówka Nowak', 'github' => '13art' },
+          'group_one/janusz' => { 'name' => 'Janusz Nowak', 'github' => '13art' },
+        }
+      end
+
+      it 'returns array of name and gh_login of all names' do
+        expect(User.find_many(names)).to eq(expected_return)
+      end
+    end
+
+    context 'one of users is not present in users_data' do
+      let(:names) { %w(michal.nowak parowka herbatka) }
+      let(:expected_return) do
+        {
+          'michal.nowak' => { 'name' => 'Michał Nowak', 'github' => 'mnowak' },
+          'parowka' => { 'name' => 'Parówka Nowak', 'github' => '13art' },
+        }
+      end
+
+      it 'find only present users' do
+        expect(User.find_many(names)).to eq(expected_return)
+      end
+
+      it 'add an error' do
+        expect { User.find_many(names) }.to change { User.errors.count }.by(1)
+      end
+
+      it 'send error to rollbar' do
+        allow(Rollbar).to receive(:error)
+        User.find_many(names)
+        expect(Rollbar).to have_received(:error)
+      end
+    end
   end
 end
