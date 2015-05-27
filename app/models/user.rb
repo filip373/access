@@ -1,4 +1,9 @@
 class User
+  @errors = []
+  class << self
+    attr_reader :errors
+  end
+
   def self.find(name)
     if name.include?('/')
       user = namespace_lookup(name)
@@ -19,11 +24,20 @@ class User
 
   def self.find_many(names)
     users = names.map do |n|
-      user = User.find(n)
-      raise "Unknown user #{n}" if user.nil?
-      [n, user]
+      begin
+        user = User.find(n)
+      rescue StandardError => e
+        add_error(e)
+      else
+        [n, user]
+      end
     end
     Hash[users]
+  end
+
+  def self.add_error(error)
+    @errors.push(error.to_s)
+    Rollbar.error(error)
   end
 
   def self.company_name
