@@ -1,5 +1,6 @@
 members:
   - first.member
+  - not.present
 repos:
   - first-repo
 permission: push

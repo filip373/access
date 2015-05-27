@@ -29,7 +29,7 @@ RSpec.describe GithubIntegration::Actions::Diff do
   let(:new_team) do
     GithubIntegration::Team.new(
       'team2',
-      ['first.member'],
+      ['first.member', 'not.present'],
       ['first-repo'],
       'push',
     )
