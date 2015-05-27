@@ -28,7 +28,7 @@ RSpec.describe Storage do
     it { expect(data.github_teams.team1).to respond_to(:members) }
     it { expect(data.github_teams.team1.members).to be_a Array }
     it { expect(data.github_teams.team1.repos).to be_a Array }
-    it { expect(data.github_teams.team1.members.count).to eq(2) }
+    it { expect(data.github_teams.team1.members.count).to eq(3) }
 
     it 'call build_tree once' do
       data
