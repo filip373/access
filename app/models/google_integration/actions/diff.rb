@@ -27,7 +27,7 @@ module GoogleIntegration
           google_group = find_or_create_google_group(expected_group)
           members_diff(google_group, expected_group.users)
           aliases_diff(google_group, expected_group.aliases)
-          domain_memberships_diff(google_group, expected_group.domain_membership)
+          domain_membership_diff(google_group, expected_group.domain_membership)
         end
       end
 
@@ -45,7 +45,7 @@ module GoogleIntegration
         end
       end
 
-      def domain_memberships_diff(group, expected_membership)
+      def domain_membership_diff(group, expected_membership)
         if group.respond_to?(:id)
           domain_membership = check_domain_membership(group['id'])
 
