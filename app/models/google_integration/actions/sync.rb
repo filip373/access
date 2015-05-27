@@ -44,11 +44,11 @@ module GoogleIntegration
 
       def sync_domain_memberships(memberships_to_add, memberships_to_remove)
         memberships_to_add.each do |group, membership|
-          add_domain_membership(group.id)
+          add_domain_membership(group)
         end
 
         memberships_to_remove.each do |group, membership|
-          remove_domain_membership(group.id)
+          remove_domain_membership(group)
         end
       end
 
@@ -63,7 +63,7 @@ module GoogleIntegration
 
           add_members(group, h[:add_members]) if h.key?(:add_members)
           add_aliases(group, h[:add_aliases]) if h.key?(:add_aliases)
-          add_membership(group, h[:add_membership]) if h.key?(:add_membership)
+          add_domain_membership(group) if h.key?(:add_membership)
         end
       end
 
@@ -75,8 +75,8 @@ module GoogleIntegration
         @google_api.remove_member(group.email, member)
       end
 
-      def remove_domain_membership(group_id)
-        @google_api.unset_domain_membership(group_id)
+      def remove_domain_membership(group)
+        @google_api.unset_domain_membership(group.email)
       end
 
       def add_members(group, members)
@@ -91,8 +91,8 @@ module GoogleIntegration
         end
       end
 
-      def add_domain_membership(group_id)
-        @google_api.set_domain_membership(group_id)
+      def add_domain_membership(group)
+        @google_api.set_domain_membership(group.email)
       end
     end
   end
