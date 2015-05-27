@@ -1,7 +1,7 @@
 .jumbotron
   %h2 Github teams
 
-  - if log_empty?(@gh_log)
+  - if log_empty?(gh_log)
     %h3 Move along, nothing to see here.
     = link_to "Wicked!", root_path, class: 'btn btn-primary btn-lg'
   - else

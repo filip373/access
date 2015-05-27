@@ -4,7 +4,7 @@ module GithubIntegration
     expose(:gh_api) { Api.new(session[:gh_token], AppConfig.company) }
     expose(:expected_teams) { Teams.all }
     expose(:gh_teams) { gh_api.list_teams }
-    expose(:get_gh_log) { Actions::Log.new(gh_diff) }
+    expose(:gh_log) { Actions::Log.new(calculated_diff).now! }
     expose(:sync_github_job) { SyncJob.new }
     expose(:teams_cleanup) { Actions::CleanupTeams.new(expected_teams, gh_teams, gh_api) }
     expose(:missing_teams) { teams_cleanup.stranded_teams }
@@ -14,11 +14,11 @@ module GithubIntegration
       reset_diff
       update_repo.now!
       Storage.reset_data
-      @gh_log = get_gh_log.now!
+      calculated_diff
     end
 
     def sync
-      sync_github_job.async.perform(gh_api, gh_diff)
+      sync_github_job.async.perform(gh_api, calculated_diff)
       reset_diff
     end
 
@@ -29,12 +29,13 @@ module GithubIntegration
     private
 
     def reset_diff
-      Rails.cache.delete 'gh_diff'
+      Rails.cache.delete 'calculated_diff'
     end
 
-    def gh_diff
-      Rails.cache.fetch 'gh_diff' do
-        @gh_diff ||= Actions::Diff.new(expected_teams, gh_teams, gh_api).now!
+    def calculated_diff
+      Rails.cache.fetch 'calculated_diff' do
+        @diff ||= Actions::Diff.new(expected_teams, gh_teams, gh_api)
+        @diff.now!
       end
     end
   end

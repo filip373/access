@@ -12,21 +12,21 @@ RSpec.describe GithubIntegration::MainController do
   describe 'GET show_diff' do
     before { get :show_diff }
 
-    it { expect(assigns(:gh_log)).to be_a Array }
+    it { expect(controller.gh_log).to be_a Array }
     it { expect(controller.validation_errors).to be_a Array }
     it { expect(controller.missing_teams).to be_a Array }
     it { expect(response).to render_template('show_diff') }
 
     it 'run diff action once' do
       allow(GithubIntegration::Actions::Diff).to receive(:new)
-      controller.get_gh_log
+      controller.send(:calculated_diff)
       expect(GithubIntegration::Actions::Diff).to_not have_received(:new)
     end
 
     it 'caches gh_diff value' do
-      expect(Rails.cache.read('gh_diff')).to_not be_nil
-      expect(Rails.cache.read('gh_diff')).to be_a Hash
-      expect(Rails.cache.read('gh_diff')).to_not be_empty
+      expect(Rails.cache.read('calculated_diff')).to_not be_nil
+      expect(Rails.cache.read('calculated_diff')).to be_a Hash
+      expect(Rails.cache.read('calculated_diff')).to_not be_empty
     end
   end
 
@@ -38,7 +38,7 @@ RSpec.describe GithubIntegration::MainController do
     end
 
     it 'use cached gh_diff value' do
-      controller.send(:gh_diff)
+      controller.send(:calculated_diff)
       allow(GithubIntegration::Actions::Diff).to receive(:new)
       post :sync
       allow(Rails.cache).to receive(:delete)
