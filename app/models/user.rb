@@ -32,12 +32,13 @@ class User
         [n, user]
       end
     end
-    Hash[users]
+    Hash[users.compact]
   end
 
   def self.add_error(error)
     @errors.push(error.to_s)
     Rollbar.error(error)
+    nil
   end
 
   def self.company_name
