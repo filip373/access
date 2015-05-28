@@ -1,16 +1,16 @@
 require 'rails_helper'
 
 RSpec.describe Storage do
-  subject { Storage }
+  subject { described_class }
   let(:instance) { subject.instance }
 
   describe '.instance' do
-    it { expect(instance).to be_a Storage }
+    it { expect(instance).to be_a described_class }
 
     it 'call initialize once' do
       instance
       allow(subject).to receive(:new)
-      Storage.instance
+      described_class.instance
       expect(subject).to_not have_received(:new)
     end
   end
@@ -33,7 +33,7 @@ RSpec.describe Storage do
     it 'call build_tree once' do
       data
       allow(instance).to receive(:build_tree)
-      Storage.instance.data
+      described_class.instance.data
       expect(instance).to_not have_received(:build_tree)
     end
   end
