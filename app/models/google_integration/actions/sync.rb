@@ -13,6 +13,7 @@ module GoogleIntegration
 
       def sync(diff)
         create_groups(diff[:create_groups])
+        sync_domain_memberships(diff[:add_membership], diff[:remove_membership]) if diff[:remove_membership]
         sync_members(diff[:add_members], diff[:remove_members]) if diff[:remove_members]
         sync_aliases(diff[:add_aliases], diff[:remove_aliases]) if diff[:remove_aliases]
       end
@@ -41,11 +42,28 @@ module GoogleIntegration
         end
       end
 
+      def sync_domain_memberships(memberships_to_add, memberships_to_remove)
+        memberships_to_add.each do |group, membership|
+          add_domain_membership(group)
+        end
+
+        memberships_to_remove.each do |group, membership|
+          remove_domain_membership(group)
+        end
+      end
+
       def create_groups(groups_to_create)
         groups_to_create.each do |group, h|
-          new_group = @google_api.create_group(group.email)
-          add_members(new_group, h[:add_members]) if h[:add_members]
-          add_aliases(new_group, h[:add_aliases]) if h[:add_aliases]
+          @google_api.create_group(group.email)
+
+          # Delay to allow group creation on the Google servers before adding
+          # members. To be refactored at a later stage. For more info please check:
+          # https://developers.google.com/admin-sdk/directory/v1/guides/manage-groups#create_group
+          sleep 5
+
+          add_members(group, h[:add_members]) if h.key?(:add_members)
+          add_aliases(group, h[:add_aliases]) if h.key?(:add_aliases)
+          add_domain_membership(group) if h.key?(:add_membership)
         end
       end
 
@@ -55,6 +73,10 @@ module GoogleIntegration
 
       def remove_member(group, member)
         @google_api.remove_member(group.email, member)
+      end
+
+      def remove_domain_membership(group)
+        @google_api.unset_domain_membership(group.email)
       end
 
       def add_members(group, members)
@@ -67,6 +89,10 @@ module GoogleIntegration
         aliases.each do |google_alias|
           @google_api.add_alias(group.email, Helpers::User.username_to_email(google_alias))
         end
+      end
+
+      def add_domain_membership(group)
+        @google_api.set_domain_membership(group.email)
       end
     end
   end

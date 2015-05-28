@@ -1,7 +1,6 @@
 module GithubIntegration
   module Actions
     class Sync
-
       def initialize(gh_api)
         @gh_api = gh_api
       end
@@ -49,7 +48,7 @@ module GithubIntegration
 
       def sync_teams_permissions(change_permissions)
         change_permissions.each do |team, permissions|
-          @gh_api.new_permission(permissions, team)
+          @gh_api.add_permission(permissions, team)
         end
       end
 
@@ -76,9 +75,8 @@ module GithubIntegration
       end
 
       def new_team_add_permissions(permissions, team)
-        @gh_api.new_permission(permissions, team)
+        @gh_api.add_permission(permissions, team)
       end
-
     end
   end
 end

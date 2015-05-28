@@ -1,5 +1,7 @@
 members:
   - second.member
+  - third.member
+  - fourth.member
 repos:
   - second-repo
 permission: push

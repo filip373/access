@@ -12,7 +12,11 @@ module GithubIntegration
     end
 
     def create_team(team_name, permission)
-      response = client.organizations.teams.create(company_name, { name: team_name, permission: permission } )
+      response = client.organizations.teams.create(
+        company_name,
+        name: team_name,
+        permission: permission,
+      )
       yield(response) if block_given?
     end
 
@@ -21,14 +25,9 @@ module GithubIntegration
     end
 
     def add_member(member, team)
-      already_invited = begin
-        !!client.get_request("/teams/#{team.id}/memberships/#{member}")
-      rescue Github::Error::NotFound
-        false
-      end
-      unless already_invited
-        client.put_request("/teams/#{team.id}/memberships/#{member}")
-      end
+      client.put_request("/teams/#{team.id}/memberships/#{member}")
+    rescue Github::Error::NotFound
+      nil
     end
 
     def remove_member(member, team)
@@ -40,12 +39,14 @@ module GithubIntegration
       client.orgs.teams.add_repo(team.id, company_name, repo)
     end
 
-    def remove_repo(repo, team)
-      client.orgs.teams.remove_repo(team.id, company_name, repo)
+    def remove_repo(repo_name, team)
+      list_team_repos(team.id).select { |e| e.name == repo_name }.each do |repo|
+        client.delete_request("/teams/#{team.id}/repos/#{repo.owner.login}/#{repo_name}")
+      end
     end
 
     def add_permission(permission, team)
-      client.organizations.teams.edit(team.id, { name: team.name, permission: permission })
+      client.organizations.teams.edit(team.id, name: team.name, permission: permission)
     end
 
     def list_org_members(org_name)
@@ -71,7 +72,23 @@ module GithubIntegration
       client.organizations.teams.list_repos(team_id)
     end
 
+    def team_member_pending?(team_id, user_name)
+      find_team_membership(team_id, user_name)['state'] == 'pending'
+      rescue Github::Error::NotFound
+        false
+    end
+
+    def find_organization_id(team_id)
+      @organization_id ||= client.get_request("/teams/#{team_id}").organization[:id]
+      rescue Github::Error::NotFound
+        false
+    end
+
     private
+
+    def find_team_membership(team_id, user_name)
+      client.get_request("/teams/#{team_id}/memberships/#{user_name}")
+    end
 
     def find_or_create_repo(repo_name)
       get_repo(repo_name) || create_repo(repo_name)
@@ -86,6 +103,5 @@ module GithubIntegration
     def create_repo(repo_name)
       client.repos.create(org: company_name, name: repo_name, private: true)
     end
-
   end
 end

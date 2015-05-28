@@ -6,6 +6,7 @@ module GoogleIntegration
           group_name,
           group_data.members,
           group_data.aliases,
+          group_data.domain_membership
         )
       end
     end
@@ -18,29 +19,33 @@ module GoogleIntegration
   end
 
   class Group
-    attr_reader :name, :members, :aliases
-    def initialize(name, members, aliases)
+    attr_reader :name, :members, :aliases, :domain_membership
+
+    def initialize(name, members, aliases, domain_membership)
       @name = name
       @members = members
       @aliases = aliases
+      @domain_membership = domain_membership
     end
 
     def email
       "#{name}@#{AppConfig.google.main_domain}"
     end
 
-    def users
-      return [] unless members.present?
-      @users ||= begin
-        u = User.find_many(members)
-        u.map do |name, data|
-          if data.email?
-            data.email
-          else
-            "#{name}@#{AppConfig.google.main_domain}"
-          end
+    def build_users
+      u = User.find_many(members)
+      u.map do |name, data|
+        if data.email?
+          data.email
+        else
+          "#{name}@#{AppConfig.google.main_domain}"
         end
       end
+    end
+
+    def users
+      return [] unless members.present?
+      @users ||= build_users
     end
   end
 end

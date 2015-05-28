@@ -4,21 +4,20 @@ AllCops:
     - 'db/**/*'
     - 'config/**/*'
     - 'script/**/*'
-    - 'Gemfile'
     - 'Guardfile'
     - 'Rakefile'
 Documentation:
   Enabled: false
 Metrics/ClassLength:
   Max: 150
+Metrics/LineLength:
+  Max: 100
 Rails/ActionFilter:
   Enabled: false
 SignalException:
   Enabled: false
-Style/PredicateName:
-  Enabled: true
-  Exclude:
-    - 'spec/support/pages/**/*'
+Style/StringLiterals:
+  EnforcedStyle: single_quotes
 Style/TrailingComma:
   EnforcedStyleForMultiline: comma
   Enabled: true

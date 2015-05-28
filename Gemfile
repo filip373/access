@@ -1,41 +1,44 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 4.1'
-gem 'jquery-rails', '~> 2.1'
+gem 'rails', '~> 4.2'
 
+gem 'celluloid'
+gem 'decent_exposure'
+gem 'font-awesome-rails'
+gem 'git'
+gem 'github_api'
 gem 'haml'
-
+gem 'jquery-rails'
+gem 'konf'
+gem 'netguru_theme'
 gem 'omniauth'
 gem 'omniauth-github'
 gem 'omniauth-google-oauth2'
-gem 'github_api'
-gem 'decent_exposure'
-gem 'konf'
-gem 'git'
-gem 'pry-rails'
 gem 'pry-byebug'
-gem 'slack-notifier'
+gem 'pry-rails'
+gem 'rollbar'
 gem 'sass-rails'
-gem 'netguru_theme'
+gem 'slack-notifier'
+gem 'sprockets'
 gem 'sucker_punch'
-gem 'font-awesome-rails'
+
+# deployment
 
 gem 'capistrano'
-gem 'rvm1-capistrano3', require: false
-gem 'capistrano-rails'
 gem 'capistrano-bundler'
 gem 'capistrano-passenger'
-
-gem 'rollbar'
+gem 'capistrano-rails'
+gem 'rvm1-capistrano3', require: false
 
 group :development do
-  gem 'pry'
-  gem 'httplog'
-  gem 'binding_of_caller'
   gem 'better_errors'
-end
-
-group :development, :test do
+  gem 'binding_of_caller'
+  gem 'guard-rspec'
+  gem 'guard-rubocop'
+  gem 'httplog'
+  gem 'quiet_assets'
   gem 'rspec-rails'
+  gem 'spring'
+  gem 'spring-commands-rspec'
 end

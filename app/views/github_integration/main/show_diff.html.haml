@@ -1,11 +1,13 @@
 .jumbotron
   %h2 Github teams
-  %h3 Please confirm changes below:
+  - if diff_errors.present?
+    = render 'errors'
 
-  - if log_empty?(@gh_log)
+  - if log_empty?(gh_log)
     %h3 Move along, nothing to see here.
     = link_to "Wicked!", root_path, class: 'btn btn-primary btn-lg'
   - else
+    %h3 Please confirm changes below:
     = render "gh_log"
     = form_tag github_sync_path, method: :post do
       = button_tag "Confirm changes", type: :submit, class: 'btn btn-primary btn-lg', 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> I\'m on it...".html_safe

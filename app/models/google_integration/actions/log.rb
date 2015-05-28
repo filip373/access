@@ -18,6 +18,8 @@ module GoogleIntegration
         log_removing_members
         log_adding_aliases
         log_removing_aliases
+        log_adding_memberships
+        log_removing_memberships
         @log << 'There are no changes.' if @log.size == 0
         @log
       end
@@ -33,7 +35,17 @@ module GoogleIntegration
           h[:add_aliases].each do |r|
             @log << "[api] add alias #{r} to group #{group.email}"
           end if h[:add_aliases]
+
+          unless h[:add_membership].nil?
+            @log << "[api] add domain membership to group #{group.email}"
+          end
         end
+      end
+
+      def log_adding_memberships
+        @diff_hash[:add_membership].each do |group, membership|
+          @log << "[api] add domain membership to group #{group.email}"
+        end if @diff_hash[:add_membership]
       end
 
       def log_adding_members
@@ -42,6 +54,12 @@ module GoogleIntegration
             @log << "[api] add member #{m} to group #{group.email}"
           end
         end if @diff_hash[:add_members]
+      end
+
+      def log_removing_memberships
+        @diff_hash[:remove_membership].each do |group, membership|
+          @log << "[api] remove domain membership from group #{group.email}"
+        end if @diff_hash[:remove_membership]
       end
 
       def log_removing_members

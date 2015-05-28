@@ -10,6 +10,8 @@ module GoogleIntegration
           remove_members: {},
           add_aliases: {},
           remove_aliases: {},
+          add_membership: {},
+          remove_membership: {}
         }
       end
 
@@ -25,6 +27,7 @@ module GoogleIntegration
           google_group = find_or_create_google_group(expected_group)
           members_diff(google_group, expected_group.users)
           aliases_diff(google_group, expected_group.aliases)
+          domain_membership_diff(google_group, expected_group.domain_membership)
         end
       end
 
@@ -42,6 +45,20 @@ module GoogleIntegration
         end
       end
 
+      def domain_membership_diff(group, expected_membership)
+        if group.respond_to?(:id)
+          domain_membership = check_domain_membership(group['id'])
+
+          if expected_membership && expected_membership != domain_membership
+            @diff_hash[:add_membership][group] = expected_membership
+          elsif domain_membership && expected_membership != domain_membership
+            @diff_hash[:remove_membership][group] = expected_membership
+          end
+        elsif expected_membership.present?
+          @diff_hash[:create_groups][group][:add_membership] = expected_membership
+        end
+      end
+
       def aliases_diff(group, aliases)
         aliases ||= []
         if group.respond_to?(:id) # persisted
@@ -50,20 +67,30 @@ module GoogleIntegration
           remove = current_aliases - aliases
           @diff_hash[:add_aliases][group] = add if add.present?
           @diff_hash[:remove_aliases][group] = remove if remove.present?
-        else
-          if aliases.present?
-            @diff_hash[:create_groups][group][:add_aliases] = aliases
-          end
+        elsif aliases.present?
+          @diff_hash[:create_groups][group][:add_aliases] = aliases
+        end
+      end
+
+      def check_domain_membership(group_id)
+        return true if members_list(group_id).find do |member|
+          member['id'] == AppConfig.google.domain_member_id
         end
       end
 
       def list_group_members(group_id)
-        @google_api.list_members(group_id).map { |m| m['email'] }.compact
+        members_list(group_id).map { |m| m['email'] }.compact
+      end
+
+      def members_list(group_id)
+        return @members_list if @group_id == group_id
+        @group_id = group_id
+        @members_list = @google_api.list_members(group_id)
       end
 
       def list_group_aliases(name)
         name = Helpers::User.email_to_username(name)
-        aliases = find_group(name)['aliases'] || []
+        aliases = find_group(name).fetch('aliases', [])
         aliases.map { |e| Helpers::User.email_to_username(e) }
       end
 

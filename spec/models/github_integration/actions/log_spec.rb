@@ -9,24 +9,24 @@ RSpec.describe GithubIntegration::Actions::Log do
         new_team => {
           add_permissions: 'push',
           add_members: ['new.dude'],
-          add_repos: ['cool-new-repo']
-        }
+          add_repos: ['cool-new-repo'],
+        },
       },
       add_members: {
-        team => ['first.dude']
+        team => ['first.dude'],
       },
       remove_members: {
-        team => ['second.dude']
+        team => ['second.dude'],
       },
       add_repos: {
-        team => ['first_repo']
+        team => ['first_repo'],
       },
       remove_repos: {
-        team => ['second_repo']
+        team => ['second_repo'],
       },
       change_permissions: {
-        team => 'push'
-      }
+        team => 'push',
+      },
     }
   end
 
@@ -37,13 +37,14 @@ RSpec.describe GithubIntegration::Actions::Log do
       remove_members: {},
       add_repos: {},
       remove_repos: {},
-      change_permissions: {}
+      change_permissions: {},
     }
   end
 
   subject { described_class.new(diff).now! }
   it { is_expected.to be_a Array }
 
+  # rubocop:disable Metrics/LineLength
   context 'with changes' do
     it { is_expected.to satisfy { |s| s.size == 9 } }
     it { is_expected.to include "[api] create team #{new_team.name}" }
@@ -56,11 +57,12 @@ RSpec.describe GithubIntegration::Actions::Log do
     it { is_expected.to include "[api] remove repo #{diff[:remove_repos][team][0]} from team #{team.name}" }
     it { is_expected.to include "[api] change permissions #{team.name} - #{diff[:change_permissions][team]}" }
   end
+  # rubocop:enable Metrics/LineLength
 
   context 'without changes' do
     subject { described_class.new(empty_diff).now! }
 
     it { is_expected.to satisfy { |s| s.size == 1 } }
-    it { is_expected.to include "There are no changes." }
+    it { is_expected.to include 'There are no changes.' }
   end
 end

@@ -1,15 +1,17 @@
 class User
+  @errors = []
+  class << self
+    attr_reader :errors
+  end
+
   def self.find(name)
-    if name.include?('/') # namespace lookup i.e netguru/marcin.stecki
-      namespace_lookup(name)
-    else
-      user_data = users_data[name]
-      if user_data.nil? && users_data[company_name].present?
-        users_data[company_name][name]
+    user =
+      if name.include?('/')
+        namespace_lookup(name)
       else
-        user_data
+        users_data[name] || users_data.fetch(company_name, {}).fetch(name, nil)
       end
-    end
+    user || raise("Unknown user #{name}. It's not in directory users or it is in wrong directory")
   end
 
   def self.namespace_lookup(name)
@@ -23,11 +25,21 @@ class User
 
   def self.find_many(names)
     users = names.map do |n|
-      user = User.find(n)
-      raise "Unknown user #{n}" if user.nil?
-      [n, user]
+      begin
+        user = User.find(n)
+      rescue StandardError => e
+        add_error(e)
+      else
+        [n, user]
+      end
     end
-    Hash[users]
+    Hash[users.compact]
+  end
+
+  def self.add_error(error)
+    @errors.push(error.to_s)
+    Rollbar.error(error)
+    nil
   end
 
   def self.company_name
@@ -36,5 +48,11 @@ class User
 
   def self.users_data
     Storage.data.users
+  end
+
+  def self.shift_errors
+    tmp_errors = @errors.clone
+    @errors = []
+    tmp_errors
   end
 end

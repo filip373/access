@@ -3,22 +3,23 @@ module GithubIntegration
     expose(:validation_errors) { Storage.validation_errors }
     expose(:gh_api) { Api.new(session[:gh_token], AppConfig.company) }
     expose(:expected_teams) { Teams.all }
-    expose(:gh_diff) { Actions::Diff.new(expected_teams, gh_api) }
-    expose(:get_gh_log) { Actions::Log.new(get_gh_diff) }
+    expose(:gh_teams) { gh_api.list_teams }
+    expose(:gh_log) { Actions::Log.new(calculated_diff).now! }
     expose(:sync_github_job) { SyncJob.new }
-    expose(:teams_cleanup) { Actions::CleanupTeams.new(expected_teams, gh_api) }
+    expose(:teams_cleanup) { Actions::CleanupTeams.new(expected_teams, gh_teams, gh_api) }
     expose(:missing_teams) { teams_cleanup.stranded_teams }
     expose(:update_repo) { UpdateRepo.new }
+    expose(:diff_errors) { @diff.errors }
 
     def show_diff
+      reset_diff
       update_repo.now!
       Storage.reset_data
-      @gh_diff = gh_diff.now!
-      @gh_log = get_gh_log.now!
+      calculated_diff
     end
 
     def sync
-      sync_github_job.async.perform(gh_api, get_gh_diff)
+      sync_github_job.async.perform(gh_api, calculated_diff)
       reset_diff
     end
 
@@ -29,11 +30,14 @@ module GithubIntegration
     private
 
     def reset_diff
-      @gh_diff = nil
+      Rails.cache.delete 'calculated_diff'
     end
 
-    def get_gh_diff
-      @gh_diff ||= gh_diff.now!
+    def calculated_diff
+      Rails.cache.fetch 'calculated_diff' do
+        @diff ||= Actions::Diff.new(expected_teams, gh_teams, gh_api)
+        @diff.now!
+      end
     end
   end
 end

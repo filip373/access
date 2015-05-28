@@ -62,7 +62,7 @@ module BaseActions
         end
       end
 
-      def self.create_model opts
+      def self.create_model(opts)
         log_creating_models(opts)
         opts[:items].each do |item_name|
           log_adding_items(item_name, opts)
@@ -70,12 +70,12 @@ module BaseActions
         end
       end
 
-      def is_empty? diff
-        diff.all? { |k,v| v == {} }
+      def is_empty?(diff)
+        diff.all? { |_k, v| v == {} }
       end
 
       def empty_diff
-        @log << "There are no changes."
+        @log << 'There are no changes.'
       end
     end
   end
