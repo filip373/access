@@ -23,8 +23,7 @@ module GithubIntegration
       def now!
         generate_diff
         @condition = Celluloid::Condition.new
-        wait_diff_result = @condition.wait
-        wait_diff_result
+        @condition.wait
       end
 
       private
