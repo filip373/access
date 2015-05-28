@@ -5,11 +5,12 @@ class User
   end
 
   def self.find(name)
-    if name.include?('/')
-      user = namespace_lookup(name)
-    else
-      user = users_data[name] || users_data.try(:[], company_name).try(:[], name)
-    end
+    user =
+      if name.include?('/')
+        namespace_lookup(name)
+      else
+        users_data[name] || users_data.fetch(company_name, {}).fetch(name, nil)
+      end
     user || raise("Unknown user #{name}. It's not in directory users or it is in wrong directory")
   end
 
