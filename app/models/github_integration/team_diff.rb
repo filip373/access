@@ -13,7 +13,7 @@ module GithubIntegration
         change_permissions: {},
       }
       @expected_team = expected_team
-      @gh_team = gh_team
+      @gh_team = gh_team || create_gh_team
       @gh_api = gh_api
       @errors = []
     end
