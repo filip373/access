@@ -4,6 +4,7 @@ RSpec.describe GithubIntegration::TeamDiff do
   include_context 'gh_api'
 
   before(:each) do
+    Celluloid.shutdown
     Celluloid.boot
   end
 
@@ -30,36 +31,24 @@ RSpec.describe GithubIntegration::TeamDiff do
       end
 
       let(:condition) { Celluloid::Condition.new }
+      let(:team_diff_observer) { GithubIntegration::Observers::TeamDiffObserver }
       it 'is alive' do
-        team_diff = GithubIntegration::TeamDiff.new(expected_team1, team1, gh_api, diff_hash, blk)
+        team_diff = described_class.new(expected_team1, team1, gh_api)
         expect(team_diff).to be_alive
       end
 
-      it 'call blk' do
-        team_diff = GithubIntegration::TeamDiff.new(expected_team1, team1, gh_api, diff_hash, blk)
-        allow(blk).to receive(:call)
-        team_diff.diff
-        expect(blk).to have_received(:call)
-      end
-
       it 'works in another thread' do
-        team_diff = GithubIntegration::TeamDiff.new(expected_team1, team1, gh_api, diff_hash, blk)
+        team_diff = described_class.new(expected_team1, team1, gh_api)
         expect(diff_hash[:add_members]).to be_empty
-
         team_diff.async.diff
-
         expect(diff_hash[:add_members]).to be_empty
-        wait_diff_result = condition.wait
-        expect(wait_diff_result).to_not be_empty
       end
 
       it 'returns errors if there are users which not exist in users dir' do
-        blk = lambda do |_diff, errors|
-          condition.signal(errors)
-        end
-        team_diff = GithubIntegration::TeamDiff.new(expected_team1, team1, gh_api, diff_hash, blk)
+        team_diff_observer.new(condition, 1).subscribe 'completed', :on_completion
+        team_diff = described_class.new(expected_team1, team1, gh_api)
         team_diff.async.diff
-        errors = condition.wait
+        _diff, errors = condition.wait
         expect(errors).to_not be_empty
         expect(errors.count).to eq(1)
       end
