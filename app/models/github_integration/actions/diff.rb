@@ -41,7 +41,7 @@ module GithubIntegration
         end
       end
 
-      def get_gh_team(team_name)
+      def gh_team(team_name)
         @gh_teams.find { |t| t.name.downcase == team_name.downcase }
       end
 
