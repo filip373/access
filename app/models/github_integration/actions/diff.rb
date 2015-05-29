@@ -10,11 +10,11 @@ module GithubIntegration
         @gh_teams = gh_teams
         @gh_api = gh_api
         @errors = []
+        @total_diff_condition = Celluloid::Condition.new
       end
 
       def now!
         generate_diff
-        @condition = Celluloid::Condition.new
         @condition.wait
       end
 
