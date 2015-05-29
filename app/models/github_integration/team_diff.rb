@@ -23,7 +23,6 @@ module GithubIntegration
       members_diff(@gh_team, members)
       repos_diff(@gh_team, @expected_team.repos)
       team_permissions_diff(@gh_team, @expected_team.permission)
-      @blk.call(@diff_hash, @errors)
       publish 'completed', @team_diff_hash, @errors
     end
 
