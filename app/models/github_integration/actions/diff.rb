@@ -9,14 +9,6 @@ module GithubIntegration
         @expected_teams = expected_teams
         @gh_teams = gh_teams
         @gh_api = gh_api
-        @diff_hash = {
-          create_teams: {},
-          add_members: {},
-          remove_members: {},
-          add_repos: {},
-          remove_repos: {},
-          change_permissions: {},
-        }
         @errors = []
       end
 
