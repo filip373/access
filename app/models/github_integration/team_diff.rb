@@ -1,6 +1,7 @@
 module GithubIntegration
   class TeamDiff
     include Celluloid
+    include Celluloid::Notifications
 
     def initialize(expected_team, gh_team, gh_api)
       @team_diff_hash = {
@@ -23,6 +24,7 @@ module GithubIntegration
       repos_diff(@gh_team, @expected_team.repos)
       team_permissions_diff(@gh_team, @expected_team.permission)
       @blk.call(@diff_hash, @errors)
+      publish 'completed', @team_diff_hash, @errors
     end
 
     private
