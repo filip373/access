@@ -77,5 +77,10 @@ module GithubIntegration
         end
       end
     end
+
+    def create_gh_team
+      @team_diff_hash[:create_teams][@expected_team] = {}
+      @expected_team
+    end
   end
 end

@@ -30,13 +30,6 @@ module GithubIntegration
       def gh_team(team_name)
         @gh_teams.find { |t| t.name.downcase == team_name.downcase }
       end
-
-      def find_or_create_gh_team(expected_team)
-        team = get_gh_team(expected_team.name)
-        return team unless team.nil?
-        @diff_hash[:create_teams][expected_team] = {}
-        expected_team
-      end
     end
   end
 end
