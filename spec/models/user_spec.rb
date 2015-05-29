@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe GithubIntegration::User do
+describe User do
   subject { described_class }
   let(:users_data) do
     {
