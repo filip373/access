@@ -2,12 +2,18 @@ module GithubIntegration
   class TeamDiff
     include Celluloid
 
-    def initialize(expected_team, gh_team, gh_api, diff_hash, blk)
+    def initialize(expected_team, gh_team, gh_api)
+      @team_diff_hash = {
+        create_teams: {},
+        add_members: {},
+        remove_members: {},
+        add_repos: {},
+        remove_repos: {},
+        change_permissions: {},
+      }
       @expected_team = expected_team
       @gh_team = gh_team
       @gh_api = gh_api
-      @diff_hash = diff_hash
-      @blk = blk
       @errors = []
     end
 
@@ -24,9 +30,9 @@ module GithubIntegration
     def team_permissions_diff(team, expected_permission)
       if team.respond_to?(:id)
         return if team.permission == expected_permission
-        @diff_hash[:change_permissions][team] = expected_permission
+        @team_diff_hash[:change_permissions][team] = expected_permission
       elsif !expected_permission.blank?
-        @diff_hash[:create_teams][team][:add_permissions] = expected_permission
+        @team_diff_hash[:create_teams][team][:add_permissions] = expected_permission
       end
     end
 
@@ -34,20 +40,20 @@ module GithubIntegration
       if team.respond_to?(:id)
         current_members = team.respond_to?(:fake) ? [] : list_team_members(team['id'])
         add = members_names - current_members
-        @diff_hash[:add_members][team] = exclude_pending_members(add, team.id)
-        @diff_hash[:remove_members][team] = current_members - members_names
+        @team_diff_hash[:add_members][team] = exclude_pending_members(add, team.id)
+        @team_diff_hash[:remove_members][team] = current_members - members_names
       elsif !members_names.empty?
-        @diff_hash[:create_teams][team][:add_members] = members_names
+        @team_diff_hash[:create_teams][team][:add_members] = members_names
       end
     end
 
     def repos_diff(team, repos_names)
       if team.respond_to?(:id)
         current_repos = team.respond_to?(:fake) ? [] : list_team_repos(team['id'])
-        @diff_hash[:add_repos][team] = repos_names - current_repos
-        @diff_hash[:remove_repos][team] = current_repos - repos_names
+        @team_diff_hash[:add_repos][team] = repos_names - current_repos
+        @team_diff_hash[:remove_repos][team] = current_repos - repos_names
       else
-        @diff_hash[:create_teams][team][:add_repos] = repos_names unless repos_names.empty?
+        @team_diff_hash[:create_teams][team][:add_repos] = repos_names unless repos_names.empty?
       end
     end
 
