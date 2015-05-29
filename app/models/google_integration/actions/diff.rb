@@ -11,7 +11,7 @@ module GoogleIntegration
           add_aliases: {},
           remove_aliases: {},
           add_membership: {},
-          remove_membership: {}
+          remove_membership: {},
         }
       end
 
