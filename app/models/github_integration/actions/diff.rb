@@ -2,6 +2,7 @@ module GithubIntegration
   module Actions
     class Diff
       include Celluloid
+      include Celluloid::Notifications
 
       attr_reader :errors
 
@@ -9,22 +10,28 @@ module GithubIntegration
         @expected_teams = expected_teams
         @gh_teams = gh_teams
         @gh_api = gh_api
-        @errors = []
         @total_diff_condition = Celluloid::Condition.new
+        Observers::TeamDiffObserver.new(
+          @total_diff_condition, @expected_teams.size
+        ).subscribe 'completed', :on_completion
       end
 
       def now!
         generate_diff
-        @condition.wait
       end
 
       private
 
       def generate_diff
         @expected_teams.each do |expected_team|
-          gh_team = find_or_create_gh_team(expected_team)
-          TeamDiff.new(expected_team, gh_team, @gh_api, @diff_hash, blk).async.diff
+          gh_team = gh_team(expected_team.name)
+          team_diff = TeamDiff.new(expected_team, gh_team, @gh_api)
+          team_diff.async.diff
         end
+        diff, @errors = @total_diff_condition.wait # Wait till all pools (threads) are done
+        @errors.uniq!
+        Celluloid.shutdown_timeout
+        diff
       end
 
       def gh_team(team_name)
