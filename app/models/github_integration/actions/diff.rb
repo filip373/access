@@ -30,7 +30,6 @@ module GithubIntegration
         end
         diff, @errors = @total_diff_condition.wait # Wait till all pools (threads) are done
         @errors.uniq!
-        Celluloid.shutdown_timeout
         diff
       end
 
