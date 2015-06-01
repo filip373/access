@@ -19,8 +19,8 @@ module GithubIntegration
     end
 
     def diff
-      Rollbar.info("teamdiff.diff", expected_team: @expected_team, diff_hash: @team_diff_hash, members: members)
       members = map_users_to_members
+      Rollbar.info("teamdiff.diff", expected_team: @expected_team, diff_hash: @team_diff_hash, members: members)
       members_diff(@gh_team, members)
       repos_diff(@gh_team, @expected_team.repos)
       team_permissions_diff(@gh_team, @expected_team.permission)
