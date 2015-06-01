@@ -19,6 +19,7 @@ module GithubIntegration
     end
 
     def diff
+      Rollbar.info("teamdiff.diff", expected_team: @expected_team, diff_hash: @team_diff_hash, members: members)
       members = map_users_to_members
       members_diff(@gh_team, members)
       repos_diff(@gh_team, @expected_team.repos)
@@ -35,6 +36,7 @@ module GithubIntegration
       elsif !expected_permission.blank?
         @team_diff_hash[:create_teams][team][:add_permissions] = expected_permission
       end
+      Rollbar.info('teamdiff.team_permissions_diff',expected_team: @expected_team, diff_hash: @team_diff_hash)
     end
 
     def members_diff(team, members_names)
@@ -46,6 +48,7 @@ module GithubIntegration
       elsif !members_names.empty?
         @team_diff_hash[:create_teams][team][:add_members] = members_names
       end
+      Rollbar.info('teamdiff.members_diff',expected_team: @expected_team, diff_hash: @team_diff_hash)
     end
 
     def repos_diff(team, repos_names)
@@ -56,6 +59,7 @@ module GithubIntegration
       else
         @team_diff_hash[:create_teams][team][:add_repos] = repos_names unless repos_names.empty?
       end
+      Rollbar.info('teamdiff.repos_diff',expected_team: @expected_team, diff_hash: @team_diff_hash)
     end
 
     def list_team_members(team_id)

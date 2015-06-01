@@ -21,11 +21,13 @@ module GithubIntegration
       end
 
       def on_completion(_topic, diff_hash, errors)
+        Rollbar.info("observer.on_completion", diff_hash: diff_hash, errors: errors)
         @diffed_count ||= 0
         @errors ||= []
         @diffed_count += 1
         @errors.push(*errors)
         @diff_hash.deep_merge!(diff_hash)
+        Rollbar.info("observer.on_completion", diff_hash_merged: @diff_hash, errors_merged: @errors, diffed_count: @diffed_count)
         @condition.signal([@diff_hash, @errors]) if @diffed_count == @teams_count
       end
     end

@@ -24,11 +24,13 @@ module GithubIntegration
 
       def generate_diff
         @expected_teams.each do |expected_team|
+          Rollbar.info('generate_diff', expected_team: expected_team)
           gh_team = gh_team(expected_team.name)
           team_diff = TeamDiff.new(expected_team, gh_team, @gh_api)
           team_diff.async.diff
         end
         diff, @errors = @total_diff_condition.wait # Wait till all pools (threads) are done
+        Rollbar.info('after condition waiter', diff: diff, errors: @errors)
         @errors.uniq!
         diff
       end
