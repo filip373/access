@@ -18,6 +18,7 @@ module GithubIntegration
           remove_repos: {},
           change_permissions: {},
         }
+        subscribe 'completed', :on_completion
       end
 
       def on_completion(_topic, diff_hash, errors)

@@ -13,7 +13,7 @@ module GithubIntegration
         @total_diff_condition = Celluloid::Condition.new
         Observers::TeamDiffObserver.new(
           @total_diff_condition, @expected_teams.size
-        ).subscribe 'completed', :on_completion
+        )
       end
 
       def now!

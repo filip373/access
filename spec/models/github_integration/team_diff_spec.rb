@@ -45,7 +45,7 @@ RSpec.describe GithubIntegration::TeamDiff do
       end
 
       it 'returns errors if there are users which not exist in users dir' do
-        team_diff_observer.new(condition, 1).subscribe 'completed', :on_completion
+        team_diff_observer.new(condition, 1)
         team_diff = described_class.new(expected_team1, team1, gh_api)
         team_diff.async.diff
         _diff, errors = condition.wait
