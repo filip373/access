@@ -31,6 +31,10 @@ RSpec.describe GithubIntegration::MainController do
   end
 
   describe 'POST sync' do
+    before do
+      allow_any_instance_of(GithubIntegration::SyncJob).to receive(:perform)
+    end
+    
     it 'resets cache' do
       allow(Rails.cache).to receive(:delete)
       post :sync
