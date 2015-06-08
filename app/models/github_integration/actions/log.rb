@@ -27,12 +27,16 @@ module GithubIntegration
         @diff_hash[:create_teams].each do |team, h|
           @log << "[api] create team #{team.name}"
 
-          h[:add_members].each do |m|
-            @log << "[api] add member #{m} to team #{team.name}"
+          if h[:add_members].present?
+            h[:add_members].each do |m|
+              @log << "[api] add member #{m} to team #{team.name}"
+            end
           end
 
-          h[:add_repos].each do |r|
-            @log << "[api] add repo #{r} to team #{team.name}"
+          if h[:add_repos].present?
+            h[:add_repos].each do |r|
+              @log << "[api] add repo #{r} to team #{team.name}"
+            end
           end
 
           unless h[:add_permissions].empty?
