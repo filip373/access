@@ -1,7 +1,5 @@
 module GoogleIntegration
   class SyncJob
-    include SuckerPunch::Job
-
     def perform(api, diff)
       before
       GoogleIntegration::Actions::Sync.new(api).now!(diff)

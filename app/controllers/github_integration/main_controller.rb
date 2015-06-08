@@ -19,7 +19,7 @@ module GithubIntegration
     end
 
     def sync
-      sync_github_job.async.perform(gh_api, calculated_diff)
+      sync_github_job.perform(gh_api, calculated_diff)
       reset_diff
     end
 

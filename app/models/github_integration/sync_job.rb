@@ -1,7 +1,5 @@
 module GithubIntegration
   class SyncJob
-    include SuckerPunch::Job
-
     def perform(api, diff)
       before
       GithubIntegration::Actions::Sync.new(api).now!(diff)
