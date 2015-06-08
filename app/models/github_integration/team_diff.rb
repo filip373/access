@@ -3,10 +3,10 @@ module GithubIntegration
     include Celluloid
 
     def initialize(expected_team, gh_team, gh_api, diff_hash, blk)
+      @diff_hash = diff_hash
       @expected_team = expected_team
       @gh_team = gh_team || create_gh_team
       @gh_api = gh_api
-      @diff_hash = diff_hash
       @blk = blk
       @errors = []
     end
@@ -76,6 +76,11 @@ module GithubIntegration
           @gh_api.team_member_pending?(team_id, user_name)
         end
       end
+    end
+
+    def create_gh_team
+      @diff_hash[:create_teams][@expected_team] = {}
+      @expected_team
     end
   end
 end

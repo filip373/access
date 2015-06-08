@@ -35,21 +35,15 @@ module GithubIntegration
             @total_diff_condition.signal(diff) if diffed_count == @expected_teams.size
             @errors.push(*errors)
           end
-          gh_team = find_or_create_gh_team(expected_team)
-          TeamDiff.new(expected_team, gh_team, @gh_api, @diff_hash, blk).async.diff
+          gh_team = gh_team(expected_team.name)
+          team_diff = TeamDiff.new(expected_team, gh_team, @gh_api, @diff_hash, blk)
+          team_diff.async.diff
         end
         @total_diff_condition.wait # Wait till all pools (threads) are done
       end
 
       def gh_team(team_name)
         @gh_teams.find { |t| t.name.downcase == team_name.downcase }
-      end
-
-      def find_or_create_gh_team(expected_team)
-        team = gh_team(expected_team.name)
-        return team unless team.nil?
-        @diff_hash[:create_teams][expected_team] = {}
-        expected_team
       end
     end
   end
