@@ -1,6 +1,5 @@
 class UpdateRepo
   def now!
-    Rollbar.info('UpdateRepo.now!', permissions_checkout_dir: permissions_checkout_dir)
     if File.exist? permissions_checkout_dir
       update
     else

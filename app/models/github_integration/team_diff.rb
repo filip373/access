@@ -1,30 +1,22 @@
 module GithubIntegration
   class TeamDiff
     include Celluloid
-    include Celluloid::Notifications
 
-    def initialize(expected_team, gh_team, gh_api)
-      @team_diff_hash = {
-        create_teams: {},
-        add_members: {},
-        remove_members: {},
-        add_repos: {},
-        remove_repos: {},
-        change_permissions: {},
-      }
+    def initialize(expected_team, gh_team, gh_api, diff_hash, blk)
       @expected_team = expected_team
       @gh_team = gh_team || create_gh_team
       @gh_api = gh_api
+      @diff_hash = diff_hash
+      @blk = blk
       @errors = []
     end
 
     def diff
       members = map_users_to_members
-      Rollbar.info("teamdiff.diff", expected_team: @expected_team, diff_hash: @team_diff_hash, members: members)
       members_diff(@gh_team, members)
       repos_diff(@gh_team, @expected_team.repos)
       team_permissions_diff(@gh_team, @expected_team.permission)
-      publish 'completed', @team_diff_hash, @errors
+      @blk.call(@diff_hash, @errors)
     end
 
     private
@@ -32,34 +24,31 @@ module GithubIntegration
     def team_permissions_diff(team, expected_permission)
       if team.respond_to?(:id)
         return if team.permission == expected_permission
-        @team_diff_hash[:change_permissions][team] = expected_permission
+        @diff_hash[:change_permissions][team] = expected_permission
       elsif !expected_permission.blank?
-        @team_diff_hash[:create_teams][team][:add_permissions] = expected_permission
+        @diff_hash[:create_teams][team][:add_permissions] = expected_permission
       end
-      Rollbar.info('teamdiff.team_permissions_diff',expected_team: @expected_team, diff_hash: @team_diff_hash)
     end
 
     def members_diff(team, members_names)
       if team.respond_to?(:id)
         current_members = team.respond_to?(:fake) ? [] : list_team_members(team['id'])
         add = members_names - current_members
-        @team_diff_hash[:add_members][team] = exclude_pending_members(add, team.id)
-        @team_diff_hash[:remove_members][team] = current_members - members_names
-      elsif members_names.any?
-        @team_diff_hash[:create_teams][team][:add_members] = members_names
+        @diff_hash[:add_members][team] = exclude_pending_members(add, team.id)
+        @diff_hash[:remove_members][team] = current_members - members_names
+      elsif !members_names.empty?
+        @diff_hash[:create_teams][team][:add_members] = members_names
       end
-      Rollbar.info('teamdiff.members_diff',expected_team: @expected_team, diff_hash: @team_diff_hash)
     end
 
     def repos_diff(team, repos_names)
       if team.respond_to?(:id)
         current_repos = team.respond_to?(:fake) ? [] : list_team_repos(team['id'])
-        @team_diff_hash[:add_repos][team] = repos_names - current_repos
-        @team_diff_hash[:remove_repos][team] = current_repos - repos_names
+        @diff_hash[:add_repos][team] = repos_names - current_repos
+        @diff_hash[:remove_repos][team] = current_repos - repos_names
       else
-        @team_diff_hash[:create_teams][team][:add_repos] = repos_names unless repos_names.empty?
+        @diff_hash[:create_teams][team][:add_repos] = repos_names unless repos_names.empty?
       end
-      Rollbar.info('teamdiff.repos_diff',expected_team: @expected_team, diff_hash: @team_diff_hash)
     end
 
     def list_team_members(team_id)
@@ -87,11 +76,6 @@ module GithubIntegration
           @gh_api.team_member_pending?(team_id, user_name)
         end
       end
-    end
-
-    def create_gh_team
-      @team_diff_hash[:create_teams][@expected_team] = {}
-      @expected_team
     end
   end
 end
