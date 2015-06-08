@@ -21,7 +21,6 @@ gem 'rollbar'
 gem 'sass-rails'
 gem 'slack-notifier'
 gem 'sprockets'
-gem 'sucker_punch'
 gem 'skylight'
 
 # deployment
