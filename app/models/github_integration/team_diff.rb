@@ -45,7 +45,7 @@ module GithubIntegration
         add = members_names - current_members
         @team_diff_hash[:add_members][team] = exclude_pending_members(add, team.id)
         @team_diff_hash[:remove_members][team] = current_members - members_names
-      elsif !members_names.empty?
+      elsif members_names.any?
         @team_diff_hash[:create_teams][team][:add_members] = members_names
       end
       Rollbar.info('teamdiff.members_diff',expected_team: @expected_team, diff_hash: @team_diff_hash)
