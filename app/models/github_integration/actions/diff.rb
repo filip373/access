@@ -28,11 +28,9 @@ module GithubIntegration
       private
 
       def generate_diff
-        diffed_count = 0
         @expected_teams.each do |expected_team|
           blk = lambda do |diff, errors|
-            diffed_count += 1
-            @total_diff_condition.signal(diff) if diffed_count == @expected_teams.size
+            @total_diff_condition.signal(diff) if all_team_diffs_finished?
             @errors.push(*errors)
           end
           gh_team = gh_team(expected_team.name)
@@ -44,6 +42,12 @@ module GithubIntegration
 
       def gh_team(team_name)
         @gh_teams.find { |t| t.name.downcase == team_name.downcase }
+      end
+
+      def all_team_diffs_finished?
+        @diffed_count ||= 0
+        @diffed_count += 1
+        @diffed_count == @expected_teams.size
       end
     end
   end
