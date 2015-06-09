@@ -75,3 +75,18 @@ Once you are done editing / creating the files you should apply new permissions:
 - access app will pull the permissions repo and apply the changes to github.
 
 A good idea is to use `rake notify` in your CI to notify the owners that changes to the permissions repo were made.
+
+
+## Setup
+
+### FAQ
+
+#### 1. `Not Authorized to access this resource/api` while trying to run show_diff on google groups.
+- check `access/config/config` 
+ google: 
+   main_domain: netguru.org
+if domain is really used in setup project.
+- check `access/config/sec_config` google: client_id: and client_secret: if equals settings from console.developers.google.com, tabs: Apis -> Credentials -> OAuth.
+- check if you try to login with the proper user. You must login with administrator of the account.
+- remember to restart server and clean session after each attempt to fix from above steps.
+
