@@ -31,22 +31,22 @@ RSpec.describe GithubIntegration::TeamDiff do
 
       let(:condition) { Celluloid::Condition.new }
       it 'is alive' do
-        team_diff = described_class.new(expected_team1, team1, gh_api, diff_hash, blk)
+        team_diff = described_class.new(expected_team1, team1, gh_api, diff_hash)
         expect(team_diff).to be_alive
       end
 
       it 'call blk' do
-        team_diff = described_class.new(expected_team1, team1, gh_api, diff_hash, blk)
+        team_diff = described_class.new(expected_team1, team1, gh_api, diff_hash)
         allow(blk).to receive(:call)
-        team_diff.diff
+        team_diff.diff(blk)
         expect(blk).to have_received(:call)
       end
 
       it 'works in another thread' do
-        team_diff = described_class.new(expected_team1, team1, gh_api, diff_hash, blk)
+        team_diff = described_class.new(expected_team1, team1, gh_api, diff_hash)
         expect(diff_hash[:add_members]).to be_empty
 
-        team_diff.async.diff
+        team_diff.async.diff(blk)
 
         expect(diff_hash[:add_members]).to be_empty
         wait_diff_result = condition.wait
@@ -57,8 +57,8 @@ RSpec.describe GithubIntegration::TeamDiff do
         blk = lambda do |_diff, errors|
           condition.signal(errors)
         end
-        team_diff = described_class.new(expected_team1, team1, gh_api, diff_hash, blk)
-        team_diff.async.diff
+        team_diff = described_class.new(expected_team1, team1, gh_api, diff_hash)
+        team_diff.async.diff(blk)
         errors = condition.wait
         expect(errors).to_not be_empty
         expect(errors.count).to eq(1)
