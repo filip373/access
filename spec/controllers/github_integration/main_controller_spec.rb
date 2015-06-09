@@ -28,13 +28,18 @@ RSpec.describe GithubIntegration::MainController do
       expect(Rails.cache.read('calculated_diff')).to be_a Hash
       expect(Rails.cache.read('calculated_diff')).to_not be_empty
     end
+
+    it 'terminates diff actor' do
+      diff = assigns(:diff)
+      expect(diff.alive?).to_not eq(true)
+    end
   end
 
   describe 'POST sync' do
     before do
       allow_any_instance_of(GithubIntegration::SyncJob).to receive(:perform)
     end
-    
+
     it 'resets cache' do
       allow(Rails.cache).to receive(:delete)
       post :sync
@@ -45,7 +50,6 @@ RSpec.describe GithubIntegration::MainController do
       controller.send(:calculated_diff)
       allow(GithubIntegration::Actions::Diff).to receive(:new)
       post :sync
-      allow(Rails.cache).to receive(:delete)
       expect(GithubIntegration::Actions::Diff).to_not have_received(:new)
     end
 
@@ -56,10 +60,15 @@ RSpec.describe GithubIntegration::MainController do
   end
 
   describe 'DELETE cleanup_teams' do
+    subject { delete :cleanup_teams }
     it 'initialize CleanupTeams class' do
       allow_any_instance_of(GithubIntegration::Actions::CleanupTeams).to receive(:now!)
-      delete :cleanup_teams
+      subject
       expect(controller.teams_cleanup).to have_received(:now!)
+    end
+
+    it 'does not raise any errors' do
+      expect{ subject }.to_not raise_error
     end
   end
 end
