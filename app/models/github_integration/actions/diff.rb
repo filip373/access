@@ -30,10 +30,10 @@ module GithubIntegration
       def generate_diff
         @expected_teams.each do |expected_team|
           blk = lambda do |diff, errors|
-            @total_diff_condition.signal(diff) if all_team_diffs_finished?
             @errors.push(*errors)
+            @total_diff_condition.signal(diff) if all_team_diffs_finished?
           end
-          gh_team = gh_team(expected_team.name)
+          gh_expected_team = gh_team(expected_team.name)
           team_diff = TeamDiff.new(expected_team, gh_expected_team, @gh_api, @diff_hash)
           team_diff.async.diff(blk)
         end
