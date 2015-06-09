@@ -11,6 +11,8 @@ module GithubIntegration
     expose(:update_repo) { UpdateRepo.new }
     expose(:diff_errors) { @diff.errors }
 
+    after_filter :clean_diff_actor
+
     def show_diff
       reset_diff
       update_repo.now!
@@ -38,6 +40,10 @@ module GithubIntegration
         @diff ||= Actions::Diff.new(expected_teams, gh_teams, gh_api)
         @diff.now!
       end
+    end
+
+    def clean_diff_actor
+      @diff.try(:terminate)
     end
   end
 end

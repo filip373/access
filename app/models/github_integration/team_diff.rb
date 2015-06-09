@@ -17,6 +17,7 @@ module GithubIntegration
       repos_diff(@gh_team, @expected_team.repos)
       team_permissions_diff(@gh_team, @expected_team.permission)
       @blk.call(@diff_hash, @errors)
+      terminate
     end
 
     private
