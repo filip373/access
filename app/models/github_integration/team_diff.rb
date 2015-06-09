@@ -2,21 +2,20 @@ module GithubIntegration
   class TeamDiff
     include Celluloid
 
-    def initialize(expected_team, gh_team, gh_api, diff_hash, blk)
+    def initialize(expected_team, gh_team, gh_api, diff_hash)
       @diff_hash = diff_hash
       @expected_team = expected_team
       @gh_team = gh_team || create_gh_team
       @gh_api = gh_api
-      @blk = blk
       @errors = []
     end
 
-    def diff
+    def diff(blk)
       members = map_users_to_members
       members_diff(@gh_team, members)
       repos_diff(@gh_team, @expected_team.repos)
       team_permissions_diff(@gh_team, @expected_team.permission)
-      @blk.call(@diff_hash, @errors)
+      blk.call(@diff_hash, @errors)
       terminate
     end
 

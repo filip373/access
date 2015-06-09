@@ -34,8 +34,8 @@ module GithubIntegration
             @errors.push(*errors)
           end
           gh_team = gh_team(expected_team.name)
-          team_diff = TeamDiff.new(expected_team, gh_team, @gh_api, @diff_hash, blk)
-          team_diff.async.diff
+          team_diff = TeamDiff.new(expected_team, gh_expected_team, @gh_api, @diff_hash)
+          team_diff.async.diff(blk)
         end
         @total_diff_condition.wait # Wait till all pools (threads) are done
       end
