@@ -3,16 +3,21 @@ require 'rails_helper'
 RSpec.describe GoogleIntegration::Actions::Diff do
   let(:expected_groups) { GoogleIntegration::Groups.all }
   let(:group1) do
-    Hashie::Mash.new(id: 1, name: 'group1', email: 'group1@netguru.pl', aliases: ['alias1'])
+    Hashie::Mash.new(
+      id: 1,
+      name: 'group1',
+      email: 'group1@netguru.pl',
+      aliases: ['alias1'],
+      members: [
+        Hashie::Mash.new(name: 'first.member', email: 'first.member@netguru.pl'),
+        Hashie::Mash.new(id: AppConfig.google.domain_member_id),
+      ],
+    )
   end
   let(:new_group) { expected_groups.find { |g| g.name == 'new_group' } }
   let(:google_api) do
     double.tap do |api|
-      allow(api).to receive(:list_groups) { [group1] }
-      allow(api).to receive(:list_members) do
-        [Hashie::Mash.new(name: 'first.member', email: 'first.member@netguru.pl'),
-         Hashie::Mash.new(id: AppConfig.google.domain_member_id)]
-      end
+      allow(api).to receive(:list_groups_with_members) { [group1] }
     end
   end
 

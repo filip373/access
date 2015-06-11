@@ -25,8 +25,8 @@ RSpec.describe GoogleIntegration::Actions::Log do
         group => ['alias1'],
       },
       remove_membership: {
-        group => nil
-      }
+        group => nil,
+      },
     }
   end
 
@@ -38,7 +38,7 @@ RSpec.describe GoogleIntegration::Actions::Log do
       add_aliases: {},
       remove_aliases: {},
       add_membership: {},
-      remove_membership: {}
+      remove_membership: {},
     }
   end
 
