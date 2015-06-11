@@ -1,7 +1,8 @@
 GithubApp::Application.routes.draw do
   root 'main#index'
   get '/auth/github/callback' => 'github_integration/session#create'
-  get '/auth/google_oauth2/callback' => 'google_integration/session#create'
+  get '/auth/google_oauth2' => 'google_integration/session#new', as: 'google_oauth2'
+  get '/auth/google_oauth2/callback' => 'google_integration/session#create', as: 'google_oauth2_callback'
 
   get 'github/show_diff' => 'github_integration/main#show_diff', as: 'github_show_diff'
   post 'github/sync' => 'github_integration/main#sync', as: 'github_sync'
