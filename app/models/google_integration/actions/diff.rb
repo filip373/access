@@ -39,7 +39,7 @@ module GoogleIntegration
 
       def members_diff(group, expected_members)
         if group.respond_to?(:id)
-          current_members = list_group_members(group['id'])
+          current_members = list_group_members(group)
           add = expected_members - current_members
           remove = current_members - expected_members
           @diff_hash[:add_members][group] = add if add.present?
@@ -53,7 +53,7 @@ module GoogleIntegration
 
       def domain_membership_diff(group, expected_membership)
         if group.respond_to?(:id)
-          domain_membership = check_domain_membership(group['id'])
+          domain_membership = check_domain_membership(group)
 
           if expected_membership && expected_membership != domain_membership
             @diff_hash[:add_membership][group] = expected_membership
@@ -78,20 +78,20 @@ module GoogleIntegration
         end
       end
 
-      def check_domain_membership(group_id)
-        return true if members_list(group_id).find do |member|
+      def check_domain_membership(group)
+        return true if members_list(group).find do |member|
           member['id'] == AppConfig.google.domain_member_id
         end
       end
 
-      def list_group_members(group_id)
-        members_list(group_id).map { |m| m['email'] }.compact
+      def list_group_members(group)
+        group.members.map { |m| m['email'] }.compact
       end
 
-      def members_list(group_id)
-        return @members_list if @group_id == group_id
-        @group_id = group_id
-        @members_list = @google_api.list_members(group_id)
+      def members_list(group)
+        return @members_list if @group == group
+        @group = group
+        group.members
       end
 
       def list_group_aliases(name)
