@@ -27,14 +27,23 @@ module GoogleIntegration
       delete "groups/#{group_id}/members/#{AppConfig.google.domain_member_id}"
     end
 
-    def list_members(group_id)
-      data = get "groups/#{group_id}/members"
-      data.fetch('members', [])
+    def list_groups
+      @groups ||= request(directory.groups.list, domain: AppConfig.google.main_domain).fetch('groups')
     end
 
-    def list_groups
-      data = get 'groups', domain: AppConfig.google.main_domain
-      data.fetch('groups', []).map { |e| Hashie::Mash.new(e) }
+    def list_groups_with_members
+      batch = Google::APIClient::BatchRequest.new
+      groups_data = list_groups.map do |group|
+        batch_request = { api_method: directory.members.list,
+                          parameters: { 'groupKey' => group['id'] },
+                          headers: { 'Content-Type' => 'application/json' } }
+        batch.add(batch_request) do |result|
+          group[:members] = JSON.parse(result.body)['members'] || []
+        end
+        group
+      end
+      client.execute(batch)
+      groups_data.map { |group| Hashie::Mash.new(group) }
     end
 
     def create_group(name)
@@ -89,11 +98,11 @@ module GoogleIntegration
       response.body.present? ? JSON.parse(response.body) : {}
     end
 
-    def get(path, query = {})
-      response = api.get "#{BASE_URL}/admin/directory/v1/#{path}",
-                         params: query,
-                         headers: { 'Content-Type' => 'application/json' }
-      JSON.parse response.body
+    def request(path, parameters)
+      result = client.execute(api_method: path,
+                              parameters: parameters,
+                             )
+      JSON.parse(result.response.body)
     end
 
     def delete(path)
@@ -102,18 +111,17 @@ module GoogleIntegration
       response.body.present? ? JSON.parse(response.body) : {}
     end
 
-    def api
-      @api ||= OAuth2::AccessToken.new(client, token)
+    def client
+      @client = ::Google::APIClient.new(application_name: 'access')
     end
 
-    def client
-      @client ||= OAuth2::Client.new(
-        AppConfig.google.client_id,
-        AppConfig.google.client_secret,
-        site: 'https://accounts.google.com',
-        authorize_url: '/o/oauth2/auth',
-        token_url: '/o/oauth2/token',
-      )
+    def directory
+      @directory ||= client.discovered_api('admin', 'directory_v1')
+    end
+
+    def authorize_client(credentials)
+      client_opts = JSON.parse(credentials)
+      client.authorization = ::Signet::OAuth2::Client.new(client_opts)
     end
   end
 end
