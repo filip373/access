@@ -1,12 +1,10 @@
+require 'google/api_client'
+require 'google/api_client/client_secrets'
+
 module GoogleIntegration
   class Api
-    attr_accessor :token
-
-    BASE_URL = 'https://www.googleapis.com:443'
-    EMAIL_SETTINGS_API = 'https://apps-apis.google.com/a/feeds/emailsettings/2.0'
-
-    def initialize(token)
-      self.token = token
+    def initialize(credentials)
+      authorize_client(credentials)
     end
 
     # groups
