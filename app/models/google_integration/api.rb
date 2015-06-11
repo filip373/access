@@ -21,8 +21,8 @@ module GoogleIntegration
 
     def set_domain_membership(group_id)
       post "groups/#{group_id}/members",
-        id: AppConfig.google.domain_member_id,
-        role: 'MEMBER'
+           id: AppConfig.google.domain_member_id,
+           role: 'MEMBER'
     end
 
     def unset_domain_membership(group_id)
