@@ -1,6 +1,8 @@
 module GoogleIntegration
   module Actions
     class Diff
+      attr_reader :api_groups
+
       def initialize(expected_groups, google_api)
         @expected_groups = expected_groups
         @google_api = google_api
@@ -18,6 +20,10 @@ module GoogleIntegration
       def now!
         generate_diff
         @diff_hash
+      end
+
+      def api_groups
+        @api_groups ||= @google_api.list_groups_with_members
       end
 
       private
@@ -96,10 +102,6 @@ module GoogleIntegration
 
       def find_group(group_name)
         api_groups.find { |g| Helpers::User.email_to_username(g.email) == group_name.downcase }
-      end
-
-      def api_groups
-        @api_groups ||= @google_api.list_groups
       end
 
       def find_or_create_google_group(expected_group)

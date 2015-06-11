@@ -6,7 +6,7 @@ module GoogleIntegration
     expose(:get_google_log) { Actions::Log.new(get_google_diff) }
     expose(:sync_google_job) { SyncJob.new }
     expose(:update_repo) { UpdateRepo.new }
-    expose(:groups_cleanup) { Actions::CleanupGroups.new(expected_groups, google_api) }
+    expose(:groups_cleanup) { Actions::CleanupGroups.new(expected_groups, google_api, google_diff.api_groups) }
     expose(:missing_groups) { groups_cleanup.stranded_groups }
 
     before_filter :google_auth_required, unless: :google_logged_in?
