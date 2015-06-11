@@ -1,6 +1,9 @@
+require 'google/api_client'
+require 'google/api_client/client_secrets'
+
 module GoogleIntegration
   class MainController < ApplicationController
-    expose(:google_api) { Api.new(session[:google_token]) }
+    expose(:google_api) { Api.new(session[:credentials]) }
     expose(:expected_groups) { Groups.all }
     expose(:google_diff) { Actions::Diff.new(expected_groups, google_api) }
     expose(:get_google_log) { Actions::Log.new(get_google_diff) }
@@ -51,7 +54,7 @@ module GoogleIntegration
     end
 
     def google_logged_in?
-      session[:google_token].present?
+      session[:credentials].present?
     end
   end
 end
