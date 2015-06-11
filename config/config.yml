@@ -25,6 +25,7 @@ defaults: &defaults
       - 'https://www.googleapis.com/auth/admin.directory.user.security'
     client_id: 'I couldnt possibly be any more in sec_config, than I am now. Just sayin'
     client_secret: 'Same here, bro. Totally and utterly in sec_config. Chillin'
+    config_json: 'config/client_secrets.json'
   features:
     google_integration: false
 
