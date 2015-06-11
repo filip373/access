@@ -39,6 +39,4 @@ group :development do
   gem 'httplog'
   gem 'quiet_assets'
   gem 'rspec-rails'
-  gem 'spring'
-  gem 'spring-commands-rspec'
 end
