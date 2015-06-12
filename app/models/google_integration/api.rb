@@ -112,7 +112,7 @@ module GoogleIntegration
     end
 
     def client
-      @client = ::Google::APIClient.new(application_name: 'access')
+      @client ||= ::Google::APIClient.new(application_name: 'access')
     end
 
     def directory
