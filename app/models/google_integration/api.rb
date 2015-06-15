@@ -49,10 +49,7 @@ module GoogleIntegration
     def list_groups_full_info
       batch = Google::APIClient::BatchRequest.new
       groups_data = list_groups.map do |group|
-        batch_request = { api_method: directory_api.members.list,
-                          parameters: { 'groupKey' => group['id'] },
-                          headers: { 'Content-Type' => 'application/json' } }
-        batch.add(batch_request) do |result|
+        batch.add(members_list_request(group)) do |result|
           group[:members] = JSON.parse(result.body)['members'] || []
         end
         batch.add(group_settings_request(group)) do |result|
@@ -67,6 +64,11 @@ module GoogleIntegration
     def group_settings_request(group)
       { api_method: groups_settings_api.groups.get,
         parameters: { 'groupUniqueId' => group['email'] } }
+    end
+
+    def members_list_request(group)
+      { api_method: directory_api.members.list,
+        parameters: { 'groupKey' => group['id'] } }
     end
 
     def create_group(name)
