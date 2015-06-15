@@ -19,3 +19,6 @@
 
 # Ignore checker gem cache 
 /.checker-cache
+
+# ingore secret files
+config/client_secrets.json
