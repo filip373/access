@@ -12,6 +12,12 @@ RSpec.describe GoogleIntegration::Actions::Diff do
         Hashie::Mash.new(name: 'first.member', email: 'first.member@netguru.pl'),
         Hashie::Mash.new(id: AppConfig.google.domain_member_id),
       ],
+      settings: group_settings,
+    )
+  end
+  let(:group_settings) do
+    Hashie::Mash.new(
+      isArchived: false
     )
   end
   let(:new_group) { expected_groups.find { |g| g.name == 'new_group' } }
