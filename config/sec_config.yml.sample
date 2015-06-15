@@ -1,5 +1,6 @@
 development:
   rollbar_token: token-from-rollbar-so
+  company: your-company
   permissions_repo:
     url: your-url-to-permissions-repo
     git: git://path-to-repo-with-permissions
@@ -9,7 +10,8 @@ development:
   google:
     client_id: google-client-id
     client_secret: google-client-secret
-    scope: google-scope
+    domain_member_id: ...
+    main_domain: main_domain.org
   slack:
     webhook_url: webhook-url
     default_channel: 'channel-with-no-hash-sign'

@@ -7,3 +7,5 @@ GithubApp::Application.configure do
   config.assets.debug = true
   config.assets.compile = true
 end
+
+OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE

@@ -16,10 +16,11 @@ defaults: &defaults
     other_domains:
       - netguru.co
       - netguru.pl
-    scope: 
+    scope:
       - 'email'
       - 'profile'
       - 'https://www.googleapis.com/auth/plus.me'
+      - 'https://www.googleapis.com/auth/apps.groups.settings'
       - 'https://www.googleapis.com/auth/admin.directory.user'
       - 'https://www.googleapis.com/auth/admin.directory.group'
       - 'https://www.googleapis.com/auth/admin.directory.user.security'

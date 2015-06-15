@@ -20,8 +20,15 @@ module GoogleIntegration
         log_removing_aliases
         log_adding_memberships
         log_removing_memberships
+        log_changing_archive
         @log << 'There are no changes.' if @log.size == 0
         @log
+      end
+
+      def log_changing_archive
+        @diff_hash[:change_archive].each do |group, h|
+          @log << "[api] change group #{group.email} archive settings to #{h.is_archived}"
+        end
       end
 
       def log_creating_groups
