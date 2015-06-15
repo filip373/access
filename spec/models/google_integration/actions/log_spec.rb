@@ -27,6 +27,9 @@ RSpec.describe GoogleIntegration::Actions::Log do
       remove_membership: {
         group => nil,
       },
+      change_archive: {
+        group => false
+      }
     }
   end
 
@@ -39,6 +42,7 @@ RSpec.describe GoogleIntegration::Actions::Log do
       remove_aliases: {},
       add_membership: {},
       remove_membership: {},
+      change_archive: {},
     }
   end
 
@@ -47,7 +51,7 @@ RSpec.describe GoogleIntegration::Actions::Log do
 
   # rubocop:disable Metrics/LineLength
   context 'with changes' do
-    it { is_expected.to satisfy { |log| log.size == 9 } }
+    it { is_expected.to satisfy { |log| log.size == 10 } }
     it { is_expected.to include "[api] create group #{new_group.name}" }
     it { is_expected.to include "[api] add member #{diff[:create_groups][new_group][:add_members][0]} to group #{new_group.name}" }
     it { is_expected.to include "[api] add alias #{diff[:create_groups][new_group][:add_aliases][0]} to group #{new_group.name}" }
@@ -56,6 +60,7 @@ RSpec.describe GoogleIntegration::Actions::Log do
     it { is_expected.to include "[api] remove member #{diff[:remove_members][group][0]} from group #{group.name}" }
     it { is_expected.to include "[api] add alias #{diff[:add_aliases][group][0]} to group #{group.name}" }
     it { is_expected.to include "[api] remove alias #{diff[:remove_aliases][group][0]} from group #{group.name}" }
+    it { is_expected.to include "[api] change group #{group.email} archive settings to false" }
     it { is_expected.to include "[api] remove domain membership from group #{group.email}" }
   end
   # rubocop:enable Metrics/LineLength
