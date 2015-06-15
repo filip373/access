@@ -1,7 +1,7 @@
 .jumbotron
   %h2 Please confirm changes below:
 
-  - if log_empty?(@google_log)
+  - if log_empty?(google_log)
     %h3 Move along, nothing to see here.
     = link_to "Wicked!", root_path, class: 'btn btn-primary btn-lg'
   - else

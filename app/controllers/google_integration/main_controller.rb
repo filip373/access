@@ -5,11 +5,12 @@ module GoogleIntegration
   class MainController < ApplicationController
     expose(:google_api) { Api.new(session[:credentials]) }
     expose(:expected_groups) { Groups.all }
-    expose(:google_diff) { Actions::Diff.new(expected_groups, google_api) }
-    expose(:get_google_log) { Actions::Log.new(get_google_diff) }
+    expose(:google_log) { Actions::Log.new(calculated_diff).now! }
     expose(:sync_google_job) { SyncJob.new }
     expose(:update_repo) { UpdateRepo.new }
-    expose(:groups_cleanup) { Actions::CleanupGroups.new(expected_groups, google_api, google_diff.api_groups) }
+    expose(:groups_cleanup) do
+      Actions::CleanupGroups.new(expected_groups, google_api, @google_diff.api_groups)
+    end
     expose(:missing_groups) { groups_cleanup.stranded_groups }
 
     before_filter :google_auth_required, unless: :google_logged_in?
@@ -17,14 +18,14 @@ module GoogleIntegration
     rescue_from ArgumentError, with: :google_error
 
     def show_diff
+      reset_diff
       update_repo.now!
       Storage.reset_data
-      @google_diff = google_diff.now!
-      @google_log = get_google_log.now!
+      calculated_diff
     end
 
     def sync
-      sync_google_job.perform(google_api, get_google_diff)
+      sync_google_job.perform(google_api, calculated_diff)
       reset_diff
     end
 
@@ -35,11 +36,14 @@ module GoogleIntegration
     private
 
     def reset_diff
-      @google_diff = nil
+      Rails.cache.delete 'calculated_diff'
     end
 
-    def get_google_diff
-      @google_diff ||= google_diff.now!
+    def calculated_diff
+      Rails.cache.fetch 'calculated_diff' do
+        @google_diff ||= Actions::Diff.new(expected_groups, google_api)
+        @google_diff.now!
+      end
     end
 
     def google_auth_required
