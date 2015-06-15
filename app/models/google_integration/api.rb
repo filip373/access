@@ -55,10 +55,18 @@ module GoogleIntegration
         batch.add(batch_request) do |result|
           group[:members] = JSON.parse(result.body)['members'] || []
         end
+        batch.add(group_settings_request(group)) do |result|
+          group[:settings] = Hash.from_xml(result.body)['entry'] || []
+        end
         group
       end
       client.execute(batch)
       groups_data.map { |group| Hashie::Mash.new(group) }
+    end
+
+    def group_settings_request(group)
+      { api_method: groups_settings_api.groups.get,
+        parameters: { 'groupUniqueId' => group['email'] } }
     end
 
     def create_group(name)
