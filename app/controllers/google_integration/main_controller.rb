@@ -14,7 +14,6 @@ module GoogleIntegration
     expose(:missing_groups) { groups_cleanup.stranded_groups }
 
     before_filter :google_auth_required, unless: :google_logged_in?
-    rescue_from OAuth2::Error, with: :google_error
     rescue_from ArgumentError, with: :google_error
 
     def show_diff
@@ -51,7 +50,7 @@ module GoogleIntegration
     end
 
     def google_error(e)
-      if e.message =~ /Invalid Credentials/ || e.message =~ /Missing authorization code./
+      if e.message =~ /Missing authorization code./
         google_auth_required
       else
         raise e.message
