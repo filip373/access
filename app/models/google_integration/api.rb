@@ -110,26 +110,6 @@ module GoogleIntegration
 
     private
 
-    def post(path, body)
-      response = api.post "#{BASE_URL}/admin/directory/v1/#{path}",
-                          body: body.to_json,
-                          headers: { 'Content-Type' => 'application/json' }
-      response.body.present? ? JSON.parse(response.body) : {}
-    end
-
-    def put(path, body)
-      response = api.put "#{BASE_URL}/admin/directory/v1/#{path}",
-                         body: body.to_json,
-                         headers: { 'Content-Type' => 'application/json' }
-      response.body.present? ? JSON.parse(response.body) : {}
-    end
-
-    end
-
-    def delete(path)
-      response = api.delete "#{BASE_URL}/admin/directory/v1/#{path}",
-                            headers: { 'Content-Type' => 'application/json' }
-      response.body.present? ? JSON.parse(response.body) : {}
     def request(params)
       result = client.execute(params)
       JSON.parse(result.response.body) if result.response.body.present?
