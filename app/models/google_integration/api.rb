@@ -93,19 +93,28 @@ module GoogleIntegration
     # user
 
     def reset_password(user_email, password)
-      put "users/#{user_email}",
+      request(
+        api_method: directory.users.patch,
+        parameters: { userKey:  user_email },
+        body_object: {
           password: password,
-          changePasswordAtNextLogin: true
+          changePasswordAtNextLogin: true,
+        },
+      )
     end
 
     def create_user(params)
-      post 'users',
-           name: {
-             familyName: params[:last_name],
-             givenName: params[:first_name],
-           },
-           primaryEmail: params[:email],
-           password: params[:password]
+      request(
+        api_method: directory.users.insert,
+        body_object: {
+          name: {
+            familyName: params[:last_name],
+            givenName: params[:first_name],
+          },
+          primaryEmail: params[:email],
+          password: params[:password],
+        },
+      )
     end
 
     private
