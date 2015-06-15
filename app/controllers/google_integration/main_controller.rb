@@ -14,6 +14,7 @@ module GoogleIntegration
 
     before_filter :google_auth_required, unless: :google_logged_in?
     rescue_from OAuth2::Error, with: :google_error
+    rescue_from ArgumentError, with: :google_error
 
     def show_diff
       update_repo.now!
@@ -46,7 +47,7 @@ module GoogleIntegration
     end
 
     def google_error(e)
-      if e.message =~ /Invalid Credentials/
+      if e.message =~ /Invalid Credentials/ || e.message =~ /Missing authorization code./
         google_auth_required
       else
         raise e.message
