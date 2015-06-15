@@ -98,6 +98,14 @@ module GoogleIntegration
       )
     end
 
+    def change_group_archive_setting(group, flag)
+      request(
+        api_method: groups_settings_api.groups.update,
+        parameters: { 'groupUniqueId' => group.email },
+        body_object: { isArchived: flag }
+      )
+    end
+
     # user
 
     def reset_password(user_email, password)
@@ -134,6 +142,10 @@ module GoogleIntegration
 
     def client
       @client ||= ::Google::APIClient.new(application_name: 'access')
+    end
+
+    def groups_settings_api
+      @groups_settings_api ||= client.discovered_api('groupssettings')
     end
 
     def directory_api
