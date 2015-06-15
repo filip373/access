@@ -1,9 +1,9 @@
 module GoogleIntegration
   class SyncJob
     def perform(api, diff)
-      #before
+      before
       GoogleIntegration::Actions::Sync.new(api).now!(diff)
-      #after
+      after
     end
 
     def before

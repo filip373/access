@@ -14,7 +14,6 @@ module GoogleIntegration
           remove_aliases: {},
           add_membership: {},
           remove_membership: {},
-          change_archive: {},
         }
       end
 
@@ -24,7 +23,7 @@ module GoogleIntegration
       end
 
       def api_groups
-        @api_groups ||= @google_api.list_groups_full_info
+        @api_groups ||= @google_api.list_groups_with_members
       end
 
       private
@@ -32,21 +31,10 @@ module GoogleIntegration
       def generate_diff
         @expected_groups.each do |expected_group|
           google_group = find_or_create_google_group(expected_group)
-          #privacy_diff(google_group, expected_group)
-          archive_diff(google_group, expected_group.archive?)
           members_diff(google_group, expected_group.users)
           aliases_diff(google_group, expected_group.aliases)
           domain_membership_diff(google_group, expected_group.domain_membership)
         end
-      end
-
-      def privacy_diff(group, expected_group)
-      end
-
-      def archive_diff(group, expected_is_archived)
-        return if group.isAchived == expected_is_archived.to_s
-        @diff_hash[:change_archive][group] = group
-        @diff_hash[:change_archive][group][:is_archived] = expected_is_archived.to_s
       end
 
       def members_diff(group, expected_members)

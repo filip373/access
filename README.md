@@ -83,7 +83,7 @@ A good idea is to use `rake notify` in your CI to notify the owners that changes
 
 #### 1. `Not Authorized to access this resource/api` while trying to run show_diff on google groups.
 - check `access/config/config` 
- google:
+ google: 
    main_domain: netguru.org
 if domain is really used in setup project.
 - check `access/config/sec_config` google: client_id: and client_secret: if equals settings from console.developers.google.com, tabs: Apis -> Credentials -> OAuth.
