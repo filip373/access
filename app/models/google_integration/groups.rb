@@ -6,6 +6,7 @@ module GoogleIntegration
           group_name,
           group_data.members,
           group_data.aliases,
+          group_data.archive,
           group_data.domain_membership
         )
       end
@@ -19,7 +20,7 @@ module GoogleIntegration
   end
 
   class Group
-    rattr_initialize :name, :members, :aliases, :domain_membership
+    rattr_initialize :name, :members, :aliases, :archive, :domain_membership
 
     def email
       "#{name}@#{AppConfig.google.main_domain}"
@@ -39,6 +40,10 @@ module GoogleIntegration
     def users
       return [] unless members.present?
       @users ||= build_users
+    end
+
+    def archive?
+      return archive unless archive.nil?
     end
   end
 end
