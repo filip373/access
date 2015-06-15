@@ -19,14 +19,7 @@ module GoogleIntegration
   end
 
   class Group
-    attr_reader :name, :members, :aliases, :domain_membership
-
-    def initialize(name, members, aliases, domain_membership)
-      @name = name
-      @members = members
-      @aliases = aliases
-      @domain_membership = domain_membership
-    end
+    rattr_initialize :name, :members, :aliases, :domain_membership
 
     def email
       "#{name}@#{AppConfig.google.main_domain}"
