@@ -17,7 +17,7 @@ RSpec.describe GoogleIntegration::Actions::Diff do
   let(:new_group) { expected_groups.find { |g| g.name == 'new_group' } }
   let(:google_api) do
     double.tap do |api|
-      allow(api).to receive(:list_groups_with_members) { [group1] }
+      allow(api).to receive(:list_groups_full_info) { [group1] }
     end
   end
 

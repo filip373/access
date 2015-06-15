@@ -23,7 +23,7 @@ module GoogleIntegration
       end
 
       def api_groups
-        @api_groups ||= @google_api.list_groups_with_members
+        @api_groups ||= @google_api.list_groups_full_info
       end
 
       private

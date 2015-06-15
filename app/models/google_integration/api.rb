@@ -46,7 +46,7 @@ module GoogleIntegration
       ).fetch('groups')
     end
 
-    def list_groups_with_members
+    def list_groups_full_info
       batch = Google::APIClient::BatchRequest.new
       groups_data = list_groups.map do |group|
         batch_request = { api_method: directory_api.members.list,
