@@ -10,25 +10,40 @@ module GoogleIntegration
     # groups
 
     def add_member(group_id, user_email)
-      post "groups/#{group_id}/members", email: user_email, role: 'MEMBER'
+      request(
+        api_method: directory.members.insert,
+        parameters: { groupKey: group_id },
+        body_object: { email: user_email, role: 'MEMBER' },
+      )
     end
 
     def remove_member(group_id, user_email)
-      delete "groups/#{group_id}/members/#{user_email}"
+      request(
+        api_method: directory.members.delete,
+        parameters: { groupKey: group_id, memberKey: user_email },
+      )
     end
 
     def set_domain_membership(group_id)
-      post "groups/#{group_id}/members",
-           id: AppConfig.google.domain_member_id,
-           role: 'MEMBER'
+      request(
+        api_method: directory.members.insert,
+        parameters: { groupKey: group_id },
+        body_object: { id: AppConfig.google.domain_member_id, role: 'MEMBER' },
+      )
     end
 
     def unset_domain_membership(group_id)
-      delete "groups/#{group_id}/members/#{AppConfig.google.domain_member_id}"
+      request(
+        api_method: directory.members.delete,
+        parameters: { groupKey: group_id, memberKey: AppConfig.google.domain_member_id },
+      )
     end
 
     def list_groups
-      @groups ||= request(directory.groups.list, domain: AppConfig.google.main_domain).fetch('groups')
+      @groups ||= request(
+        api_method: directory.groups.list,
+        parameters: { domain: AppConfig.google.main_domain },
+      ).fetch('groups')
     end
 
     def list_groups_with_members
@@ -47,21 +62,32 @@ module GoogleIntegration
     end
 
     def create_group(name)
-      post 'groups',
-           email: name,
-           name: "Project group - #{name}"
+      request(
+        api_method: directory.groups.insert,
+        body_object: { email: name, name: "Project group - #{name}" },
+      )
     end
 
     def remove_group(group_id)
-      delete "groups/#{group_id}"
+      request(
+        api_method: directory.groups.delete,
+        parameters: { groupKey: group_id },
+      )
     end
 
     def add_alias(group_id, google_alias)
-      post "groups/#{group_id}/aliases", alias: google_alias
+      request(
+        api_method: directory.groups.aliases.insert,
+        parameters: { groupKey: group_id },
+        body_object: { alias: google_alias },
+      )
     end
 
     def remove_alias(group_id, google_alias)
-      delete "groups/#{group_id}/aliases/#{google_alias}"
+      request(
+        api_method: directory.groups.aliases.delete,
+        parameters: { groupKey: group_id, alias: google_alias },
+      )
     end
 
     # user
@@ -98,17 +124,15 @@ module GoogleIntegration
       response.body.present? ? JSON.parse(response.body) : {}
     end
 
-    def request(path, parameters)
-      result = client.execute(api_method: path,
-                              parameters: parameters,
-                             )
-      JSON.parse(result.response.body)
     end
 
     def delete(path)
       response = api.delete "#{BASE_URL}/admin/directory/v1/#{path}",
                             headers: { 'Content-Type' => 'application/json' }
       response.body.present? ? JSON.parse(response.body) : {}
+    def request(params)
+      result = client.execute(params)
+      JSON.parse(result.response.body) if result.response.body.present?
     end
 
     def client
