@@ -22,6 +22,7 @@ gem 'sass-rails'
 gem 'slack-notifier'
 gem 'sprockets'
 gem 'skylight'
+gem 'attr_extras'
 gem 'redis-rails'
 
 # deployment
