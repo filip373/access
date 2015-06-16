@@ -29,8 +29,15 @@ module GoogleIntegration
     end
 
     def client_secrets
-      client_secret_json = Rails.root.join(AppConfig.google.config_json)
-      ::Google::APIClient::ClientSecrets.load(client_secret_json)
+      google_secrets = AppConfig.google
+      ::Google::APIClient::ClientSecrets.new(
+        flow: :web,
+        web: {
+          client_id: google_secrets.client_id,
+          client_secret: google_secrets.client_secret,
+          redirect_uri: google_oauth2_callback_url,
+        },
+      )
     end
 
     def authorize_auth_client!
