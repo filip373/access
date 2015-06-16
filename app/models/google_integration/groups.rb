@@ -65,8 +65,7 @@ module GoogleIntegration
     end
 
     def open?
-      return true if privacy.nil?
-      privacy == 'open'
+      privacy.nil? || privacy == 'open'
     end
   end
 end
