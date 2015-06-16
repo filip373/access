@@ -1,7 +1,7 @@
 module GoogleIntegration
   class GroupPrivacy
     pattr_initialize :options
-    delegate :who_can_view_group, :show_in_group_directory?, to: :options
+    delegate :who_can_view_group, :show_in_group_directory, to: :options
 
     OPEN_VIEW_POLICY = 'ALL_IN_DOMAIN_CAN_VIEW'.freeze
     CLOSED_VIEW_POLICY = 'ALL_MEMBERS_CAN_VIEW'.freeze
@@ -22,14 +22,19 @@ module GoogleIntegration
 
     def open!
       @options.who_can_view_group = OPEN_VIEW_POLICY
-      @options.show_in_group_directory = true
+      @options.show_in_group_directory = 'true'
       self
     end
 
     def close!
       @options.who_can_view_group = CLOSED_VIEW_POLICY
-      @options.show_in_group_directory = false
+      @options.show_in_group_directory = 'false'
       self
+    end
+
+    def show_in_group_directory?
+      return true if show_in_group_directory == 'true'
+      return false if show_in_group_directory == 'false'
     end
 
     def to_google_params
