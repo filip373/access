@@ -16,7 +16,7 @@ module GithubIntegration
         members_diff(@gh_team, members)
         repos_diff(@gh_team, @expected_team.repos)
         team_permissions_diff(@gh_team, @expected_team.permission)
-      rescue Error => e
+      rescue Exception => e
         Rollbar.error(e)
       ensure
         blk.call(@diff_hash, @errors)
