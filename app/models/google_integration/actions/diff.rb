@@ -108,6 +108,7 @@ module GoogleIntegration
         return true if members_list(group).find do |member|
           member['id'] == AppConfig.google.domain_member_id
         end
+        false
       end
 
       def list_group_members(group)
