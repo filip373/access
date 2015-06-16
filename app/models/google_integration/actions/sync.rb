@@ -14,6 +14,7 @@ module GoogleIntegration
       def sync(diff)
         create_groups(diff[:create_groups])
         sync_groups_archive_settings(diff[:change_archive])
+        sync_groups_privacy_settings(diff[:change_privacy])
         sync_domain_memberships(diff[:add_membership], diff[:remove_membership]) if diff[:remove_membership]
         sync_members(diff[:add_members], diff[:remove_members]) if diff[:remove_members]
         sync_aliases(diff[:add_aliases], diff[:remove_aliases]) if diff[:remove_aliases]
@@ -65,6 +66,12 @@ module GoogleIntegration
           add_members(group, h[:add_members]) if h.key?(:add_members)
           add_aliases(group, h[:add_aliases]) if h.key?(:add_aliases)
           add_domain_membership(group) if h.key?(:add_membership)
+        end
+      end
+
+      def sync_groups_privacy_settings(groups_to_sync)
+        groups_to_sync.each do |group, privacy|
+          @google_api.change_group_privacy_setting(group, privacy.to_google_params)
         end
       end
 

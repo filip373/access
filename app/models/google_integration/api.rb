@@ -100,6 +100,14 @@ module GoogleIntegration
       )
     end
 
+    def change_group_privacy_setting(group, privacy)
+      request(
+        api_method: groups_settings_api.groups.update,
+        parameters: { 'groupUniqueId' => group.email },
+        body_object: privacy
+      )
+    end
+
     def change_group_archive_setting(group, flag)
       request(
         api_method: groups_settings_api.groups.update,
