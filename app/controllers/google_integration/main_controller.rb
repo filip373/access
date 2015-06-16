@@ -9,7 +9,7 @@ module GoogleIntegration
     expose(:sync_google_job) { SyncJob.new }
     expose(:update_repo) { UpdateRepo.new }
     expose(:groups_cleanup) do
-      Actions::CleanupGroups.new(expected_groups, google_api, @google_diff.api_groups)
+      Actions::CleanupGroups.new(expected_groups, google_api, api_groups)
     end
     expose(:missing_groups) { groups_cleanup.stranded_groups }
 
@@ -36,12 +36,21 @@ module GoogleIntegration
 
     def reset_diff
       Rails.cache.delete 'calculated_diff'
+      Rails.cache.delete 'api_groups'
     end
 
     def calculated_diff
       Rails.cache.fetch 'calculated_diff' do
         @google_diff ||= Actions::Diff.new(expected_groups, google_api)
-        @google_diff.now!
+        diff = @google_diff.now!
+        api_groups
+        diff
+      end
+    end
+
+    def api_groups
+      Rails.cache.fetch 'api_groups' do
+        @google_diff.api_groups
       end
     end
 
