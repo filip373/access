@@ -53,7 +53,7 @@ module GoogleIntegration
           group[:members] = JSON.parse(result.body)['members'] || []
         end
         batch.add(group_settings_request(group)) do |result|
-          group[:settings] = Hash.from_xml(result.body)['entry'] || []
+          group[:settings] = Hash.from_xml(result.body)['entry'] || {}
         end
         group
       end
