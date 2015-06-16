@@ -1,12 +1,12 @@
 module GoogleIntegration
   module Actions
     class CleanupGroups
-      attr_accessor :expected_groups, :api
+      attr_accessor :expected_groups, :api, :api_groups
 
       def initialize(expected_groups, api, api_groups)
         self.expected_groups = expected_groups
         self.api = api
-        @api_groups = api_groups
+        self.api_groups = api_groups
       end
 
       def now!
@@ -15,7 +15,7 @@ module GoogleIntegration
 
       def stranded_groups
         expected_names = expected_groups.map(&:name)
-        @api_groups.reject do |e|
+        self.api_groups.reject do |e|
           Helpers::User.email_to_username(e['email']).in?(expected_names)
         end
       end
@@ -24,7 +24,7 @@ module GoogleIntegration
 
       def remove_stranded_groups
         stranded_groups.each do |group|
-          api.remove_group(group.email)
+          api.remove_group(group['email'])
         end
       end
     end
