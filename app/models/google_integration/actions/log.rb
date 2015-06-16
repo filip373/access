@@ -21,8 +21,15 @@ module GoogleIntegration
         log_adding_memberships
         log_removing_memberships
         log_changing_archive
+        log_changing_privacy
         @log << 'There are no changes.' if @log.size == 0
         @log
+      end
+
+      def log_changing_privacy
+        @diff_hash[:change_privacy].each do |group, privacy|
+          @log << "[api] change group #{group.email} privacy settings to #{privacy.to_s}"
+        end
       end
 
       def log_changing_archive
