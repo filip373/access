@@ -6,6 +6,7 @@ module GoogleIntegration
           group_name,
           group_data.members,
           group_data.aliases,
+          group_data.privacy,
           group_data.archive,
           group_data.domain_membership
         )
@@ -20,7 +21,7 @@ module GoogleIntegration
   end
 
   class Group
-    rattr_initialize :name, :members, :aliases, :archive, :domain_membership
+    rattr_initialize :name, :members, :aliases, :privacy, :archive, :domain_membership
 
     def email
       "#{name}@#{AppConfig.google.main_domain}"
@@ -42,8 +43,30 @@ module GoogleIntegration
       @users ||= build_users
     end
 
+    def show_in_group_directory?
+      open?
+    end
+
+    def who_can_view_group
+      if closed?
+        'ALL_MEMBERS_CAN_VIEW'
+      else
+        'ALL_IN_DOMAIN_CAN_VIEW'
+      end
+    end
+
     def archive?
       return archive unless archive.nil?
+      open?
+    end
+
+    def closed?
+      privacy == 'closed'
+    end
+
+    def open?
+      return true if privacy.nil?
+      privacy == 'open'
     end
   end
 end
