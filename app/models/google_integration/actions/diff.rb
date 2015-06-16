@@ -15,6 +15,7 @@ module GoogleIntegration
           add_membership: {},
           remove_membership: {},
           change_archive: {},
+          change_privacy: {},
         }
       end
 
@@ -32,10 +33,27 @@ module GoogleIntegration
       def generate_diff
         @expected_groups.each do |expected_group|
           google_group = find_or_create_google_group(expected_group)
+          privacy_diff(google_group, expected_group)
           archive_diff(google_group, expected_group.archive?)
           members_diff(google_group, expected_group.users)
           aliases_diff(google_group, expected_group.aliases)
           domain_membership_diff(google_group, expected_group.domain_membership)
+        end
+      end
+
+      def privacy_diff(group, expected_group)
+        google_group_settings = Hashie::Mash.new(
+          show_in_group_directory: group.try(:settings).try(:showInGroupDirectory),
+          who_can_view_group: group.try(:settings).try(:whoCanViewGroup)
+        )
+        expected_settings = Hashie::Mash.new(
+          show_in_group_directory: expected_group.show_in_group_directory?.to_s,
+          who_can_view_group: expected_group.who_can_view_group
+        )
+
+        if google_group_settings != expected_settings
+          @diff_hash[:change_privacy][group] =
+            GoogleIntegration::GroupPrivacy.new(expected_settings)
         end
       end
 

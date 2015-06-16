@@ -17,7 +17,9 @@ RSpec.describe GoogleIntegration::Actions::Diff do
   end
   let(:group_settings) do
     Hashie::Mash.new(
-      isArchived: false
+      isArchived: 'false',
+      showInGroupDirectory: 'true',
+      whoCanViewGroup: 'ALL_MEMBERS_CAN_VIEW',
     )
   end
   let(:new_group) { expected_groups.find { |g| g.name == 'new_group' } }
@@ -46,5 +48,39 @@ RSpec.describe GoogleIntegration::Actions::Diff do
     end
     it { expect(subject[:create_groups][new_group][:add_aliases]).to eq %w(alias1 alias2) }
     it { expect(subject[:create_groups][new_group][:add_membership]).to eq(true) }
+  end
+
+  describe '#privacy_diff' do
+    let(:privacy_open) do
+      Hashie::Mash.new(
+        showInGroupDirectory: 'true',
+        whoCanViewGroup: 'ALL_IN_DOMAIN_CAN_VIEW',
+      )
+    end
+    let(:privacy_closed) do
+      Hashie::Mash.new(
+        showInGroupDirectory: 'false',
+        whoCanViewGroup: 'ALL_MEMBERS_CAN_VIEW',
+      )
+    end
+    context 'localy is open, but on google it is closed group' do
+      let(:group_settings) do
+        privacy_closed
+      end
+
+      it 'overwrites changes on google' do
+        expect(subject[:change_privacy][group1].open?).to be_truthy
+      end
+    end
+
+    context 'localy and on google privacy is open' do
+      let(:group_settings) do
+        privacy_open
+      end
+
+      it 'does not list the change' do
+        expect(subject[:change_privacy][group1]).to be_nil
+      end
+    end
   end
 end
