@@ -151,7 +151,10 @@ module GoogleIntegration
     end
 
     def client
-      @client ||= ::Google::APIClient.new(application_name: 'access')
+      @client ||= ::Google::APIClient.new(
+        application_name: AppConfig.google.application_name,
+        application_version: AppConfig.google.application_version
+      )
     end
 
     def groups_settings_api
