@@ -79,7 +79,7 @@ module GoogleIntegration
 
       def domain_membership_diff(group, expected_membership)
         if group.respond_to?(:id)
-          domain_membership = check_domain_membership(group)
+          domain_membership = domain_membership?(group)
 
           if expected_membership && expected_membership != domain_membership
             @diff_hash[:add_membership][group] = expected_membership
@@ -104,11 +104,8 @@ module GoogleIntegration
         end
       end
 
-      def check_domain_membership(group)
-        return true if members_list(group).find do |member|
-          member['id'] == AppConfig.google.domain_member_id
-        end
-        false
+      def domain_membership?(group)
+        members_list(group).find { |member| member['id'] == AppConfig.google.domain_member_id }
       end
 
       def list_group_members(group)
