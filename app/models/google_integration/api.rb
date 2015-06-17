@@ -158,11 +158,15 @@ module GoogleIntegration
     end
 
     def groups_settings_api
-      @groups_settings_api ||= client.discovered_api('groupssettings')
+      Rails.cache.fetch 'groups_settings_api' do
+        client.discovered_api('groupssettings')
+      end
     end
 
     def directory_api
-      @directory_api ||= client.discovered_api('admin', 'directory_v1')
+      Rails.cache.fetch 'directory_api' do
+        client.discovered_api('admin', 'directory_v1')
+      end
     end
 
     def authorize_client(credentials)
