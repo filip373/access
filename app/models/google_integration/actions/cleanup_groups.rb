@@ -15,7 +15,7 @@ module GoogleIntegration
 
       def stranded_groups
         expected_names = expected_groups.map(&:name)
-        self.api_groups.reject do |e|
+        api_groups.reject do |e|
           Helpers::User.email_to_username(e['email']).in?(expected_names)
         end
       end
