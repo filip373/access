@@ -20,6 +20,13 @@ module GoogleIntegration
       raise NotImplementedError, 'we have no idea what privacy is this?'
     end
 
+    def to_google_params
+      {
+        whoCanViewGroup: who_can_view_group,
+        showInGroupDirectory: show_in_group_directory?.to_s,
+      }
+    end
+
     def open!
       @options.who_can_view_group = OPEN_VIEW_POLICY
       @options.show_in_group_directory = 'true'
@@ -35,13 +42,6 @@ module GoogleIntegration
     def show_in_group_directory?
       return true if show_in_group_directory == 'true'
       return false if show_in_group_directory == 'false'
-    end
-
-    def to_google_params
-      {
-        whoCanViewGroup: who_can_view_group,
-        showInGroupDirectory: show_in_group_directory?.to_s,
-      }
     end
   end
 end
