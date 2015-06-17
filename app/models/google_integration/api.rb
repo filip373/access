@@ -47,28 +47,18 @@ module GoogleIntegration
     end
 
     def list_groups_full_info
-      batch = Google::APIClient::BatchRequest.new
-      groups_data = list_groups.map do |group|
-        batch.add(members_list_request(group)) do |result|
-          group[:members] = JSON.parse(result.body)['members'] || []
-        end
-        batch.add(group_settings_request(group)) do |result|
-          group[:settings] = Hash.from_xml(result.body)['entry'] || {}
-        end
-        group
+      return @groups_data.google_groups if @groups_data.present?
+      @groups_data =
+        GroupsFullInfoBatch.new(list_groups, groups_settings_api, directory_api, client)
+      @groups_data.execute!
+
+      retry_count = 10
+      while retry_count > 0 && @groups_data.general_error? do
+        retry_count -= 1
+        @groups_data.retry_fetch!
       end
-      client.execute(batch)
-      groups_data.map { |group| Hashie::Mash.new(group) }
-    end
 
-    def group_settings_request(group)
-      { api_method: groups_settings_api.groups.get,
-        parameters: { 'groupUniqueId' => group['email'] } }
-    end
-
-    def members_list_request(group)
-      { api_method: directory_api.members.list,
-        parameters: { 'groupKey' => group['id'] } }
+      @groups_data.google_groups
     end
 
     def create_group(name)
