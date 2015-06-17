@@ -12,7 +12,8 @@ module GoogleIntegration
       session[:credentials] = {
         client_id: auth_client.client_id,
         access_token: auth_client.access_token,
-        refresh_token: auth_client.refresh_token,
+        redirect_uri: auth_client.redirect_uri,
+        token_credential_uri: auth_client.token_credential_uri,
       }
       redirect_to google_show_diff_path
     end
