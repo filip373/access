@@ -7,7 +7,6 @@ module GoogleIntegration
     expose(:expected_groups) { Groups.all }
     expose(:google_log) { Actions::Log.new(calculated_diff).now! }
     expose(:sync_google_job) { SyncJob.new }
-    expose(:update_repo) { UpdateRepo.new }
     expose(:groups_cleanup) do
       Actions::CleanupGroups.new(expected_groups, google_api, api_groups)
     end
@@ -18,7 +17,7 @@ module GoogleIntegration
 
     def show_diff
       reset_diff
-      update_repo.now!
+      UpdateRepo.now!
       Storage.reset_data
       calculated_diff
     end

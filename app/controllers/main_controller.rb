@@ -3,10 +3,9 @@ class MainController < ApplicationController
 
   expose(:gh_api) { GithubIntegration::Api.new(session[:gh_token], AppConfig.company) }
   expose(:validation_errors) { Storage.validation_errors }
-  expose(:update_repo) { UpdateRepo.new }
 
   def index
-    update_repo.now!
+    UpdateRepo.now!
   end
 
   def check_permissions
