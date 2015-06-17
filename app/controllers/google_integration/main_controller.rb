@@ -5,7 +5,8 @@ module GoogleIntegration
   class MainController < ApplicationController
     expose(:google_api) { Api.new(session[:credentials]) }
     expose(:expected_groups) { Groups.all }
-    expose(:google_log) { Actions::Log.new(calculated_diff).now! }
+    expose(:google_log_errors) { log.errors }
+    expose(:google_log) { log.log }
     expose(:sync_google_job) { SyncJob.new }
     expose(:groups_cleanup) do
       Actions::CleanupGroups.new(expected_groups, google_api, api_groups)
@@ -66,6 +67,13 @@ module GoogleIntegration
 
     def google_logged_in?
       session[:credentials].present?
+    end
+
+    def log
+      return @log if @log.present?
+      @log = Actions::Log.new(calculated_diff)
+      @log.generate_log
+      @log
     end
   end
 end

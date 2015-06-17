@@ -1,6 +1,8 @@
 module GoogleIntegration
   module Actions
     class Log
+      attr_reader :log, :errors
+
       def initialize(diff_hash)
         @diff_hash = diff_hash
         @log = []
@@ -10,9 +12,8 @@ module GoogleIntegration
         generate_log
       end
 
-      private
-
       def generate_log
+        @errors = log_errors
         log_creating_groups
         log_adding_members
         log_removing_members
@@ -24,6 +25,14 @@ module GoogleIntegration
         log_changing_privacy
         @log << 'There are no changes.' if @log.size == 0
         @log
+      end
+
+      private
+
+      def log_errors
+        @diff_hash[:errors].map do |key, errors|
+          "[error] #{errors}"
+        end
       end
 
       def log_changing_privacy
