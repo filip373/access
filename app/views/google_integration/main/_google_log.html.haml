@@ -1,3 +1,7 @@
+%ul.list-group.google_log_errors
+  - google_log_errors.each do |line|
+    %li.list-group-item-error #{line}
+
 %ul.list-group.google_log
   - google_log.each do |line|
     %li.list-group-item #{line}
