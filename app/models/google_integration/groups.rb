@@ -57,7 +57,7 @@ module GoogleIntegration
 
     def archive?
       return archive unless archive.nil?
-      open?
+      false
     end
 
     def closed?
