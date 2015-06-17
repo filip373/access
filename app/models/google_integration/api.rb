@@ -166,8 +166,7 @@ module GoogleIntegration
     end
 
     def authorize_client(credentials)
-      client_opts = JSON.parse(credentials)
-      client.authorization = ::Signet::OAuth2::Client.new(client_opts)
+      client.authorization = ::Signet::OAuth2::Client.new(credentials)
     end
   end
 end

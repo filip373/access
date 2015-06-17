@@ -9,7 +9,11 @@ module GoogleIntegration
 
     def create
       authorize_auth_client!
-      session[:credentials] = auth_client_json
+      session[:credentials] = {
+        client_id: auth_client.client_id,
+        access_token: auth_client.access_token,
+        refresh_token: auth_client.refresh_token,
+      }
       redirect_to google_show_diff_path
     end
 
@@ -43,13 +47,6 @@ module GoogleIntegration
     def authorize_auth_client!
       auth_client.code = request['code']
       auth_client.fetch_access_token!
-    end
-
-    def auth_client_json
-      auth_client_json = JSON.parse(auth_client.to_json)
-      auth_client_json['redirect_uri'] = auth_client.redirect_uri.to_s
-      auth_client_json['client_secret'] = nil
-      auth_client_json.compact.to_json
     end
   end
 end
