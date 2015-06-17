@@ -105,17 +105,11 @@ module GoogleIntegration
       end
 
       def domain_membership?(group)
-        members_list(group).find { |member| member['id'] == AppConfig.google.domain_member_id }
+        !!group.members.find { |member| member['id'] == AppConfig.google.domain_member_id }
       end
 
       def list_group_members(group)
         group.members.map { |m| m['email'] }.compact
-      end
-
-      def members_list(group)
-        return @members_list if @group == group
-        @group = group
-        group.members
       end
 
       def list_group_aliases(name)
