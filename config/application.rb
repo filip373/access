@@ -14,8 +14,5 @@ Bundler.require(*Rails.groups)
 module GithubApp
   class Application < Rails::Application
     config.assets.enabled = true
-    config.cache_store = :redis_store,
-      'redis://localhost:6379/0/cache',
-      { expires_in: 90.minutes }
   end
 end
