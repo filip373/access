@@ -3,8 +3,11 @@ require 'google/api_client/client_secrets'
 
 module GoogleIntegration
   class Api
+    attr_reader :errors
+
     def initialize(credentials)
       authorize_client(credentials)
+      @errors = {}
     end
 
     # groups
@@ -58,8 +61,11 @@ module GoogleIntegration
         @groups_data.retry_fetch!
       end
 
+      add_general_error @groups_data.general_error if @groups_data.general_error?
+
       @groups_data.google_groups
     end
+
 
     def create_group(name)
       request(
@@ -161,6 +167,10 @@ module GoogleIntegration
 
     def authorize_client(credentials)
       client.authorization = ::Signet::OAuth2::Client.new(credentials)
+    end
+
+    def add_general_error(error_message)
+      errors[:general] = error_message
     end
   end
 end
