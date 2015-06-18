@@ -56,16 +56,12 @@ module GoogleIntegration
       @groups_data.execute!
 
       retry_count = 10
-      while retry_count > 0 && @groups_data.general_error? do
-        retry_count -= 1
-        @groups_data.retry_fetch!
-      end
+      while retry_count > 0 && @groups_data.retry_fetch! do retry_count -= 1 end
 
       add_general_error @groups_data.general_error if @groups_data.general_error?
 
       @groups_data.google_groups
     end
-
 
     def create_group(name)
       request(
