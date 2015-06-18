@@ -25,10 +25,10 @@ class GoogleIntegration::Api
 
     def general_error
       return unless general_error?
-      %Q{
-          we couldn't retrive full info from the google api.
-          Affected groups: #{groups_to_retry.map { |group| group['name'] }.join(', ')}.
-        }
+      %(
+        we couldn't retrive full info from the google api.
+        Affected groups: #{groups_to_retry.map { |group| group['name'] }.join(', ')}.
+            )
     end
 
     def general_error?
@@ -57,35 +57,40 @@ class GoogleIntegration::Api
 
     def group_settings_batch_request!(group, batch)
       return if group[:settings].present?
+      group[:errors] = nil
+
       batch.add(group_settings_request(group)) do |result|
-        group[:errors] = nil
         body = Hash.from_xml(result.body) || {}
-        if body['errors'].present?
-          group[:errors] =  {
-            settings: body['errors']['error']['internalReason']
-          }
-          groups_to_retry.push group
-        end
+        add_groups_error(group, body['errors'])
         group[:settings] = body['entry'] || {}
       end
     end
 
     def members_list_batch_request!(group, batch)
       return if group[:members].present?
+      group[:errors] = nil
 
       batch.add(members_list_request(group)) do |result|
-        group[:errors] = nil
         body = JSON.parse(result.body) || {}
 
-        if body['error'].present?
-          group[:errors] = {
-            members: body['error']['errors'].map { |error| error['message'] }.join(', ')
-          }
-          groups_to_retry.push group
-        end
+        add_members_error(group, body['error'])
         group[:members] = body['members'] || []
       end
+    end
 
+    def add_groups_error(group, errors)
+      return if errors.blank?
+
+      group[:errors] =  { settings: errors['error']['internalReason'] }
+      groups_to_retry.push group
+    end
+
+    def add_members_error(group, errors)
+      return if errors.blank?
+
+      message = errors['errors'].map { |error| error['message'] }.join(', ')
+      group[:errors] = { members: message }
+      groups_to_retry.push group
     end
 
     def group_settings_request(group)
