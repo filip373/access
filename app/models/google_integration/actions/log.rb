@@ -31,7 +31,7 @@ module GoogleIntegration
 
       def log_errors
         @diff_hash[:errors].map do |key, errors|
-          "[error] #{errors}"
+          "[#{key} error] #{errors}"
         end
       end
 
