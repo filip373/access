@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<atom:entry xmlns:atom="http://www.w3.org/2005/Atom" xmlns:apps="http://schemas.google.com/apps/2006">
+  <apps:property name='from' value='donotreply@airbrake.io OR honeybadger.mailgun.org OR notifier@mail.rollbar.com'/>
+  <apps:property name='label' value='ci/errors'/>
+  <apps:property name='shouldArchive' value='true'/>
+  <apps:property name='neverSpam' value='true'/>
+</atom:entry>
