@@ -34,7 +34,7 @@ module GoogleIntegration
       def generate_diff
         @expected_groups.each do |expected_group|
           google_group = find_or_create_google_group(expected_group)
-          add_group_errors(google_group, expected_group)
+          add_group_errors(google_group)
           privacy_diff(google_group, expected_group)
           archive_diff(google_group, expected_group.archive?)
           members_diff(google_group, expected_group.users)
@@ -44,7 +44,7 @@ module GoogleIntegration
         @diff_hash[:errors].update @google_api.errors
       end
 
-      def add_group_errors(group, expected_group)
+      def add_group_errors(group)
         return if group.errors.blank?
         group.errors.each do |key, errors|
           @diff_hash[:errors][key] = errors
