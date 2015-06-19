@@ -36,6 +36,7 @@ module GoogleIntegration
 
     def reset_diff
       Rails.cache.delete 'calculated_diff'
+      Rails.cache.delete 'missing_accounts'
       Rails.cache.delete 'api_groups'
     end
 
