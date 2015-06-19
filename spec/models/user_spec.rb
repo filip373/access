@@ -83,4 +83,10 @@ describe User do
       end
     end
   end
+
+  describe '.list_company_users' do
+    it 'returns users only form directory company_name' do
+      expect(subject.list_company_users).to be(users_data['default_group'])
+    end
+  end
 end
