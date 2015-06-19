@@ -11,17 +11,15 @@ module GithubIntegration
     end
 
     def diff(blk)
-      begin
-        members = map_users_to_members
-        members_diff(@gh_team, members)
-        repos_diff(@gh_team, @expected_team.repos)
-        team_permissions_diff(@gh_team, @expected_team.permission)
-      rescue Exception => e
-        Rollbar.error(e)
-      ensure
-        blk.call(@diff_hash, @errors)
-        terminate
-      end
+      members = map_users_to_members
+      members_diff(@gh_team, members)
+      repos_diff(@gh_team, @expected_team.repos)
+      team_permissions_diff(@gh_team, @expected_team.permission)
+    rescue Exception => e
+      Rollbar.error(e)
+    ensure
+      blk.call(@diff_hash, @errors)
+      terminate
     end
 
     private
