@@ -67,5 +67,9 @@ module GoogleIntegration
     def open?
       privacy.nil? || privacy == 'open'
     end
+
+    def errors
+      nil
+    end
   end
 end
