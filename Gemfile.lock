@@ -156,6 +156,8 @@ GEM
     konf (0.0.2)
     launchy (2.4.3)
       addressable (~> 2.3)
+    letter_opener (1.3.0)
+      launchy (~> 2.2)
     listen (2.10.0)
       celluloid (~> 0.16.0)
       rb-fsevent (>= 0.9.3)
@@ -345,6 +347,7 @@ DEPENDENCIES
   httplog
   jquery-rails
   konf
+  letter_opener
   netguru_theme
   omniauth
   omniauth-github

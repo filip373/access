@@ -41,3 +41,7 @@ group :development do
   gem 'quiet_assets'
   gem 'rspec-rails'
 end
+
+group :development, :test do
+  gem 'letter_opener'
+end
