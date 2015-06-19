@@ -13,6 +13,7 @@ module GoogleIntegration
     end
     expose(:missing_groups) { groups_cleanup.stranded_groups }
 
+    expose(:missing_accounts) { calculated_missing_accounts }
     before_filter :google_auth_required, unless: :google_logged_in?
     rescue_from ArgumentError, with: :google_error
 
@@ -50,6 +51,12 @@ module GoogleIntegration
     def api_groups
       Rails.cache.fetch 'api_groups' do
         @google_diff.api_groups
+      end
+    end
+
+    def calculated_missing_accounts
+      Rails.cache.fetch 'calculated_missing_accounts' do
+        Actions::AccountsDiff.new(google_api).now!
       end
     end
 
