@@ -25,7 +25,7 @@ RSpec.shared_context 'google_api' do
         params
       end
       allow(api).to receive(:post_filters)
-      allow(api).to receive(:get_codes)
+      allow(api).to receive(:get_codes) { %w(a b c) }
       allow(api).to receive(:reset_password)
       allow(api).to receive(:generate_codes)
     end
