@@ -26,6 +26,14 @@ RSpec.describe GoogleIntegration::MainController do
       expect(Rails.cache.read('calculated_missing_accounts')).to_not be_empty
     end
 
+    it 'caches google_diff value' do
+      controller.google_log # Needs to use exposed variable since views are not rendered
+      expect(Rails.cache.read('calculated_diff')).to_not be_nil
+      expect(Rails.cache.read('calculated_diff')).to be_a Hash
+      expect(Rails.cache.read('calculated_diff')).to_not be_empty
+    end
+  end
+
   describe 'POST create_accounts' do
     before do
       allow_any_instance_of(GoogleIntegration::Actions::CreateAccounts).to receive(:now!) do
