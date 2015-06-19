@@ -37,7 +37,7 @@ module GoogleIntegration
 
       def log_changing_privacy
         @diff_hash[:change_privacy].each do |group, privacy|
-          @log << "[api] change group #{group.email} privacy settings to #{privacy.to_s}"
+          @log << "[api] change group #{group.email} privacy settings to #{privacy}"
         end
       end
 
@@ -66,7 +66,7 @@ module GoogleIntegration
       end
 
       def log_adding_memberships
-        @diff_hash[:add_membership].each do |group, membership|
+        @diff_hash[:add_membership].each do |group, _membership|
           @log << "[api] add domain membership to group #{group.email}"
         end if @diff_hash[:add_membership]
       end
@@ -80,7 +80,7 @@ module GoogleIntegration
       end
 
       def log_removing_memberships
-        @diff_hash[:remove_membership].each do |group, membership|
+        @diff_hash[:remove_membership].each do |group, _membership|
           @log << "[api] remove domain membership from group #{group.email}"
         end if @diff_hash[:remove_membership]
       end

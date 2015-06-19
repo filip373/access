@@ -30,7 +30,7 @@ class Storage
   end
 
   def build_tree
-    hash = files_list.inject({}) do |hash, path|
+    hash = files_list.inject({},) do |hash, path|
       tree = hash
       path_parts = split_path(path)
       path_parts.each_with_index do |part, index|

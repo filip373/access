@@ -8,7 +8,7 @@ module GoogleIntegration
           group_data.aliases,
           group_data.privacy,
           group_data.archive,
-          group_data.domain_membership
+          group_data.domain_membership,
         )
       end
     end

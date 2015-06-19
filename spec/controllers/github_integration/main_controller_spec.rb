@@ -68,7 +68,7 @@ RSpec.describe GithubIntegration::MainController do
     end
 
     it 'does not raise any errors' do
-      expect{ subject }.to_not raise_error
+      expect { subject }.to_not raise_error
     end
   end
 end

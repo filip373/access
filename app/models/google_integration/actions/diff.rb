@@ -54,11 +54,11 @@ module GoogleIntegration
       def privacy_diff(group, expected_group)
         google_group_settings = Hashie::Mash.new(
           show_in_group_directory: group.try(:settings).try(:showInGroupDirectory),
-          who_can_view_group: group.try(:settings).try(:whoCanViewGroup)
+          who_can_view_group: group.try(:settings).try(:whoCanViewGroup),
         )
         expected_settings = Hashie::Mash.new(
           show_in_group_directory: expected_group.show_in_group_directory?.to_s,
-          who_can_view_group: expected_group.who_can_view_group
+          who_can_view_group: expected_group.who_can_view_group,
         )
 
         if google_group_settings != expected_settings

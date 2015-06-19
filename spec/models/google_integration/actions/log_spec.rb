@@ -28,10 +28,10 @@ RSpec.describe GoogleIntegration::Actions::Log do
         group => nil,
       },
       change_archive: {
-        group => false
+        group => false,
       },
       change_privacy: {
-        group => ::GoogleIntegration::GroupPrivacy.new(Hashie::Mash.new).close!
+        group => ::GoogleIntegration::GroupPrivacy.new(Hashie::Mash.new).close!,
       },
     }
   end

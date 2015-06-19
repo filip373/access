@@ -96,7 +96,7 @@ module GoogleIntegration
       request(
         api_method: groups_settings_api.groups.update,
         parameters: { 'groupUniqueId' => group.email },
-        body_object: privacy
+        body_object: privacy,
       )
     end
 
@@ -104,7 +104,7 @@ module GoogleIntegration
       request(
         api_method: groups_settings_api.groups.update,
         parameters: { 'groupUniqueId' => group.email },
-        body_object: { isArchived: flag }
+        body_object: { isArchived: flag },
       )
     end
 
@@ -145,7 +145,7 @@ module GoogleIntegration
     def client
       @client ||= ::Google::APIClient.new(
         application_name: AppConfig.google.application_name,
-        application_version: AppConfig.google.application_version
+        application_version: AppConfig.google.application_version,
       )
     end
 

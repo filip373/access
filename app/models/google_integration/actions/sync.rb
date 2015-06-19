@@ -45,11 +45,11 @@ module GoogleIntegration
       end
 
       def sync_domain_memberships(memberships_to_add, memberships_to_remove)
-        memberships_to_add.each do |group, membership|
+        memberships_to_add.each do |group, _membership|
           add_domain_membership(group)
         end
 
-        memberships_to_remove.each do |group, membership|
+        memberships_to_remove.each do |group, _membership|
           remove_domain_membership(group)
         end
       end
