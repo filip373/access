@@ -1,6 +1,7 @@
 defaults: &defaults
   rollbar_token: fake-token
   company: netguru
+  office_email: 'depens-on-environment'
   cache_data: true
   permissions_repo:
     url: http://url-to-repo-with-permissions
@@ -47,6 +48,7 @@ staging:
 
 production:
   <<: *defaults
+  office_email: 'office@netguru.pl'
   github:
     client_id: <%= ENV["GH_CLIENT_ID"] %>
     client_secret: <%= ENV["GH_CLIENT_SECRET"] %>
