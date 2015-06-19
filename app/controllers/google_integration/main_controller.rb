@@ -32,6 +32,14 @@ module GoogleIntegration
       groups_cleanup.now!
     end
 
+    def create_accounts
+      created_accounts = Actions::CreateAccounts.new(google_api).now!(missing_accounts)
+      created_accounts.each do |login, account|
+        ::AccountCreationNotifierMailer.new_account(login, account).deliver
+      end
+      reset_diff
+    end
+
     private
 
     def reset_diff

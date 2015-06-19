@@ -25,5 +25,27 @@ RSpec.describe GoogleIntegration::MainController do
       expect(Rails.cache.read('calculated_missing_accounts')).to be_a Array
       expect(Rails.cache.read('calculated_missing_accounts')).to_not be_empty
     end
+
+  describe 'POST create_accounts' do
+    before do
+      allow_any_instance_of(GoogleIntegration::Actions::CreateAccounts).to receive(:now!) do
+        {
+          'second.member' => { email: 'second.member@netguru.pl', codes: %w(a b c) },
+          'third.member' => { email: 'third.member@netguru.pl', codes: %w(a b c) },
+        }
+      end
+      
+      Rails.cache.fetch('calculated_missing_accounts') { 'calculated_missing_accounts' }
+      ActionMailer::Base.deliveries = []
+      post :create_accounts
+    end
+
+    it 'sends emails to office' do
+      expect(ActionMailer::Base.deliveries.count).to eq(2)
+    end
+
+    it 'resets cache' do
+      expect(Rails.cache.read('calculated_missing_accounts')).to be_nil
+    end
   end
 end
