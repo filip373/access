@@ -135,6 +135,41 @@ module GoogleIntegration
       )
     end
 
+    def list_users
+      request(
+        api_method: directory_api.users.list,
+        parameters: { domain: AppConfig.google.main_domain },
+      ).fetch('users')
+    end
+
+    def generate_codes(user_email)
+      request(
+        api_method: directory_api.verification_codes.generate,
+        parameters: { userKey: user_email },
+      )
+    end
+
+    def get_codes(user_email)
+      codes = request(
+        api_method: directory_api.verification_codes.list,
+        parameters: { userKey: user_email },
+      )
+      codes['items'].map { |e| e['verificationCode'] }
+    end
+
+    def post_filters(login)
+      Dir.glob("#{Rails.root}/static_data/gmail_filters/*").each do |filter|
+        filter = File.read(filter)
+        url = "https://apps-apis.google.com/a/feeds/emailsettings/2.0/#{AppConfig.google.main_domain}/#{login}/filter"
+        client.execute(
+          uri: url,
+          body: filter,
+          headers: { 'Content-Type' => 'application/atom+xml' },
+          http_method: 'POST',
+        )
+      end
+    end
+
     private
 
     def request(params)
