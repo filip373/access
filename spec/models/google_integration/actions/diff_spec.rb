@@ -26,6 +26,7 @@ RSpec.describe GoogleIntegration::Actions::Diff do
   let(:google_api) do
     double.tap do |api|
       allow(api).to receive(:list_groups_full_info) { [group1] }
+      allow(api).to receive(:errors) { {} }
     end
   end
 
