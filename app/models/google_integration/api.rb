@@ -56,7 +56,7 @@ module GoogleIntegration
       @groups_data.execute!
 
       retry_count = 10
-      while retry_count > 0 && @groups_data.retry_fetch! do retry_count -= 1 end
+      retry_count -= 1 while retry_count > 0 && @groups_data.retry_fetch!
 
       add_general_error @groups_data.general_error if @groups_data.general_error?
 
