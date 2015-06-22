@@ -1,0 +1,71 @@
+[{
+    "adminCreated": true,
+    "description": "Project group for team@example.com",
+    "directMembersCount": "1",
+    "email": "team@my-company.org",
+    "errors": null,
+    "etag": "etag",
+    "id": "123",
+    "kind": "admin#directory#group",
+    "members": [
+        {
+            "email": "jon.hanks@example.com",
+            "etag": "etag2",
+            "id": "12",
+            "kind": "admin#directory#member",
+            "role": "MEMBER",
+            "type": "USER"
+        },
+        {
+            "email": "beth.hamilthon@example.com",
+            "etag": "etag2",
+            "id": "1234",
+            "kind": "admin#directory#member",
+            "role": "MEMBER",
+            "type": "USER"
+        }
+    ],
+    "name": "Project group - team@example.com",
+    "nonEditableAliases": [
+        "team@example.org",
+        "people@example.org",
+        "people@example.com"
+    ],
+    "settings": {
+        "allowExternalMembers": "false",
+        "allowGoogleCommunication": "false",
+        "allowWebPosting": "true",
+        "archiveOnly": "false",
+        "author": {
+            "name": "Google"
+        },
+        "content": "Project group - team@example.com",
+        "customReplyTo": null,
+        "defaultMessageDenyNotificationText": null,
+        "description": "Project group for team@example.com",
+        "email": "team@example.com",
+        "id": "tag:googleapis.com,2010:apps:groupssettings:GROUP:team@example.com",
+        "includeInGlobalAddressList": "true",
+        "isArchived": "true",
+        "maxMessageBytes": "5242880",
+        "membersCanPostAsTheGroup": "false",
+        "messageDisplayFont": "DEFAULT_FONT",
+        "messageModerationLevel": "MODERATE_NONE",
+        "name": "Project group - team@example.com",
+        "replyTo": "REPLY_TO_IGNORE",
+        "sendMessageDenyNotification": "false",
+        "showInGroupDirectory": "true",
+        "spamModerationLevel": "ALLOW",
+        "title": "Groups Resource Entry",
+        "whoCanContactOwner": "ANYONE_CAN_CONTACT",
+        "whoCanInvite": "ALL_MANAGERS_CAN_INVITE",
+        "whoCanJoin": "CAN_REQUEST_TO_JOIN",
+        "whoCanLeaveGroup": "ALL_MEMBERS_CAN_LEAVE",
+        "whoCanPostMessage": "ANYONE_CAN_POST",
+        "whoCanViewGroup": "ALL_IN_DOMAIN_CAN_VIEW",
+        "whoCanViewMembership": "ALL_IN_DOMAIN_CAN_VIEW",
+        "xmlns": "http://www.w3.org/2005/Atom",
+        "xmlns:apps": "http://schemas.google.com/apps/2006",
+        "xmlns:gd": "http://schemas.google.com/g/2005"
+    }
+}]
