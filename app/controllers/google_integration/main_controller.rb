@@ -1,9 +1,9 @@
 require 'google/api_client'
-require 'google/api_client/client_secrets'
 
 module GoogleIntegration
-  class MainController < ApplicationController
-    expose(:google_api) { Api.new(session[:credentials]) }
+  class MainController < GoogleIntegration::BaseController
+    before_filter :google_auth_required, unless: :google_logged_in?
+
     expose(:expected_groups) { Groups.all }
     expose(:google_log_errors) { log.errors }
     expose(:google_log) { log.log }
@@ -14,8 +14,6 @@ module GoogleIntegration
     expose(:missing_groups) { groups_cleanup.stranded_groups }
 
     expose(:missing_accounts) { calculated_missing_accounts }
-    before_filter :google_auth_required, unless: :google_logged_in?
-    rescue_from ArgumentError, with: :google_error
 
     def show_diff
       reset_diff
@@ -70,22 +68,6 @@ module GoogleIntegration
       Rails.cache.fetch 'calculated_missing_accounts' do
         Actions::AccountsDiff.new(google_api).now!
       end
-    end
-
-    def google_auth_required
-      redirect_to '/auth/google_oauth2'
-    end
-
-    def google_error(e)
-      if e.message =~ /Missing authorization code./
-        google_auth_required
-      else
-        raise
-      end
-    end
-
-    def google_logged_in?
-      session[:credentials].present?
     end
 
     def log
