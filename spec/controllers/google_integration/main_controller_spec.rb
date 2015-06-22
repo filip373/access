@@ -42,7 +42,6 @@ RSpec.describe GoogleIntegration::MainController do
           'third.member' => { email: 'third.member@netguru.pl', codes: %w(a b c) },
         }
       end
-      
       Rails.cache.fetch('calculated_missing_accounts') { 'calculated_missing_accounts' }
       ActionMailer::Base.deliveries = []
       post :create_accounts
