@@ -16,8 +16,11 @@ module GoogleIntegration
       def create_accounts(accounts)
         accounts.each do |login|
           create_account(login)
-          reset_password(login)
+          sleep(5)
           generate_codes(login)
+          sleep(5)
+          reset_password(login)
+          sleep(10)
           @create_accounts[login][:codes] = get_codes(login).take(3)
           sleep(10)
           post_filters(login)
@@ -35,12 +38,10 @@ module GoogleIntegration
         }
         @google_api.create_user(params)
         @create_accounts[login] = params
-        sleep(5)
       end
 
       def generate_codes(login)
         @google_api.generate_codes(@create_accounts[login][:email])
-        sleep(5)
       end
 
       def reset_password(login)
@@ -48,7 +49,6 @@ module GoogleIntegration
           @create_accounts[login][:email],
           @create_accounts[login][:password],
         )
-        sleep(5)
       end
 
       def get_codes(login)
