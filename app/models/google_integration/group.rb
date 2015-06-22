@@ -47,6 +47,20 @@ module GoogleIntegration
       privacy.nil? || privacy == 'open'
     end
 
+    def to_yaml
+      {
+        domain_membership: domain_membership,
+        members: Array(members).map { |user| username(user.email || '') }.compact,
+        aliases: Array(aliases).map { |email| username(email) }.compact,
+        privacy: privacy,
+        archive: archive,
+      }.stringify_keys.to_yaml
+    end
+
+    def username(email)
+      email.split('@').first
+    end
+
     def errors
       nil
     end
