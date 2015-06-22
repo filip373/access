@@ -18,26 +18,28 @@ RSpec.shared_context 'gh_api' do
     Hashie::Mash.new(
       name: 'team1',
       id: 1,
-      members: [login: 'frst.mbr'],
+      members: [login: 'first.mbr'],
       repos: [
         { name: 'first-repo', owner: { id: 1 } },
         { name: 'first-repo', owner: { id: 2 } },
       ],
-      permissions: 'pull',
+      permission: 'pull',
     )
   end
+
   let(:team_empty) do
     Hashie::Mash.new(
       name: 'team_empty',
       id: 1,
-      members: [login: 'frst.mbr'],
+      members: [login: 'first.mbr'],
       repos: [
         { name: 'first-repo', owner: { id: 1 } },
         { name: 'first-repo', owner: { id: 2 } },
       ],
-      permissions: 'pull',
+      permission: 'pull',
     )
   end
+
   let(:new_team) do
     GithubIntegration::Team.new(
       'team2',

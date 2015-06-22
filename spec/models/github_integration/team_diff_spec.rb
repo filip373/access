@@ -4,6 +4,7 @@ RSpec.describe GithubIntegration::TeamDiff do
   include_context 'gh_api'
 
   before(:each) do
+    Celluloid.shutdown
     Celluloid.boot
   end
 
@@ -61,6 +62,7 @@ RSpec.describe GithubIntegration::TeamDiff do
         team_diff.async.diff(blk)
         errors = condition.wait
         expect(errors).to_not be_empty
+        binding.pry if errors.count == 4
         expect(errors.count).to eq(1)
       end
     end
