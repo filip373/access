@@ -1,11 +1,11 @@
 class GoogleIntegration::Api
   class GroupsFullInfoBatch
-    attr_reader :google_groups, :groups_settings_api, :directory_api, :client
+    attr_reader :initial_groups, :google_groups, :groups_settings_api, :directory_api, :client
     attr_accessor :groups_to_retry
-    private :groups_to_retry
+    private :initial_groups, :groups_to_retry
 
-    def initialize(groups, groups_settings_api, directory_api, client)
-      @groups = groups.map { |group| Hashie::Mash.new group }
+    def initialize(initial_groups, groups_settings_api, directory_api, client)
+      @initial_groups = initial_groups.map { |group| Hashie::Mash.new group }
       @groups_settings_api = groups_settings_api
       @directory_api = directory_api
       @client = client
@@ -14,7 +14,7 @@ class GoogleIntegration::Api
     end
 
     def execute!
-      @google_groups = collect_groups_full_info!(@groups)
+      @google_groups = collect_groups_full_info!(initial_groups)
     end
 
     def retry_fetch!
