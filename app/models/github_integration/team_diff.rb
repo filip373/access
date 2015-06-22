@@ -67,7 +67,7 @@ module GithubIntegration
 
     def list_team_repos(team_id)
       repos = @gh_api.list_team_repos(team_id)
-      organization_id = Rails.cache.fetch 'organization_id' do
+      organization_id = Rails.cache.fetch "organization_id_#{AppConfig.company}" do
         @gh_api.find_organization_id(team_id)
       end
       repos.select { |e| e['owner']['id'] == organization_id }.map { |e| e['name'] }
