@@ -6,9 +6,9 @@ module GoogleIntegration
           group_name,
           group_data.members,
           group_data.aliases,
+          group_data.domain_membership,
           group_data.privacy,
           group_data.archive,
-          group_data.domain_membership,
         )
       end
     end
