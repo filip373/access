@@ -10,5 +10,13 @@ module GithubIntegration
         team.permission,
       )
     end
+
+    def to_yaml
+      {
+        permission: permission,
+        members: members || [],
+        repos: repos || [],
+      }.stringify_keys.to_yaml
+    end
   end
 end
