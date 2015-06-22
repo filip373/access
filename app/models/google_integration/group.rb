@@ -1,6 +1,6 @@
 module GoogleIntegration
   class Group
-    rattr_initialize :name, :members, :aliases, :privacy, :archive, :domain_membership
+    rattr_initialize :name, :members, :aliases, :domain_membership, :privacy, :archive
 
     def email
       "#{name}@#{AppConfig.google.main_domain}"
