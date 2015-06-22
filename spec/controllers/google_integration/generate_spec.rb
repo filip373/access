@@ -32,7 +32,6 @@ module GoogleIntegration
           end
         end
 
-
         subject { YAML.load_file(permissions_dir.join('google_groups/team.yml')) }
 
         it 'creates a google group' do
