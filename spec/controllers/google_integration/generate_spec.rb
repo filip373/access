@@ -7,6 +7,7 @@ module GoogleIntegration
 
     before(:each) do
       allow(controller).to receive(:google_auth_required) { true }
+      allow(controller).to receive(:gh_auth_required) { true }
       allow(google_api).to receive(:list_groups_full_info) { groups }
       allow(GoogleIntegration::Api).to receive(:new).and_return(google_api)
     end
@@ -15,12 +16,6 @@ module GoogleIntegration
       let(:permissions_dir) { Rails.root.join('tmp/test_permissions') }
 
       describe 'creating google groups' do
-        let(:groups) do
-          JSON.load(Rails.root.join('spec/fixtures/google/team_example.json')).map do |group|
-            Hashie::Mash.new group
-          end
-        end
-
         before do
           google_api = double
           allow(google_api).to receive(:list_groups_full_info).and_return(groups)
@@ -30,6 +25,13 @@ module GoogleIntegration
         end
 
         after { FileUtils.rm_rf(permissions_dir) }
+
+        let(:groups) do
+          JSON.load(Rails.root.join('spec/fixtures/google/team_example.json')).map do |group|
+            Hashie::Mash.new group
+          end
+        end
+
 
         subject { YAML.load_file(permissions_dir.join('google_groups/team.yml')) }
 
@@ -46,9 +48,6 @@ module GoogleIntegration
           it { expect(subject['privacy']).to eq 'open' }
           it { expect(subject['archive']).to eq true }
         end
-      end
-
-      describe 'creating github users' do
       end
     end
   end
