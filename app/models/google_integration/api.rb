@@ -174,7 +174,9 @@ module GoogleIntegration
 
     def request(params)
       result = client.execute(params)
-      JSON.parse(result.response.body) if result.response.body.present?
+      response = JSON.parse(result.response.body) if result.response.body.present?
+      raise response.to_s if response.key? 'error'
+      response
     end
 
     def client
