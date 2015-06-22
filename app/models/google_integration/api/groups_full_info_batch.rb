@@ -28,7 +28,7 @@ class GoogleIntegration::Api
       %(
         we couldn't retrieve full info from the google api.
         Affected groups: #{groups_to_retry.map { |group| group['name'] }.join(', ')}.
-            )
+      )
     end
 
     def general_error?
@@ -45,14 +45,13 @@ class GoogleIntegration::Api
       batch = Google::APIClient::BatchRequest.new
       @groups_to_retry = []
 
-      data = groups.map do |group|
+      groups.each do |group|
         members_list_batch_request!(group, batch)
         group_settings_batch_request!(group, batch)
-        group
       end
 
       client.execute(batch)
-      data
+      groups
     end
 
     def group_settings_batch_request!(group, batch)
