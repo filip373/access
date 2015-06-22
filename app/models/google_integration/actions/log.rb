@@ -30,7 +30,7 @@ module GoogleIntegration
       private
 
       def log_errors
-        Array.wrap(@diff_hash[:errors]).map do |key, errors|
+        Hash(@diff_hash[:errors]).map do |key, errors|
           "[#{key} error] #{errors}"
         end
       end
