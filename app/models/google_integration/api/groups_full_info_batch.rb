@@ -80,7 +80,7 @@ class GoogleIntegration::Api
     def add_groups_error(group, errors)
       return if errors.blank?
 
-      group[:errors] =  { settings: errors['error']['internalReason'] }
+      group[:errors] = { settings: errors['error']['internalReason'] }
       groups_to_retry.push group
     end
 
