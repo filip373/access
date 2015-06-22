@@ -26,7 +26,7 @@ class GoogleIntegration::Api
     def general_error
       return unless general_error?
       %(
-        we couldn't retrive full info from the google api.
+        we couldn't retrieve full info from the google api.
         Affected groups: #{groups_to_retry.map { |group| group['name'] }.join(', ')}.
             )
     end
