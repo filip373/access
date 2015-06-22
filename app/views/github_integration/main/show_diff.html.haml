@@ -5,6 +5,11 @@
       = button_tag "Generate permissions", type: :submit, class: 'btn btn-primary btn-lg'
 
 .jumbotron
+  %h2 Do you want to generate github teams yaml files for permissions?
+  = form_tag github_generate_permissions_path, method: :get do
+    = button_tag "Generate permissions", type: :submit, class: 'btn btn-primary btn-lg'
+
+.jumbotron
   %h2 Github teams
   - if diff_errors.present?
     = render 'errors'
