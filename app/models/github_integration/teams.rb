@@ -23,7 +23,4 @@ module GithubIntegration
       'push'
     end
   end
-
-  class Team < Struct.new(:name, :members, :repos, :permission)
-  end
 end
