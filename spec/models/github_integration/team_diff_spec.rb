@@ -62,7 +62,6 @@ RSpec.describe GithubIntegration::TeamDiff do
         team_diff.async.diff(blk)
         errors = condition.wait
         expect(errors).to_not be_empty
-        binding.pry if errors.count == 4
         expect(errors.count).to eq(1)
       end
     end
