@@ -11,7 +11,7 @@ module GoogleIntegration
 
       flash[:notice] = 'Permissions has been created'
 
-      redirect_to '/'
+      redirect_to root_path
     end
 
     def permissions_dir

@@ -8,7 +8,7 @@ module GithubIntegration
 
       flash[:notice] = 'Permissions has been created'
 
-      redirect_to '/'
+      redirect_to root_path
     end
 
     private
