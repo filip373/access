@@ -9,10 +9,10 @@ GithubApp::Application.routes.draw do
   delete 'github/cleanup_teams' => 'github_integration/main#cleanup_teams', as: 'github_cleanup_teams'
   get 'github/generate_permissions' => 'github_integration/generate#permissions'
 
+  get 'google/generate_permissions' => 'google_integration/generate#permissions'
+  get 'google/generate_users' => 'google_integration/generate#users'
   get 'google/show_diff' => 'google_integration/main#show_diff', as: 'google_show_diff'
   post 'google/sync' => 'google_integration/main#sync', as: 'google_sync'
   post 'google/create_accounts' => 'google_integration/main#create_accounts', as: 'create_accounts'
   delete 'google/cleanup_groups' => 'google_integration/main#cleanup_groups', as: 'google_cleanup_groups'
-  get 'google/generate_permissions' => 'google_integration/generate#permissions'
-
 end
