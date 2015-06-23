@@ -53,9 +53,9 @@ module GoogleIntegration
 
       def privacy_diff(group, expected_group)
         group_privacy = GoogleIntegration::GroupPrivacy.from_google_api(group)
-        if not(expected_group.privacy.unknown?) && group_privacy != expected_group.privacy
-          @diff_hash[:change_privacy][group] = expected_group.privacy
-        end
+        return if expected_group.privacy.unknown? || group_privacy == expected_group.privacy
+
+        @diff_hash[:change_privacy][group] = expected_group.privacy
       end
 
       def archive_diff(group, expected_is_archived)
