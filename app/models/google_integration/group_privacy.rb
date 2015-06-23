@@ -28,10 +28,22 @@ module GoogleIntegration
       who_can_view_group == CLOSED_VIEW_POLICY && !show_in_group_directory?
     end
 
+    def unknown?
+      [open?, closed?].all? { |privacy| privacy == false }
+    end
+
+    def !=(privacy)
+      [open?, closed?] != [privacy.open?, privacy.closed?]
+    end
+
+    def ==(privacy)
+      [open?, closed?] == [privacy.open?, privacy.closed?]
+    end
+
     def to_s
       return 'open' if open?
       return 'closed' if closed?
-      raise NotImplementedError, 'we have no idea what privacy is this?'
+      'unknown'
     end
 
     def to_google_params
