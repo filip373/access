@@ -31,7 +31,7 @@ RSpec.describe GoogleIntegration::Actions::Log do
         group => false,
       },
       change_privacy: {
-        group => ::GoogleIntegration::GroupPrivacy.new(Hashie::Mash.new).close!,
+        group => ::GoogleIntegration::GroupPrivacy.new(nil, nil).close!,
       },
     }
   end
