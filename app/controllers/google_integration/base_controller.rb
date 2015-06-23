@@ -18,7 +18,7 @@ module GoogleIntegration
       if e.message =~ /Missing authorization code./
         google_auth_required
       else
-        raise
+        fail
       end
     end
   end
