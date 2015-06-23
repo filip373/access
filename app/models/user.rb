@@ -69,6 +69,13 @@ class User
     tmp_errors
   end
 
+  def to_yaml
+    {
+      name: full_name,
+      github: github,
+    }.stringify_keys.to_yaml
+  end
+
   def external?
     email.split('@').last != AppConfig.google.main_domain
   end

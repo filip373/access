@@ -153,4 +153,23 @@ describe User do
       expect(user.github).to eq 'oterlogin'
     end
   end
+
+  describe '#to_yaml' do
+    let(:user) do
+      User.new(
+        email: 'mariusz.blaszczak@netguru.pl',
+        name: 'mariusz.blaszczak',
+        full_name: 'Mariusz Blaszczak',
+        github: 'blaszczakm',
+      )
+    end
+
+    let(:yaml_object) { YAML.load user.to_yaml }
+
+    it { expect(yaml_object.keys.count).to eq 2 }
+    it { expect(yaml_object.keys.first).to eq 'name' }
+    it { expect(yaml_object.keys.second).to eq 'github' }
+    it { expect(yaml_object.values.first).to eq user.full_name }
+    it { expect(yaml_object.values.second).to eq user.github }
+  end
 end
