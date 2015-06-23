@@ -16,28 +16,8 @@ module Generate
 
     def groups
       @groups ||= google_groups.map do |group|
-        GoogleIntegration::Group.new(
-          username(group.email),
-          group.members,
-          group.aliases,
-          !!group.members.find { |member| member['id'] == AppConfig.google.domain_member_id },
-          privacy(group),
-          group.settings.isArchived == 'true',
-        )
+        GoogleIntegration::Group.from_google_api(group)
       end
-    end
-
-    def username(email)
-      email.split('@').first
-    end
-
-    def privacy(group)
-      normalized_privacy = Hashie::Mash.new(
-        show_in_group_directory: group.settings.showInGroupDirectory,
-        who_can_view_group: group.settings.whoCanViewGroup,
-      )
-
-      GoogleIntegration::GroupPrivacy.new(normalized_privacy).to_s
     end
 
     def google_dir
