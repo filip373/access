@@ -59,9 +59,9 @@ module GoogleIntegration
       end
 
       def archive_diff(group, expected_is_archived)
-        if group.try(:settings).try(:isArchived) != expected_is_archived.to_s
-          @diff_hash[:change_archive][group] = expected_is_archived.to_s
-        end
+        return if group.try(:settings).try(:isArchived) == expected_is_archived.to_s
+
+        @diff_hash[:change_archive][group] = expected_is_archived.to_s
       end
 
       def members_diff(group, expected_members)
