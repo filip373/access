@@ -32,12 +32,12 @@ module GoogleIntegration
       [open?, closed?].all? { |privacy| privacy == false }
     end
 
-    def !=(privacy)
-      [open?, closed?] != [privacy.open?, privacy.closed?]
+    def !=(other)
+      [open?, closed?] != [other.open?, other.closed?]
     end
 
-    def ==(privacy)
-      [open?, closed?] == [privacy.open?, privacy.closed?]
+    def ==(other)
+      [open?, closed?] == [other.open?, other.closed?]
     end
 
     def to_s
