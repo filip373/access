@@ -59,4 +59,8 @@ class User
     @errors = []
     tmp_errors
   end
+
+  def external?
+    email.split('@').last != AppConfig.google.main_domain
+  end
 end

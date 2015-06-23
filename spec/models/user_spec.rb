@@ -89,4 +89,32 @@ describe User do
       expect(subject.list_company_users).to be(users_data['default_group'])
     end
   end
+
+  describe '#extenal?' do
+    context 'user is from company' do
+      let(:user) do
+        User.new(
+          email: "mariusz.blaszczak@#{AppConfig.google.main_domain}",
+          name: 'mariusz.blaszczak',
+        )
+      end
+
+      it 'returns false' do
+        expect(user.external?).to be_falsy
+      end
+    end
+
+    context 'user is not from company' do
+      let(:user) do
+        User.new(
+          email: "mariusz.blaszczak@wp.pl",
+          name: 'mariusz.blaszczak',
+        )
+      end
+
+      it 'returns true' do
+        expect(user.external?).to be_truthy
+      end
+    end
+  end
 end
