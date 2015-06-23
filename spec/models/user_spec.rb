@@ -107,7 +107,7 @@ describe User do
     context 'user is not from company' do
       let(:user) do
         User.new(
-          email: "mariusz.blaszczak@wp.pl",
+          email: 'mariusz.blaszczak@wp.pl',
           name: 'mariusz.blaszczak',
         )
       end
@@ -115,6 +115,42 @@ describe User do
       it 'returns true' do
         expect(user.external?).to be_truthy
       end
+    end
+  end
+
+  describe '.new' do
+    let(:user) do
+      User.new(
+        email: 'mariusz.blaszczak@netguru.pl',
+        name: 'mariusz.blaszczak',
+        full_name: 'Mariusz Blaszczak',
+        github: 'Mariusz Blaszczak',
+      )
+    end
+
+    it { expect(user.email).to_not be_empty }
+    it { expect(user.name).to_not be_empty }
+    it { expect(user.full_name).to_not be_empty }
+    it { expect(user.github).to_not be_empty }
+
+    it 'is possible to change email' do
+      user.email = 'another@email.pl'
+      expect(user.email).to eq 'another@email.pl'
+    end
+
+    it 'is possible to change name' do
+      user.name = 'another.name'
+      expect(user.name).to eq 'another.name'
+    end
+
+    it 'is possible to change full_name' do
+      user.full_name = 'Another Fullname'
+      expect(user.full_name).to eq 'Another Fullname'
+    end
+
+    it 'is possible to change github' do
+      user.github = 'oterlogin'
+      expect(user.github).to eq 'oterlogin'
     end
   end
 end

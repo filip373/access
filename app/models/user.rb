@@ -1,7 +1,16 @@
 class User
+  attr_accessor :name, :full_name, :github, :email
+
   @errors = []
   class << self
     attr_reader :errors
+  end
+
+  def initialize(name:, full_name: '', github: '', email: '')
+    @name = name
+    @full_name = full_name
+    @github = github
+    @email = email
   end
 
   def self.find(name)
