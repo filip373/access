@@ -3,3 +3,4 @@ members:
   - second.member
 aliases:
   - alias2
+privacy: open
