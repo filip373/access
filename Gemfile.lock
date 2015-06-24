@@ -95,7 +95,7 @@ GEM
     font-awesome-rails (4.3.0.0)
       railties (>= 3.2, < 5.0)
     formatador (0.2.5)
-    git (1.2.9.1)
+    git (1.2.8)
     github_api (0.12.3)
       addressable (~> 2.3)
       descendants_tracker (~> 0.0.4)
@@ -338,7 +338,7 @@ DEPENDENCIES
   celluloid
   decent_exposure
   font-awesome-rails
-  git
+  git (= 1.2.8)
   github_api
   google-api-client
   guard-rspec
