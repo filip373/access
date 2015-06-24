@@ -45,7 +45,7 @@ module GoogleIntegration
     def list_groups
       @groups ||= request(
         api_method: directory_api.groups.list,
-        parameters: { domain: AppConfig.google.main_domain },
+        parameters: { domain: AppConfig.google.main_domain, maxResults: 500 },
       ).fetch('groups')
     end
 
@@ -137,7 +137,7 @@ module GoogleIntegration
     def list_users
       request(
         api_method: directory_api.users.list,
-        parameters: { domain: AppConfig.google.main_domain },
+        parameters: { domain: AppConfig.google.main_domain, maxResults: 500 },
       ).fetch('users')
     end
 
