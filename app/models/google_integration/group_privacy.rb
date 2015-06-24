@@ -28,7 +28,8 @@ module GoogleIntegration
       who_can_view_group == CLOSED_VIEW_POLICY && !show_in_group_directory?
     end
 
-    def unknown?
+    def can_change?
+      return true unless default.nil?
       [open?, closed?].all? { |privacy| privacy == false }
     end
 
@@ -43,7 +44,7 @@ module GoogleIntegration
     def to_s
       return 'open' if open?
       return 'closed' if closed?
-      'unknown'
+      default { 'unknown' }
     end
 
     def to_google_params
@@ -68,6 +69,12 @@ module GoogleIntegration
     def show_in_group_directory?
       return true if show_in_group_directory == 'true'
       return false if show_in_group_directory == 'false'
+    end
+
+    private
+
+    def default
+      GoogleIntegration::Defaults.group.privacy
     end
   end
 end
