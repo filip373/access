@@ -15,11 +15,20 @@ module GoogleIntegration
     end
 
     def google_error(e)
-      if e.message =~ /Missing authorization code./
+      if signet_errors.include? e.message
         google_auth_required
       else
         fail
       end
+    end
+
+    def signet_errors
+      [
+        'Missing required redirect URI.',
+        'Missing token endpoint URI.',
+        'Missing authorization code.',
+        'Missing access token.',
+      ]
     end
   end
 end
