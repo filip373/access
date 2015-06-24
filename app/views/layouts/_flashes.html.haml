@@ -1,0 +1,10 @@
+.container
+  - flash.each do |type, message|
+    - if type == 'api_error'
+      .alert.alert-danger{ role: :alert }
+        = message
+        %br
+        We suggest you to #{link_to 'relogin', google_oauth2_path }
+
+    - else
+      .alert{ class: "alert-#{type}" }= message
