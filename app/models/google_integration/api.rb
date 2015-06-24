@@ -175,7 +175,7 @@ module GoogleIntegration
       result = client.execute(params)
       return unless result.response.body.present?
       response = JSON.parse(result.response.body)
-      fail response.to_s if response.key? 'error'
+      raise ApiError.new(response['error'].to_s) if response.key? 'error'
       response
     end
 
