@@ -4,6 +4,7 @@ module GoogleIntegration
     skip_before_filter :google_auth_required, only: [:create]
 
     def new
+      session.delete(:credentials)
       redirect_to authorization_uri
     end
 
