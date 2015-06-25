@@ -7,4 +7,11 @@ RSpec.describe GoogleIntegration::Actions::AccountsDiff do
 
   it { is_expected.to be_a Array }
   it { is_expected.to_not be_nil }
+
+  context 'Yml (sixth.member.yml) contains email (sixth@..) with login different than filename' do
+    it 'compare login from email' do
+      expect(subject).to_not include 'sixth.member'
+      expect(subject).to include 'sixth'
+    end
+  end
 end
