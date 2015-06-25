@@ -53,7 +53,8 @@ module GoogleIntegration
 
       def privacy_diff(group, expected_group)
         group_privacy = GoogleIntegration::GroupPrivacy.from_google_api(group)
-        return if !expected_group.privacy.can_change? || group_privacy == expected_group.privacy
+        return unless expected_group.privacy.can_change?
+        return if group_privacy == expected_group.privacy
 
         @diff_hash[:change_privacy][group] = expected_group.privacy
       end

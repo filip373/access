@@ -29,8 +29,8 @@ module GoogleIntegration
     end
 
     def can_change?
-      return true unless default.nil?
-      [open?, closed?].all? { |privacy| privacy == false }
+      return true if default.present?
+      [open?, closed?].any? { |privacy| privacy == true }
     end
 
     def !=(other)
