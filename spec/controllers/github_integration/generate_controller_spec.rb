@@ -29,8 +29,8 @@ module GithubIntegration
 
         describe 'contents of yaml file' do
           it { expect(subject['permission']).to eq 'pull' }
-          it { expect(subject['members']).to match %w[first.mbr] }
-          it { expect(subject['repos']).to match %w[first-repo] }
+          it { expect(subject['members']).to match %w(first.mbr) }
+          it { expect(subject['repos']).to match %w(first-repo) }
         end
       end
     end
