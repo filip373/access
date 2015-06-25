@@ -70,17 +70,37 @@ describe Generate::Users do
 
     it 'creates file with company user' do
       expect(File.exist?(first_member_path)).to be_truthy
+      expect(File.exist?(fifth_member_path)).to be_truthy
     end
 
     it 'creates file with external user' do
       expect(File.exist?(second_member_path)).to be_truthy
+      expect(File.exist?(third_member_path)).to be_truthy
+      expect(File.exist?(fourth_member_path)).to be_truthy
     end
 
-    it 'creates files with proper attributes' do
+    it 'creates files with proper name attributes' do
       expect(first_member_yaml['name']).to eq 'First Member'
       expect(second_member_yaml['name']).to eq 'Second Member'
+      expect(third_member_yaml['name']).to eq 'Third Member'
+      expect(fourth_member_yaml['name']).to eq 'Frth.mbr'
+      expect(fifth_member_yaml['name']).to eq 'Fifth Member'
+    end
+
+    it 'creates files with proper github attributes' do
       expect(first_member_yaml['github']).to eq 'frst.mbr'
       expect(second_member_yaml['github']).to eq 'scnd.mbr'
+      expect(third_member_yaml['github']).to eq 'thrd.mbr'
+      expect(fourth_member_yaml['github']).to eq 'frth.mbr'
+      expect(fifth_member_yaml['github']).to eq ''
+    end
+
+    it 'creates files with proper email attributes' do
+      expect(first_member_yaml['email']).to eq 'first.member@netguru.pl'
+      expect(second_member_yaml['email']).to eq 'second.member@external.pl'
+      expect(third_member_yaml['email']).to eq ''
+      expect(fourth_member_yaml['email']).to eq ''
+      expect(fifth_member_yaml['email']).to eq 'fifth.member@netguru.pl'
     end
 
     context 'There is a github user (thrd.mbr) who has no email' do
