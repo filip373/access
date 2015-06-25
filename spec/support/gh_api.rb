@@ -11,6 +11,34 @@ RSpec.shared_context 'gh_api' do
         team_id == 1 && user_name == 'thrd.mbr'
       end
       allow(api).to receive(:find_organization_id) { 1 }
+      allow(api).to receive(:get_user) do |login|
+        case login
+        when 'frst.mbr'
+          {
+            'login' => login,
+            'email' => 'first.member@netguru.pl',
+            'name' => 'First Member',
+          }
+        when 'scnd.mbr'
+          {
+            'login' => login,
+            'email' => 'second.member@external.pl',
+            'name' => 'Second Member',
+          }
+        when 'thrd.mbr'
+          {
+            'login' => login,
+            'name' => 'Third Member',
+          }
+        when 'frth.mbr'
+          {
+            'login' => login,
+          }
+        end
+      end
+      allow(api).to receive(:list_org_members) do
+        gh_org_members
+      end
     end
   end
 
