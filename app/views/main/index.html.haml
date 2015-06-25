@@ -2,3 +2,6 @@
   = render "github_integration"
 .jumbotron
   = render "google_integration"
+- if AppConfig.features.generate_permissions
+  .jumbotron
+    = render "generate_integration"
