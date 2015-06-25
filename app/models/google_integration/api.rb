@@ -5,6 +5,8 @@ module GoogleIntegration
   class Api
     attr_reader :errors
 
+    MAX_RESULTS_LIMIT = 500
+
     def initialize(credentials)
       authorize_client(credentials)
       @errors = {}
@@ -45,7 +47,7 @@ module GoogleIntegration
     def list_groups
       @groups ||= request(
         api_method: directory_api.groups.list,
-        parameters: { domain: AppConfig.google.main_domain, maxResults: 500 },
+        parameters: { domain: AppConfig.google.main_domain, maxResults: MAX_RESULTS_LIMIT },
       ).fetch('groups')
     end
 
@@ -137,7 +139,7 @@ module GoogleIntegration
     def list_users
       request(
         api_method: directory_api.users.list,
-        parameters: { domain: AppConfig.google.main_domain, maxResults: 500 },
+        parameters: { domain: AppConfig.google.main_domain, maxResults: MAX_RESULTS_LIMIT },
       ).fetch('users')
     end
 
