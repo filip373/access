@@ -40,7 +40,7 @@ module GoogleIntegration
 
     def archive?
       return archive unless archive.nil?
-      GoogleIntegration::Defaults.group.archive { nil }
+      GoogleIntegration::Defaults.group.try(:archive)
     end
 
     def to_yaml

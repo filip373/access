@@ -44,7 +44,7 @@ module GoogleIntegration
     def to_s
       return 'open' if open?
       return 'closed' if closed?
-      default { 'unknown' }
+      default || 'unknown'
     end
 
     def to_google_params
@@ -74,7 +74,7 @@ module GoogleIntegration
     private
 
     def default
-      GoogleIntegration::Defaults.group.privacy
+      GoogleIntegration::Defaults.group.try(:privacy)
     end
   end
 end
