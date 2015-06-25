@@ -37,13 +37,17 @@ module Generate
           user.github = gh_user['login']
           nil
         else
-          User.new(
-            name: slugify(gh_user['name'] || gh_user['login']),
-            full_name: gh_user['name'] || gh_user['login'].capitalize,
-            github: gh_user['login'],
-          )
+          new_user_from_github(gh_user)
         end
       end.compact
+    end
+
+    def new_user_from_github(gh_user)
+      User.new(
+        name: slugify(gh_user['name'] || gh_user['login']),
+        full_name: gh_user['name'] || gh_user['login'].capitalize,
+        github: gh_user['login'],
+      )
     end
 
     def google_users
