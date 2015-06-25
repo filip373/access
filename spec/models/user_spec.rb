@@ -93,7 +93,7 @@ describe User do
   describe '#extenal?' do
     context 'user is from company' do
       let(:user) do
-        User.new(
+        described_class.new(
           email: "mariusz.blaszczak@#{AppConfig.google.main_domain}",
           name: 'mariusz.blaszczak',
         )
@@ -106,7 +106,7 @@ describe User do
 
     context 'user is not from company' do
       let(:user) do
-        User.new(
+        described_class.new(
           email: 'mariusz.blaszczak@wp.pl',
           name: 'mariusz.blaszczak',
         )
@@ -120,7 +120,7 @@ describe User do
 
   describe '.new' do
     let(:user) do
-      User.new(
+      described_class.new(
         email: 'mariusz.blaszczak@netguru.pl',
         name: 'mariusz.blaszczak',
         full_name: 'Mariusz Blaszczak',
@@ -156,7 +156,7 @@ describe User do
 
   describe '#to_yaml' do
     let(:user) do
-      User.new(
+      described_class.new(
         email: 'mariusz.blaszczak@netguru.pl',
         name: 'mariusz.blaszczak',
         full_name: 'Mariusz Blaszczak',
