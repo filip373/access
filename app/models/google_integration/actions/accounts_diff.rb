@@ -17,7 +17,7 @@ module GoogleIntegration
 
       def google_accounts
         @google_api.list_users.map do |account|
-          Helpers::User.email_to_username(account['primaryEmail'])
+          account['primaryEmail'].try(:split, '@').try(:first)
         end.compact
       end
 
