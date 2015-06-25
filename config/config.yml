@@ -31,6 +31,7 @@ defaults: &defaults
     application_version: '0.0.1'
   features:
     google_integration: false
+    generate_permissions: false
 
 test:
   <<: *defaults
