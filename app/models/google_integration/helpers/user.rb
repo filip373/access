@@ -2,7 +2,8 @@ module GoogleIntegration
   module Helpers
     class User
       def self.email_to_username(email)
-        email.sub(domains_regexp, '')
+        email.try(:sub, domains_regexp, '')
+      end
 
       def self.any_email_to_username(email)
         email.try(:split, '@').try(:first)
