@@ -166,10 +166,12 @@ describe User do
 
     let(:yaml_object) { YAML.load user.to_yaml }
 
-    it { expect(yaml_object.keys.count).to eq 2 }
+    it { expect(yaml_object.keys.count).to eq 3 }
     it { expect(yaml_object.keys.first).to eq 'name' }
     it { expect(yaml_object.keys.second).to eq 'github' }
+    it { expect(yaml_object.keys.third).to eq 'email' }
     it { expect(yaml_object.values.first).to eq user.full_name }
     it { expect(yaml_object.values.second).to eq user.github }
+    it { expect(yaml_object.values.third).to eq user.email }
   end
 end

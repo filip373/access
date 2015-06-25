@@ -73,6 +73,7 @@ class User
     {
       name: full_name,
       github: github,
+      email: email,
     }.stringify_keys.to_yaml
   end
 
