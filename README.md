@@ -20,6 +20,7 @@ Sample permissions directory looks like this: https://github.com/netguru/access-
  - [Adding groups] (#adding-groups)
  - [Adding group aliases] (#adding-group-aliases)
  - [Removing groups] (#removing-groups)
+ - [Creating google accounts] (#creating-google-accounts)
 - [Flow for applying the changes.] (#flow-for-applying-the-changes)
 - [Setup] (#setup)
 - [FAQ] (#faq)
@@ -63,6 +64,7 @@ Adding a repository that does not exist in to the team file will create an empty
 #### Deleting teams
 Delete team file from repository and go to github/diff screen. It should display teams that do not have their files in permissions repository any more. You can confirm and delete them by pressing delete button under 'stranded' teams.
 
+
 ## Google apps
 
 #### Adding groups
@@ -82,6 +84,28 @@ See example here: https://github.com/netguru/access-permissions-sample/blob/mast
 #### Removing groups
 
 To remove google group just remove it's file from the google groups folder. The application should display "stranded" groups on diff screen. You can confirm the deletion there.
+
+#### Creating google accounts
+
+To create a new google account you need to add new yaml file with user. The file should be created inside of directory named the same like company from `config.yml` (e.g. `permissions/users/company_name/firstname.lastname.yml`).
+
+Filename will be an account login (e.g. if your main_domain is `company_name.com` created email will look like `firstname.lastname@company_name.com`).
+
+Remember to include in the yml file following attributes:
+- `name:` which should be a full name of the person
+- `github` which is github login of the person (if you use that service)
+
+You can find sample user file here:
+https://github.com/netguru/access-permissions-sample/blob/master/users/user_group/jane.kowalski.yml
+
+Since the file is added you will see it under header 'Missing user's account' in google show diff `google/show_diff` action. Then to create missing accounts just click button 'Create accounts'. 
+The application will:
+- create missing accounts, 
+- generate 2step codes, 
+- reset password (user will be asked to change it while first login), 
+- will post gmail filters 
+- and finally will send email to email specified in `AppConfig.office_email` containing details necessary to login, 2step codes and short instruction.
+
 
 ## Flow for applying the changes.
 
