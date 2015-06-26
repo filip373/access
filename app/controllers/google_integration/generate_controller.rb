@@ -14,18 +14,6 @@ module GoogleIntegration
       redirect_to root_path
     end
 
-    def users
-      Generate::Users.new(
-        google_api,
-        gh_api,
-        permissions_dir,
-      ).call
-
-      flash[:notice] = 'Users have been created'
-
-      redirect_to '/'
-    end
-
     private
 
     def permissions_dir
