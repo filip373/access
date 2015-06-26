@@ -29,6 +29,9 @@ defaults: &defaults
     client_secret: 'Same here, bro. Totally and utterly in sec_config. Chillin'
     application_name: 'Access'
     application_version: '0.0.1'
+    email:
+      account_using_instruction: |
+                                 Short description how to use account creation details, how to login in using 2step. This should be overriden in sec-config.
   features:
     google_integration: false
     generate_permissions: false
