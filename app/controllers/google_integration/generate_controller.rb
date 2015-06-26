@@ -5,7 +5,7 @@ module GoogleIntegration
 
     def permissions
       Generate::GooglePermissions.new(
-        api_groups,
+        google_api.list_groups_full_info,
         permissions_dir,
       ).call
 
@@ -18,13 +18,6 @@ module GoogleIntegration
 
     def permissions_dir
       Rails.root.join('tmp/new_permissions/')
-    end
-
-    def api_groups
-      Rails.cache.fetch 'api_groups' do
-        google_api = Api.new(session[:credentials])
-        google_api.list_groups_full_info
-      end
     end
   end
 end
