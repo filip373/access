@@ -1,7 +1,7 @@
 class MainController < ApplicationController
+  include ::GithubApi
   before_action :check_permissions
 
-  expose(:gh_api) { GithubIntegration::Api.new(session[:gh_token], AppConfig.company) }
   expose(:validation_errors) { Storage.validation_errors }
 
   def index
