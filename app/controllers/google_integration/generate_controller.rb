@@ -1,7 +1,7 @@
 module GoogleIntegration
-  class GenerateController < GoogleIntegration::BaseController
-    before_filter :google_auth_required, unless: :google_logged_in?
-    rescue_from ArgumentError, with: :google_error
+  class GenerateController < ApplicationController
+    include GoogleApi
+    include GithubApi
 
     def permissions
       Generate::GooglePermissions.new(
@@ -37,14 +37,6 @@ module GoogleIntegration
         google_api = Api.new(session[:credentials])
         google_api.list_groups_full_info
       end
-    end
-
-    def google_api
-      GoogleIntegration::Api.new(session[:credentials])
-    end
-
-    def gh_api
-      GithubIntegration::Api.new(session[:gh_token], AppConfig.company)
     end
   end
 end
