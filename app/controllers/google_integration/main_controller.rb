@@ -1,8 +1,9 @@
 require 'google/api_client'
 
 module GoogleIntegration
-  class MainController < GoogleIntegration::BaseController
-    before_filter :google_auth_required, unless: :google_logged_in?
+  class MainController < ApplicationController
+    include ::GoogleApi
+
 
     expose(:expected_groups) { Groups.all }
     expose(:google_log_errors) { log.errors }
@@ -60,7 +61,7 @@ module GoogleIntegration
 
     def api_groups
       Rails.cache.fetch 'api_groups' do
-        @google_diff.api_groups
+        google_api.list_groups_full_info
       end
     end
 
