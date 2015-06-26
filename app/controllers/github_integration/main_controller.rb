@@ -1,7 +1,8 @@
 module GithubIntegration
   class MainController < ApplicationController
+    include ::GithubApi
+
     expose(:validation_errors) { Storage.validation_errors }
-    expose(:gh_api) { Api.new(session[:gh_token], AppConfig.company) }
     expose(:expected_teams) { Teams.all }
     expose(:gh_teams) { gh_api.list_teams }
     expose(:gh_log) { Actions::Log.new(calculated_diff).now! }
