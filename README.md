@@ -6,6 +6,24 @@ This makes managing permissions very easy, and also makes it possible for your u
 
 Sample permissions directory looks like this: https://github.com/netguru/access-permissions-sample
 
+## Table of contents
+
+
+- [Adding / editing users] (#adding--editing-users)
+- [Github] (#github)
+ - [Adding / editing github teams] (#adding--editing-github-teams)
+ - [User naming within permissions repo] (#user-naming-within-permissions-repo)
+ - [Adding new repositories] (#adding-new-repositories)
+ - [Deleting users] (#deleting-users)
+ - [Deleting teams] (#deleting-teams)
+- [Google apps] (#google-apps)
+ - [Adding groups] (#adding-groups)
+ - [Adding group aliases] (#adding-group-aliases)
+ - [Removing groups] (#removing-groups)
+- [Flow for applying the changes.] (#flow-for-applying-the-changes)
+- [Setup] (#setup)
+- [FAQ] (#faq)
+
 ### Adding / editing users
 Before you add team to google group or github team you have to first create a data file for this user:
 
@@ -77,7 +95,7 @@ Once you are done editing / creating the files you should apply new permissions:
 A good idea is to use `rake notify` in your CI to notify the owners that changes to the permissions repo were made.
 
 
-## Setup
+### Setup
 
 ### FAQ
 
