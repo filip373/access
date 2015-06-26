@@ -1,6 +1,6 @@
 module Generate
   class Users
-    pattr_initialize :google_api, :gh_api, :users_dir
+    pattr_initialize :google_api, :gh_api, :permissions_dir
 
     def call
       recreate_users_dir
@@ -83,11 +83,15 @@ module Generate
     end
 
     def company_users_dir
-      users_dir.join "users/#{AppConfig.company}"
+      users_dir.join "#{AppConfig.company}"
     end
 
     def external_users_dir
-      users_dir.join 'users/external'
+      users_dir.join 'external'
+    end
+
+    def users_dir
+      permissions_dir.join 'users'
     end
 
     def recreate_users_dir
