@@ -154,3 +154,9 @@ if domain is really used in setup project.
 - check if you try to login with the proper user. You must login with administrator of the account.
 - remember to restart server and clean session after each attempt to fix from above steps.
 
+#### 2. Request rate is higher than expected error (or Backend Error) (google api show diff)
+- to mitigate this problem you should change quotas - per-user limit:
+  - go to `https://console.google.com` and and find the app you're using for access
+  - go to APIs/EnabledAPIs/Groups Settings API/Quotas
+  - edit `Per-user limit` setting, and rise the request limit to something more reasonable (eg. 1000)
+  - do the same for Admin SDK
