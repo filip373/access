@@ -33,7 +33,6 @@ defaults: &defaults
       account_using_instruction: |
                                  Short description how to use account creation details, how to login in using 2step. This should be overriden in sec-config.
   features:
-    google_integration: false
     generate_permissions: false
 
 test:
@@ -43,8 +42,6 @@ test:
 
 development:
   <<: *defaults
-  features:
-    google_integration: true
   cache_data: true
 
 staging:
