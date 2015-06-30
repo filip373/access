@@ -64,23 +64,29 @@ RSpec.describe GoogleIntegration::Actions::Diff do
         whoCanViewGroup: 'ALL_MEMBERS_CAN_VIEW',
       )
     end
-    context 'localy is open, but on google it is closed group' do
-      let(:group_settings) do
-        privacy_closed
+
+    context 'defaults are not set' do
+      before do
+        allow(GoogleIntegration::Defaults).to receive(:default_yaml) { '' }
+      end
+      context 'localy is open, but on google it is a closed group' do
+        let(:group_settings) do
+          privacy_closed
+        end
+
+        it 'overwrites changes on google' do
+          expect(subject[:change_privacy][group1].open?).to be_truthy
+        end
       end
 
-      it 'overwrites changes on google' do
-        expect(subject[:change_privacy][group1].open?).to be_truthy
-      end
-    end
+      context 'localy and on google privacy is open' do
+        let(:group_settings) do
+          privacy_open
+        end
 
-    context 'localy and on google privacy is open' do
-      let(:group_settings) do
-        privacy_open
-      end
-
-      it 'does not list the change' do
-        expect(subject[:change_privacy][group1]).to be_nil
+        it 'does not list the change' do
+          expect(subject[:change_privacy][group1]).to be_nil
+        end
       end
     end
   end
