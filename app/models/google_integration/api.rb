@@ -3,13 +3,14 @@ require 'google/api_client/client_secrets'
 
 module GoogleIntegration
   class Api
-    attr_reader :errors
+    attr_reader :errors, :authorization_client
 
     MAX_RESULTS_LIMIT = 500
 
-    def initialize(credentials)
-      authorize_client(credentials)
+    def initialize(credentials, authorization: UserAccountAuthorization)
       @errors = {}
+      @authorization_client = authorization.new(credentials: credentials).authorize!
+      authorize_client!
     end
 
     # groups
@@ -201,8 +202,8 @@ module GoogleIntegration
       end
     end
 
-    def authorize_client(credentials)
-      client.authorization = ::Signet::OAuth2::Client.new(credentials)
+    def authorize_client!
+      client.authorization = authorization_client
     end
 
     def add_general_error(error_message)
