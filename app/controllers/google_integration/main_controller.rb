@@ -4,7 +4,6 @@ module GoogleIntegration
   class MainController < ApplicationController
     include ::GoogleApi
 
-
     expose(:expected_groups) { Groups.all }
     expose(:google_log_errors) { log.errors }
     expose(:google_log) { log.log }

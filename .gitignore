@@ -22,3 +22,4 @@
 
 # ingore secret files
 config/client_secrets.json
+config/keys
