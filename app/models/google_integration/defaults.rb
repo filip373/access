@@ -1,12 +1,12 @@
 module GoogleIntegration
   class Defaults
-    def defaults
-      @@defaults ||= Hashie::Mash.new(defaults_hash)
+    def self.defaults
+      @defaults ||= Hashie::Mash.new(defaults_hash)
     end
 
-    def defaults_hash
-      return {} unless File.file?(Defaults.default_yaml)
-      YAML.load_file(Defaults.default_yaml)
+    def self.defaults_hash
+      return {} unless File.file?(default_yaml)
+      YAML.load_file(default_yaml)
     end
     private
 
@@ -15,7 +15,7 @@ module GoogleIntegration
     end
 
     def self.method_missing(method)
-      new.defaults[method] || (yield if block_given?)
+      defaults[method] || (yield if block_given?)
     end
   end
 end
