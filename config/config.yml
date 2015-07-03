@@ -1,3 +1,30 @@
+google_defaults: &google_defaults
+  domain_member_id: 'This little guy is in sec-config.'
+  main_domain: netguru.pl
+  other_domains:
+    - netguru.co
+    - netguru.pl
+  scope:
+    - 'email'
+    - 'profile'
+    - 'https://www.googleapis.com/auth/plus.me'
+    - 'https://www.googleapis.com/auth/apps.groups.settings'
+    - 'https://www.googleapis.com/auth/admin.directory.user'
+    - 'https://www.googleapis.com/auth/admin.directory.group'
+    - 'https://www.googleapis.com/auth/admin.directory.user.security'
+  client_id: 'I couldnt possibly be any more in sec_config, than I am now. Just sayin'
+  client_secret: 'Same here, bro. Totally and utterly in sec_config. Chillin'
+  service_account_email: 'mail@sec_config'
+  p12_key_path: 'config/keys/google-service-account-key.p12'
+  p12_key_secret: 'notasecret'
+  supporter_email: 'supporter@netguru.pl'
+  application_name: 'Access'
+  application_version: '0.0.1'
+  email:
+    account_using_instruction: |
+                                Short description how to use account creation details, how to login in using 2step. This should be overriden in sec-config.
+
+
 defaults: &defaults
   rollbar_token: fake-token
   company: netguru
@@ -12,33 +39,7 @@ defaults: &defaults
     client_id: a
     client_secret: b
   google:
-    domain_member_id: 'This little guy is in sec-config.'
-    main_domain: netguru.pl
-    other_domains:
-      - netguru.co
-      - netguru.pl
-    scope:
-      - 'email'
-      - 'profile'
-      - 'https://www.googleapis.com/auth/plus.me'
-      - 'https://www.googleapis.com/auth/apps.groups.settings'
-      - 'https://www.googleapis.com/auth/admin.directory.user'
-      - 'https://www.googleapis.com/auth/admin.directory.group'
-      - 'https://www.googleapis.com/auth/admin.directory.user.security'
-    client_id: 'I couldnt possibly be any more in sec_config, than I am now. Just sayin'
-    client_secret: 'Same here, bro. Totally and utterly in sec_config. Chillin'
-    service_account_email: 'mail@sec_config'
-    p12_key_path: 'config/keys/google-service-account-key.p12'
-    p12_key_secret: 'notasecret'
-    supporter_email: 'supporter@netguru.pl'
-    application_name: 'Access'
-    application_version: '0.0.1'
-    email:
-      account_using_instruction: |
-                                 Short description how to use account creation details, how to login in using 2step. This should be overriden in sec-config.
-  features:
-    generate_permissions: false
-    use_service_account: false
+    <<: *google_defaults
 
 test:
   <<: *defaults
