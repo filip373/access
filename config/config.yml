@@ -50,10 +50,20 @@ test:
   <<: *defaults
   permissions_repo:
     checkout_dir: 'spec/get_diff_yamls'
+  google:
+    <<: *google_defaults
+    groups_whitelist:
+      - 'group1@netguru.pl'
+  features:
+    use_service_account: 'yep'
+    generate_permissions: 'yep'
 
 development:
   <<: *defaults
   cache_data: true
+  features:
+    generate_permissions: 'yep'
+    use_service_account: 'yep'
 
 staging:
   <<: *defaults
