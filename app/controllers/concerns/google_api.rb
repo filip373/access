@@ -5,6 +5,7 @@ module GoogleApi
     rescue_from ArgumentError, with: :google_error
     rescue_from GoogleIntegration::ApiError, with: :suggest_relogin
     before_filter :google_auth_required, unless: :google_logged_in?
+    before_filter :unauthorized_access, unless: :google_authorized?
   end
 
   def google_api
@@ -12,6 +13,26 @@ module GoogleApi
       session[:credentials],
       authorization: google_authorization
     )
+  end
+
+  def google_authorized?(authorization: GoogleIntegration::Api::UserAccountAuthorization)
+    return true unless AppConfig.features.use_service_account?
+    credentials = session[:credentials]
+
+    return false if credentials.nil?
+    return true if permitted_members.empty?
+
+    user_email = authorization.new(
+      credentials: credentials
+    ).email
+    username = GoogleIntegration::Helpers::User.email_to_username(user_email)
+
+    permitted_members.include? username
+  end
+
+  def unauthorized_access
+    flash[:danger] = "Unauthorized access!"
+    redirect_to root_url
   end
 
   def google_logged_in?
@@ -42,6 +63,15 @@ module GoogleApi
       'Missing authorization code.',
       'Missing access token.',
     ]
+  end
+
+  def permitted_members
+    return [] unless AppConfig.google.managers?
+
+    group_managers = Array(AppConfig.google.managers.groups)
+    group_managers.map do |group_name|
+      GoogleIntegration::Groups.find_by(name: group_name).try(:members) || []
+    end.flatten.uniq
   end
 
   def google_authorization
