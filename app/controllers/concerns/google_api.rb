@@ -8,7 +8,10 @@ module GoogleApi
   end
 
   def google_api
-    @google_api ||= GoogleIntegration::Api.new(session[:credentials])
+    @google_api ||= GoogleIntegration::Api.new(
+      session[:credentials],
+      authorization: google_authorization
+    )
   end
 
   def google_logged_in?
@@ -39,5 +42,13 @@ module GoogleApi
       'Missing authorization code.',
       'Missing access token.',
     ]
+  end
+
+  def google_authorization
+    if AppConfig.features.use_service_account?
+      GoogleIntegration::Api::ServiceAccountAuthorization
+    else
+      GoogleIntegration::Api::UserAccountAuthorization
+    end
   end
 end
