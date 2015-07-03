@@ -2,9 +2,14 @@ require 'rails_helper'
 
 RSpec.describe GoogleIntegration::MainController do
   include_context 'google_api'
+  it_behaves_like 'a google_api'
+
   before(:each) do
     allow(controller).to receive(:google_auth_required).and_return(true)
     allow(controller).to receive(:gh_auth_required).and_return(true)
+    if AppConfig.features.use_service_account?
+      allow(controller).to receive(:unauthorized_access).and_return(true)
+    end
     allow(GoogleIntegration::Api).to receive(:new).and_return(google_api)
     UpdateRepo.stub(:now!).and_return(true)
   end
