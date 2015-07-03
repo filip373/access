@@ -13,6 +13,10 @@ module GoogleIntegration
       end
     end
 
+    def self.find_by(name:)
+      all.find { |group| group.name == name }
+    end
+
     private
 
     def self.raw_data
