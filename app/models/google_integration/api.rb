@@ -34,20 +34,22 @@ module GoogleIntegration
     end
 
     def set_domain_membership(group_id)
-      return unless GroupPolicy.edit?(group_id)
-      request(
-        api_method: directory_api.members.insert,
-        parameters: { groupKey: group_id },
-        body_object: { id: AppConfig.google.domain_member_id, role: 'MEMBER' },
-      )
+      force_user_authorization do
+        request(
+          api_method: directory_api.members.insert,
+          parameters: { groupKey: group_id },
+          body_object: { id: AppConfig.google.domain_member_id, role: 'MEMBER' },
+        )
+      end
     end
 
     def unset_domain_membership(group_id)
-      return unless GroupPolicy.edit?(group_id)
-      request(
-        api_method: directory_api.members.delete,
-        parameters: { groupKey: group_id, memberKey: AppConfig.google.domain_member_id },
-      )
+      force_user_authorization do
+        request(
+          api_method: directory_api.members.delete,
+          parameters: { groupKey: group_id, memberKey: AppConfig.google.domain_member_id },
+        )
+      end
     end
 
     def list_groups
@@ -90,11 +92,12 @@ module GoogleIntegration
     end
 
     def remove_group(group_id)
-      return unless GroupPolicy.edit?(group_id)
-      request(
-        api_method: directory_api.groups.delete,
-        parameters: { groupKey: group_id },
-      )
+      force_user_authorization do
+        request(
+          api_method: directory_api.groups.delete,
+          parameters: { groupKey: group_id },
+        )
+      end
     end
 
     def add_alias(group_id, google_alias)
@@ -135,28 +138,32 @@ module GoogleIntegration
     # user
 
     def reset_password(user_email, password)
-      request(
-        api_method: directory_api.users.patch,
-        parameters: { userKey:  user_email },
-        body_object: {
-          password: password,
-          changePasswordAtNextLogin: true,
-        },
-      )
+      force_user_authorization do
+        request(
+          api_method: directory_api.users.patch,
+          parameters: { userKey:  user_email },
+          body_object: {
+            password: password,
+            changePasswordAtNextLogin: true,
+          },
+        )
+      end
     end
 
     def create_user(params)
-      request(
-        api_method: directory_api.users.insert,
-        body_object: {
-          name: {
-            familyName: params[:last_name],
-            givenName: params[:first_name],
+      force_user_authorization do
+        request(
+          api_method: directory_api.users.insert,
+          body_object: {
+            name: {
+              familyName: params[:last_name],
+              givenName: params[:first_name],
+            },
+            primaryEmail: params[:email],
+            password: params[:password],
           },
-          primaryEmail: params[:email],
-          password: params[:password],
-        },
-      )
+        )
+      end
     end
 
     def list_users
@@ -182,30 +189,36 @@ module GoogleIntegration
     end
 
     def generate_codes(user_email)
-      request(
-        api_method: directory_api.verification_codes.generate,
-        parameters: { userKey: user_email },
-      )
+      force_user_authorization do
+        request(
+          api_method: directory_api.verification_codes.generate,
+          parameters: { userKey: user_email },
+        )
+      end
     end
 
     def get_codes(user_email)
-      codes = request(
-        api_method: directory_api.verification_codes.list,
-        parameters: { userKey: user_email },
-      )
-      codes['items'].map { |e| e['verificationCode'] }
+      force_user_authorization do
+        codes = request(
+          api_method: directory_api.verification_codes.list,
+          parameters: { userKey: user_email },
+        )
+        codes['items'].map { |e| e['verificationCode'] }
+      end
     end
 
     def post_filters(login)
-      Dir.glob("#{Rails.root}/static_data/gmail_filters/*").each do |filter|
-        filter = File.read(filter)
-        url = "https://apps-apis.google.com/a/feeds/emailsettings/2.0/#{AppConfig.google.main_domain}/#{login}/filter"
-        client.execute(
-          uri: url,
-          body: filter,
-          headers: { 'Content-Type' => 'application/atom+xml' },
-          http_method: 'POST',
-        )
+      force_user_authorization do
+        Dir.glob("#{Rails.root}/static_data/gmail_filters/*").each do |filter|
+          filter = File.read(filter)
+          url = "https://apps-apis.google.com/a/feeds/emailsettings/2.0/#{AppConfig.google.main_domain}/#{login}/filter"
+          client.execute(
+            uri: url,
+            body: filter,
+            headers: { 'Content-Type' => 'application/atom+xml' },
+            http_method: 'POST',
+          )
+        end
       end
     end
 
