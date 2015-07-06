@@ -16,7 +16,7 @@ module GoogleIntegration
     # groups
 
     def add_member(group_id, user_email)
-      return unless GroupPolicy.edit?(group_id)
+      return unless GroupPolicy.edit?(group_id, admin?)
       request(
         api_method: directory_api.members.insert,
         parameters: { groupKey: group_id },
@@ -25,7 +25,7 @@ module GoogleIntegration
     end
 
     def remove_member(group_id, user_email)
-      return unless GroupPolicy.edit?(group_id)
+      return unless GroupPolicy.edit?(group_id, admin?)
       request(
         api_method: directory_api.members.delete,
         parameters: { groupKey: group_id, memberKey: user_email },
@@ -97,7 +97,7 @@ module GoogleIntegration
     end
 
     def add_alias(group_id, google_alias)
-      return unless GroupPolicy.edit?(group_id)
+      return unless GroupPolicy.edit?(group_id, admin?)
       request(
         api_method: directory_api.groups.aliases.insert,
         parameters: { groupKey: group_id },
@@ -106,7 +106,7 @@ module GoogleIntegration
     end
 
     def remove_alias(group_id, google_alias)
-      return unless GroupPolicy.edit?(group_id)
+      return unless GroupPolicy.edit?(group_id, admin?)
       request(
         api_method: directory_api.groups.aliases.delete,
         parameters: { groupKey: group_id, alias: google_alias },
@@ -114,7 +114,7 @@ module GoogleIntegration
     end
 
     def change_group_privacy_setting(group, privacy)
-      return unless GroupPolicy.edit?(group.email)
+      return unless GroupPolicy.edit?(group.email, admin?)
       request(
         api_method: groups_settings_api.groups.update,
         parameters: { 'groupUniqueId' => group.email },
@@ -123,7 +123,7 @@ module GoogleIntegration
     end
 
     def change_group_archive_setting(group, flag)
-      return unless GroupPolicy.edit?(group.email)
+      return unless GroupPolicy.edit?(group.email, admin?)
       request(
         api_method: groups_settings_api.groups.update,
         parameters: { 'groupUniqueId' => group.email },
@@ -163,6 +163,21 @@ module GoogleIntegration
         api_method: directory_api.users.list,
         parameters: { domain: AppConfig.google.main_domain, maxResults: MAX_RESULTS_LIMIT },
       ).fetch('users')
+    end
+
+    def admin?
+      @is_admin ||= request(
+        api_method: directory_api.users.get,
+        parameters: { userKey: user_email }
+      ).fetch('isAdmin')
+    end
+
+    def user_email
+      @user_email ||= force_user_authorization do
+        request(
+          api_method: oauth2_api.userinfo.get
+        ).fetch('email') { '' }
+      end
     end
 
     def generate_codes(user_email)
