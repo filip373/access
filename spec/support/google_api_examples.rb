@@ -1,10 +1,7 @@
 shared_examples 'a google_api' do
   describe '#google_authorized?' do
+    before { allow(controller.google_api).to receive(:user_info) { user } }
     let(:mock_authorization) { GoogleIntegration::Api::MockAccountAuthorization }
-
-    before do
-      allow_any_instance_of(mock_authorization).to receive(:email) { user.email }
-    end
 
     subject { controller.google_authorized?(authorization: mock_authorization) }
 
@@ -13,6 +10,8 @@ shared_examples 'a google_api' do
         before { session[:credentials] = { some: :valid_credentials } }
 
         context 'user is permitted to manage google groups' do
+          before { allow(controller).to receive(:permitted_members) { [members.first.email] } }
+
           let(:user) { members.first }
           it { is_expected.to be_truthy }
 
@@ -23,13 +22,15 @@ shared_examples 'a google_api' do
         end
 
         context 'managers are not set' do
-          let(:user) { members.last }
+          let(:user) { members[1] }
           before { allow(controller).to receive(:permitted_members) { [] } }
           it { is_expected.to be_truthy }
         end
 
         context 'user is not permitted to manage google groups' do
-          let(:user) { members.last }
+          before { allow(controller).to receive(:permitted_members) { [members.first.email] } }
+
+          let(:user) { members[1] }
           it { is_expected.to be_falsy }
         end
       end
