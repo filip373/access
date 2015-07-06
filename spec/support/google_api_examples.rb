@@ -1,35 +1,42 @@
 shared_examples 'a google_api' do
   describe '#google_authorized?' do
-    before { allow(controller.google_api).to receive(:user_info) { user } }
+    before do
+      allow(controller.google_api).to receive(:user_email) { user.email }
+      allow(controller.google_api).to receive(:admin?) { admin? }
+      allow(controller).to receive(:permitted_members) { permitted_members }
+    end
     let(:mock_authorization) { GoogleIntegration::Api::MockAccountAuthorization }
+    let(:admin?) { false }
+    let(:permitted_members) { [members.first.email] }
 
-    subject { controller.google_authorized?(authorization: mock_authorization) }
+    subject { controller.google_authorized? }
 
     if AppConfig.features.use_service_account?
       context 'user is authorized' do
         before { session[:credentials] = { some: :valid_credentials } }
 
+        context 'user is s an admin' do
+          let(:admin?) { true }
+          it { is_expected.to be_truthy }
+        end
+
         context 'user is permitted to manage google groups' do
-          before { allow(controller).to receive(:permitted_members) { [members.first.email] } }
 
           let(:user) { members.first }
           it { is_expected.to be_truthy }
 
           context 'managers are not set' do
-            before { allow(controller).to receive(:permitted_members) { [] } }
             it { is_expected.to be_truthy }
           end
         end
 
         context 'managers are not set' do
           let(:user) { members[1] }
-          before { allow(controller).to receive(:permitted_members) { [] } }
+          let(:permitted_members) { [] }
           it { is_expected.to be_truthy }
         end
 
         context 'user is not permitted to manage google groups' do
-          before { allow(controller).to receive(:permitted_members) { [members.first.email] } }
-
           let(:user) { members[1] }
           it { is_expected.to be_falsy }
         end
@@ -41,7 +48,7 @@ shared_examples 'a google_api' do
         it { is_expected.to be_falsy }
 
         context 'managers are not set' do
-          before { allow(controller).to receive(:permitted_members) { [] } }
+          let(:permitted_members) { [] }
 
           it { is_expected.to be_falsey }
         end
