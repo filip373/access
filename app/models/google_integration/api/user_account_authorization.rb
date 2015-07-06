@@ -1,5 +1,7 @@
 class GoogleIntegration::Api
   class UserAccountAuthorization < AuthorizationAbstract
+    delegate :access_token, to: :client
+
     def authorize!
       client
     end

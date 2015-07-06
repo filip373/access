@@ -11,5 +11,9 @@ class GoogleIntegration::Api
     def user_info
       self
     end
+
+    def access_token
+      self
+    end
   end
 end
