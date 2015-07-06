@@ -56,6 +56,17 @@ module GoogleIntegration
       ).fetch('groups')
     end
 
+    def list_members(group_id)
+      request(
+        api_method: directory_api.members.list,
+        parameters: {
+          groupKey: group_id,
+          domain: AppConfig.google.main_domain,
+          maxResults: MAX_RESULTS_LIMIT,
+        },
+      ).fetch('members')
+    end
+
     def list_groups_full_info
       return @groups_data.google_groups if @groups_data.present?
       @groups_data =
@@ -182,6 +193,14 @@ module GoogleIntegration
       end
     end
 
+    def user_info(access_token = nil)
+      access_token ||= client.access_token
+      request(
+        api_method: oauth2_api.userinfo.get,
+        parameters: { accessToken: access_token },
+      )
+    end
+
     private
 
     def request(params)
@@ -208,6 +227,12 @@ module GoogleIntegration
     def directory_api
       Rails.cache.fetch 'directory_api' do
         client.discovered_api('admin', 'directory_v1')
+      end
+    end
+
+    def oauth2_api
+      Rails.cache.fetch 'oauth2_api' do
+        client.discovered_api('oauth2')
       end
     end
 
