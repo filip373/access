@@ -26,9 +26,7 @@ module GoogleApi
       credentials: credentials
     ).access_token
     user_email = google_api.user_info(access_token).fetch('email') { '' }
-    username = GoogleIntegration::Helpers::User.email_to_username(user_email)
-
-    permitted_members.include? username
+    permitted_members.include? user_email
   end
 
   def unauthorized_access
@@ -71,8 +69,10 @@ module GoogleApi
 
     group_managers = Array(AppConfig.google.managers.groups)
     group_managers.map do |group_name|
-      GoogleIntegration::Groups.find_by(name: group_name).try(:members) || []
-    end.flatten.uniq
+      google_api
+        .list_members("#{group_name}@#{AppConfig.google.main_domain}")
+        .map { |member| member['email'] }
+    end.compact.flatten.uniq
   end
 
   def google_authorization
