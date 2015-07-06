@@ -9,6 +9,7 @@ module GoogleIntegration
 
     def initialize(credentials, authorization: UserAccountAuthorization)
       @errors = {}
+      @credentials = credentials
       @authorization_client = authorization.new(credentials: credentials).authorize!
       authorize_client!
     end
@@ -215,6 +216,14 @@ module GoogleIntegration
       return unless result.response.body.present?
       response = JSON.parse(result.response.body)
       raise ApiError.new(response['error'].to_s) if response.key? 'error'
+      response
+    end
+
+    def force_user_authorization(&block)
+      backup_authorization = client.authorization
+      client.authorization = UserAccountAuthorization.new(credentials: @credentials).authorize!
+      response = block.call
+      client.authorization = backup_authorization
       response
     end
 
