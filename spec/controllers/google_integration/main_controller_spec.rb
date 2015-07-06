@@ -13,7 +13,7 @@ RSpec.describe GoogleIntegration::MainController do
 
   context 'is permitted to manage google groups' do
     before do
-      if AppConfig.features.use_service_account?
+      if AppConfig.features.use_service_account? && AppConfig.features.use_service_account
         allow(controller).to receive(:google_authorized?).and_return(true)
       end
     end

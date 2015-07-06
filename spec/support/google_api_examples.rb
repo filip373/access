@@ -11,7 +11,7 @@ shared_examples 'a google_api' do
 
     subject { controller.google_authorized? }
 
-    if AppConfig.features.use_service_account?
+    if AppConfig.features.use_service_account? && AppConfig.features.use_service_account
       context 'user is authorized' do
         before { session[:credentials] = { some: :valid_credentials } }
 

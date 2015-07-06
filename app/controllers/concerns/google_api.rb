@@ -16,7 +16,7 @@ module GoogleApi
   end
 
   def google_authorized?
-    return true unless AppConfig.features.use_service_account?
+    return true unless (AppConfig.features.use_service_account? && AppConfig.features.use_service_account)
     credentials = session[:credentials]
 
     return false if credentials.nil?
@@ -73,7 +73,7 @@ module GoogleApi
   end
 
   def google_authorization
-    if AppConfig.features.use_service_account?
+    if AppConfig.features.use_service_account? && AppConfig.features.use_service_account
       GoogleIntegration::Api::ServiceAccountAuthorization
     else
       GoogleIntegration::Api::UserAccountAuthorization
