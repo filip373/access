@@ -208,14 +208,6 @@ module GoogleIntegration
       end
     end
 
-    def user_info(access_token = nil)
-      access_token ||= client.access_token
-      request(
-        api_method: oauth2_api.userinfo.get,
-        parameters: { accessToken: access_token },
-      )
-    end
-
     private
 
     def request(params)
