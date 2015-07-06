@@ -15,18 +15,15 @@ module GoogleApi
     )
   end
 
-  def google_authorized?(authorization: GoogleIntegration::Api::UserAccountAuthorization)
+  def google_authorized?
     return true unless AppConfig.features.use_service_account?
     credentials = session[:credentials]
 
     return false if credentials.nil?
     return true if permitted_members.empty?
+    return true if google_api.admin?
 
-    access_token = authorization.new(
-      credentials: credentials
-    ).access_token
-    user_email = google_api.user_info(access_token).fetch('email') { '' }
-    permitted_members.include? user_email
+    permitted_members.include? google_api.user_email
   end
 
   def unauthorized_access
