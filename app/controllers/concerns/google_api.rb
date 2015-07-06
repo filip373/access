@@ -22,9 +22,10 @@ module GoogleApi
     return false if credentials.nil?
     return true if permitted_members.empty?
 
-    user_email = authorization.new(
+    access_token = authorization.new(
       credentials: credentials
-    ).email
+    ).access_token
+    user_email = google_api.user_info(access_token).fetch('email') { '' }
     username = GoogleIntegration::Helpers::User.email_to_username(user_email)
 
     permitted_members.include? username
