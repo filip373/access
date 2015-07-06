@@ -6,18 +6,6 @@ class GoogleIntegration::Api
       client
     end
 
-    def email
-      user_info.email
-    end
-
-    def user_info
-      return @user_info if @user_info.present?
-      response = client.fetch_protected_resource(
-        uri: user_info_uri(client.access_token)
-      )
-      @user_info = Hashie::Mash.new(JSON.parse(response.body))
-    end
-
     private
 
     def client
