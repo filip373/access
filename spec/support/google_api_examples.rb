@@ -21,7 +21,6 @@ shared_examples 'a google_api' do
         end
 
         context 'user is permitted to manage google groups' do
-
           let(:user) { members.first }
           it { is_expected.to be_truthy }
 
