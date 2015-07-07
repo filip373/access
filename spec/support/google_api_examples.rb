@@ -31,13 +31,13 @@ shared_examples 'a google_api' do
         end
 
         context 'managers are not set' do
-          let(:user) { members[1] }
+          let(:user) { members.second }
           let(:permitted_members) { [] }
           it { is_expected.to be_truthy }
         end
 
         context 'user is not permitted to manage google groups' do
-          let(:user) { members[1] }
+          let(:user) { members.second }
           it { is_expected.to be_falsy }
         end
       end
