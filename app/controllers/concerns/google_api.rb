@@ -11,12 +11,12 @@ module GoogleApi
   def google_api
     @google_api ||= GoogleIntegration::Api.new(
       session[:credentials],
-      authorization: google_authorization
+      authorization: google_authorization,
     )
   end
 
   def google_authorized?
-    return true unless (AppConfig.features.use_service_account? && AppConfig.features.use_service_account)
+    return true unless use_service_account?
     credentials = session[:credentials]
 
     return false if credentials.nil?
@@ -27,7 +27,7 @@ module GoogleApi
   end
 
   def unauthorized_access
-    flash[:danger] = "Unauthorized access!"
+    flash[:danger] = 'Unauthorized access!'
     redirect_to root_url
   end
 
@@ -64,12 +64,11 @@ module GoogleApi
   def permitted_members
     return [] unless AppConfig.google.managers?
 
-    group_managers = Array(AppConfig.google.managers.groups)
-    group_managers.map do |group_name|
+    Array(AppConfig.google.managers.groups).flat_map do |group_name|
       google_api
         .list_members("#{group_name}@#{AppConfig.google.main_domain}")
         .map { |member| member['email'] }
-    end.compact.flatten.uniq
+    end.compact.uniq
   end
 
   def google_authorization
@@ -78,5 +77,9 @@ module GoogleApi
     else
       GoogleIntegration::Api::UserAccountAuthorization
     end
+  end
+
+  def use_service_account?
+    AppConfig.features.use_service_account? && AppConfig.features.use_service_account
   end
 end
