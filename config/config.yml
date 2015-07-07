@@ -17,7 +17,7 @@ google_defaults: &google_defaults
   service_account_email: 'mail@sec_config'
   p12_key_path: 'config/keys/google-service-account-key.p12'
   p12_key_secret: 'notasecret'
-  supporter_email: 'supporter@your.company.org'
+  supporter_email: 'supporter@your.company.dev'
   application_name: 'Access'
   application_version: '0.0.1'
   managers:
