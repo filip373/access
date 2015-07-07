@@ -1,4 +1,4 @@
-- if AppConfig.features.generate_permissions? && AppConfig.features.generate_permissions
+- if Features.on?(:generate_permissions)
   .jumbotron
     %h2 Do you want to generate github teams yaml files for permissions?
     = form_tag github_generate_permissions_path, method: :get do
