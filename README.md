@@ -22,8 +22,13 @@ Sample permissions directory looks like this: https://github.com/netguru/access-
 - [Google apps] (#google-apps)
   - [Adding groups] (#adding-groups)
   - [Adding group aliases] (#adding-group-aliases)
+  - [Group settings] (#group-settings)
+    - [Privacy] (#privacy)
+    - [Archive] (#archive)
+    - [Default config] (#default-config)
   - [Removing groups] (#removing-groups)
   - [Creating google accounts] (#creating-google-accounts)
+  - [Service Account authorization] (#service-account-authorization)
 - [Flow for applying the changes.] (#flow-for-applying-the-changes)
 - [FAQ] (#faq)
 
@@ -40,7 +45,15 @@ Enable the following APIs:
 Sec-config is file which override `config.yml`. In that file you should have most of the configuration of the access app. 
 
 ### Import data from services
-Before you start using the access app you first need to create repo `permissions`. We created a feature to help you to import the data from services used by your organization configured in your `sec_config.yml`
+Before you start using the access app you first need to create a `permissions` repo. We created a feature to help you to import the data from services used by your organization configured in your `sec_config.yml`
+
+```yaml
+your_environment:
+  features:
+    generate_permissions: true
+```
+
+After enabling this feature, you can go to main page and generate necessary files. The files will reside in your rails root directory at `tmp/new_permissions` dir ready to be copied to your `permissions` repo.
 
 #### Github Teams
 To import github data from Github API to permissions directory you just need click button 'Generate github teams' on main page of the access app. Files will be saved in the directory specified in `sec_config.yml` in `AppConfig.permissions_repo.checkout_dir` in subdirectory `/github_teams`. 
@@ -113,6 +126,50 @@ Special `aliases` key in group file allows you to controll group aliases.
 
 See example here: https://github.com/netguru/access-permissions-sample/blob/master/google_groups/sample-group.yml#L6
 
+#### Group settings
+
+##### Privacy
+
+Define the level of privacy for your groups. There are two settings:
+
+```yaml
+privacy: open
+```
+
+or
+
+```yaml
+privacy: closed
+```
+
+when a google group is set to open it means that:
+
+  - all in domain can view this group
+  - it is shown in a group directory
+
+when a google group is set to closed it means that:
+
+  - only members of the group can view it
+  - it is hidden from a group directory
+
+##### Archive
+
+Define if messages in a group should be archived
+
+```yaml
+archive: true/false
+```
+
+##### Default config
+
+you can define the default behavior of privacy and archive by creating a file in your permissions repo `google_defaults.yml`.
+
+```yaml
+group:
+  privacy: open
+  archive: false
+```
+
 #### Removing groups
 
 To remove google group just remove it's file from the google groups folder. The application should display "stranded" groups on diff screen. You can confirm the deletion there.
@@ -138,6 +195,45 @@ The application will:
 - will post gmail filters 
 - and finally will send email to email specified in `AppConfig.office_email` containing details necessary to login, 2step codes and short instruction (from `AppConfig.google.email.account_using_instruction`).
 
+#### Service Account authorization
+
+You might want to authorize more people to apply changes to some google groups but you are reluctant to provide them with admin rights. In that case you can enable a feature `use_service_account: true` to use a Service Account as an authorization strategy.
+
+Then you set who and what can sync: (in sec_config.yml)
+
+1. what google groups can manage sync:
+
+```yaml
+google:
+  managers:
+    groups:
+      - 'support'
+      - 'managers'
+      - 'founders'
+```
+
+2. what group emails can they manage (these are turned into regexp later on):
+
+```yaml
+google:
+  groups:
+  - .*-supported@.*
+  - special-group-managed-by-support.*
+```
+
+Now you also need to activate a service account on google and configure it properly:
+
+- go to console.google.com
+- go to credentials - and create a new client id http://screencast.com/t/PjRw88ySI
+- copy service account email to sec_config.yml (google.service_account_email)
+- copy p12 file to server
+- set p12_key_path and secret in sec config
+- go to admin.google.com
+- go to security/show more/advanced/Manage API client access
+- http://screencast.com/t/5gIEyb0vtl
+- setup groups whitelists (which groups can be managed by the support?)
+
+The way how *service accounts* work is that it authenticates through p12 key and then can use google API as another user. So to have this working we need to create a google account with admin rights that the service account could use. You set that account in `sec_config.yml` as a `supporter_email` key.
 
 ## Flow for applying the changes.
 

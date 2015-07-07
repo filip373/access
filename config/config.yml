@@ -55,15 +55,15 @@ test:
     groups_whitelist:
       - 'group1@netguru.pl'
   features:
-    use_service_account: 'yep'
-    generate_permissions: 'yep'
+    use_service_account: true
+    generate_permissions: true
 
 development:
   <<: *defaults
   cache_data: true
   features:
-    generate_permissions: 'yep'
-    use_service_account: 'yep'
+    generate_permissions: true
+    use_service_account: true
 
 staging:
   <<: *defaults
