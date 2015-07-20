@@ -1,7 +1,5 @@
 module GoogleIntegration
   class GroupPolicy
-    @groups = Groups.all
-
     def self.edit?(group_email, is_admin = false)
       return true if is_admin
       whitelist.any? { |regexp| regexp.match group_email }
