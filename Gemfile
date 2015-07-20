@@ -29,6 +29,7 @@ gem 'attr_extras'
 gem 'capistrano'
 gem 'capistrano-bundler'
 gem 'capistrano-passenger'
+gem 'capistrano-upload', require: false
 gem 'capistrano-rails'
 gem 'rvm1-capistrano3', require: false
 

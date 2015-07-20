@@ -1,3 +1,5 @@
+require 'capistrano/upload'
+
 set :application, 'access'
 set :repo_url, 'git://github.com/netguru/access.git'
 set :deploy_to, ENV["DEPLOY_PATH"]
