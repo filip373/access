@@ -8,6 +8,7 @@ module GoogleIntegration
       return {} unless File.file?(default_yaml)
       YAML.load_file(default_yaml)
     end
+
     private
 
     def self.default_yaml

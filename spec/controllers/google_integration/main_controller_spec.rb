@@ -30,16 +30,16 @@ RSpec.describe GoogleIntegration::MainController do
 
       it 'caches missing accounts' do
         controller.missing_accounts # Needs to use exposed variable since views are not rendered
-        expect(Rails.cache.read('calculated_missing_accounts')).to_not be_nil
-        expect(Rails.cache.read('calculated_missing_accounts')).to be_a Array
-        expect(Rails.cache.read('calculated_missing_accounts')).to_not be_empty
+        expect(Rails.cache.read('google_calculated_missing_accounts')).to_not be_nil
+        expect(Rails.cache.read('google_calculated_missing_accounts')).to be_a Array
+        expect(Rails.cache.read('google_calculated_missing_accounts')).to_not be_empty
       end
 
       it 'caches google_diff value' do
         controller.google_log # Needs to use exposed variable since views are not rendered
-        expect(Rails.cache.read('calculated_diff')).to_not be_nil
-        expect(Rails.cache.read('calculated_diff')).to be_a Hash
-        expect(Rails.cache.read('calculated_diff')).to_not be_empty
+        expect(Rails.cache.read('google_calculated_diff')).to_not be_nil
+        expect(Rails.cache.read('google_calculated_diff')).to be_a Hash
+        expect(Rails.cache.read('google_calculated_diff')).to_not be_empty
       end
     end
 
@@ -61,7 +61,7 @@ RSpec.describe GoogleIntegration::MainController do
       end
 
       it 'resets cache' do
-        expect(Rails.cache.read('calculated_missing_accounts')).to be_nil
+        expect(Rails.cache.read('google_calculated_missing_accounts')).to be_nil
       end
     end
   end

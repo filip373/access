@@ -32,11 +32,11 @@ module GithubIntegration
     private
 
     def reset_diff
-      Rails.cache.delete 'calculated_diff'
+      Rails.cache.delete 'github_calculated_diff'
     end
 
     def calculated_diff
-      Rails.cache.fetch 'calculated_diff' do
+      Rails.cache.fetch 'github_calculated_diff' do
         @diff ||= Actions::Diff.new(expected_teams, gh_teams, gh_api)
         @diff.now!
       end

@@ -176,14 +176,14 @@ module GoogleIntegration
     def admin?
       @is_admin ||= request(
         api_method: directory_api.users.get,
-        parameters: { userKey: user_email }
+        parameters: { userKey: user_email },
       ).fetch('isAdmin')
     end
 
     def user_email
       @user_email ||= force_user_authorization do
         request(
-          api_method: oauth2_api.userinfo.get
+          api_method: oauth2_api.userinfo.get,
         ).fetch('email') { '' }
       end
     end
@@ -248,19 +248,19 @@ module GoogleIntegration
     end
 
     def groups_settings_api
-      Rails.cache.fetch 'groups_settings_api' do
+      Rails.cache.fetch 'google_groups_settings_api' do
         client.discovered_api('groupssettings')
       end
     end
 
     def directory_api
-      Rails.cache.fetch 'directory_api' do
+      Rails.cache.fetch 'google_directory_api' do
         client.discovered_api('admin', 'directory_v1')
       end
     end
 
     def oauth2_api
-      Rails.cache.fetch 'oauth2_api' do
+      Rails.cache.fetch 'google_oauth2_api' do
         client.discovered_api('oauth2')
       end
     end

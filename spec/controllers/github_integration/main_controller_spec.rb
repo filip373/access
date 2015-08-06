@@ -24,9 +24,9 @@ RSpec.describe GithubIntegration::MainController do
     end
 
     it 'caches gh_diff value' do
-      expect(Rails.cache.read('calculated_diff')).to_not be_nil
-      expect(Rails.cache.read('calculated_diff')).to be_a Hash
-      expect(Rails.cache.read('calculated_diff')).to_not be_empty
+      expect(Rails.cache.read('github_calculated_diff')).to_not be_nil
+      expect(Rails.cache.read('github_calculated_diff')).to be_a Hash
+      expect(Rails.cache.read('github_calculated_diff')).to_not be_empty
     end
 
     it 'terminates diff actor' do

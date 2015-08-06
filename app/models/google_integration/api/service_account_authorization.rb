@@ -16,14 +16,14 @@ class GoogleIntegration::Api
         scope: AppConfig.google.scope,
         issuer: AppConfig.google.service_account_email,
         signing_key: p12_key,
-        sub: AppConfig.google.supporter_email
+        sub: AppConfig.google.supporter_email,
       )
     end
 
     def p12_key
       Google::APIClient::KeyUtils.load_from_pkcs12(
         Rails.root.join(AppConfig.google.p12_key_path),
-        AppConfig.google.p12_key_secret
+        AppConfig.google.p12_key_secret,
       )
     end
   end

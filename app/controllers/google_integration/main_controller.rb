@@ -41,13 +41,13 @@ module GoogleIntegration
     private
 
     def reset_diff
-      Rails.cache.delete 'calculated_diff'
-      Rails.cache.delete 'calculated_missing_accounts'
-      Rails.cache.delete 'api_groups'
+      Rails.cache.delete 'google_calculated_diff'
+      Rails.cache.delete 'google_calculated_missing_accounts'
+      Rails.cache.delete 'google_api_groups'
     end
 
     def calculated_diff
-      Rails.cache.fetch 'calculated_diff' do
+      Rails.cache.fetch 'google_calculated_diff' do
         @google_diff ||= Actions::Diff.new(expected_groups, google_api)
         @google_diff.now!
       end
@@ -59,13 +59,13 @@ module GoogleIntegration
     end
 
     def api_groups
-      Rails.cache.fetch 'api_groups' do
+      Rails.cache.fetch 'google_api_groups' do
         google_api.list_groups_full_info
       end
     end
 
     def calculated_missing_accounts
-      Rails.cache.fetch 'calculated_missing_accounts' do
+      Rails.cache.fetch 'google_calculated_missing_accounts' do
         Actions::AccountsDiff.new(google_api).now!
       end
     end
