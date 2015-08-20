@@ -4,6 +4,7 @@
 %hr
 - if validation_errors.empty?
   = link_to "Show diff", google_show_diff_path, class: 'btn btn-primary btn-lg'
+  = link_to "List groups", google_show_groups_path, class: 'btn btn-primary btn-lg'
 - else
   %h3 Unable to parse following .yml files:
   %ul.list-group

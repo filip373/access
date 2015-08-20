@@ -1,6 +1,7 @@
 module GoogleIntegration
   class GroupPrivacy
     pattr_initialize :who_can_view_group, :show_in_group_directory
+    attr_reader :show_in_group_directory
 
     OPEN_VIEW_POLICY = 'ALL_IN_DOMAIN_CAN_VIEW'.freeze
     CLOSED_VIEW_POLICY = 'ALL_MEMBERS_CAN_VIEW'.freeze

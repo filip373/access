@@ -12,6 +12,7 @@ GithubApp::Application.routes.draw do
   get 'google/generate_permissions' => 'google_integration/generate#permissions'
   get 'generate_users' => 'generate#users'
   get 'google/show_diff' => 'google_integration/main#show_diff', as: 'google_show_diff'
+  get 'google/show_groups' => 'google_integration/main#show_groups', as: 'google_show_groups'
   post 'google/sync' => 'google_integration/main#sync', as: 'google_sync'
   post 'google/create_accounts' => 'google_integration/main#create_accounts', as: 'create_accounts'
   delete 'google/cleanup_groups' => 'google_integration/main#cleanup_groups', as: 'google_cleanup_groups'

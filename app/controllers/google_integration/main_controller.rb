@@ -14,11 +14,15 @@ module GoogleIntegration
     expose(:missing_groups) { groups_cleanup.stranded_groups }
 
     expose(:missing_accounts) { calculated_missing_accounts }
+    expose(:groups_from_google_api) { api_groups.map { |data| Group.from_google_api(data) } }
 
     def show_diff
       reset_diff
       UpdateRepo.now!
       Storage.reset_data
+    end
+
+    def show_groups
     end
 
     def sync
