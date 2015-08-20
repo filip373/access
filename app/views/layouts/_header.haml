@@ -2,5 +2,8 @@
   .container
     .navbar-header
       = link_to 'Access app', root_path, class: 'navbar-logo'
-    .pull-right
-      = link_to 'relogin google', google_oauth2_path if session[:credentials].present?
+    .collapse.navbar-collapse
+      %ul.nav.navbar-nav
+      %ul.nav.navbar-nav.navbar-right
+        %li
+          = link_to 'relogin google', google_oauth2_path if session[:credentials].present?
