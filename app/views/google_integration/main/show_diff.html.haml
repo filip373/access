@@ -22,6 +22,6 @@
     %h2 Missing user's account
     %h3 Following users are in permissions repository, but can't be found in google api - they most likely should be created.
     = render 'missing_accounts_log'
-    = form_tag create_accounts_path, method: :post do
+    = form_tag google_create_accounts_path, method: :post do
       = button_tag "Create accounts", type: :submit, class: 'btn btn-primary btn-lg', 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> I\'m on it...".html_safe
 
