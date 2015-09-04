@@ -9,8 +9,6 @@ module GoogleIntegration
       YAML.load_file(default_yaml)
     end
 
-    private
-
     def self.default_yaml
       Rails.root.join(AppConfig.permissions_repo.checkout_dir, 'google_defaults.yml')
     end

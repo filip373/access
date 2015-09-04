@@ -21,6 +21,11 @@ module GoogleIntegration
       instance
     end
 
+    def self.from_bool(private_bool)
+      privacy_str = private_bool ? 'closed' : 'open'
+      from_string(privacy_str)
+    end
+
     def open?
       who_can_view_group == OPEN_VIEW_POLICY && show_in_group_directory?
     end

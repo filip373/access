@@ -133,21 +133,21 @@ See example here: https://github.com/netguru/access-permissions-sample/blob/mast
 Define the level of privacy for your groups. There are two settings:
 
 ```yaml
-privacy: open
+private: true
 ```
 
 or
 
 ```yaml
-privacy: closed
+private: false
 ```
 
-when a google group is set to open it means that:
+when a google group is set to open (`private: false`) it means that:
 
   - all in domain can view this group
   - it is shown in a group directory
 
-when a google group is set to closed it means that:
+when a google group is set to closed (`private: true`) it means that:
 
   - only members of the group can view it
   - it is hidden from a group directory
@@ -166,7 +166,7 @@ you can define the default behavior of privacy and archive by creating a file in
 
 ```yaml
 group:
-  privacy: open
+  private: false
   archive: false
 ```
 
