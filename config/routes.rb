@@ -4,12 +4,12 @@ GithubApp::Application.routes.draw do
   # AUTH
 
   scope :auth do
-    namespace :google_oauth2, module: :google_integration  do
-      get '',  to: 'session#new', as: ''
+    namespace :google_oauth2, module: :google_integration do
+      get '', to: 'session#new', as: ''
       get :callback, to: 'session#create'
     end
 
-    namespace :github, module: :github_integration  do
+    namespace :github, module: :github_integration do
       get :callback, to: 'session#create'
     end
   end
