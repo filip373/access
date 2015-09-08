@@ -4,7 +4,7 @@ module GoogleIntegration
       @privacy = GoogleIntegration::GroupPrivacy.from_string(@privacy)
     end
 
-    delegate :open?, :closed?, :who_can_view_group, :show_in_group_directory?, to: :privacy
+    delegate :open?, :closed?, :who_can_view_group, to: :privacy
 
     def self.from_google_api(group)
       privacy = GoogleIntegration::GroupPrivacy.from_google_api(group)

@@ -7,7 +7,7 @@ module GoogleIntegration
           group_data.members,
           group_data.aliases,
           group_data.domain_membership,
-          group_data.privacy,
+          GroupPrivacy.from_bool(group_data.private).to_s,
           group_data.archive,
         )
       end
