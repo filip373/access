@@ -1,21 +1,19 @@
 module GoogleIntegration
   class GroupPrivacy
-    pattr_initialize :who_can_view_group, :show_in_group_directory
-    attr_reader :show_in_group_directory
+    pattr_initialize :who_can_view_group
 
     OPEN_VIEW_POLICY = 'ALL_IN_DOMAIN_CAN_VIEW'.freeze
     CLOSED_VIEW_POLICY = 'ALL_MEMBERS_CAN_VIEW'.freeze
 
     def self.from_google_api(group)
-      return new('unknown', 'unknown') if group.try(:settings).nil?
+      return new('unknown') if group.try(:settings).nil?
       new(
         group.settings.whoCanViewGroup,
-        group.settings.showInGroupDirectory,
       )
     end
 
     def self.from_string(privacy)
-      instance = new(nil, nil)
+      instance = new(nil)
       instance.open! if privacy == 'open'
       instance.close! if privacy == 'closed'
       instance
@@ -27,11 +25,11 @@ module GoogleIntegration
     end
 
     def open?
-      who_can_view_group == OPEN_VIEW_POLICY && show_in_group_directory?
+      who_can_view_group == OPEN_VIEW_POLICY
     end
 
     def closed?
-      who_can_view_group == CLOSED_VIEW_POLICY && !show_in_group_directory?
+      who_can_view_group == CLOSED_VIEW_POLICY
     end
 
     def can_change?
@@ -56,25 +54,18 @@ module GoogleIntegration
     def to_google_params
       {
         whoCanViewGroup: who_can_view_group,
-        showInGroupDirectory: show_in_group_directory?.to_s,
+        showInGroupDirectory: 'true',
       }
     end
 
     def open!
       @who_can_view_group = OPEN_VIEW_POLICY
-      @show_in_group_directory = 'true'
       self
     end
 
     def close!
       @who_can_view_group = CLOSED_VIEW_POLICY
-      @show_in_group_directory = 'false'
       self
-    end
-
-    def show_in_group_directory?
-      return true if show_in_group_directory == 'true'
-      return false if show_in_group_directory == 'false'
     end
 
     private

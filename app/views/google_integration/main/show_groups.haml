@@ -5,9 +5,7 @@
         %tr
           %th Name
           %th Archiving enabled
-          %th Show in directory
-          %th Open
-          %th Closed
+          %th Open?
           %th Members
           %th Aliases
 
@@ -16,8 +14,6 @@
           %tr
             %td= g.name
             %td= bool_label(g.archive?)
-            %td= bool_label(g.show_in_group_directory?)
             %td= bool_label(g.open?)
-            %td= bool_label(g.closed?)
             %td= g.members.map { |m| m.email }.join(', ')
             %td= g.aliases.to_a.join(', ')

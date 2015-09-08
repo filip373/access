@@ -12,7 +12,6 @@ RSpec.shared_context 'google_api' do
   let(:group_settings) do
     Hashie::Mash.new(
       isArchived: 'false',
-      showInGroupDirectory: 'true',
       whoCanViewGroup: 'ALL_MEMBERS_CAN_VIEW',
     )
   end

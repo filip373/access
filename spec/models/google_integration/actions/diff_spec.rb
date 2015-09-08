@@ -54,13 +54,11 @@ RSpec.describe GoogleIntegration::Actions::Diff do
   describe '#privacy_diff' do
     let(:privacy_open) do
       Hashie::Mash.new(
-        showInGroupDirectory: 'true',
         whoCanViewGroup: 'ALL_IN_DOMAIN_CAN_VIEW',
       )
     end
     let(:privacy_closed) do
       Hashie::Mash.new(
-        showInGroupDirectory: 'false',
         whoCanViewGroup: 'ALL_MEMBERS_CAN_VIEW',
       )
     end
