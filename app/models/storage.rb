@@ -33,6 +33,9 @@ class Storage
     hash = files_list.inject({},) do |hash, path|
       tree = hash
       path_parts = split_path(path)
+      if path_parts.first != 'users' && path_parts.length > 2
+        path_parts = [path_parts[0], path_parts[-1]]
+      end
       path_parts.each_with_index do |part, index|
         tree[part] ||= {}
         if index == (path_parts.size - 1) # last element
