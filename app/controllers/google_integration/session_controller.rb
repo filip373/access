@@ -30,6 +30,8 @@ module GoogleIntegration
       @auth_client = client_secrets.to_authorization
       @auth_client.update!(
         scope: AppConfig.google.scope,
+        authorization_uri: @auth_client.authorization_uri(
+          additional_parameters: { hd: AppConfig.google.main_domain })
       )
       @auth_client
     end
