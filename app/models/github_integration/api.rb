@@ -53,6 +53,10 @@ module GithubIntegration
       client.organizations.members.all(org_name)
     end
 
+    def list_org_members_without_2fa(org_name)
+      client.organizations.members.all(org_name, filter: '2fa_disabled').to_a
+    end
+
     def get_user(login)
       client.users.get(user: login).body
     end

@@ -5,6 +5,8 @@
       = button_tag "Generate permissions", type: :submit, class: 'btn btn-primary btn-lg'
 
 .jumbotron
+  = render 'insecure_users', users: insecure_users
+
   %h2 Github teams
   - if diff_errors.present?
     = render 'errors'

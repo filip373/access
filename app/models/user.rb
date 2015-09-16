@@ -1,16 +1,17 @@
 class User
-  attr_accessor :name, :full_name, :github, :email
+  attr_accessor :name, :full_name, :github, :email, :html_url
 
   @errors = []
   class << self
     attr_reader :errors
   end
 
-  def initialize(name:, full_name: '', github: '', email: '')
+  def initialize(name:, full_name: '', github: '', email: '', html_url: '')
     @name = name
     @full_name = full_name
     @github = github
     @email = email
+    @html_url = html_url
   end
 
   def self.find(name)
@@ -61,6 +62,15 @@ class User
 
   def self.users_data
     Storage.data.users
+  end
+
+  def self.find_user_by_github(login)
+    user = Storage.data.users.map { |_k, users| users.values }.flatten.find do |entry|
+      entry['github'].to_s.downcase == login.downcase
+    end
+    User.new(github: login,
+             name: user.try(:name),
+             email: user.try(:email))
   end
 
   def self.shift_errors
