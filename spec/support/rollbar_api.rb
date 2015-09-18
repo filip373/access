@@ -39,6 +39,14 @@ RSpec.shared_context 'rollbar_api' do
     )
   end
 
+  let(:member3) do
+    Hashie::Mash.new(
+      id: 2,
+      username: 'member3',
+      email: 'member3@foo.pl',
+    )
+  end
+
   let(:project1) do
     Hashie::Mash.new(
       id: 1,
@@ -54,6 +62,6 @@ RSpec.shared_context 'rollbar_api' do
   end
 
   let(:existing_teams) { [team1, team2] }
-  let(:existing_members) { [member1, member2] }
+  let(:existing_members) { [member1, member2, member3] }
   let(:existing_projects) { [project1, project2] }
 end

@@ -26,7 +26,7 @@ module RollbarIntegration
           user = nil
         end
         user
-      end
+      end.compact
     end
   end
 end
