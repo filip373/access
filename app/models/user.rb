@@ -1,17 +1,19 @@
 class UserError < StandardError; end
 
 class User
-  attr_accessor :name, :full_name, :github, :email, :html_url
+  attr_accessor :name, :full_name, :github, :email, :html_url, :rollbar
 
   @errors = []
   class << self
     attr_reader :errors
   end
 
-  def initialize(name:, full_name: '', github: '', email: '', html_url: '')
+  def initialize(name:, full_name: '', github: '', email: '', html_url: '',
+                 rollbar: '')
     @name = name
     @full_name = full_name
     @github = github
+    @rollbar = rollbar
     @email = email
     @html_url = html_url
   end
