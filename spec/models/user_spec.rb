@@ -5,7 +5,8 @@ describe User do
   let(:users_data) do
     {
       'group_one' => {
-        'janusz' => { 'name' => 'Janusz Nowak', 'github' => '13art' },
+        'janusz' => { 'name' => 'Janusz Nowak',
+                      'github' => '13art', 'rollbar' => '13art' },
         'marian' => { 'name' => 'Marian Nowak', 'github' => '76marekm' },
       },
       'group_two' => {
@@ -14,7 +15,8 @@ describe User do
       'default_group' => {
         'parowka' => { 'name' => 'Parówka Nowak', 'github' => '13art' },
       },
-      'michal.nowak' => { 'name' => 'Michał Nowak', 'github' => 'mnowak' },
+      'michal.nowak' => { 'name' => 'Michał Nowak', 'github' => 'mnowak',
+                          'rollbar' => 'mnowak' },
     }
   end
 
@@ -43,14 +45,45 @@ describe User do
     end
   end
 
+  describe '.find_by_rollbar(username)' do
+    let(:expected_user) do
+      { 'michal.nowak' => { 'name' => 'Michał Nowak',
+                            'github' => 'mnowak',
+                            'rollbar' => 'mnowak' } }
+    end
+
+    let(:expected_nested_user) do
+      { 'janusz' => { 'name' => 'Janusz Nowak',
+                      'github' => '13art',
+                      'rollbar' => '13art' } }
+    end
+    it 'finds user outside groups' do
+      expect(subject.find_by_rollbar('mnowak')).to eq(expected_user)
+    end
+
+    it 'finds user nested in the group' do
+      expect(subject.find_by_rollbar('13art')).to eq(expected_nested_user)
+    end
+
+    context 'user with desirable username does not exist' do
+      it 'raises error' do
+        expect { subject.find_by_rollbar('not_exist') }.to raise_error(UserError)
+      end
+    end
+  end
+
   describe '.find_many(names)' do
     context 'all users are present in users_data' do
       let(:names) { %w(michal.nowak parowka group_one/janusz) }
       let(:expected_return) do
         {
-          'michal.nowak' => { 'name' => 'Michał Nowak', 'github' => 'mnowak' },
+          'michal.nowak' => { 'name' => 'Michał Nowak', 'github' => 'mnowak',
+                              'rollbar' => 'mnowak' },
           'parowka' => { 'name' => 'Parówka Nowak', 'github' => '13art' },
-          'group_one/janusz' => { 'name' => 'Janusz Nowak', 'github' => '13art' },
+          'group_one/janusz' => { 'name' => 'Janusz Nowak',
+                                  'github' => '13art',
+                                  'rollbar' => '13art',
+                                },
         }
       end
 
@@ -63,7 +96,8 @@ describe User do
       let(:names) { %w(michal.nowak parowka herbatka) }
       let(:expected_return) do
         {
-          'michal.nowak' => { 'name' => 'Michał Nowak', 'github' => 'mnowak' },
+          'michal.nowak' => { 'name' => 'Michał Nowak', 'github' => 'mnowak',
+                              'rollbar' => 'mnowak' },
           'parowka' => { 'name' => 'Parówka Nowak', 'github' => '13art' },
         }
       end
