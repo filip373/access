@@ -25,11 +25,15 @@ describe Users::FindByRollbar do
         described_class.new(users_data: users_data, username: 'mnowak').call
       end
       let(:expected_user) do
-        { 'michal.nowak' => { 'name' => 'Michał Nowak', 'github' => 'mnowak',
-                              'rollbar' => 'mnowak' } }
+        { full_name: 'Michał Nowak', github: 'mnowak', rollbar: 'mnowak',
+          name: 'michal.nowak' }
       end
       it 'returns user' do
-        expect(subject).to eq(expected_user)
+        expect(subject).to have_attributes(expected_user)
+      end
+
+      it 'is a User' do
+        expect(subject).to be_a User
       end
     end
 
@@ -38,11 +42,11 @@ describe Users::FindByRollbar do
         described_class.new(users_data: users_data, username: '13art').call
       end
       let(:expected_user) do
-        { 'janusz' => { 'name' => 'Janusz Nowak',
-                        'github' => '13art', 'rollbar' => '13art' } }
+        { full_name: 'Janusz Nowak', github: '13art', rollbar: '13art',
+          name: 'janusz' }
       end
       it 'returns user' do
-        expect(subject).to eq(expected_user)
+        expect(subject).to have_attributes(expected_user)
       end
     end
 

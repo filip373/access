@@ -47,22 +47,20 @@ describe User do
 
   describe '.find_by_rollbar(username)' do
     let(:expected_user) do
-      { 'michal.nowak' => { 'name' => 'Michał Nowak',
-                            'github' => 'mnowak',
-                            'rollbar' => 'mnowak' } }
+      { name: 'michal.nowak', full_name: 'Michał Nowak',
+        github: 'mnowak', rollbar: 'mnowak' }
     end
 
     let(:expected_nested_user) do
-      { 'janusz' => { 'name' => 'Janusz Nowak',
-                      'github' => '13art',
-                      'rollbar' => '13art' } }
+      { name: 'janusz', full_name: 'Janusz Nowak',
+        github: '13art', rollbar: '13art' }
     end
     it 'finds user outside groups' do
-      expect(subject.find_by_rollbar('mnowak')).to eq(expected_user)
+      expect(subject.find_by_rollbar('mnowak')).to have_attributes(expected_user)
     end
 
     it 'finds user nested in the group' do
-      expect(subject.find_by_rollbar('13art')).to eq(expected_nested_user)
+      expect(subject.find_by_rollbar('13art')).to have_attributes(expected_nested_user)
     end
 
     context 'user with desirable username does not exist' do

@@ -17,13 +17,23 @@ module Users
       hash.each do |key, user_hash|
         found = find(user_hash) if directory?(user_hash)
         return found if found
-        return key => user_hash if user_hash['rollbar'] == username
+        return instantiated_user(key, user_hash) if username_matched?(user_hash)
       end
       false
     end
 
+    def username_matched?(user_hash)
+      user_hash['rollbar'] == username
+    end
+
     def directory?(hash)
       !hash.key?('name')
+    end
+
+    def instantiated_user(key, user_hash)
+      User.new(full_name: user_hash['name'], name: key,
+               github: user_hash['github'], rollbar: user_hash['rollbar'],
+               email: user_hash['email'])
     end
   end
 end
