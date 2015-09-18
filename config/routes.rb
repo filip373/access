@@ -36,5 +36,9 @@ GithubApp::Application.routes.draw do
     get 'generate_permissions', to: 'generate#permissions'
   end
 
+  namespace :rollbar, module: :rollbar_integration do
+    get 'generate_permissions', to: 'generate#permissions'
+  end
+
   get 'generate_users', to: 'generate#users'
 end
