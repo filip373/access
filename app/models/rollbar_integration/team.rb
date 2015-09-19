@@ -23,6 +23,7 @@ module RollbarIntegration
         begin
           user = User.find_by_rollbar(username).name
         rescue
+          Rollbar.info("There is no user with rollbar: #{username}")
           user = nil
         end
         user
