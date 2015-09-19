@@ -10,23 +10,36 @@ module RollbarIntegration
     end
 
     def get(url, options = {})
-      options.merge!(query: { access_token: read_token })
+      options.deep_merge!(query: { access_token: read_token })
       response = self.class.get(url, options)
       raise ApiError, response['message'] if response['err'] > 0
       response['result']
     end
 
+    def get_all_pages(url, options = {})
+      list = []
+      counter = 1
+      loop do
+        options = { query: { page: counter } }
+        tmp_list = get(url, options)
+        break if tmp_list.empty?
+        list += tmp_list
+        counter += 1
+      end
+      list
+    end
+
     def post(url, options = {})
-      options.merge!(query: { access_token: write_token },
-                     'Content-Type' => 'application/json')
+      options.deep_merge!(query: { access_token: write_token },
+                          'Content-Type' => 'application/json')
       response = self.class.post(url, options)
       raise ApiError, response['message'] if response['err'] > 0
       response['result']
     end
 
     def put(url, options = {})
-      options.merge!(query: { access_token: write_token },
-                     'Content-Type' => 'application/json')
+      options.deep_merge!(query: { access_token: write_token },
+                          'Content-Type' => 'application/json')
       response = self.class.put(url, options)
       raise ApiError, response['message'] if response['err'] > 0
       response['result']

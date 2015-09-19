@@ -12,19 +12,13 @@ module RollbarIntegration
     end
 
     def list_team_members(team_id)
-      users_ids = client.get("/api/1/team/#{team_id}/users")
-                  .map { |user| user['user_id'] }
-      users_ids.map do |user_id|
-        get_member(user_id)
-      end
+      client.get_all_pages("/api/1/team/#{team_id}/users")
+        .map { |member| get_member(member['user_id']) }
     end
 
     def list_team_projects(team_id)
-      projects_ids = client.get("/api/1/team/#{team_id}/projects")
-                     .map { |project| project['project_id'] }
-      projects_ids.map do |project_id|
-        get_project(project_id)
-      end
+      client.get_all_pages("/api/1/team/#{team_id}/projects")
+        .map { |project| get_project(project['project_id']) }
     end
 
     def create_team(name, access_level = 'standard')
