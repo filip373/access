@@ -4,6 +4,7 @@ source 'https://rubygems.org'
 gem 'rails', '~> 4.2'
 
 gem 'celluloid'
+gem 'data_guru', git: 'git@github.com:netguru/data_guru.git'
 gem 'decent_exposure'
 gem 'font-awesome-rails'
 gem 'git', '1.2.8'

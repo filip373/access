@@ -1,3 +1,11 @@
+GIT
+  remote: git@github.com:netguru/data_guru.git
+  revision: 4d37928e8015de6c65b7680dd47a420ad65f9f26
+  specs:
+    data_guru (0.1.0)
+      activesupport
+      git
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -345,6 +353,7 @@ DEPENDENCIES
   capistrano-rails
   capistrano-upload
   celluloid
+  data_guru!
   decent_exposure
   font-awesome-rails
   git (= 1.2.8)
