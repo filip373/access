@@ -45,6 +45,9 @@ defaults: &defaults
     client_secret: b
   google:
     <<: *google_defaults
+  dataguru:
+    git_repo_url: 'https://github.com/netguru/permissions'
+    git_repo_temp_dir: 'tmp/permissions-template'
 
 test:
   <<: *defaults
