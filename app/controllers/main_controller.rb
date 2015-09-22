@@ -4,10 +4,6 @@ class MainController < ApplicationController
 
   expose(:validation_errors) { Storage.validation_errors }
 
-  def index
-    UpdateRepo.now!
-  end
-
   def check_permissions
     gh_api.client.patch_request("/orgs/#{gh_api.client.org}")
     rescue Github::Error::NotFound
