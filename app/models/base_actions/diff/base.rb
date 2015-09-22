@@ -24,7 +24,7 @@ module BaseActions
       def map_members_to_users(members)
         members.map do |m|
           user = User.find(m)
-          raise "Unknown user #{m}" if user.nil?
+          fail "Unknown user #{m}" if user.nil?
           yield(user)
         end
       end

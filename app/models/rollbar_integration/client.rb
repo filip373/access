@@ -12,7 +12,7 @@ module RollbarIntegration
     def get(url, options = {})
       options.deep_merge!(query: { access_token: read_token })
       response = self.class.get(url, options)
-      raise ApiError, response['message'] if response['err'] > 0
+      fail ApiError, response['message'] if response['err'] > 0
       response['result']
     end
 
@@ -33,7 +33,7 @@ module RollbarIntegration
       options.deep_merge!(query: { access_token: write_token },
                           'Content-Type' => 'application/json')
       response = self.class.post(url, options)
-      raise ApiError, response['message'] if response['err'] > 0
+      fail ApiError, response['message'] if response['err'] > 0
       response['result']
     end
 
@@ -41,7 +41,7 @@ module RollbarIntegration
       options.deep_merge!(query: { access_token: write_token },
                           'Content-Type' => 'application/json')
       response = self.class.put(url, options)
-      raise ApiError, response['message'] if response['err'] > 0
+      fail ApiError, response['message'] if response['err'] > 0
       response['result']
     end
   end
