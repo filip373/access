@@ -25,7 +25,7 @@ class User
       else
         users_data[name] || users_data.fetch(company_name, {}).fetch(name, nil)
       end
-    user || raise("Unknown user #{name}. It's not in directory users or it is in wrong directory")
+    user || fail("Unknown user #{name}. It's not in directory users or it is in wrong directory")
   end
 
   def self.find_by_rollbar(username)
