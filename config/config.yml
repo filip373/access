@@ -60,6 +60,10 @@ test:
   features:
     use_service_account: true
     generate_permissions: true
+  dataguru:
+    git_repo_url: 'https://github.com/netguru/permissions'
+    git_repo_temp_dir: 'spec/get_diff_yamls'
+
 
 development:
   <<: *defaults
