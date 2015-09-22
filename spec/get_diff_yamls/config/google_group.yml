@@ -1,0 +1,6 @@
+---
+permitted:
+  - members
+  - aliases
+required:
+  - members

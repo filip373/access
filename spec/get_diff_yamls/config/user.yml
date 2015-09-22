@@ -1,0 +1,11 @@
+---
+permitted:
+  - name
+  - email
+  - github
+  - public_key
+  - external
+required:
+  - name
+  - email
+  - public_key

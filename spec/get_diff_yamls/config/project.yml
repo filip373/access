@@ -1,0 +1,13 @@
+---
+permitted:
+  - display_name
+  - description
+  - project_email
+  - slack_project_channel_name
+  - slack_client_channel_name
+  - github_teams
+  - google_groups
+required:
+  - display_name
+  - project_email
+  - slack_project_channel_name

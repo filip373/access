@@ -1,0 +1,9 @@
+---
+permitted:
+  - permission
+  - members
+  - repos
+required:
+  - permission
+  - members
+  - repos
