@@ -18,12 +18,11 @@ module RollbarIntegration
     end
 
     def self.prepare_members(api, team)
-      usernames = api.list_team_members(team.id).map(&:username)
-      usernames.map do |username|
+      api.list_team_members(team.id).map do |rollbar_user|
         begin
-          user = User.find_by_rollbar(username).name
+          user = User.find_by_email(rollbar_user.email).name
         rescue
-          Rollbar.info("There is no user with rollbar: #{username}")
+          Rollbar.info("There is no user with email: #{username}")
           user = nil
         end
         user
