@@ -6,7 +6,6 @@ module GithubIntegration
     expose(:expected_teams) { Teams.all }
     expose(:gh_teams) { gh_api.list_teams }
     expose(:gh_log) { Actions::Log.new(calculated_diff).now! }
-    expose(:sync_github_job) { SyncJob.new }
     expose(:teams_cleanup) { Actions::CleanupTeams.new(expected_teams, gh_teams, gh_api) }
     expose(:missing_teams) { teams_cleanup.stranded_teams }
     expose(:diff_errors) { @diff.errors }
@@ -25,7 +24,7 @@ module GithubIntegration
     end
 
     def sync
-      sync_github_job.perform(gh_api, calculated_diff)
+      SyncJob.new.perform(gh_api, calculated_diff)
       reset_diff
     end
 

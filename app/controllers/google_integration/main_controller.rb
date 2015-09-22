@@ -7,7 +7,6 @@ module GoogleIntegration
     expose(:expected_groups) { Groups.all }
     expose(:google_log_errors) { log.errors }
     expose(:google_log) { log.log }
-    expose(:sync_google_job) { SyncJob.new }
     expose(:groups_cleanup) do
       Actions::CleanupGroups.new(expected_groups, google_api, api_groups)
     end
@@ -26,7 +25,7 @@ module GoogleIntegration
     end
 
     def sync
-      sync_google_job.perform(google_api, calculated_diff)
+      SyncJob.new.perform(google_api, calculated_diff)
       reset_diff
     end
 
