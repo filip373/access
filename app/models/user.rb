@@ -34,6 +34,12 @@ class User
     raise UserError, "User with rollbar login: #{username} does not exist."
   end
 
+  def self.find_by_email(email)
+    user = Users::FindByEmail.new(email: email).call
+    return user if user
+    raise UserError, "User with email: #{email} does not exist."
+  end
+
   def self.list_company_users
     users_data.fetch(company_name, {})
   end

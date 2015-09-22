@@ -6,7 +6,8 @@ describe User do
     {
       'group_one' => {
         'janusz' => { 'name' => 'Janusz Nowak',
-                      'github' => '13art', 'rollbar' => '13art' },
+                      'github' => '13art', 'rollbar' => '13art',
+                      'email' => '13art@foo.pl' },
         'marian' => { 'name' => 'Marian Nowak', 'github' => '76marekm' },
       },
       'group_two' => {
@@ -16,7 +17,7 @@ describe User do
         'parowka' => { 'name' => 'Parówka Nowak', 'github' => '13art' },
       },
       'michal.nowak' => { 'name' => 'Michał Nowak', 'github' => 'mnowak',
-                          'rollbar' => 'mnowak' },
+                          'rollbar' => 'mnowak', 'email' => 'mnowak@foo.pl' },
     }
   end
 
@@ -70,17 +71,47 @@ describe User do
     end
   end
 
+  describe '.find_by_email(email)' do
+    let(:expected_attrubutes) do
+      { name: 'michal.nowak', full_name: 'Michał Nowak',
+        github: 'mnowak', email: 'mnowak@foo.pl' }
+    end
+
+    let(:expected_nested_attributes) do
+      { name: 'janusz', full_name: 'Janusz Nowak',
+        github: '13art', email: '13art@foo.pl' }
+    end
+    it 'finds user outside groups' do
+      expect(subject.find_by_email('mnowak@foo.pl'))
+        .to have_attributes(expected_attrubutes)
+    end
+
+    it 'finds user nested in the group' do
+      expect(subject.find_by_email('13art@foo.pl'))
+        .to have_attributes(expected_nested_attributes)
+    end
+
+    context 'user with desirable username does not exist' do
+      it 'raises error' do
+        expect { subject.find_by_email('not_exist@foo.pl') }
+          .to raise_error(UserError)
+      end
+    end
+  end
+
   describe '.find_many(names)' do
     context 'all users are present in users_data' do
       let(:names) { %w(michal.nowak parowka group_one/janusz) }
       let(:expected_return) do
         {
           'michal.nowak' => { 'name' => 'Michał Nowak', 'github' => 'mnowak',
-                              'rollbar' => 'mnowak' },
+                              'rollbar' => 'mnowak',
+                              'email' => 'mnowak@foo.pl' },
           'parowka' => { 'name' => 'Parówka Nowak', 'github' => '13art' },
           'group_one/janusz' => { 'name' => 'Janusz Nowak',
                                   'github' => '13art',
                                   'rollbar' => '13art',
+                                  'email' => '13art@foo.pl',
                                 },
         }
       end
@@ -95,7 +126,8 @@ describe User do
       let(:expected_return) do
         {
           'michal.nowak' => { 'name' => 'Michał Nowak', 'github' => 'mnowak',
-                              'rollbar' => 'mnowak' },
+                              'rollbar' => 'mnowak',
+                              'email' => 'mnowak@foo.pl' },
           'parowka' => { 'name' => 'Parówka Nowak', 'github' => '13art' },
         }
       end
