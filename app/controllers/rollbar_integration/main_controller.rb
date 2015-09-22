@@ -7,7 +7,6 @@ module RollbarIntegration
       Actions::ListPendingInvitations.new(rollbar_api).now!
     end
     expose(:rollbar_log) { Actions::Log.new(calculated_diff).now! }
-    expose(:sync_rollbar_job) { SyncJob.new }
     expose(:teams_cleanup) do
       Actions::CleanupTeams.new(expected_teams, rollbar_teams, rollbar_api)
     end
@@ -25,7 +24,7 @@ module RollbarIntegration
     end
 
     def sync
-      sync_rollbar_job.perform(rollbar_api, calculated_diff)
+      SyncJob.new.perform(rollbar_api, calculated_diff)
       reset_diff
     end
 

@@ -1,19 +1,15 @@
 module GithubIntegration
   class SyncJob
     def perform(api, diff)
-      before
-      GithubIntegration::Actions::Sync.new(api).now!(diff)
-      after
+      ping_messages { GithubIntegration::Actions::Sync.new(api).now!(diff) }
     end
 
-    def before
-      msg = 'Synchronizing github teams...'
-      notification_ping! msg
-    end
+    private
 
-    def after
-      msg = 'Synchronization done! High Five!'
-      notification_ping! msg
+    def ping_messages
+      notification_ping! "Synchronizing github teams..."
+      yield
+      notification_ping! "Synchronization done! High Five!"
     end
 
     def notification_ping!(msg)
