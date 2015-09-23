@@ -6,7 +6,7 @@ module RollbarIntegration
     expose(:rollbar_log) { Actions::Log.new(calculated_diff).now! }
     expose(:sync_rollbar_job) { SyncJob.new }
     expose(:missing_teams) { [] }
-    expose(:diff_errors) { [] }
+    expose(:diff_errors) { @diff.errors }
     expose(:rollbar_api) { Api.new }
 
     after_filter :clean_diff_actor
