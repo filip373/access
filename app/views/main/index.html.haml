@@ -2,6 +2,8 @@
   = render "github_integration"
 .jumbotron
   = render "google_integration"
+.jumbotron
+  = render "rollbar_integration"
 - if Features.on?(:generate_permissions)
   .jumbotron
     = render "generate_integration"
