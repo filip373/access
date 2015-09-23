@@ -44,5 +44,18 @@ module RollbarIntegration
       fail ApiError, response['message'] if response['err'] > 0
       response['result']
     end
+
+    def delete(url, options = {})
+      options.deep_merge!(query: { access_token: write_token },
+                          'Content-Type' => 'application/json')
+      fail_or_return(self.class.delete(url, options))
+    end
+
+    private
+
+    def fail_or_return(response)
+      fail ApiError, response['message'] if response['err'] > 0
+      response['result']
+    end
   end
 end
