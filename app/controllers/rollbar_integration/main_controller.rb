@@ -5,7 +5,10 @@ module RollbarIntegration
     expose(:rollbar_teams) { rollbar_api.list_teams }
     expose(:rollbar_log) { Actions::Log.new(calculated_diff).now! }
     expose(:sync_rollbar_job) { SyncJob.new }
-    expose(:missing_teams) { [] }
+    expose(:teams_cleanup) do
+      Actions::CleanupTeams.new(expected_teams, rollbar_teams, rollbar_api)
+    end
+    expose(:missing_teams) { teams_cleanup.stranded_teams }
     expose(:diff_errors) { @diff.errors }
     expose(:rollbar_api) { Api.new }
 
