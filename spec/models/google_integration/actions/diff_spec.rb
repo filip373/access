@@ -35,7 +35,7 @@ RSpec.describe GoogleIntegration::Actions::Diff do
   it { is_expected.to be_a Hash }
 
   context 'existing group' do
-    it { expect(subject[:add_members][group1]).to eq ['second.member@netguru.pl'] }
+    it { expect(subject[:add_members][group1]).to eq ['member2@foo.pl'] }
     it { expect(subject[:remove_members][group1]).to eq ['first.member@netguru.pl'] }
     it { expect(subject[:add_aliases][group1]).to eq ['alias2'] }
     it { expect(subject[:remove_aliases][group1]).to eq ['alias1'] }
@@ -44,7 +44,7 @@ RSpec.describe GoogleIntegration::Actions::Diff do
 
   context 'new group' do
     it do
-      expected_members = ['first.member@netguru.pl', 'second.member@netguru.pl']
+      expected_members = ['member1@foo.pl', 'member2@foo.pl']
       expect(subject[:create_groups][new_group][:add_members]).to eq(expected_members)
     end
     it { expect(subject[:create_groups][new_group][:add_aliases]).to eq %w(alias1 alias2) }

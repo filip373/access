@@ -1,6 +1,7 @@
 members:
   - first.member
   - second.member
+  - forth.member
 projects:
   - project1
   - project2
