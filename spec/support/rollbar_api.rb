@@ -4,6 +4,21 @@ RSpec.shared_context 'rollbar_api' do
       allow(api).to receive(:list_teams) { existing_teams }
       allow(api).to receive(:list_team_members) { existing_members }
       allow(api).to receive(:list_team_projects) { existing_projects }
+      allow(api).to receive(:remove_project) do |project_name, team|
+        team.projects.delete_if { |r| r.name == project_name }
+      end
+      allow(api).to receive(:add_project) do |project_name, team|
+        team.projects.push(Hashie::Mash.new name: project_name)
+      end
+      allow(api).to receive(:add_member) do |member_username, team|
+        team.members.push(Hashie::Mash.new username: member_username)
+      end
+      allow(api).to receive(:remove_member) do |member_username, team|
+        team.members.delete_if { |m| m.username == member_username }
+      end
+      allow(api).to receive(:create_team) do
+        existing_teams.push(new_team)
+      end.and_yield(new_team)
     end
   end
 
