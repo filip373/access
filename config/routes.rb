@@ -40,6 +40,7 @@ GithubApp::Application.routes.draw do
     get 'generate_permissions', to: 'generate#permissions'
     controller :main do
       get :show_diff
+      delete :cleanup_teams
     end
   end
 

@@ -16,7 +16,7 @@ module RollbarIntegration
 
       def remove_stranded_teams
         stranded_teams.each do |team|
-          rollbar_api.remove_team(team)
+          rollbar_api.remove_team(team.id)
         end
       end
     end

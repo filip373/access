@@ -21,6 +21,10 @@ module RollbarIntegration
       calculated_diff
     end
 
+    def cleanup_teams
+      teams_cleanup.now!
+    end
+
     private
 
     def reset_diff

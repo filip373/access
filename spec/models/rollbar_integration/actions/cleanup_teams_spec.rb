@@ -16,8 +16,8 @@ RSpec.describe RollbarIntegration::Actions::CleanupTeams do
   end
   let(:rollbar_api) do
     double.tap do |api|
-      allow(api).to receive(:remove_team) do |team|
-        m_existing_teams.delete team
+      allow(api).to receive(:remove_team) do |team_id|
+        m_existing_teams.delete_if { |t| t.id == team_id }
       end
     end
   end
@@ -40,7 +40,7 @@ RSpec.describe RollbarIntegration::Actions::CleanupTeams do
     end
 
     it 'use fire remove_team on github api' do
-      expect(rollbar_api).to have_received(:remove_team).with(team3)
+      expect(rollbar_api).to have_received(:remove_team).with(team3.id)
     end
   end
 end
