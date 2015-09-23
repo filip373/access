@@ -35,6 +35,10 @@ module RollbarIntegration
       client.put("/api/1/team/#{team_id}/project/#{project_id}")
     end
 
+    def remove_team(team_id)
+      client.delete("/api/1/team/#{team_id}")
+    end
+
     private
 
     def get_member(user_id)
