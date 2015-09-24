@@ -14,7 +14,7 @@ module RollbarIntegration
 
       def generate_log
         log_creating_teams
-        log_adding_members
+        log_inviting_members
         log_removing_members
         log_adding_projects
         log_removing_projects
@@ -27,47 +27,47 @@ module RollbarIntegration
           @log << "[api] create team #{team.name}"
 
           if h[:add_members].present?
-            h[:add_members].each do |m|
-              @log << "[api] add member #{m} to team #{team.name}"
+            h[:add_members].each do |email, _m|
+              @log << "[api] add member #{email} to team #{team.name}"
             end
           end
 
           if h[:add_projects].present?
-            h[:add_projects].each do |r|
-              @log << "[api] add project #{r} to team #{team.name}"
+            h[:add_projects].each do |name, _r|
+              @log << "[api] add project #{name} to team #{team.name}"
             end
           end
         end
       end
 
-      def log_adding_members
+      def log_inviting_members
         @diff_hash[:add_members].each do |team, members|
-          members.each do |m|
-            @log << "[api] add member #{m} to team #{team.name}"
+          members.each do |email, _m|
+            @log << "[api] add member #{email} to team #{team.name}"
           end
         end
       end
 
       def log_removing_members
         @diff_hash[:remove_members].each do |team, members|
-          members.each do |m|
-            @log << "[api] remove member #{m} from team #{team.name}"
+          members.each do |email, _m|
+            @log << "[api] remove member #{email} from team #{team.name}"
           end
         end
       end
 
       def log_adding_projects
         @diff_hash[:add_projects].each do |team, projects|
-          projects.each do |r|
-            @log << "[api] add project #{r} to team #{team.name}"
+          projects.each do |name, _r|
+            @log << "[api] add project #{name} to team #{team.name}"
           end
         end
       end
 
       def log_removing_projects
         @diff_hash[:remove_projects].each do |team, projects|
-          projects.each do |r|
-            @log << "[api] remove project #{r} from team #{team.name}"
+          projects.each do |name, _r|
+            @log << "[api] remove project #{name} from team #{team.name}"
           end
         end
       end
