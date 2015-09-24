@@ -2,6 +2,9 @@ module RollbarIntegration
   class TeamDiff
     include Celluloid
 
+    attr_reader :server_team, :yaml_team, :rollbar_api
+    attr_accessor :diff_hash
+
     def initialize(yaml_team, server_team, rollbar_api, diff_hash)
       @diff_hash = diff_hash
       @yaml_team = yaml_team
@@ -11,34 +14,33 @@ module RollbarIntegration
     end
 
     def diff(blk)
-      yaml_members = map_users_to_emails
-      members_diff(@server_team, yaml_members)
-      projects_diff(@server_team, @yaml_team.projects)
+      members_diff
+      projects_diff
     rescue StandardError => e
       Rollbar.error(e)
     ensure
-      blk.call(@diff_hash, @errors)
+      blk.call(diff_hash, @errors)
       terminate
     end
 
     private
 
-    def members_diff(server_team, yaml_members)
       if server_team.respond_to?(:id)
         server_members = server_team.respond_to?(:fake) ? [] : list_team_members(server_team['id'])
         @diff_hash[:add_members][server_team] = yaml_members - server_members
         @diff_hash[:remove_members][server_team] = server_members - yaml_members
+    def members_diff
       elsif !yaml_members.empty?
         @diff_hash[:create_teams][server_team][:add_members] = yaml_members
       end
     end
 
-    def projects_diff(server_team, yaml_projects)
       if server_team.respond_to?(:id)
         server_projects = server_team.respond_to?(:fake) ? [] : list_team_projects(server_team['id'])
 
         @diff_hash[:add_projects][server_team] = yaml_projects - server_projects
         @diff_hash[:remove_projects][server_team] = server_projects - yaml_projects
+    def projects_diff
       elsif !yaml_projects.empty?
         @diff_hash[:create_teams][server_team][:add_projects] = yaml_projects
       end
