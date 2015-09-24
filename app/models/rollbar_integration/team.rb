@@ -1,6 +1,7 @@
 module RollbarIntegration
   class Team
     rattr_initialize :name, :members, :projects
+    attr_accessor :id
 
     def self.from_api_request(api, team)
       new(
