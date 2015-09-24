@@ -31,8 +31,13 @@ class User
   end
 
   def self.find_by_rollbar(username)
+<<<<<<< HEAD
     user = Users::FindByRollbar.new(username: username).call
     user || fail(UserError, "User with rollbar login: #{username} does not exist.")
+=======
+    users_data.find { |u| u.rollbar == nickname } ||
+      fail UserError, "User with rollbar login: #{username} does not exist."
+>>>>>>> remove FindByRollbar service
   end
 
   def self.find_by_email(email)
