@@ -2,66 +2,94 @@ require 'rails_helper'
 
 describe User do
   subject { described_class }
-  let(:users_data) do
+  let(:janusz) do
     {
-      'group_one' => {
-        'janusz' => { 'name' => 'Janusz Nowak',
-                      'github' => '13art', 'rollbar' => '13art',
-                      'email' => '13art@foo.pl' },
-        'marian' => { 'name' => 'Marian Nowak', 'github' => '76marekm' },
-      },
-      'group_two' => {
-        'andrzej' => { 'name' => 'Andrzej Nowak', 'github' => '13art' },
-      },
-      'default_group' => {
-        'parowka' => { 'name' => 'Parówka Nowak', 'github' => '13art' },
-      },
-      'michal.nowak' => { 'name' => 'Michał Nowak', 'github' => 'mnowak',
-                          'rollbar' => 'mnowak', 'email' => 'mnowak@foo.pl' },
+      id: 'janusz.nowak',
+      name: 'Janusz Nowak',
+      email: 'janusz.nowak@example.com',
+      github: 'gh_jnowak',
+      rollbar: 'roll_jnowak',
+      external: false,
+    }
+  end
+  let(:marian) do
+    {
+      id: 'marian.nowak',
+      name: 'Marina Nowak',
+      email: 'marian.nowak@example.com',
+      github: 'gh_mnowak',
+      rollbar: 'roll_mnowak',
+      external: true,
+    }
+  end
+  let(:stefan) do
+    {
+      id: 'stefan.nowak',
+      name: 'Stefan Nowak',
+      email: 'stefan.nowak@example.com',
+      github: 'gh_snowak',
+      rollbar: 'roll_snowak',
+      external: true,
     }
   end
 
-  let(:company_name) { 'default_group' }
+  let(:users_data) do
+    storage = OpenStruct.new data: {
+      users: {
+        janusz[:id] => janusz.except(:id),
+        marian[:id] => marian.except(:id),
+        stefan[:id] => stefan.except(:id),
+      },
+      config: {
+        user: {
+          name: {
+            required: true,
+            default_value: nil,
+            value_type: 'string',
+          },
+          email: {
+            required: true,
+            default_value: nil,
+            value_type: 'string',
+          },
+          github: {
+            required: true,
+            default_value: nil,
+            value_type: 'string',
+          },
+          rollbar: {
+            required: false,
+            default_value: false,
+            value_type: 'string',
+          },
+          external: {
+            required: true,
+            default_value: false,
+            value_type: 'boolean',
+          }
+        }
+      }
+    }.deep_stringify_keys
+    DataGuru::UsersCollection.new(storage: storage)
+  end
 
   before do
-    allow(subject).to receive(:company_name) { company_name }
     allow(subject).to receive(:users_data) { users_data }
   end
 
   describe '.find(name)' do
-    it 'finds user in default group' do
-      expect(subject.find('parowka')).to be
-    end
-
-    it 'finds user nested in other group' do
-      expect(subject.find('group_one/janusz')).to be
-    end
-
-    it 'finds user defined outside groups' do
-      expect(subject.find('michal.nowak')).to be
+    it 'finds user by filename' do
+      expect(subject.find(janusz[:id])).to have_attributes(janusz)
     end
 
     it 'raise exception if user is not in users_data' do
-      expect { subject.find('herbatka') }.to raise_error
+      expect { subject.find('nobody') }.to raise_error UserError
     end
   end
 
   describe '.find_by_rollbar(username)' do
-    let(:expected_user) do
-      { name: 'michal.nowak', full_name: 'Michał Nowak',
-        github: 'mnowak', rollbar: 'mnowak' }
-    end
-
-    let(:expected_nested_user) do
-      { name: 'janusz', full_name: 'Janusz Nowak',
-        github: '13art', rollbar: '13art' }
-    end
-    it 'finds user outside groups' do
-      expect(subject.find_by_rollbar('mnowak')).to have_attributes(expected_user)
-    end
-
-    it 'finds user nested in the group' do
-      expect(subject.find_by_rollbar('13art')).to have_attributes(expected_nested_user)
+    it 'finds user by rollbar username' do
+      expect(subject.find_by_rollbar('roll_mnowak')).to have_attributes(marian)
     end
 
     context 'user with desirable username does not exist' do
@@ -72,68 +100,34 @@ describe User do
   end
 
   describe '.find_by_email(email)' do
-    let(:expected_attrubutes) do
-      { name: 'michal.nowak', full_name: 'Michał Nowak',
-        github: 'mnowak', email: 'mnowak@foo.pl' }
-    end
-
-    let(:expected_nested_attributes) do
-      { name: 'janusz', full_name: 'Janusz Nowak',
-        github: '13art', email: '13art@foo.pl' }
-    end
     it 'finds user outside groups' do
-      expect(subject.find_by_email('mnowak@foo.pl'))
-        .to have_attributes(expected_attrubutes)
-    end
-
-    it 'finds user nested in the group' do
-      expect(subject.find_by_email('13art@foo.pl'))
-        .to have_attributes(expected_nested_attributes)
+      expect(subject.find_by_email('marian.nowak@example.com')).to have_attributes(marian)
     end
 
     context 'user with desirable username does not exist' do
       it 'raises error' do
-        expect { subject.find_by_email('not_exist@foo.pl') }
-          .to raise_error(UserError)
+        expect { subject.find_by_email('not_exist@foo.pl') }.to raise_error(UserError)
       end
     end
   end
 
   describe '.find_many(names)' do
     context 'all users are present in users_data' do
-      let(:names) { %w(michal.nowak parowka group_one/janusz) }
-      let(:expected_return) do
-        {
-          'michal.nowak' => { 'name' => 'Michał Nowak', 'github' => 'mnowak',
-                              'rollbar' => 'mnowak',
-                              'email' => 'mnowak@foo.pl' },
-          'parowka' => { 'name' => 'Parówka Nowak', 'github' => '13art' },
-          'group_one/janusz' => { 'name' => 'Janusz Nowak',
-                                  'github' => '13art',
-                                  'rollbar' => '13art',
-                                  'email' => '13art@foo.pl',
-                                },
-        }
-      end
+      let(:names) { [janusz[:id], marian[:id], stefan[:id]] }
 
       it 'returns array of name and gh_login of all names' do
-        expect(subject.find_many(names)).to eq(expected_return)
+        expect(subject.find_many(names)).to include janusz[:id] => janusz[:github]
+        expect(subject.find_many(names)).to include marian[:id] => marian[:github]
+        expect(subject.find_many(names)).to include stefan[:id] => stefan[:github]
       end
     end
 
     context 'one of users is not present in users_data' do
-      let(:names) { %w(michal.nowak parowka herbatka) }
-      let(:expected_return) do
-        {
-          'michal.nowak' => { 'name' => 'Michał Nowak', 'github' => 'mnowak',
-                              'rollbar' => 'mnowak',
-                              'email' => 'mnowak@foo.pl' },
-          'parowka' => { 'name' => 'Parówka Nowak', 'github' => '13art' },
-        }
-      end
+      let(:names) { [janusz[:id], marian[:id], 'not.found'] }
 
       it 'find only present users' do
-        expect(subject.find_many(names)).to eq(expected_return)
+        expect(subject.find_many(names)).to include [janusz[:id], janusz[:github]]
+        expect(subject.find_many(names)).to include [marian[:id], marian[:github]]
       end
 
       it 'add an error' do
@@ -149,8 +143,12 @@ describe User do
   end
 
   describe '.list_company_users' do
+    # this will pass when DataGuru::ModelBase#attributes includes :id
     it 'returns users only form directory company_name' do
-      expect(subject.list_company_users).to be(users_data['default_group'])
+      company_users = subject.list_company_users.map(&:attributes)
+      expect(company_users).to include janusz
+      expect(company_users).to_not include marian
+      expect(company_users).to_not include stefan
     end
   end
 

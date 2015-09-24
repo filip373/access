@@ -32,7 +32,7 @@ class User
 
   def self.find_by_email(email)
     users_data.find { |u| u.email == email } ||
-      fail UserError, "User with email: #{email} does not exist."
+      fail(UserError, "User with email: #{email} does not exist.")
   end
 
   def self.list_company_users
