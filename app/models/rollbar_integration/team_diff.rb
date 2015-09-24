@@ -25,22 +25,22 @@ module RollbarIntegration
 
     private
 
-      if server_team.respond_to?(:id)
         server_members = server_team.respond_to?(:fake) ? [] : list_team_members(server_team['id'])
         @diff_hash[:add_members][server_team] = yaml_members - server_members
         @diff_hash[:remove_members][server_team] = server_members - yaml_members
     def members_diff
+      if server_team.id.present?
       elsif !yaml_members.empty?
         @diff_hash[:create_teams][server_team][:add_members] = yaml_members
       end
     end
 
-      if server_team.respond_to?(:id)
         server_projects = server_team.respond_to?(:fake) ? [] : list_team_projects(server_team['id'])
 
         @diff_hash[:add_projects][server_team] = yaml_projects - server_projects
         @diff_hash[:remove_projects][server_team] = server_projects - yaml_projects
     def projects_diff
+      if server_team.id.present?
       elsif !yaml_projects.empty?
         @diff_hash[:create_teams][server_team][:add_projects] = yaml_projects
       end
