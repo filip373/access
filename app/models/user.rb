@@ -30,24 +30,9 @@ class User
     user || fail("Unknown user #{name}. It's not in directory users or it is in wrong directory")
   end
 
-  def self.find_by_rollbar(username)
-<<<<<<< HEAD
-    user = Users::FindByRollbar.new(username: username).call
-    user || fail(UserError, "User with rollbar login: #{username} does not exist.")
-=======
-    users_data.find { |u| u.rollbar == nickname } ||
-      fail UserError, "User with rollbar login: #{username} does not exist."
->>>>>>> remove FindByRollbar service
-  end
-
   def self.find_by_email(email)
-<<<<<<< HEAD
-    user = Users::FindByEmail.new(email: email).call
-    user || fail(UserError, "User with email: #{email} does not exist in directory users.")
-=======
     users_data.find { |u| u.email == email } ||
       fail UserError, "User with email: #{email} does not exist."
->>>>>>> remove FindByEmail and FindByRollbar services
   end
 
   def self.list_company_users
