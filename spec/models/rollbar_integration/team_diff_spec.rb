@@ -11,6 +11,7 @@ RSpec.describe RollbarIntegration::TeamDiff do
   let(:yaml_teams) { RollbarIntegration::Teams.all }
 
   let(:yaml_team1) { yaml_teams.find { |t| t.name == 'team1' } }
+  let(:yaml_new_team) { yaml_teams.find { |t| t.name == 'new_team' } }
   let(:diff_hash) do
     {
       create_teams: {},
@@ -64,43 +65,128 @@ RSpec.describe RollbarIntegration::TeamDiff do
         expect(errors.count).to eq(1)
       end
 
-      context 'there is one project less in yaml than in server' do
-        let(:project3) do
-          Hashie::Mash.new(
-            id: 2,
-            name: 'project3',
-          )
-        end
-        let(:existing_projects) { [project1, project2, project3] }
+      describe 'diff hash values' do
+        context 'remove_projects key - there is one project less in yaml than in server' do
+          let(:project3) do
+            Hashie::Mash.new(
+              id: 2,
+              name: 'project3',
+            )
+          end
+          let(:existing_projects) { [project1, project2, project3] }
 
-        before do
-          team_diff = described_class.new(yaml_team1, team1, rollbar_api, diff_hash)
-          team_diff.diff(blk)
-        end
+          before do
+            team_diff = described_class.new(yaml_team1, team1, rollbar_api, diff_hash)
+            team_diff.diff(blk)
+          end
 
-        it 'remove projects' do
-          expect(diff_hash[:remove_projects][team1]).to_not be_empty
-        end
+          it 'removes projects' do
+            expect(diff_hash[:remove_projects][team1]).to_not be_empty
+          end
 
-        it 'adds to remove_projects extra project' do
-          expect(diff_hash[:remove_projects][team1]).to eq(%w(project3))
-        end
-      end
+          it 'adds to remove_projects extra project' do
+            expect(diff_hash[:remove_projects][team1]).to eq('project3' => project3)
+          end
 
-      context 'there is one project more in yaml than in server' do
-        let(:existing_projects) { [project1] }
-
-        before do
-          team_diff = described_class.new(yaml_team1, team1, rollbar_api, diff_hash)
-          team_diff.diff(blk)
+          it 'contains projects with ID attribute' do
+            expect(diff_hash[:remove_projects][team1].values.first).to respond_to(:id)
+          end
         end
 
-        it 'remove projects' do
-          expect(diff_hash[:add_projects][team1]).to_not be_empty
+        context 'add_projects key - there is one project more in yaml than in server' do
+          let(:existing_projects) { [project1] }
+
+          before do
+            team_diff = described_class.new(yaml_team1, team1, rollbar_api, diff_hash)
+            team_diff.diff(blk)
+          end
+
+          it 'adds projects' do
+            expect(diff_hash[:add_projects][team1]).to_not be_empty
+            expect(diff_hash[:add_projects][team1]).to be_a Hash
+          end
+
+          it 'contains projects with ID attribute' do
+            expect(diff_hash[:add_projects][team1].values.first).to respond_to(:id)
+          end
+
+          it 'contains project with project name as key of hash' do
+            expect(diff_hash[:add_projects][team1].keys.first).to eq('project2')
+          end
         end
 
-        it 'adds to remove_projects extra project' do
-          expect(diff_hash[:add_projects][team1]).to eq(%w(project2))
+        context 'add_members key - there is one member more in yaml than in server' do
+          let(:existing_members) { [member1] }
+
+          before do
+            team_diff = described_class.new(yaml_team1, team1, rollbar_api, diff_hash)
+            team_diff.diff(blk)
+          end
+
+          it { expect(diff_hash[:add_members][team1]).to_not be_empty }
+          it { expect(diff_hash[:add_members][team1]).to be_a Hash }
+
+          it 'contains new member with email attribute' do
+            expect(diff_hash[:add_members][team1].values.first).to respond_to(:email)
+          end
+
+          it 'contains member with email as key of hash' do
+            expect(diff_hash[:add_members][team1].keys.first).to include('@')
+          end
+        end
+
+        context 'remove_members key - there is one member less in yaml than in server' do
+          let(:existing_members) { [member1, member2, member3] }
+
+          before do
+            team_diff = described_class.new(yaml_team1, team1, rollbar_api, diff_hash)
+            team_diff.diff(blk)
+          end
+
+          it { expect(diff_hash[:remove_members][team1]).to_not be_empty }
+          it { expect(diff_hash[:remove_members][team1]).to be_a Hash }
+
+          it 'contains member with email attribute' do
+            expect(diff_hash[:remove_members][team1].values.first).to respond_to(:id)
+          end
+
+          it 'contains member with email as key of hash' do
+            expect(diff_hash[:remove_members][team1].keys.first).to include('@')
+          end
+        end
+
+        context 'create_teams - there is a team in yaml which does not exist in server' do
+          let(:existing_teams) { [team1] }
+
+          before do
+            team_diff = described_class.new(yaml_new_team, nil, rollbar_api, diff_hash)
+            team_diff.diff(blk)
+          end
+          it { expect(diff_hash[:create_teams][yaml_new_team]).to_not be_empty }
+          it { expect(diff_hash[:create_teams][yaml_new_team]).to be_a Hash }
+
+          context 'add_members key' do
+            subject { diff_hash[:create_teams][yaml_new_team][:add_members] }
+
+            it 'contains members with email attribute' do
+              expect(subject.values.first).to respond_to(:email)
+            end
+
+            it 'contains members with email as key of hash' do
+              expect(subject.keys.first).to include('@')
+            end
+          end
+
+          context 'add_projects key' do
+            subject { diff_hash[:create_teams][yaml_new_team][:add_projects] }
+            it 'contains projects with ID attribute' do
+              expect(subject.values.first).to respond_to(:id)
+            end
+
+            it 'contains projects with project name as key of hash' do
+              expect(subject.keys.first).to eq('project2')
+            end
+          end
         end
       end
     end
