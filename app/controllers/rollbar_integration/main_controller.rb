@@ -21,6 +21,11 @@ module RollbarIntegration
       calculated_diff
     end
 
+    def sync
+      sync_rollbar_job.perform(rollbar_api, calculated_diff)
+      reset_diff
+    end
+
     def cleanup_teams
       teams_cleanup.now!
     end
