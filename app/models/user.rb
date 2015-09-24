@@ -41,8 +41,13 @@ class User
   end
 
   def self.find_by_email(email)
+<<<<<<< HEAD
     user = Users::FindByEmail.new(email: email).call
     user || fail(UserError, "User with email: #{email} does not exist in directory users.")
+=======
+    users_data.find { |u| u.email == email } ||
+      fail UserError, "User with email: #{email} does not exist."
+>>>>>>> remove FindByEmail and FindByRollbar services
   end
 
   def self.list_company_users
