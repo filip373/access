@@ -87,7 +87,7 @@ class User
   end
 
   def self.users_data
-    Storage.data.users
+    DataGuru::Client.new.users
   end
 
   def self.find_user_by_github(login)
