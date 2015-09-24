@@ -55,7 +55,9 @@ module RollbarIntegration
 
     def fail_or_return(response)
       fail ApiError, response['message'] if response['err'] > 0
-      response['result']
+      result = response['result']
+      return result.map { |e| Hashie::Mash.new(e) } if result.is_a? Array
+      Hashie::Mash.new(result)
     end
   end
 end
