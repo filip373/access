@@ -30,7 +30,7 @@ module RollbarIntegration
         diff_hash[:add_members][server_team] = add_members
         diff_hash[:remove_members][server_team] = remove_members
       elsif !yaml_members.empty?
-        @diff_hash[:create_teams][server_team][:add_members] = yaml_members
+        diff_hash[:create_teams][server_team][:add_members] = yaml_members
       end
     end
 
@@ -39,7 +39,7 @@ module RollbarIntegration
         diff_hash[:add_projects][server_team] = add_projects
         diff_hash[:remove_projects][server_team] = remove_projects
       elsif !yaml_projects.empty?
-        @diff_hash[:create_teams][server_team][:add_projects] = yaml_projects
+        diff_hash[:create_teams][server_team][:add_projects] = yaml_projects
       end
     end
 
@@ -60,8 +60,8 @@ module RollbarIntegration
     end
 
     def create_server_team
-      @diff_hash[:create_teams][@yaml_team] = {}
-      @yaml_team
+      diff_hash[:create_teams][yaml_team] = {}
+      yaml_team
     end
 
     def yaml_members
