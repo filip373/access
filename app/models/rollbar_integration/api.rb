@@ -43,11 +43,15 @@ module RollbarIntegration
     private
 
     def get_member(user_id)
-      Hashie::Mash.new(client.get("/api/1/user/#{user_id}"))
+      Rails.cache.fetch("get_member-#{user_id}") do
+        client.get("/api/1/user/#{user_id}")
+      end
     end
 
     def get_project(project_id)
-      Hashie::Mash.new(client.get("/api/1/project/#{project_id}"))
+      Rails.cache.fetch("get_project-#{project_id}") do
+        client.get("/api/1/project/#{project_id}")
+      end
     end
   end
 end
