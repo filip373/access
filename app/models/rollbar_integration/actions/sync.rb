@@ -19,28 +19,28 @@ module RollbarIntegration
 
       def sync_members(members_to_add, members_to_remove)
         members_to_add.each do |team, members|
-          members.each do |member|
-            @rollbar_api.add_member(member, team)
+          members.each do |email, _member|
+            @rollbar_api.invite_member_to_team(email, team.id)
           end
         end
 
         members_to_remove.each do |team, members|
-          members.each do |member|
-            @rollbar_api.remove_member(member, team)
+          members.each do |_email, member|
+            @rollbar_api.remove_member_from_team(member.id, team.id)
           end
         end
       end
 
       def sync_projects(projects_to_add, projects_to_remove)
         projects_to_add.each do |team, projects|
-          projects.each do |project|
-            @rollbar_api.add_project(project, team)
+          projects.each do |_project_name, project|
+            @rollbar_api.add_project_to_team(project.id, team.id)
           end
         end
 
         projects_to_remove.each do |team, projects|
-          projects.each do |project|
-            @rollbar_api.remove_project(project, team)
+          projects.each do |_project_name, project|
+            @rollbar_api.remove_project_from_team(project.id, team.id)
           end
         end
       end
@@ -55,14 +55,14 @@ module RollbarIntegration
       end
 
       def new_team_add_members(members, team)
-        members.each do |member|
-          @rollbar_api.add_member(member, team)
+        members.each do |email, _member|
+          @rollbar_api.invite_member_to_team(email, team.id)
         end
       end
 
       def new_team_add_projects(projects, team)
-        projects.each do |project|
-          @rollbar_api.add_project(project, team)
+        projects.each do |_project_name, project|
+          @rollbar_api.add_project_to_team(project.id, team.id)
         end
       end
     end
