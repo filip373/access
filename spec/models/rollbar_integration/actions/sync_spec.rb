@@ -5,52 +5,64 @@ RSpec.describe RollbarIntegration::Actions::Sync do
 
   let(:team) do
     Hashie::Mash.new name: 'team1',
-                     projects: [name: 'first-project'],
-                     members: [
-                       { username: 'first_dude' },
-                     ]
+                     id: 1,
+                     projects: {
+                       project1.name => project1,
+                     },
+                     members: {
+                       member1.email => member1,
+                     }
   end
   let(:new_team) do
     Hashie::Mash.new name: 'new team',
-                     projects: [],
-                     members: []
+                     projects: {},
+                     members: {}
   end
   let(:existing_teams) { [team] }
   let(:diff) do
     {
       create_teams: {
         new_team => {
-          add_members: ['new_dude'],
-          add_projects: ['cool-new-project'],
+          add_members: {
+            member2.email => member2,
+          },
+          add_projects: {
+            project2.name => project2,
+          },
         },
       },
       add_members: {
-        team => ['added_dude'],
+        team => {
+          member3.email => member3,
+        },
       },
       remove_members: {
-        team => ['first_dude'],
+        team => {
+          member1.email => member1,
+        },
       },
       add_projects: {
-        team => ['added-project'],
+        team => {
+          project3.name => project3,
+        },
       },
       remove_projects: {
-        team => ['first-project'],
-      },
-      change_permissions: {
-        team => 'pull',
+        team => {
+          project1.name => project1,
+        },
       },
     }
   end
 
   before { described_class.new(rollbar_api).now!(diff) }
 
-  it { expect(team.projects).to_not include(name: 'first-project') }
-  it { expect(team.projects).to include(name: 'added-project') }
-  it { expect(team.members).to include(username: 'added_dude') }
-  it { expect(team.members).to_not include(username: 'first_dude') }
+  it { expect(team.projects).to_not have_key(project1.name) }
+  it { expect(team.projects).to have_key(project3.name) }
+  it { expect(team.members).to have_key(member3.email) }
+  it { expect(team.members).to_not have_key(member1.email) }
 
   let(:created_team) { existing_teams[1] }
   it { expect(created_team.name).to eq 'new team' }
-  it { expect(created_team.projects).to include(name: 'cool-new-project') }
-  it { expect(created_team.members).to include(username: 'new_dude') }
+  it { expect(created_team.projects).to have_key(project2.name) }
+  it { expect(created_team.members).to have_key(member2.email) }
 end
