@@ -7,7 +7,8 @@ module RollbarIntegration
     end
 
     def list_teams
-      client.get('/api/1/teams').map { |team| Hashie::Mash.new(team) }
+      client.get('/api/1/teams')
+        .reject { |e| e.name == 'Owners' }
     end
 
     def list_team_members(team_id)
