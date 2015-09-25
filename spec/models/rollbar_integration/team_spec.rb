@@ -12,14 +12,18 @@ RSpec.describe RollbarIntegration::Team do
     end
 
     it 'creates team with name attribute' do
-      expect(subject.name).to be_present
       expect(subject.name).to eq(team.name)
     end
 
-    it 'creates team with members attribute' do
-      expect(subject.members).to be_present
-      expect(subject.members).to be_a Array
+    it 'creates team with members' do
       expect(subject.members).to match_array(['first.member', 'second.member'])
+    end
+
+    context 'one member has not corresponging yaml with email' do
+      let(:existing_members) { [member1, member2, member5] }
+      it 'not list that member in members' do
+        expect(subject.members).to match_array(['first.member', 'second.member'])
+      end
     end
   end
 end

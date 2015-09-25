@@ -24,7 +24,6 @@ module RollbarIntegration
           user = User.find_by_email(rollbar_user.email).name
         rescue
           Rollbar.info("There is no user with email: #{rollbar_user.email}")
-          user = nil
         end
         user
       end.compact
