@@ -2,9 +2,8 @@ module RollbarIntegration
   class Api
     attr_accessor :client
 
-    def initialize(read_token: AppConfig.rollbar.read_token,
-                   write_token: AppConfig.rollbar.write_token)
-      self.client = Client.new(read_token: read_token, write_token: write_token)
+    def initialize(token: AppConfig.rollbar.token)
+      self.client = Client.new(token: token)
     end
 
     def list_teams

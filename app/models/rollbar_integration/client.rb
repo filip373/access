@@ -1,16 +1,15 @@
 module RollbarIntegration
   class Client
     include HTTParty
-    attr_accessor :read_token, :write_token
+    attr_accessor :token
     base_uri 'https://api.rollbar.com/'
 
-    def initialize(read_token:, write_token:)
-      self.read_token = read_token
-      self.write_token = write_token
+    def initialize(token:)
+      self.token = token
     end
 
     def get(url, options = {})
-      options.deep_merge!(query: { access_token: read_token })
+      options.deep_merge!(query: { access_token: token })
       fail_or_return(self.class.get(url, options))
     end
 
@@ -28,19 +27,19 @@ module RollbarIntegration
     end
 
     def post(url, options = {})
-      options.deep_merge!(query: { access_token: write_token },
+      options.deep_merge!(query: { access_token: token },
                           'Content-Type' => 'application/json')
       fail_or_return(self.class.post(url, options))
     end
 
     def put(url, options = {})
-      options.deep_merge!(query: { access_token: write_token },
+      options.deep_merge!(query: { access_token: token },
                           'Content-Type' => 'application/json')
       fail_or_return(self.class.put(url, options))
     end
 
     def delete(url, options = {})
-      options.deep_merge!(query: { access_token: write_token },
+      options.deep_merge!(query: { access_token: token },
                           'Content-Type' => 'application/json')
       fail_or_return(self.class.delete(url, options))
     end
