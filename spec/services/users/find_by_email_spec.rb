@@ -4,8 +4,8 @@ describe Users::FindByEmail do
   let(:users_data) do
     {
       'group_one' => {
-        'janusz' => { 'name' => 'Janusz Nowak',
-                      'github' => '13art', 'email' => '13art@foo.pl' },
+        'janusz.nowak' => { 'name' => 'Janusz Nowak',
+                            'github' => '13art', 'email' => 'janusz.nowak@foo.pl' },
         'marian' => { 'name' => 'Marian Nowak', 'github' => '76marekm' },
       },
       'group_two' => {
@@ -15,7 +15,7 @@ describe Users::FindByEmail do
         'parowka' => { 'name' => 'Parówka Nowak', 'github' => '13art' },
       },
       'michal.nowak' => { 'name' => 'Michał Nowak', 'github' => 'mnowak',
-                          'email' => 'mnowak@foo.pl' },
+                          'email' => 'michal.nowak@foo.pl' },
     }
   end
 
@@ -23,10 +23,10 @@ describe Users::FindByEmail do
     context 'sought user is outside of any group' do
       subject do
         described_class
-          .new(users_data: users_data, email: 'mnowak@foo.pl').call
+          .new(users_data: users_data, email: 'michal.nowak@foo.pl').call
       end
       let(:expected_attrubutes) do
-        { full_name: 'Michał Nowak', github: 'mnowak', email: 'mnowak@foo.pl',
+        { full_name: 'Michał Nowak', github: 'mnowak', email: 'michal.nowak@foo.pl',
           name: 'michal.nowak' }
       end
       it 'returns user with attributes' do
@@ -40,11 +40,11 @@ describe Users::FindByEmail do
 
     context 'sought user is nested in a group' do
       subject do
-        described_class.new(users_data: users_data, email: '13art@foo.pl').call
+        described_class.new(users_data: users_data, email: 'janusz.nowak@foo.pl').call
       end
       let(:expected_attrubutes) do
-        { full_name: 'Janusz Nowak', github: '13art', email: '13art@foo.pl',
-          name: 'janusz' }
+        { full_name: 'Janusz Nowak', github: '13art', email: 'janusz.nowak@foo.pl',
+          name: 'janusz.nowak' }
       end
       it 'returns user with attributes' do
         expect(subject).to have_attributes(expected_attrubutes)
