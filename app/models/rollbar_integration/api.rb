@@ -25,8 +25,10 @@ module RollbarIntegration
         .map { |project| get_project(project['project_id']) }
     end
 
-    def list_team_invities(team_id)
+    def list_team_pending_members(team_id)
       client.get("/api/1/team/#{team_id}/invites")
+        .select { |e| e.status == 'pending' }
+        .each { |e| e[:email] = e[:to_email] }
     end
 
     def create_team(name, access_level = 'standard')
