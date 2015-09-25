@@ -1,13 +1,9 @@
 ---
-permission:
-  required: true
-  default_value: 'push'
-  value_type: string
 members:
   required: true
   default_value: []
   value_type: array
-repos:
+projects:
   required: true
   default_value: []
   value_type: array

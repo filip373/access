@@ -1,13 +1,29 @@
 ---
-permitted:
-  - display_name
-  - description
-  - project_email
-  - slack_project_channel_name
-  - slack_client_channel_name
-  - github_teams
-  - google_groups
-required:
-  - display_name
-  - project_email
-  - slack_project_channel_name
+display_name:
+  required: true
+  default_value:
+  value_type: string
+description:
+  required: false
+  default_value:
+  value_type: string
+project_email:
+  required: true
+  default_value:
+  value_type: string
+slack_project_channel_name:
+  required: true
+  default_value:
+  value_type: string
+slack_client_channel_name:
+  required: false
+  default_value:
+  value_type: string
+github_teams:
+  required: false
+  default_value: []
+  value_type: array
+google_groups:
+  required: false
+  default_value: []
+  value_type: array

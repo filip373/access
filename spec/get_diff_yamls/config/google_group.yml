@@ -1,6 +1,9 @@
 ---
-permitted:
-  - members
-  - aliases
-required:
-  - members
+members:
+  required: true
+  default_value: []
+  value_type: array
+aliases:
+  required: false
+  default_value: []
+  value_type: array

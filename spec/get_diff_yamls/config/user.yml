@@ -1,11 +1,21 @@
 ---
-permitted:
-  - name
-  - email
-  - github
-  - public_key
-  - external
-required:
-  - name
-  - email
-  - public_key
+name:
+  required: true
+  default_value:
+  value_type: string
+email:
+  required: true
+  default_value:
+  value_type: string
+github:
+  required: true
+  default_value:
+  value_type: string
+public_key:
+  required: true
+  default_value:
+  value_type: string
+external:
+  required: true
+  default_value: false
+  value_type: boolean
