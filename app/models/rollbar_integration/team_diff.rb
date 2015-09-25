@@ -99,13 +99,11 @@ module RollbarIntegration
       if server_team.respond_to?(:fake)
         @server_members = []
       else
-        @server_members = Hash[combined_pending_and_active_members.map { |e| [e.email, e] }]
+        @server_members = Hash[
+          rollbar_api.list_all_team_members(server_team['id'])
+          .map { |e| [e.email, e] }
+        ]
       end
-    end
-
-    def combined_pending_and_active_members
-      rollbar_api.list_team_members(server_team['id']) +
-        rollbar_api.list_team_pending_members(server_team['id'])
     end
   end
 end
