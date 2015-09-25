@@ -15,7 +15,7 @@ module Generate
     private
 
     def teams
-      @teams ||= rollbar_api.list_teams.map do |team|
+      rollbar_api.list_teams.map do |team|
         RollbarIntegration::Team.from_api_request(rollbar_api, team)
       end
     end
