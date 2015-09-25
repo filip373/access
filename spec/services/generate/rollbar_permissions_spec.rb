@@ -36,13 +36,11 @@ describe Generate::RollbarPermissions do
     end
 
     it 'creates yaml file with members attribute' do
-      expect(team1_yaml['members']).to be_present
       expect(team1_yaml['members']).to be_a Array
       expect(team1_yaml['members']).to_not be_empty
     end
 
     it 'creates yaml file with projects attribute' do
-      expect(team1_yaml['projects']).to be_present
       expect(team1_yaml['projects']).to be_a Array
       expect(team1_yaml['projects']).to_not be_empty
     end
