@@ -3,7 +3,7 @@ module RollbarIntegration
     attr_accessor :client
 
     def initialize(token: AppConfig.rollbar.token)
-      self.client = Client.new(token: token)
+      self.client = Client.new(token)
     end
 
     def list_teams

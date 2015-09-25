@@ -1,12 +1,8 @@
 module RollbarIntegration
   class Client
     include HTTParty
-    attr_accessor :token
+    rattr_initialize :token
     base_uri 'https://api.rollbar.com/'
-
-    def initialize(token:)
-      self.token = token
-    end
 
     def get(url, options = {})
       options.deep_merge!(query: { access_token: token })
