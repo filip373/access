@@ -4,6 +4,9 @@ RSpec.shared_context 'rollbar_api' do
       allow(api).to receive(:list_teams) { existing_teams }
       allow(api).to receive(:list_team_members) { existing_members }
       allow(api).to receive(:list_team_pending_members) { [] }
+      allow(api).to receive(:list_all_team_members) do
+        rollbar_api.list_team_members + rollbar_api.list_team_pending_members
+      end
       allow(api).to receive(:list_team_projects) { existing_projects }
       allow(api).to receive(:remove_project_from_team) do |project_id, _team_id|
         project = all_projects.find { |p| p.id == project_id }
