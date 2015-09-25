@@ -19,7 +19,7 @@ module RollbarIntegration
     end
 
     def self.prepare_members(api, team)
-      api.list_team_members(team.id).map do |rollbar_user|
+      api.list_all_team_members(team.id).map do |rollbar_user|
         begin
           user = User.find_by_email(rollbar_user.email).name
         rescue
