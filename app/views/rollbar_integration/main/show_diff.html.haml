@@ -1,5 +1,9 @@
 .jumbotron
   %h2 Rollbar teams
+
+  - if pending_invitations.any?
+    = render 'pending_invitations'
+
   - if diff_errors.present?
     = render 'errors'
 

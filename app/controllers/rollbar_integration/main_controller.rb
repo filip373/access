@@ -3,6 +3,9 @@ module RollbarIntegration
     expose(:validation_errors) { Storage.validation_errors }
     expose(:expected_teams) { Teams.all }
     expose(:rollbar_teams) { rollbar_api.list_teams }
+    expose(:pending_invitations) do
+      Actions::ListPendingInvitations.new(rollbar_api).now!
+    end
     expose(:rollbar_log) { Actions::Log.new(calculated_diff).now! }
     expose(:sync_rollbar_job) { SyncJob.new }
     expose(:teams_cleanup) do
