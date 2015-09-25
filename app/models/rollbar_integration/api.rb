@@ -16,6 +16,10 @@ module RollbarIntegration
         .map { |member| get_member(member['user_id']) }
     end
 
+    def list_all_team_members(team_id)
+      list_team_members(team_id) + list_team_pending_members(team_id)
+    end
+
     def list_account_projects
       client.get('/api/1/projects')
     end
