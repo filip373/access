@@ -83,6 +83,14 @@ RSpec.shared_context 'rollbar_api' do
     )
   end
 
+  let(:member5) do
+    Hashie::Mash.new(
+      id: 5,
+      username: 'member5',
+      email: 'member5@foo.pl',
+    )
+  end
+
   let(:member6) do
     Hashie::Mash.new(
       id: 6,
