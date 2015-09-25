@@ -1,6 +1,6 @@
 GIT
   remote: git@github.com:netguru/data_guru.git
-  revision: 4d37928e8015de6c65b7680dd47a420ad65f9f26
+  revision: 692570a6b4146d454c16d3b8e19458e3cb7a3634
   specs:
     data_guru (0.1.0)
       activesupport
@@ -188,7 +188,7 @@ GEM
     method_source (0.8.2)
     mime-types (2.6.1)
     mini_portile (0.6.2)
-    minitest (5.7.0)
+    minitest (5.8.1)
     multi_json (1.11.0)
     multi_xml (0.5.5)
     multipart-post (2.0.0)
