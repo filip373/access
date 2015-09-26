@@ -7,3 +7,15 @@ aliases:
   required: false
   default_value: []
   value_type: array
+domain_membership:
+  required: false
+  default_value: false
+  value_type: boolean
+privacy:
+  required: false
+  default_value: false
+  value_type: false
+archive:
+  required: false
+  default_value: false
+  value_type: false
