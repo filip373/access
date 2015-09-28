@@ -1,9 +1,9 @@
 module RollbarIntegration
   class Teams
     def self.all
-      raw_data.map do |team_name, team_data|
+      raw_data.map do |_team_name, team_data|
         Team.new(
-          team_name,
+          team_data.name,
           team_data.members || [],
           team_data.projects || [],
         )

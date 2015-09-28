@@ -13,6 +13,7 @@ module RollbarIntegration
 
     def to_yaml
       {
+        name: name,
         members: members || [],
         projects: projects || [],
       }.stringify_keys.to_yaml

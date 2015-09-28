@@ -6,7 +6,7 @@ module Generate
       recreate_rollbar_dir
 
       teams.each do |team|
-        File.open(rollbar_dir.join("#{team.name}.yml"), 'w') do |f|
+        File.open(rollbar_dir.join("#{file_name(team.name)}.yml"), 'w') do |f|
           f.write team.to_yaml
         end
       end
@@ -22,6 +22,13 @@ module Generate
 
     def rollbar_dir
       permissions_dir.join 'rollbar_teams'
+    end
+
+    def file_name(team_name)
+      team_name = File.basename(team_name.gsub('\\', '/'))
+      team_name.gsub!(/[^a-zA-Z0-9\.\-\+_]/, '_')
+      team_name = "_#{team_name}" if team_name =~ /^\.+$/
+      team_name
     end
 
     def recreate_rollbar_dir

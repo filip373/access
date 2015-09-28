@@ -44,5 +44,28 @@ describe Generate::RollbarPermissions do
       expect(team1_yaml['projects']).to be_a Array
       expect(team1_yaml['projects']).to_not be_empty
     end
+
+    it 'creates yaml file with name attribute' do
+      expect(team1_yaml['name']).to eq 'team1'
+    end
+
+    context 'team name contains spaces' do
+      let(:team1) do
+        Hashie::Mash.new(
+          name: 'team1 with spaces',
+          id: 1,
+          account_id: 1,
+        )
+      end
+      let(:team1_path) { rollbar_teams_dir.join('team1_with_spaces.yml') }
+
+      it 'creates yaml file with slugified filename' do
+        expect(File.exist?(team1_path)).to be_truthy
+      end
+
+      it 'creates yaml file with name attribute' do
+        expect(team1_yaml['name']).to eq 'team1 with spaces'
+      end
+    end
   end
 end
