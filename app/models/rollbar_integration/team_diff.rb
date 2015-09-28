@@ -86,11 +86,7 @@ module RollbarIntegration
       @server_projects ||= if server_team.respond_to?(:fake)
                              []
                            else
-                             Hash[
-                              rollbar_api
-                              .list_team_projects(server_team['id'])
-                              .map { |e| [e.name, e] }
-                             ]
+                             prepare_server_projects_hash
                            end
     end
 
@@ -118,6 +114,16 @@ module RollbarIntegration
                   end
                 end
               ]
+      hash.delete(nil)
+      hash
+    end
+
+    def prepare_server_projects_hash
+      hash = Hash[
+                   rollbar_api
+                   .list_team_projects(server_team['id'])
+                   .map { |e| [e.name, e] }
+                 ]
       hash.delete(nil)
       hash
     end
