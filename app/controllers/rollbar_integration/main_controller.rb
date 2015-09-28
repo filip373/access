@@ -11,7 +11,7 @@ module RollbarIntegration
       Actions::CleanupTeams.new(expected_teams, rollbar_teams, rollbar_api)
     end
     expose(:missing_teams) { teams_cleanup.stranded_teams }
-    expose(:diff_errors) { @diff.errors.uniq }
+    expose(:diff_errors) { @diff.errors.uniq.sort { |a, b| a.to_s <=> b.to_s } }
     expose(:rollbar_api) { Api.new }
 
     after_filter :clean_diff_actor
