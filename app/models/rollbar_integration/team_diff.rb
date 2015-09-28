@@ -99,11 +99,27 @@ module RollbarIntegration
       if server_team.respond_to?(:fake)
         @server_members = []
       else
-        @server_members = Hash[
-          rollbar_api.list_all_team_members(server_team['id'])
-          .map { |e| [e.email, e] }
-        ]
+        @server_members = prepare_server_members_hash
       end
+    end
+
+    def prepare_server_members_hash
+      hash = Hash[
+                rollbar_api.list_all_team_members(server_team['id'])
+                .map do |e|
+                  begin
+                    yaml_user = User.find_by_email(e.email)
+                  rescue => e
+                    Rollbar.error(e)
+                    @errors.push(e)
+                    [nil, nil]
+                  else
+                    [e.email, yaml_user]
+                  end
+                end
+              ]
+      hash.delete(nil)
+      hash
     end
   end
 end
