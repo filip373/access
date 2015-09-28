@@ -7,7 +7,7 @@ module RollbarIntegration
       new(
         team.name,
         prepare_members(api, team),
-        api.list_team_projects(team.id).map(&:name).uniq,
+        api.list_team_projects(team.id).map(&:name).uniq.compact,
       )
     end
 
