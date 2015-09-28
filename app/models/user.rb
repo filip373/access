@@ -23,7 +23,9 @@ class User
       if name.include?('/')
         namespace_lookup(name)
       else
-        users_data[name] || users_data.fetch(company_name, {}).fetch(name, nil)
+        users_data[name] ||
+        users_data.fetch(company_name, {}).fetch(name, nil) ||
+        users_data.fetch('external', {}).fetch(name, nil)
       end
     user || fail("Unknown user #{name}. It's not in directory users or it is in wrong directory")
   end
@@ -37,7 +39,7 @@ class User
   def self.find_by_email(email)
     user = Users::FindByEmail.new(email: email).call
     return user if user
-    fail UserError, "User with email: #{email} does not exist."
+    fail UserError, "User with email: #{email} does not exist in directory users."
   end
 
   def self.list_company_users
