@@ -32,14 +32,12 @@ class User
 
   def self.find_by_rollbar(username)
     user = Users::FindByRollbar.new(username: username).call
-    return user if user
-    fail UserError, "User with rollbar login: #{username} does not exist."
+    user || fail(UserError, "User with rollbar login: #{username} does not exist.")
   end
 
   def self.find_by_email(email)
     user = Users::FindByEmail.new(email: email).call
-    return user if user
-    fail UserError, "User with email: #{email} does not exist in directory users."
+    user || fail(UserError, "User with email: #{email} does not exist in directory users.")
   end
 
   def self.list_company_users
