@@ -106,8 +106,8 @@ module RollbarIntegration
                   begin
                     yaml_user = User.find_by_email(e.email)
                   rescue => exception
-                    Rollbar.error(exception)
-                    custom_error = "#{exception} rollbar_user: #{e}"
+                    custom_error = "#{exception} rollbar_user: #{e}, team: #{server_team}"
+                    Rollbar.error(custom_error)
                     @errors.push(custom_error)
                     [nil, nil]
                   else
