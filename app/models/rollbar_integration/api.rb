@@ -33,6 +33,7 @@ module RollbarIntegration
       client.get("/api/1/team/#{team_id}/invites")
         .select { |e| e.status == 'pending' }
         .each { |e| e[:email] = e[:to_email] }
+        .uniq(&:email)
     end
 
     def create_team(name, access_level = 'standard')
