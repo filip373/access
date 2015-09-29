@@ -26,7 +26,11 @@ module RollbarIntegration
 
         members_to_remove.each do |team, members|
           members.each do |_key, member|
-            @rollbar_api.remove_member_from_team(member.id, team.id)
+            if member.status == 'pending'
+              @rollbar_api.cancel_invitation(member.id)
+            else
+              @rollbar_api.remove_member_from_team(member.id, team.id)
+            end
           end
         end
       end

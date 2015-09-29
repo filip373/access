@@ -56,6 +56,10 @@ module RollbarIntegration
       client.post("/api/1/team/#{team_id}/invites", options)
     end
 
+    def cancel_invitation(invitation_id)
+      client.delete("/api/1/invite/#{invitation_id}")
+    end
+
     def remove_member_from_team(user_id, team_id)
       client.delete("/api/1/team/#{team_id}/user/#{user_id}")
     end
