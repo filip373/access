@@ -130,8 +130,8 @@ RSpec.describe RollbarIntegration::TeamDiff do
             expect(diff_hash[:add_members][team1].values.first).to respond_to(:email)
           end
 
-          it 'contains member with email as key of hash' do
-            expect(diff_hash[:add_members][team1].keys.first).to include('@')
+          it 'contains member with name as key of hash' do
+            expect(diff_hash[:add_members][team1].keys.first).to include('.')
           end
         end
 
@@ -150,8 +150,8 @@ RSpec.describe RollbarIntegration::TeamDiff do
             expect(diff_hash[:remove_members][team1].values.first).to respond_to(:id)
           end
 
-          it 'contains member with email as key of hash' do
-            expect(diff_hash[:remove_members][team1].keys.first).to include('@')
+          it 'contains member with name as key of hash' do
+            expect(diff_hash[:remove_members][team1].keys.first).to include('.')
           end
         end
 
@@ -172,8 +172,8 @@ RSpec.describe RollbarIntegration::TeamDiff do
               expect(subject.values.first).to respond_to(:email)
             end
 
-            it 'contains members with email as key of hash' do
-              expect(subject.keys.first).to include('@')
+            it 'contains members with name as key of hash' do
+              expect(subject.keys.first).to include('')
             end
           end
 

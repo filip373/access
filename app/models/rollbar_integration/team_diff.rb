@@ -66,9 +66,9 @@ module RollbarIntegration
 
     def yaml_members
       return @yaml_members if @yaml_members.present?
-      users = User.find_many(yaml_team.members)
+      @yaml_members = User.find_many(yaml_team.members)
       @errors.push(*User.shift_errors) if User.errors.present?
-      @yaml_members = Hash[users.values.map { |e| [e.email, e] }]
+      @yaml_members
     end
 
     def yaml_projects
@@ -104,13 +104,14 @@ module RollbarIntegration
                 rollbar_api.list_all_team_members(server_team['id'])
                 .map do |e|
                   begin
-                    User.find_by_email(e.email)
-                  rescue => e
-                    Rollbar.error(e)
-                    @errors.push(e)
+                    yaml_user = User.find_by_email(e.email)
+                  rescue => exception
+                    Rollbar.error(exception)
+                    custom_error = "#{exception} rollbar_user: #{e}"
+                    @errors.push(custom_error)
                     [nil, nil]
                   else
-                    [e.email, e]
+                    [yaml_user.name, e]
                   end
                 end
               ]
