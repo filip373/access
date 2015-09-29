@@ -146,7 +146,7 @@ RSpec.describe RollbarIntegration::TeamDiff do
           it { expect(diff_hash[:remove_members][team1]).to_not be_empty }
           it { expect(diff_hash[:remove_members][team1]).to be_a Hash }
 
-          it 'contains member with email attribute' do
+          it 'contains member with id attribute' do
             expect(diff_hash[:remove_members][team1].values.first).to respond_to(:id)
           end
 

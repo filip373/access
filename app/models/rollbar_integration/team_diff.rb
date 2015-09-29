@@ -104,13 +104,13 @@ module RollbarIntegration
                 rollbar_api.list_all_team_members(server_team['id'])
                 .map do |e|
                   begin
-                    yaml_user = User.find_by_email(e.email)
+                    User.find_by_email(e.email)
                   rescue => e
                     Rollbar.error(e)
                     @errors.push(e)
                     [nil, nil]
                   else
-                    [e.email, yaml_user]
+                    [e.email, e]
                   end
                 end
               ]
