@@ -23,7 +23,13 @@ module Users
     end
 
     def email_matched?(user_hash)
-      user_hash['email'] == email
+      if user_hash['email'].include? 'netguru'
+        user_hash['email'].split('@').first == email.split('@').first
+      else
+        user_hash['email'] == email
+      end
+    rescue
+      false
     end
 
     def directory?(hash)
