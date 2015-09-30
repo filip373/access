@@ -19,7 +19,6 @@ module GithubIntegration
     def show_diff
       reset_diff
       UpdateRepo.now!
-      Storage.reset_data
       calculated_diff
     end
 
