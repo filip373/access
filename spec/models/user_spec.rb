@@ -66,9 +66,9 @@ describe User do
             required: true,
             default_value: false,
             value_type: 'boolean',
-          }
-        }
-      }
+          },
+        },
+      },
     }.deep_stringify_keys
     DataGuru::UsersCollection.new(storage: storage)
   end
@@ -115,10 +115,10 @@ describe User do
     context 'all users are present in users_data' do
       let(:names) { [janusz[:id], marian[:id], stefan[:id]] }
 
-      it 'returns array of name and gh_login of all names' do
-        expect(subject.find_many(names)).to include janusz[:id] => janusz[:github]
-        expect(subject.find_many(names)).to include marian[:id] => marian[:github]
-        expect(subject.find_many(names)).to include stefan[:id] => stefan[:github]
+      it 'returns hash where key is name and value is user' do
+        expect(subject.find_many(names).keys).to include janusz[:id]
+        expect(subject.find_many(names).keys).to include marian[:id]
+        expect(subject.find_many(names).keys).to include stefan[:id]
       end
     end
 
@@ -126,8 +126,9 @@ describe User do
       let(:names) { [janusz[:id], marian[:id], 'not.found'] }
 
       it 'find only present users' do
-        expect(subject.find_many(names)).to include [janusz[:id], janusz[:github]]
-        expect(subject.find_many(names)).to include [marian[:id], marian[:github]]
+        expect(subject.find_many(names).keys).to include janusz[:id]
+        expect(subject.find_many(names).keys).to include marian[:id]
+        expect(subject.find_many(names).keys).to_not include 'not.found'
       end
 
       it 'add an error' do
