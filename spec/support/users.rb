@@ -63,9 +63,9 @@ RSpec.shared_context 'users' do
             required: true,
             default_value: false,
             value_type: 'boolean',
-          }
-        }
-      }
+          },
+        },
+      },
     }.deep_stringify_keys
     DataGuru::UsersCollection.new(storage: storage)
   end

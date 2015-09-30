@@ -42,8 +42,8 @@ RSpec.shared_context 'gh_teams' do
             default_value: nil,
             value_type: 'array',
           },
-        }
-      }
+        },
+      },
     }.deep_stringify_keys
     DataGuru::GithubTeamsCollection.new(storage: storage)
   end

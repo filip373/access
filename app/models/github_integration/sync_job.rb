@@ -7,9 +7,9 @@ module GithubIntegration
     private
 
     def ping_messages
-      notification_ping! "Synchronizing github teams..."
+      notification_ping! 'Synchronizing github teams...'
       yield
-      notification_ping! "Synchronization done! High Five!"
+      notification_ping! 'Synchronization done! High Five!'
     end
 
     def notification_ping!(msg)
