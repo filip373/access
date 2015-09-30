@@ -21,7 +21,6 @@ class User
   def self.find(name)
     user =
       if name.include?('/')
-        namespace_lookup(name)
       else
         users_data[name] ||
         users_data.fetch(company_name, {}).fetch(name, nil) ||
@@ -37,15 +36,6 @@ class User
 
   def self.list_company_users
     users_data.fetch(company_name, {})
-  end
-
-  def self.namespace_lookup(name)
-    parts = name.split('/')
-    nick = parts.last
-    parts = parts[0..-2]
-    user_directory = users_data
-    parts.each { |part| user_directory = user_directory[part] }
-    user_directory[nick]
   end
 
   def self.find_many(names)
