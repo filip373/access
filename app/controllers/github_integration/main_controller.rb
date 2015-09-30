@@ -2,7 +2,7 @@ module GithubIntegration
   class MainController < ApplicationController
     include ::GithubApi
 
-    expose(:validation_errors) { Storage.validation_errors }
+    expose(:validation_errors) { DataGuru::Client.new.errors }
     expose(:expected_teams) { Teams.all }
     expose(:gh_teams) { gh_api.list_teams }
     expose(:gh_log) { Actions::Log.new(calculated_diff).now! }
