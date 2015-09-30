@@ -26,11 +26,12 @@ gem 'attr_extras'
 
 # deployment
 
+gem 'airbrussh', require: false
 gem 'capistrano'
 gem 'capistrano-bundler'
 gem 'capistrano-passenger'
-gem 'capistrano-upload', require: false
 gem 'capistrano-rails'
+gem 'capistrano-upload', require: false
 gem 'rvm1-capistrano3', require: false
 
 group :development do
