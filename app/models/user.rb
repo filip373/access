@@ -45,7 +45,7 @@ class User
       rescue StandardError => e
         add_error(e)
       else
-        [n, user]
+        [user.id, user]
       end
     end
     Hash[users.compact]
