@@ -21,6 +21,8 @@ class User
   def self.find(name)
     user =
       if name.include?('/')
+        nick = name.split('/').last
+        users_data.find { |u| u.id == nick }
       else
         users_data[name] ||
         users_data.fetch(company_name, {}).fetch(name, nil) ||
