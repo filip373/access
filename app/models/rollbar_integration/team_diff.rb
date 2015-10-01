@@ -111,7 +111,7 @@ module RollbarIntegration
                     @errors.push(custom_error)
                     [nil, nil]
                   else
-                    [yaml_user.name, e]
+                    [yaml_user.id, e]
                   end
                 end
               ]
