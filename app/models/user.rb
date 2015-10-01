@@ -24,11 +24,9 @@ class User
         nick = name.split('/').last
         users_data.find { |u| u.id == nick }
       else
-        users_data[name] ||
-        users_data.fetch(company_name, {}).fetch(name, nil) ||
-        users_data.fetch('external', {}).fetch(name, nil)
+        users_data.find { |u| u.id == name }
       end
-    user || fail("Unknown user #{name}. It's not in directory users or it is in wrong directory")
+    user || fail(UserError, "Unknown user #{name}. It's not in directory users or it is in wrong directory")
   end
 
   def self.find_by_email(email)
@@ -37,7 +35,7 @@ class User
   end
 
   def self.list_company_users
-    users_data.fetch(company_name, {})
+    users_data.reject(&:external)
   end
 
   def self.find_many(names)
