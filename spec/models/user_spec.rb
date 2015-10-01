@@ -87,18 +87,6 @@ describe User do
     end
   end
 
-  describe '.find_by_rollbar(username)' do
-    it 'finds user by rollbar username' do
-      expect(subject.find_by_rollbar('roll_mnowak')).to have_attributes(marian)
-    end
-
-    context 'user with desirable username does not exist' do
-      it 'raises error' do
-        expect { subject.find_by_rollbar('not_exist') }.to raise_error(UserError)
-      end
-    end
-  end
-
   describe '.find_by_email(email)' do
     it 'finds user outside groups' do
       expect(subject.find_by_email('marian.nowak@example.com')).to have_attributes(marian)
