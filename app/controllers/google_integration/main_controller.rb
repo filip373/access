@@ -18,7 +18,6 @@ module GoogleIntegration
     def show_diff
       reset_diff
       UpdateRepo.now!
-      Storage.reset_data
     end
 
     def show_groups
