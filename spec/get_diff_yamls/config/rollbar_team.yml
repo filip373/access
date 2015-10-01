@@ -7,3 +7,7 @@ projects:
   required: true
   default_value: []
   value_type: array
+name:
+  required: true
+  default_value:
+  value_type: string
