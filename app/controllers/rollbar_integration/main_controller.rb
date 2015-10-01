@@ -1,6 +1,6 @@
 module RollbarIntegration
   class MainController < ApplicationController
-    expose(:validation_errors) { Storage.validation_errors }
+    expose(:validation_errors) { DataGuru::Client.new.errors }
     expose(:expected_teams) { Teams.all }
     expose(:rollbar_teams) { rollbar_api.list_teams }
     expose(:pending_invitations) do

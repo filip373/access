@@ -9,4 +9,4 @@
   %h3 Unable to parse following .yml files:
   %ul.list-group
   - validation_errors.each do |error|
-    = link_to error.message, github_file_path(error.file), class: 'list-group-item list-group-item-danger'
+    %li.list-group-item.list-group-item-danger #{error}

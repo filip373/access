@@ -2,7 +2,7 @@ class MainController < ApplicationController
   include ::GithubApi
   before_action :check_permissions
 
-  expose(:validation_errors) { Storage.validation_errors }
+  expose(:validation_errors) { DataGuru::Client.new.errors }
 
   def check_permissions
     gh_api.client.patch_request("/orgs/#{gh_api.client.org}")
