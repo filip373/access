@@ -22,8 +22,8 @@ module GoogleIntegration
       end
 
       def expected_accounts
-        User.list_company_users.map do |login, value|
-          Helpers::User.email_to_username(value['email']) || login
+        User.list_company_users.map do |user|
+          Helpers::User.email_to_username(user.email) || user.id
         end
       end
     end
