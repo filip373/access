@@ -65,15 +65,6 @@ class User
     DataGuru::Client.new.users
   end
 
-  def self.find_user_by_github(login)
-    user = Storage.data.users.map { |_k, users| users.values }.flatten.find do |entry|
-      entry['github'].to_s.downcase == login.downcase
-    end
-    User.new(github: login,
-             name: user.try(:name),
-             email: user.try(:email))
-  end
-
   def self.shift_errors
     tmp_errors = @errors.clone
     @errors = []

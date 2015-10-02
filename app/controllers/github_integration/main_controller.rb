@@ -11,7 +11,8 @@ module GithubIntegration
     expose(:diff_errors) { @diff.errors }
     expose(:insecure_users) do
       Actions::ListInsecureUsers.new(
-        gh_api.list_org_members_without_2fa(AppConfig.company)).call
+        gh_api.list_org_members_without_2fa(AppConfig.company),
+        data_guru.users).call
     end
 
     after_filter :clean_diff_actor
