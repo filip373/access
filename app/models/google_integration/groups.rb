@@ -1,14 +1,15 @@
 module GoogleIntegration
   class Groups
     def self.all
-      raw_data.map do |group_name, group_data|
+      raw_data.map do |group|
+        privacy_bool = group.privacy == "open" ? false : true
         Group.new(
-          group_name,
-          group_data.members,
-          group_data.aliases,
-          group_data.domain_membership,
-          GroupPrivacy.from_bool(group_data.private).to_s,
-          group_data.archive,
+          group.id,
+          group.members,
+          group.aliases,
+          group.domain_membership,
+          GroupPrivacy.from_bool(privacy_bool).to_s,
+          group.archive,
         )
       end
     end
@@ -20,7 +21,7 @@ module GoogleIntegration
     private
 
     def self.raw_data
-      Storage.data.google_groups
+      DataGuru::Client.new.google_groups
     end
   end
 end
