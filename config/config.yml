@@ -46,8 +46,8 @@ defaults: &defaults
   google:
     <<: *google_defaults
   dataguru:
-    git_repo_url: 'https://github.com/netguru/permissions'
-    git_repo_temp_dir: 'tmp/permissions-template'
+    git_repo_url: http://url-to-repo-with-permissions
+    git_repo_temp_dir: 'tmp/permissions'
 
 test:
   <<: *defaults
@@ -61,9 +61,8 @@ test:
     use_service_account: true
     generate_permissions: true
   dataguru:
-    git_repo_url: 'https://github.com/netguru/permissions'
+    git_repo_url: 'http://url-to-repo-with-permissions'
     git_repo_temp_dir: 'spec/get_diff_yamls'
-
 
 development:
   <<: *defaults
