@@ -56,13 +56,13 @@ module GithubIntegration
 
     def list_team_members(team_id)
       r = @gh_api.list_team_members(team_id)
-      r.map { |e| e['login'] }
+      r.map { |e| e['login'].downcase }
     end
 
     def map_users_to_members
       users = User.find_many(@expected_team.members)
       @errors.push(*User.shift_errors) if User.errors.present?
-      users.values.map(&:github)
+      users.values.map { |v| v.github.downcase }
     end
 
     def list_team_repos(team_id)
