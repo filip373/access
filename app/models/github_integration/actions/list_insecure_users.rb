@@ -17,12 +17,12 @@ module GithubIntegration
       def convert_members_to_users
         gh_members.map do |m|
           dg_user = users.find do |u|
-            u.github == m['login']
+            u.github.to_s.downcase == m['login'].downcase
           end
-           User.new(github: dg_user.id,
-            name: dg_user.name,
-            email: dg_user.email,
-            html_url: m['html_url'])
+          User.new(github: dg_user.id,
+                   name: dg_user.name,
+                   email: dg_user.email,
+                   html_url: m['html_url'])
         end
       end
     end
