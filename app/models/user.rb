@@ -18,6 +18,10 @@ class User
     @html_url = html_url
   end
 
+  def email
+    emails.first
+  end
+
   def self.find(name)
     user =
       if name.include?('/')
