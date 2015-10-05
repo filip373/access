@@ -2,13 +2,12 @@ module GoogleIntegration
   class Groups
     def self.all
       raw_data.map do |group|
-        privacy_bool = group.privacy == "open" ? false : true
         Group.new(
           group.id,
           group.members,
           group.aliases,
           group.domain_membership,
-          GroupPrivacy.from_bool(privacy_bool).to_s,
+          GroupPrivacy.from_bool(group.private).to_s,
           group.archive,
         )
       end

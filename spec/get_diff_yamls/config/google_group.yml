@@ -11,10 +11,10 @@ domain_membership:
   required: false
   default_value: false
   value_type: boolean
-privacy:
+private:
   required: false
   default_value: false
-  value_type: false
+  value_type: boolean
 archive:
   required: false
   default_value: false
