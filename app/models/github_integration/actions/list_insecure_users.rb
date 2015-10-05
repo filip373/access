@@ -20,9 +20,10 @@ module GithubIntegration
             u.github.to_s.downcase == m['login'].downcase
           end
           User.new(github: dg_user.id,
-                   name: dg_user.name,
-                   email: dg_user.email,
-                   html_url: m['html_url'])
+            name: dg_user.name,
+            emails: dg_user.emails,
+            html_url: m['html_url']
+          )
         end
       end
     end

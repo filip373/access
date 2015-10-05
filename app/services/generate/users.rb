@@ -24,7 +24,7 @@ module Generate
         User.new(
           name: username(user['primaryEmail']),
           full_name: user['name']['fullName'],
-          email: user['primaryEmail'],
+          emails: [user['primaryEmail']],
         )
       end
     end
@@ -61,7 +61,7 @@ module Generate
     def match_google_user(gh_user)
       return unless gh_user
       @users.find do |u|
-        u.email == gh_user['email'] || u.name == slugify(gh_user['name'])
+        u.emails.include?(gh_user['email']) || u.name == slugify(gh_user['name'])
       end
     end
 

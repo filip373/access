@@ -25,8 +25,8 @@ module GoogleIntegration
     def build_users
       u = User.find_many(members)
       u.map do |name, data|
-        if data.email.present?
-          data.email
+        if data.emails.present?
+          data.emails.first
         else
           "#{name}@#{AppConfig.google.main_domain}"
         end

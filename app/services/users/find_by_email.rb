@@ -23,10 +23,10 @@ module Users
     end
 
     def email_matched?(user_hash)
-      if user_hash['email'].include? 'netguru'
-        user_hash['email'].split('@').first == email.split('@').first
+      if user_hash['emails'].any? { |e| e.include? 'netguru' }
+        user_hash['emails'].any? { |e| e.split('@').first == email.split('@').first }
       else
-        user_hash['email'] == email
+        user_hash['emails'].include? email
       end
     rescue
       false
@@ -39,7 +39,7 @@ module Users
     def instantiated_user(key, user_hash)
       User.new(full_name: user_hash['name'], name: key,
                github: user_hash['github'],
-               email: user_hash['email'])
+               emails: user_hash['emails'])
     end
   end
 end

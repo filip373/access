@@ -1,20 +1,20 @@
 class UserError < StandardError; end
 
 class User
-  attr_accessor :name, :full_name, :github, :email, :html_url, :rollbar
+  attr_accessor :name, :full_name, :github, :emails, :html_url, :rollbar
 
   @errors = []
   class << self
     attr_reader :errors
   end
 
-  def initialize(name:, full_name: '', github: '', email: '', html_url: '',
+  def initialize(name:, full_name: '', github: '', emails: [''], html_url: '',
                  rollbar: '')
     @name = name
     @full_name = full_name
     @github = github
     @rollbar = rollbar
-    @email = email
+    @emails = emails
     @html_url = html_url
   end
 
@@ -30,8 +30,10 @@ class User
   end
 
   def self.find_by_email(email)
-    users_data.find { |u| u.email == email } ||
-      fail(UserError, "User with email: #{email} does not exist.")
+    user = users_data.find do |u|
+      u.emails.include?(email)
+    end
+    user || fail(UserError, "User with email: #{email} does not exist.")
   end
 
   def self.list_company_users
@@ -75,11 +77,13 @@ class User
     {
       name: full_name,
       github: github,
-      email: email,
+      emails: emails,
     }.stringify_keys.to_yaml
   end
 
   def external?
-    email.split('@').last != AppConfig.google.main_domain
+    emails.map do |email|
+      email.split('@').last != AppConfig.google.main_domain
+    end.first
   end
 end
