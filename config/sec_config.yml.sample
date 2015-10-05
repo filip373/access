@@ -2,7 +2,9 @@ development:
   rollbar_token: token-from-rollbar-so
   permissions_repo:
     url: your-url-to-permissions-repo
-    git: git://path-to-repo-with-permissions
+  dataguru:
+    git_repo_url: http://url-to-repo-with-permissions
+    git_repo_temp_dir: 'tmp/permissions'
   github:
     client_id: gh-client-id
     client_secret: gh-secret
