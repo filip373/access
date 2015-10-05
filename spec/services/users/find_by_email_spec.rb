@@ -5,7 +5,7 @@ describe Users::FindByEmail do
     {
       'group_one' => {
         'janusz.nowak' => { 'name' => 'Janusz Nowak',
-                            'github' => '13art', 'email' => 'janusz.nowak@foo.pl' },
+                            'github' => '13art', 'emails' => ['janusz.nowak@foo.pl'] },
         'marian' => { 'name' => 'Marian Nowak', 'github' => '76marekm' },
       },
       'group_two' => {
@@ -15,7 +15,7 @@ describe Users::FindByEmail do
         'parowka' => { 'name' => 'Parówka Nowak', 'github' => '13art' },
       },
       'michal.nowak' => { 'name' => 'Michał Nowak', 'github' => 'mnowak',
-                          'email' => 'michal.nowak@foo.pl' },
+                          'emails' => ['michal.nowak@foo.pl'] },
     }
   end
 
@@ -26,7 +26,7 @@ describe Users::FindByEmail do
           .new(users_data: users_data, email: 'michal.nowak@foo.pl').call
       end
       let(:expected_attrubutes) do
-        { full_name: 'Michał Nowak', github: 'mnowak', email: 'michal.nowak@foo.pl',
+        { full_name: 'Michał Nowak', github: 'mnowak', emails: ['michal.nowak@foo.pl'],
           name: 'michal.nowak' }
       end
       it 'returns user with attributes' do
@@ -43,7 +43,7 @@ describe Users::FindByEmail do
         described_class.new(users_data: users_data, email: 'janusz.nowak@foo.pl').call
       end
       let(:expected_attrubutes) do
-        { full_name: 'Janusz Nowak', github: '13art', email: 'janusz.nowak@foo.pl',
+        { full_name: 'Janusz Nowak', github: '13art', emails: ['janusz.nowak@foo.pl'],
           name: 'janusz.nowak' }
       end
       it 'returns user with attributes' do

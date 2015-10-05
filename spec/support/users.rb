@@ -3,7 +3,7 @@ RSpec.shared_context 'users' do
     {
       id: 'janusz.nowak',
       name: 'Janusz Nowak',
-      email: 'janusz.nowak@example.com',
+      emails: ['janusz.nowak@example.com'],
       github: 'gh_jnowak',
       rollbar: 'roll_jnowak',
       external: false,
@@ -13,7 +13,7 @@ RSpec.shared_context 'users' do
     {
       id: 'marian.nowak',
       name: 'Marina Nowak',
-      email: 'marian.nowak@example.com',
+      emails: ['marian.nowak@example.com'],
       github: 'gh_mnowak',
       rollbar: 'roll_mnowak',
       external: true,
@@ -23,7 +23,7 @@ RSpec.shared_context 'users' do
     {
       id: 'stefan.nowak',
       name: 'Stefan Nowak',
-      email: 'stefan.nowak@example.com',
+      emails: ['stefan.nowak@example.com'],
       github: 'gh_snowak',
       rollbar: 'roll_snowak',
       external: true,
@@ -44,10 +44,10 @@ RSpec.shared_context 'users' do
             default_value: nil,
             value_type: 'string',
           },
-          email: {
+          emails: {
             required: true,
             default_value: nil,
-            value_type: 'string',
+            value_type: 'array',
           },
           github: {
             required: true,

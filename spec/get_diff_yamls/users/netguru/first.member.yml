@@ -2,4 +2,5 @@
 name: First Member
 github: first.mbr
 rollbar: member1
-email: member1@foo.pl
+emails:
+  - member1@foo.pl

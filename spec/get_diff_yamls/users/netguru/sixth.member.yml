@@ -1,4 +1,5 @@
 ---
 name: Sixsth Member
 github: sth.mbr
-email: member6@foo.pl
+emails:
+  - member6@foo.pl

@@ -2,4 +2,5 @@
 name: Second Member
 github: scnd.mbr
 rollbar: member2
-email: member2@foo.pl
+emails:
+  - member2@foo.pl

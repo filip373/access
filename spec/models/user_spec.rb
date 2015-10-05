@@ -6,7 +6,7 @@ describe User do
     {
       id: 'janusz.nowak',
       name: 'Janusz Nowak',
-      email: 'janusz.nowak@example.com',
+      emails: ['janusz.nowak@example.com'],
       github: 'gh_jnowak',
       rollbar: 'roll_jnowak',
       external: false,
@@ -16,7 +16,7 @@ describe User do
     {
       id: 'marian.nowak',
       name: 'Marina Nowak',
-      email: 'marian.nowak@example.com',
+      emails: ['marian.nowak@example.com'],
       github: 'gh_mnowak',
       rollbar: 'roll_mnowak',
       external: true,
@@ -26,7 +26,7 @@ describe User do
     {
       id: 'stefan.nowak',
       name: 'Stefan Nowak',
-      email: 'stefan.nowak@example.com',
+      emails: ['stefan.nowak@example.com'],
       github: 'gh_snowak',
       rollbar: 'roll_snowak',
       external: true,
@@ -47,10 +47,10 @@ describe User do
             default_value: nil,
             value_type: 'string',
           },
-          email: {
+          emails: {
             required: true,
             default_value: nil,
-            value_type: 'string',
+            value_type: 'array',
           },
           github: {
             required: true,
@@ -145,7 +145,7 @@ describe User do
     context 'user is from company' do
       let(:user) do
         described_class.new(
-          email: "mariusz.blaszczak@#{AppConfig.google.main_domain}",
+          emails: ["mariusz.blaszczak@#{AppConfig.google.main_domain}"],
           name: 'mariusz.blaszczak',
         )
       end
@@ -158,7 +158,7 @@ describe User do
     context 'user is not from company' do
       let(:user) do
         described_class.new(
-          email: 'mariusz.blaszczak@wp.pl',
+          emails: ['mariusz.blaszczak@wp.pl'],
           name: 'mariusz.blaszczak',
         )
       end
@@ -172,21 +172,21 @@ describe User do
   describe '.new' do
     let(:user) do
       described_class.new(
-        email: 'mariusz.blaszczak@netguru.pl',
+        emails: ['mariusz.blaszczak@netguru.pl'],
         name: 'mariusz.blaszczak',
         full_name: 'Mariusz Blaszczak',
         github: 'Mariusz Blaszczak',
       )
     end
 
-    it { expect(user.email).to_not be_empty }
+    it { expect(user.emails).to_not be_empty }
     it { expect(user.name).to_not be_empty }
     it { expect(user.full_name).to_not be_empty }
     it { expect(user.github).to_not be_empty }
 
     it 'is possible to change email' do
-      user.email = 'another@email.pl'
-      expect(user.email).to eq 'another@email.pl'
+      user.emails = 'another@email.pl'
+      expect(user.emails).to include 'another@email.pl'
     end
 
     it 'is possible to change name' do
@@ -208,7 +208,7 @@ describe User do
   describe '#to_yaml' do
     let(:user) do
       described_class.new(
-        email: 'mariusz.blaszczak@netguru.pl',
+        emails: ['mariusz.blaszczak@netguru.pl'],
         name: 'mariusz.blaszczak',
         full_name: 'Mariusz Blaszczak',
         github: 'blaszczakm',
@@ -220,9 +220,9 @@ describe User do
     it { expect(yaml_object.keys.count).to eq 3 }
     it { expect(yaml_object.keys.first).to eq 'name' }
     it { expect(yaml_object.keys.second).to eq 'github' }
-    it { expect(yaml_object.keys.third).to eq 'email' }
+    it { expect(yaml_object.keys.third).to eq 'emails' }
     it { expect(yaml_object.values.first).to eq user.full_name }
     it { expect(yaml_object.values.second).to eq user.github }
-    it { expect(yaml_object.values.third).to eq user.email }
+    it { expect(yaml_object.values.third).to eq user.emails }
   end
 end

@@ -127,7 +127,7 @@ RSpec.describe RollbarIntegration::TeamDiff do
           it { expect(diff_hash[:add_members][team1]).to be_a Hash }
 
           it 'contains new member with email attribute' do
-            expect(diff_hash[:add_members][team1].values.first).to respond_to(:email)
+            expect(diff_hash[:add_members][team1].values.first).to respond_to(:emails)
           end
 
           it 'contains member with name as key of hash' do
@@ -169,7 +169,7 @@ RSpec.describe RollbarIntegration::TeamDiff do
             subject { diff_hash[:create_teams][yaml_new_team][:add_members] }
 
             it 'contains members with email attribute' do
-              expect(subject.values.first).to respond_to(:email)
+              expect(subject.values.first).to respond_to(:emails)
             end
 
             it 'contains members with name as key of hash' do

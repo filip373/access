@@ -3,10 +3,10 @@ name:
   required: true
   default_value:
   value_type: string
-email:
+emails:
   required: true
   default_value:
-  value_type: string
+  value_type: array
 github:
   required: true
   default_value:

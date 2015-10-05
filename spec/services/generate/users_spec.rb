@@ -96,11 +96,11 @@ describe Generate::Users do
     end
 
     it 'creates files with proper email attributes' do
-      expect(first_member_yaml['email']).to eq 'first.member@netguru.pl'
-      expect(second_member_yaml['email']).to eq 'second.member@external.pl'
-      expect(third_member_yaml['email']).to eq ''
-      expect(fourth_member_yaml['email']).to eq ''
-      expect(fifth_member_yaml['email']).to eq 'fifth.member@netguru.pl'
+      expect(first_member_yaml['emails']).to include 'first.member@netguru.pl'
+      expect(second_member_yaml['emails']).to include 'second.member@external.pl'
+      expect(third_member_yaml['emails']).to eq ['']
+      expect(fourth_member_yaml['emails']).to eq ['']
+      expect(fifth_member_yaml['emails']).to include 'fifth.member@netguru.pl'
     end
 
     context 'There is a github user (thrd.mbr) who has no email' do
