@@ -17,8 +17,6 @@ module TogglIntegration
       }.stringify_keys.to_yaml
     end
 
-    private
-
     def self.team_members(api, team)
       api.list_team_members(team['id']).map do |member|
         begin
@@ -31,5 +29,7 @@ module TogglIntegration
     def self.team_projects(team)
       [team['name']]
     end
+
+    private_class_method :team_members, :team_projects
   end
 end
