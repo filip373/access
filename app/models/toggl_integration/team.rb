@@ -9,6 +9,14 @@ module TogglIntegration
          )
     end
 
+    def to_yaml
+      {
+        name: name,
+        members: members || [],
+        projects: projects || [],
+      }.stringify_keys.to_yaml
+    end
+
     private
 
     def self.team_members(api, team)

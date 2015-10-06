@@ -25,4 +25,21 @@ describe TogglIntegration::Team do
       expect(team.members).to eq(['james.bond'])
     end
   end
+
+  describe '#to_yaml' do
+    it 'returns new team with members' do
+      team = TogglIntegration::Team.from_api_request(toggl_api, team1)
+      expect(team.to_yaml).to eq(
+        <<-EOS
+---
+name: Team1
+members:
+- john.doe
+- jane.kovalsky
+projects:
+- Team1
+EOS
+      )
+    end
+  end
 end
