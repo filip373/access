@@ -26,6 +26,7 @@ gem 'slack-notifier'
 gem 'sprockets'
 gem 'skylight'
 gem 'attr_extras'
+gem 'togglv8'
 
 # deployment
 
