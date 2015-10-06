@@ -3,6 +3,7 @@ module GoogleIntegration
     class AccountsDiff
       def initialize(google_api)
         @google_api = google_api
+        @repo = UserRepository.new
       end
 
       def now!
@@ -22,7 +23,7 @@ module GoogleIntegration
       end
 
       def expected_accounts
-        User.list_company_users.map do |user|
+        @repo.list_company_users.map do |user|
           Helpers::User.email_to_username(user.emails.first) || user.id
         end
       end

@@ -4,6 +4,7 @@ module GoogleIntegration
       def initialize(google_api)
         @google_api = google_api
         @create_accounts = {}
+        @repo = UserRepository.new
       end
 
       def now!(accounts)
@@ -28,7 +29,7 @@ module GoogleIntegration
       end
 
       def create_account(login)
-        user = User.find(login)
+        user = @repo.find(login)
         params = {
           first_name: user.name.split(' ').first,
           last_name: user.name.split(' ').last,

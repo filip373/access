@@ -2,7 +2,7 @@ module RollbarIntegration
   class TeamDiff
     include Celluloid
 
-    attr_reader :server_team, :yaml_team, :rollbar_api
+    attr_reader :server_team, :yaml_team, :rollbar_api, :repo
     attr_accessor :diff_hash
 
     def initialize(yaml_team, server_team, rollbar_api, diff_hash)
@@ -11,6 +11,7 @@ module RollbarIntegration
       @server_team = server_team || create_server_team
       @rollbar_api = rollbar_api
       @errors = []
+      @repo = UserRepository.new
     end
 
     def diff(blk)
@@ -66,8 +67,8 @@ module RollbarIntegration
 
     def yaml_members
       return @yaml_members if @yaml_members.present?
-      @yaml_members = User.find_many(yaml_team.members)
-      @errors.push(*User.shift_errors) if User.errors.present?
+      @yaml_members = repo.find_many(yaml_team.members)
+      @errors.push(repo.errors) if repo.errors.present?
       @yaml_members
     end
 
@@ -104,7 +105,7 @@ module RollbarIntegration
                 rollbar_api.list_all_team_members(server_team['id'])
                 .map do |e|
                   begin
-                    yaml_user = User.find_by_email(e.email)
+                    yaml_user = repo.find_by_email(e.email)
                   rescue => exception
                     custom_error = "#{exception} rollbar_user: #{e}, team: #{server_team}"
                     Rollbar.error(custom_error)

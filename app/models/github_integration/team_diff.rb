@@ -8,6 +8,7 @@ module GithubIntegration
       @gh_team = gh_team || create_gh_team
       @gh_api = gh_api
       @errors = []
+      @repo = UserRepository.new
     end
 
     def diff(blk)
@@ -60,8 +61,8 @@ module GithubIntegration
     end
 
     def map_users_to_members
-      users = User.find_many(@expected_team.members)
-      @errors.push(*User.shift_errors) if User.errors.present?
+      users = @repo.find_many(@expected_team.members)
+      @errors.push(@repo.errors) if @repo.errors.present?
       users.values.map { |v| v.github.downcase }
     end
 

@@ -23,7 +23,7 @@ module GoogleIntegration
     end
 
     def build_users
-      u = User.find_many(members)
+      u = UserRepository.new.find_many(members)
       u.map do |name, data|
         if data.emails.present?
           data.emails.first
