@@ -49,6 +49,7 @@ defaults: &defaults
   dataguru:
     git_repo_url: http://url-to-repo-with-permissions
     git_repo_temp_dir: 'tmp/permissions'
+  toggl_token: fake-token
 
 test:
   <<: *defaults

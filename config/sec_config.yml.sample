@@ -15,3 +15,4 @@ development:
   slack:
     webhook_url: webhook-url
     default_channel: 'channel-with-no-hash-sign'
+  toggl_token: token-from-toggl-account
