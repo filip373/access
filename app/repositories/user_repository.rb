@@ -36,7 +36,7 @@ class UserRepository
         [user.id, user]
       end
     end
-    hash2 = users.compact.each_with_object({}) do |user, memo|
+    users.compact.each_with_object({}) do |user, memo|
       next unless user.is_a?(Array)
       memo[user.first] = user.last
     end
