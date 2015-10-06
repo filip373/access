@@ -46,4 +46,8 @@ GithubApp::Application.routes.draw do
   end
 
   get 'generate_users', to: 'generate#users'
+
+  namespace :toggl, module: :toggl_integration do
+    get 'generate_permissions', to: 'generate#permissions'
+  end
 end
