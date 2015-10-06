@@ -19,6 +19,7 @@ Sample permissions directory looks like this: https://github.com/netguru/access-
   - [Adding new repositories] (#adding-new-repositories)
   - [Deleting users] (#deleting-users)
   - [Deleting teams] (#deleting-teams)
+- [Rollbar] (#rollbar)
 - [Google apps] (#google-apps)
   - [Adding groups] (#adding-groups)
   - [Adding group aliases] (#adding-group-aliases)
@@ -109,6 +110,27 @@ Adding a repository that does not exist in to the team file will create an empty
 #### Deleting teams
 Delete team file from repository and go to github/diff screen. It should display teams that do not have their files in permissions repository any more. You can confirm and delete them by pressing delete button under 'stranded' teams.
 
+
+## Rollbar
+
+We need organization token in order to perform teams management with Rollbar.
+You can find the token
+[here](https://rollbar.com/settings/accounts/YOUR-ORGANIZATION/access_tokens/)
+
+## Adding teams
+
+In order to add new rollbar team, please create a file in `rollbar_teams/`
+directory. It should look like this:
+
+```yml
+---
+name: cool name for a foo project
+members:
+  - john.doe
+  - jane.doe
+projects:
+  - foo-project
+```
 
 ## Google apps
 
