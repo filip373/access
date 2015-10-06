@@ -27,6 +27,7 @@ gem 'sprockets'
 gem 'skylight'
 gem 'attr_extras'
 gem 'togglv8'
+gem 'awesome_print'
 
 # deployment
 

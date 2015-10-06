@@ -59,6 +59,7 @@ GEM
     autoprefixer-rails (5.2.0)
       execjs
       json
+    awesome_print (1.6.1)
     better_errors (2.1.1)
       coderay (>= 1.0.0)
       erubis (>= 2.6.6)
@@ -354,6 +355,7 @@ PLATFORMS
 DEPENDENCIES
   airbrussh
   attr_extras
+  awesome_print
   better_errors
   binding_of_caller
   capistrano
