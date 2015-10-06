@@ -43,7 +43,7 @@ Enable the following APIs:
 - Google+ API
 
 ### Configure the access app `sec_config.yml`
-Sec-config is file which override `config.yml`. In that file you should have most of the configuration of the access app. 
+Sec-config is file which override `config.yml`. In that file you should have most of the configuration of the access app.
 
 ### Import data from services
 Before you start using the access app you first need to create a `permissions` repo. We created a feature to help you to import the data from services used by your organization configured in your `sec_config.yml`
@@ -57,17 +57,17 @@ your_environment:
 After enabling this feature, you can go to main page and generate necessary files. The files will reside in your rails root directory at `tmp/new_permissions` dir ready to be copied to your `permissions` repo.
 
 #### Github Teams
-To import github data from Github API to permissions directory you just need click button 'Generate github teams' on main page of the access app. Files will be saved in the directory specified in `sec_config.yml` in `AppConfig.permissions_repo.checkout_dir` in subdirectory `/github_teams`. 
+To import github data from Github API to permissions directory you just need click button 'Generate github teams' on main page of the access app. Files will be saved in the directory specified in `sec_config.yml` in `AppConfig.permissions_repo.checkout_dir` in subdirectory `/github_teams`.
 
 Since it has created the github teams yml files, you can push them to your permissions repository on github.
 
 #### Google Groups
-To import google data from Google API to permissions directory you just need click button 'Generate google groups' on main page of the access app. Files will be saved in the directory specified in `sec_config.yml` in `AppConfig.permissions_repo.checkout_dir` in subdirectory `/google_groups`. 
+To import google data from Google API to permissions directory you just need click button 'Generate google groups' on main page of the access app. Files will be saved in the directory specified in `sec_config.yml` in `AppConfig.permissions_repo.checkout_dir` in subdirectory `/google_groups`.
 
 Since it has created the google groups yml files, you can push them to your permissions repository on github.
 
 #### Users
-To import users data from Google API and Gitgub Api to permissions directory you just need click button 'Generate usrs' on main page of the access app. Files will be saved in the directory specified in `sec_config.yml` in `AppConfig.permissions_repo.checkout_dir` in subdirectory `/users`. 
+To import users data from Google API and Gitgub Api to permissions directory you just need click button 'Generate usrs' on main page of the access app. Files will be saved in the directory specified in `sec_config.yml` in `AppConfig.permissions_repo.checkout_dir` in subdirectory `/users`.
 
 Since it has created the users yml files, you can push them to your permissions repository on github.
 
@@ -209,12 +209,12 @@ Remember to include in the yml file following attributes:
 You can find sample user file here:
 https://github.com/netguru/access-permissions-sample/blob/master/users/user_group/jane.kowalski.yml
 
-Since the file is added you will see it under header 'Missing user's account' in google show diff `google/show_diff` action. Then to create missing accounts just click button 'Create accounts'. 
+Since the file is added you will see it under header 'Missing user's account' in google show diff `google/show_diff` action. Then to create missing accounts just click button 'Create accounts'.
 The application will:
-- create missing accounts, 
-- generate 2step codes, 
-- reset password (user will be asked to change it while first login), 
-- will post gmail filters 
+- create missing accounts,
+- generate 2step codes,
+- reset password (user will be asked to change it while first login),
+- will post gmail filters
 - and finally will send email to email specified in `AppConfig.office_email` containing details necessary to login, 2step codes and short instruction (from `AppConfig.google.email.account_using_instruction`).
 
 #### Service Account authorization
@@ -272,7 +272,7 @@ A good idea is to use `rake notify` in your CI to notify the owners that changes
 ## FAQ
 
 #### 1. `Not Authorized to access this resource/api` while trying to run show_diff on google groups.
-- check `access/config/config` 
+- check `access/config/config`
  google:
    main_domain: netguru.org
 if domain is really used in setup project.
