@@ -22,6 +22,7 @@ module TogglIntegration
         begin
           User.find_by_email(member['email']).id
         rescue
+          nil
         end
       end.compact
     end
