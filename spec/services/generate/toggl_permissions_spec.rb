@@ -2,12 +2,14 @@ require 'rails_helper'
 
 describe Generate::TogglPermissions do
   include_context 'toggl_api'
+  let(:repo) { UserRepository.new }
+
   before do
-    allow(User).to receive(:find_by_email)
+    allow(repo).to receive(:find_by_email)
       .with(member1['email']) { OpenStruct.new(id: 'john.doe') }
-    allow(User).to receive(:find_by_email)
+    allow(repo).to receive(:find_by_email)
       .with(member2['email']) { OpenStruct.new(id: 'jane.kovalsky') }
-    allow(User).to receive(:find_by_email)
+    allow(repo).to receive(:find_by_email)
       .with(member3['email']) { OpenStruct.new(id: 'james.bond') }
   end
 

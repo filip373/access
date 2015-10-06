@@ -20,7 +20,7 @@ module RollbarIntegration
       def sync_members(members_to_add, members_to_remove)
         members_to_add.each do |team, members|
           members.each do |_key, member|
-            @rollbar_api.invite_member_to_team(member.emails.first, team.id)
+            @rollbar_api.invite_member_to_team(member.email, team.id)
           end
         end
 
