@@ -20,6 +20,10 @@ module GithubIntegration
           dg_user = users.find do |u|
             u.github.to_s.downcase == gh_member['login'].downcase
           end
+          if dg_user.nil?
+            fail("User '#{gh_member['login']}' doesn't exist in the catalog.
+                 You should probably delete them from your github organization")
+          end
           build_user(dg_user, gh_member)
         end
       end
