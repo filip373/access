@@ -20,7 +20,7 @@ module TogglIntegration
     def self.team_members(api, team)
       api.list_team_members(team['id']).map do |member|
         begin
-          UserRepository.find_by_email(member['email']).id
+          UserRepository.new.find_by_email(member['email']).id
         rescue
           nil
         end
