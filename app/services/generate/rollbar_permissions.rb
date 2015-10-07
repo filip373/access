@@ -25,7 +25,7 @@ module Generate
     end
 
     def file_name(team_name)
-      team_name = File.basename(team_name.gsub('\\', '/'))
+      team_name = File.basename(team_name.tr('\\', '/'))
       team_name.gsub!(/[^a-zA-Z0-9\.\-\+_]/, '_')
       team_name = "_#{team_name}" if team_name =~ /^\.+$/
       team_name

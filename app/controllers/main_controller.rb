@@ -7,7 +7,7 @@ class MainController < ApplicationController
   def check_permissions
     data_guru.refresh
     gh_api.client.patch_request("/orgs/#{gh_api.client.org}")
-    rescue Github::Error::NotFound
-      render 'main/unauthorized'
+  rescue Github::Error::NotFound
+    render 'main/unauthorized'
   end
 end

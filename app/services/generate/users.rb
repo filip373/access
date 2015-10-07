@@ -67,7 +67,7 @@ module Generate
 
     def slugify(name)
       return unless name.present?
-      I18n.transliterate(name).gsub(' ', '.').downcase
+      I18n.transliterate(name).tr(' ', '.').downcase
     end
 
     def file_path(user)

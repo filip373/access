@@ -78,14 +78,14 @@ module GithubIntegration
 
     def team_member_pending?(team_id, user_name)
       find_team_membership(team_id, user_name)['state'] == 'pending'
-      rescue Github::Error::NotFound
-        false
+    rescue Github::Error::NotFound
+      false
     end
 
     def find_organization_id(team_id)
       @organization_id ||= client.get_request("/teams/#{team_id}").organization[:id]
-      rescue Github::Error::NotFound
-        false
+    rescue Github::Error::NotFound
+      false
     end
 
     private
