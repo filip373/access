@@ -8,10 +8,8 @@ RSpec.describe RollbarIntegration::TeamDiff do
     Celluloid.boot
   end
 
-  let(:yaml_teams) { RollbarIntegration::Teams.all }
-
-  let(:yaml_team1) { yaml_teams.find { |t| t.name == 'team1' } }
-  let(:yaml_new_team) { yaml_teams.find { |t| t.name == 'new_team' } }
+  let(:yaml_team1) { expected_teams.find { |t| t.name == 'team1' } }
+  let(:yaml_new_team) { expected_teams.find { |t| t.name == 'new_team' } }
   let(:diff_hash) do
     {
       create_teams: {},

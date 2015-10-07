@@ -8,12 +8,11 @@ RSpec.describe RollbarIntegration::Actions::Diff do
     Celluloid.boot
   end
 
-  let(:expected_teams) { RollbarIntegration::Teams.all }
   let(:new_team) do
     expected_teams.find { |team| team.name == 'team2' }
   end
 
-  subject { described_class.new(expected_teams, existing_teams, rollbar_api).now! }
+  subject { described_class.new(expected_teams, existing_teams, double(:rollbar_api)).now! }
 
   it { is_expected.to be_a Hash }
 

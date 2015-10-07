@@ -3,7 +3,6 @@ require 'rails_helper'
 RSpec.describe RollbarIntegration::Actions::CleanupTeams do
   include_context 'rollbar_api'
 
-  let(:expected_teams) { RollbarIntegration::Teams.all }
   let(:team1) do
     Hashie::Mash.new(
       name: 'team1',

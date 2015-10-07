@@ -1,4 +1,20 @@
 RSpec.shared_context 'rollbar_api' do
+  let(:expected_teams) do
+    [
+      RollbarIntegration::Team.new('new_team',
+                                   ['third.member'],
+                                   ['project2']),
+      RollbarIntegration::Team.new('team1',
+                                   ['first.member', 'second.member', 'forth.member'],
+                                   %w(project1 project2)),
+      RollbarIntegration::Team.new('team2',
+                                   ['third.member'],
+                                   ['project2']),
+      RollbarIntegration::Team.new('team_empty',
+                                   [],
+                                   []),
+    ]
+  end
   let(:rollbar_api) do
     double.tap do |api|
       allow(api).to receive(:list_teams) { existing_teams }
