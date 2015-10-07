@@ -1,13 +1,13 @@
 source 'https://rubygems.org'
 
-# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 4.2'
 
+gem 'attr_extras'
+gem 'awesome_print'
 gem 'celluloid'
 gem 'data_guru', git: 'git@github.com:netguru/data_guru.git'
 gem 'decent_exposure'
 gem 'font-awesome-rails'
-gem 'git', '1.2.8'
 gem 'github_api'
 gem 'google-api-client'
 gem 'haml'
@@ -22,12 +22,10 @@ gem 'pry-rails'
 gem 'pry-stack_explorer'
 gem 'rollbar'
 gem 'sass-rails'
+gem 'skylight'
 gem 'slack-notifier'
 gem 'sprockets'
-gem 'skylight'
-gem 'attr_extras'
 gem 'togglv8'
-gem 'awesome_print'
 
 # deployment
 
