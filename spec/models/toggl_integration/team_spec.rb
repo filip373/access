@@ -3,9 +3,10 @@ require 'rails_helper'
 describe TogglIntegration::Team do
   include_context 'toggl_api'
 
-  let(:repo) { UserRepository.new }
-
   before do
+    repo = double(:user_repository)
+    allow(UserRepository).to receive(:new) { repo }
+
     allow(repo).to receive(:find_by_email)
       .with(member1['email']) { OpenStruct.new(id: 'john.doe') }
     allow(repo).to receive(:find_by_email)
