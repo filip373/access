@@ -49,5 +49,8 @@ GithubApp::Application.routes.draw do
 
   namespace :toggl, module: :toggl_integration do
     get 'generate_permissions', to: 'generate#permissions'
+    controller :main do
+      get :show_diff
+    end
   end
 end
