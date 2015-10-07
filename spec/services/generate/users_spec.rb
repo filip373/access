@@ -22,17 +22,14 @@ describe Generate::Users do
     let(:members) do
       [
         Hashie::Mash.new(
-          name: 'first.member',
           primaryEmail: 'first.member@netguru.pl',
           name: { fullName: 'First Member' },
         ),
         Hashie::Mash.new(
-          name: 'second.member',
           primaryEmail: 'second.member@external.pl',
           name: { fullName: 'Second Member' },
         ),
         Hashie::Mash.new(
-          name: 'fifth.member',
           primaryEmail: 'fifth.member@netguru.pl',
           name: { fullName: 'Fifth Member' },
         ),

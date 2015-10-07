@@ -6,7 +6,7 @@ RSpec.describe GithubIntegration::MainController do
   before(:each) do
     allow(controller).to receive(:gh_auth_required).and_return(true)
     allow(GithubIntegration::Api).to receive(:new).and_return(gh_api)
-    UpdateRepo.stub(:now!).and_return(true)
+    allow(UpdateRepo).to receive(:now!).and_return(true)
   end
 
   describe 'GET show_diff' do
