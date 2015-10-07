@@ -1,11 +1,12 @@
 module TogglIntegration
   module Actions
     class Diff
-      attr_reader :local_teams
+      attr_reader :local_teams, :errors
 
       def initialize(local_teams, toggl_api)
         @local_teams = local_teams
         @toggl_api = toggl_api
+        @errors = []
       end
 
       def call
@@ -27,7 +28,7 @@ module TogglIntegration
       # This method is time expensive (calls remote API).
       def server_teams
         @server_teams ||= @toggl_api.list_teams.map do |team|
-          Team.from_api_request(toggl_api, team)
+          Team.from_api_request(@toggl_api, team)
         end
       end
 
