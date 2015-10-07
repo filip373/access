@@ -28,7 +28,7 @@ module TogglIntegration
 
     def member_by_uid(member_uid)
       @all_members ||=
-        list_all_members.each_with_object({}) { |acc, member| acc[member['uid'].to_i] = member }
+        list_all_members.each_with_object({}) { |member, acc| acc[member['uid'].to_i] = member }
       @all_members[member_uid.to_i]
     end
   end
