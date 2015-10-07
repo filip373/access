@@ -6,6 +6,7 @@
         %th Name
         %th Github handle
         %th Email
+        %th Projects
     %tbody
       - users.each do |u|
         %tr
@@ -15,3 +16,5 @@
             = link_to u.github, u.html_url
           %td
             = u.email
+          %td
+            = u.github_teams
