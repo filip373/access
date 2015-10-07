@@ -8,7 +8,7 @@ RSpec.describe GoogleIntegration::MainController do
     allow(controller).to receive(:google_auth_required).and_return(true)
     allow(controller).to receive(:gh_auth_required).and_return(true)
     allow(GoogleIntegration::Api).to receive(:new).and_return(google_api)
-    UpdateRepo.stub(:now!).and_return(true)
+    allow(UpdateRepo).to receive(:now!).and_return(true)
   end
 
   context 'is permitted to manage google groups' do
