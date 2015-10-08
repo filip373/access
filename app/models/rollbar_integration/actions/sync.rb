@@ -17,22 +17,9 @@ module RollbarIntegration
         sync_projects(diff[:add_projects], diff[:remove_projects])
       end
 
-      def sync_members(members_to_add, members_to_remove)
-        members_to_add.each do |team, members|
-          members.each do |_key, member|
-            @rollbar_api.invite_member_to_team(member.emails.first, team.id)
-          end
-        end
-
-        members_to_remove.each do |team, members|
-          members.each do |_key, member|
-            if member.status == 'pending'
-              @rollbar_api.cancel_invitation(member.id)
-            else
-              @rollbar_api.remove_member_from_team(member.id, team.id)
-            end
-          end
-        end
+      def sync_members(teams_with_members_to_add, teams_with_members_to_remove)
+        invite_members(teams_with_members_to_add)
+        remove_members(teams_with_members_to_remove)
       end
 
       def sync_projects(projects_to_add, projects_to_remove)
@@ -67,6 +54,28 @@ module RollbarIntegration
       def new_team_add_projects(projects, team)
         projects.each do |_project_name, project|
           @rollbar_api.add_project_to_team(project.id, team.id)
+        end
+      end
+
+      private
+
+      def invite_members(teams_with_members_to_add)
+        teams_with_members_to_add.each do |team, members|
+          members.values.each do |member|
+            @rollbar_api.invite_member_to_team(member.emails.first, team.id)
+          end
+        end
+      end
+
+      def remove_members(teams_with_members_to_remove)
+        teams_with_members_to_remove.each do |team, members|
+          members.values.each do |member|
+            if member.status == 'pending'
+              @rollbar_api.cancel_invitation(member.id)
+            else
+              @rollbar_api.remove_member_from_team(member.id, team.id)
+            end
+          end
         end
       end
     end
