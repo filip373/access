@@ -13,7 +13,11 @@ describe TogglIntegration::Actions::Diff do
       TogglIntegration::Team.new(
         'team2', ['john.doe', 'james.bond', 'john.wayne'], ['team2'], '2')
     end
-    let(:server_teams) { [server_team1, server_team2] }
+    let(:server_team5) do
+      TogglIntegration::Team.new(
+        'team5', ['john.doe', 'james.bond', 'john.wayne'], ['team5'], '5')
+    end
+    let(:server_teams) { [server_team1, server_team2, server_team5] }
 
     let(:toggl_api) { double(:toggl_api) }
     let(:diff) do
@@ -41,6 +45,10 @@ describe TogglIntegration::Actions::Diff do
     it 'returns list of teams to create' do
       expect(diff_result[:create_teams].size).to eq 2
       expect(diff_result[:create_teams].keys).to eq [team3, team4]
+    end
+
+    it 'returns list of missing teams' do
+      expect(diff_result[:missing_teams]).to eq [server_team5]
     end
   end
 end

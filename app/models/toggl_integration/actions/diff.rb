@@ -20,6 +20,7 @@ module TogglIntegration
           create_teams: {},
           add_members: {},
           remove_members: {},
+          missing_teams: {},
         }
       end
 
@@ -42,6 +43,7 @@ module TogglIntegration
             diff_array(:create_teams, local_team)
           end
         end
+        diff_hash[:missing_teams] = server_teams if server_teams.any?
       end
 
       def diff_teams_members(local_team, server_team)
