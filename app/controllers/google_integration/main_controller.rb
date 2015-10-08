@@ -17,7 +17,7 @@ module GoogleIntegration
 
     def show_diff
       reset_diff
-      UpdateRepo.now!
+      data_guru.refresh
     end
 
     def show_groups

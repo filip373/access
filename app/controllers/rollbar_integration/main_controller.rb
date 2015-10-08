@@ -18,7 +18,7 @@ module RollbarIntegration
 
     def show_diff
       reset_diff
-      UpdateRepo.now!
+      data_guru.refresh
       calculated_diff
     end
 
