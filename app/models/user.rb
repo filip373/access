@@ -17,7 +17,7 @@ class User
   end
 
   def email
-    emails.first
+    emails.try(:first)
   end
 
   def self.company_name
