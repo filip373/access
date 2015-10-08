@@ -39,25 +39,23 @@ module TogglIntegration
             diff_teams_members(local_team, server_team)
             server_teams.delete(server_team)
           else
-            diff_array(:create_teams, local_team.name) << local_team
+            diff_array(:create_teams, local_team)
           end
         end
       end
 
       def diff_teams_members(local_team, server_team)
         return unless local_team.name == server_team.name
-
         local_team.members.each do |local_member|
           server_member = server_team.members.find { |sm| sm.downcase == local_member.downcase }
           if server_member
             server_team.members.delete(server_member)
           else
-            diff_array(:add_members, local_team.name) << local_member
+            diff_array(:add_members, server_team) << local_member
           end
         end
-
         unless server_team.members.empty?
-          diff_array(:remove_members, server_team.name).concat server_team.members
+          diff_array(:remove_members, server_team).concat server_team.members
         end
       end
 
