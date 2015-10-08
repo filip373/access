@@ -60,7 +60,7 @@ module RollbarIntegration
 
       def new_team_add_members(members, team)
         members.each do |_key, member|
-          @rollbar_api.invite_member_to_team(member.email, team.id)
+          @rollbar_api.invite_member_to_team(member.emails.first, team.id)
         end
       end
 
