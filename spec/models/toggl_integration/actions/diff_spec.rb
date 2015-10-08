@@ -9,8 +9,10 @@ describe TogglIntegration::Actions::Diff do
     let(:local_teams) { [team1, team2, team3, team4] }
 
     let(:server_team1) { TogglIntegration::Team.new('team1', ['john.doe'], ['team1'], '1') }
-    let(:server_team2) { TogglIntegration::Team.new(
-      'team2', ['john.doe', 'james.bond', 'john.wayne'], ['team2'], '2') }
+    let(:server_team2) do
+      TogglIntegration::Team.new(
+        'team2', ['john.doe', 'james.bond', 'john.wayne'], ['team2'], '2')
+    end
     let(:server_teams) { [server_team1, server_team2] }
 
     let(:toggl_api) { double(:toggl_api) }

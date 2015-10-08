@@ -13,7 +13,7 @@ module TogglIntegration
       new(team['name'],
           team_members(api, team),
           team_projects(team),
-          team['id']
+          team['id'],
          )
     end
 
