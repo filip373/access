@@ -7,6 +7,7 @@ describe User do
     let(:user) do
       described_class.new(
         emails: ['mariusz.blaszczak@netguru.pl'],
+        external: false,
         name: 'mariusz.blaszczak',
         full_name: 'Mariusz Blaszczak',
         github: 'Mariusz Blaszczak',
@@ -17,6 +18,7 @@ describe User do
     it { expect(user.name).to_not be_empty }
     it { expect(user.full_name).to_not be_empty }
     it { expect(user.github).to_not be_empty }
+    it { expect(user.external).to_not eq nil  }
 
     it 'is possible to change email' do
       user.emails = 'another@email.pl'
@@ -43,6 +45,7 @@ describe User do
     let(:user) do
       described_class.new(
         emails: ['mariusz.blaszczak@netguru.pl'],
+        external: false,
         name: 'mariusz.blaszczak',
         full_name: 'Mariusz Blaszczak',
         github: 'blaszczakm',
@@ -51,12 +54,14 @@ describe User do
 
     let(:yaml_object) { YAML.load user.to_yaml }
 
-    it { expect(yaml_object.keys.count).to eq 3 }
+    it { expect(yaml_object.keys.count).to eq 4 }
     it { expect(yaml_object.keys.first).to eq 'name' }
     it { expect(yaml_object.keys.second).to eq 'github' }
-    it { expect(yaml_object.keys.third).to eq 'emails' }
+    it { expect(yaml_object.keys.third).to eq 'external' }
+    it { expect(yaml_object.keys.fourth).to eq 'emails' }
     it { expect(yaml_object.values.first).to eq user.full_name }
     it { expect(yaml_object.values.second).to eq user.github }
-    it { expect(yaml_object.values.third).to eq user.emails }
+    it { expect(yaml_object.values.third).to eq user.external }
+    it { expect(yaml_object.values.fourth).to eq user.emails }
   end
 end

@@ -35,6 +35,7 @@ module Generate
         user = match_google_user(gh_user)
         if user.present?
           user.github = gh_user['login']
+          user.external = false
           nil
         else
           new_user_from_github(gh_user)
@@ -47,6 +48,7 @@ module Generate
         name: slugify(gh_user['name'] || gh_user['login']),
         full_name: gh_user['name'] || gh_user['login'].capitalize,
         github: gh_user['login'],
+        external: true,
       )
     end
 
@@ -71,7 +73,7 @@ module Generate
     end
 
     def file_path(user)
-      if user.external?
+      if user.external
         "#{external_users_dir}/#{user.name}.yml"
       else
         "#{company_users_dir}/#{user.name}.yml"

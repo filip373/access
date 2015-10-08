@@ -26,7 +26,7 @@ describe Generate::Users do
           name: { fullName: 'First Member' },
         ),
         Hashie::Mash.new(
-          primaryEmail: 'second.member@external.pl',
+          primaryEmail: 'second.member@netguru.pl',
           name: { fullName: 'Second Member' },
         ),
         Hashie::Mash.new(
@@ -46,7 +46,7 @@ describe Generate::Users do
     end
     let(:users_dir) { Rails.root.join('spec/tmp/permissions') }
     let(:first_member_path) { users_dir.join('users/netguru/first.member.yml') }
-    let(:second_member_path) { users_dir.join('users/external/second.member.yml') }
+    let(:second_member_path) { users_dir.join('users/netguru/second.member.yml') }
     let(:third_member_path) { users_dir.join('users/external/third.member.yml') }
     let(:fourth_member_path) { users_dir.join('users/external/frth.mbr.yml') }
     let(:fifth_member_path) { users_dir.join('users/netguru/fifth.member.yml') }
@@ -67,11 +67,11 @@ describe Generate::Users do
 
     it 'creates file with company user' do
       expect(File.exist?(first_member_path)).to be_truthy
+      expect(File.exist?(first_member_path)).to be_truthy
       expect(File.exist?(fifth_member_path)).to be_truthy
     end
 
     it 'creates file with external user' do
-      expect(File.exist?(second_member_path)).to be_truthy
       expect(File.exist?(third_member_path)).to be_truthy
       expect(File.exist?(fourth_member_path)).to be_truthy
     end
@@ -94,7 +94,7 @@ describe Generate::Users do
 
     it 'creates files with proper email attributes' do
       expect(first_member_yaml['emails']).to include 'first.member@netguru.pl'
-      expect(second_member_yaml['emails']).to include 'second.member@external.pl'
+      expect(second_member_yaml['emails']).to include 'second.member@netguru.pl'
       expect(third_member_yaml['emails']).to eq ['']
       expect(fourth_member_yaml['emails']).to eq ['']
       expect(fifth_member_yaml['emails']).to include 'fifth.member@netguru.pl'

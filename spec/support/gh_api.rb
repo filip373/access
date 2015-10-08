@@ -22,7 +22,7 @@ RSpec.shared_context 'gh_api' do
         when 'scnd.mbr'
           {
             'login' => login,
-            'email' => 'second.member@external.pl',
+            'email' => 'second.member@netguru.pl',
             'name' => 'Second Member',
           }
         when 'thrd.mbr'
