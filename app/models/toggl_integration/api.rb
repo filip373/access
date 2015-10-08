@@ -19,12 +19,12 @@ module TogglIntegration
       project_users.map { |project_user| member_by_uid(project_user['uid']) }
     end
 
-    private
-
     def workspace
       @workspace ||=
         toggl_client.workspaces.find { |workspace| workspace['name'] == AppConfig.company }
     end
+
+    private
 
     def member_by_uid(member_uid)
       @all_members ||=
