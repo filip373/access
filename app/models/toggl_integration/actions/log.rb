@@ -21,26 +21,17 @@ module TogglIntegration
       end
 
       def log_creating_teams
-        @diff_hash[:create_teams].each do |team, h|
+        @diff_hash[:create_teams].each do |team|
           @log << "[api] create team #{team.name}"
-
-          if h[:add_members].present?
-            h[:add_members].each do |email, _m|
-              @log << "[api] add member #{email} to team #{team.name}"
-            end
-          end
-
-          if h[:add_projects].present?
-            h[:add_projects].each do |name, _r|
-              @log << "[api] add project #{name} to team #{team.name}"
-            end
+          team.members.each do |email|
+            @log << "[api] add member #{email} to team #{team.name}"
           end
         end
       end
 
       def log_inviting_members
         @diff_hash[:add_members].each do |team, members|
-          members.each do |email, _m|
+          members.each do |email|
             @log << "[api] add member #{email} to team #{team.name}"
           end
         end
@@ -48,7 +39,7 @@ module TogglIntegration
 
       def log_removing_members
         @diff_hash[:remove_members].each do |team, members|
-          members.each do |email, _m|
+          members.each do |email|
             @log << "[api] remove member #{email} from team #{team.name}"
           end
         end

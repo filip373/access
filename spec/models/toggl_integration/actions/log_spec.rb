@@ -5,11 +5,7 @@ RSpec.describe TogglIntegration::Actions::Log do
   let(:new_team) { TogglIntegration::Team.new('NewTeam', ['john.doe'], ['NewTeam']) }
   let(:diff) do
     {
-      create_teams: {
-        new_team => {
-          add_members: ['new.dude'],
-        },
-      },
+      create_teams: [ new_team ],
       add_members: {
         team => ['first.dude'],
       },
@@ -34,7 +30,7 @@ RSpec.describe TogglIntegration::Actions::Log do
   context 'with changes' do
     it { is_expected.to satisfy { |s| s.size == 4 } }
     it { is_expected.to include "[api] create team #{new_team.name}" }
-    it { is_expected.to include "[api] add member #{diff[:create_teams][new_team][:add_members][0]} to team #{new_team.name}" }
+    it { is_expected.to include "[api] add member #{diff[:create_teams][0].members[0]} to team #{new_team.name}" }
     it { is_expected.to include "[api] add member #{diff[:add_members][team][0]} to team #{team.name}" }
     it { is_expected.to include "[api] remove member #{diff[:remove_members][team][0]} from team #{team.name}" }
   end
