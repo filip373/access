@@ -46,7 +46,7 @@ RSpec.shared_context 'rollbar_api' do
       end
       allow(api).to receive(:remove_member_from_team) do |member_id, _team_id|
         member = all_members.find { |m| m.id == member_id }
-        team.members.delete(member.email)
+        team.members.delete(member.emails.first)
       end
       allow(api).to receive(:create_team) do
         existing_teams.push(new_team)
@@ -83,7 +83,7 @@ RSpec.shared_context 'rollbar_api' do
     Hashie::Mash.new(
       id: 1,
       username: 'member1',
-      email: 'member1@foo.pl',
+      emails: ['member1@foo.pl'],
     )
   end
 
@@ -91,7 +91,7 @@ RSpec.shared_context 'rollbar_api' do
     Hashie::Mash.new(
       id: 2,
       username: 'member2',
-      email: 'member2@foo.pl',
+      emails: ['member2@foo.pl'],
     )
   end
 
@@ -99,7 +99,7 @@ RSpec.shared_context 'rollbar_api' do
     Hashie::Mash.new(
       id: 3,
       username: 'member3',
-      email: 'member3@foo.pl',
+      emails: ['member3@foo.pl'],
     )
   end
 
@@ -107,7 +107,7 @@ RSpec.shared_context 'rollbar_api' do
     Hashie::Mash.new(
       id: 5,
       username: 'member5',
-      email: 'member5@foo.pl',
+      emails: ['member5@foo.pl'],
     )
   end
 
@@ -115,7 +115,7 @@ RSpec.shared_context 'rollbar_api' do
     Hashie::Mash.new(
       id: 6,
       username: 'member6',
-      email: 'member6@foo.pl',
+      emails: ['member6@foo.pl'],
     )
   end
 

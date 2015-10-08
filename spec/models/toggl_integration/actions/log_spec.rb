@@ -5,7 +5,7 @@ RSpec.describe TogglIntegration::Actions::Log do
   let(:new_team) { TogglIntegration::Team.new('NewTeam', ['john.doe'], ['NewTeam']) }
   let(:diff) do
     {
-      create_teams: [ new_team ],
+      create_teams: [new_team],
       add_members: {
         team => ['first.dude'],
       },

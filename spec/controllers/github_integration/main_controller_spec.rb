@@ -3,7 +3,6 @@ require 'rails_helper'
 RSpec.describe GithubIntegration::MainController do
   include_context 'gh_api'
 
-
   before(:each) do
     allow(controller).to receive(:gh_auth_required).and_return(true)
     allow(GithubIntegration::Api).to receive(:new).and_return(gh_api)

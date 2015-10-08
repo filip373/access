@@ -22,9 +22,9 @@ module RollbarIntegration
     def self.prepare_members(api, team)
       api.list_all_team_members(team.id).map do |rollbar_user|
         begin
-          user = UserRepository.new.find_by_email(rollbar_user.email).id
+          user = UserRepository.new.find_by_email(rollbar_user.emails.first).id
         rescue
-          Rollbar.info("There is no user with email: #{rollbar_user.email}")
+          Rollbar.info("There is no user with email: #{rollbar_user.emails.first}")
         end
         user
       end.compact

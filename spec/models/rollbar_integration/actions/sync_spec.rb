@@ -10,7 +10,7 @@ RSpec.describe RollbarIntegration::Actions::Sync do
                        project1.name => project1,
                      },
                      members: {
-                       member1.email => member1,
+                       member1.emails.first => member1,
                      }
   end
   let(:new_team) do
@@ -24,7 +24,7 @@ RSpec.describe RollbarIntegration::Actions::Sync do
       create_teams: {
         new_team => {
           add_members: {
-            member2.email => member2,
+            member2.emails.first => member2,
           },
           add_projects: {
             project2.name => project2,
@@ -33,12 +33,12 @@ RSpec.describe RollbarIntegration::Actions::Sync do
       },
       add_members: {
         team => {
-          member3.email => member3,
+          member3.emails.first => member3,
         },
       },
       remove_members: {
         team => {
-          member1.email => member1,
+          member1.emails.first => member1,
         },
       },
       add_projects: {
@@ -58,11 +58,11 @@ RSpec.describe RollbarIntegration::Actions::Sync do
 
   it { expect(team.projects).to_not have_key(project1.name) }
   it { expect(team.projects).to have_key(project3.name) }
-  it { expect(team.members).to have_key(member3.email) }
-  it { expect(team.members).to_not have_key(member1.email) }
+  it { expect(team.members).to have_key(member3.emails.first) }
+  it { expect(team.members).to_not have_key(member1.emails.first) }
 
   let(:created_team) { existing_teams[1] }
   it { expect(created_team.name).to eq 'new team' }
   it { expect(created_team.projects).to have_key(project2.name) }
-  it { expect(created_team.members).to have_key(member2.email) }
+  it { expect(created_team.members).to have_key(member2.emails.first) }
 end

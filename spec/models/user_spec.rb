@@ -18,7 +18,7 @@ describe User do
     it { expect(user.name).to_not be_empty }
     it { expect(user.full_name).to_not be_empty }
     it { expect(user.github).to_not be_empty }
-    it { expect(user.external).to_not eq nil  }
+    it { expect(user.external).to_not eq nil }
 
     it 'is possible to change email' do
       user.emails = 'another@email.pl'
