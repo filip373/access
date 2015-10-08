@@ -44,7 +44,7 @@ describe TogglIntegration::Actions::Diff do
 
     it 'returns list of teams to create' do
       expect(diff_result[:create_teams].size).to eq 2
-      expect(diff_result[:create_teams].keys).to eq [team3, team4]
+      expect(diff_result[:create_teams]).to eq [team3, team4]
     end
 
     it 'returns list of missing teams' do

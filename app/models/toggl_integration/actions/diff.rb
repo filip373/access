@@ -17,10 +17,10 @@ module TogglIntegration
 
       def diff_hash
         @diff_hash ||= {
-          create_teams: {},
+          create_teams: [],
           add_members: {},
           remove_members: {},
-          missing_teams: {},
+          missing_teams: [],
         }
       end
 
@@ -40,10 +40,10 @@ module TogglIntegration
             diff_teams_members(local_team, server_team)
             server_teams.delete(server_team)
           else
-            diff_array(:create_teams, local_team)
+            diff_hash[:create_teams] << local_team
           end
         end
-        diff_hash[:missing_teams] = server_teams if server_teams.any?
+        diff_hash[:missing_teams].concat server_teams if server_teams.any?
       end
 
       def diff_teams_members(local_team, server_team)
@@ -53,16 +53,16 @@ module TogglIntegration
           if server_member
             server_team.members.delete(server_member)
           else
-            diff_array(:add_members, server_team) << local_member
+            diff_hash_array(:add_members, server_team) << local_member
           end
         end
         unless server_team.members.empty?
-          diff_array(:remove_members, server_team).concat server_team.members
+          diff_hash_array(:remove_members, server_team).concat server_team.members
         end
       end
 
-      def diff_array(group, team_name)
-        diff_hash[group][team_name] ||= []
+      def diff_hash_array(group, team)
+        diff_hash[group][team] ||= []
       end
 
       def reset_diff_hash
