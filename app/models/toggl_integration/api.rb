@@ -20,6 +20,10 @@ module TogglIntegration
       project_users.map { |project_user| member_by_uid(project_user['uid']) }
     end
 
+    def delete_team(team_id)
+      toggl_client.delete_project(team_id)
+    end
+
     def workspace
       @workspace ||=
         toggl_client.workspaces.find { |workspace| workspace['name'] == company_name }
