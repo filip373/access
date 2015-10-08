@@ -1,11 +1,19 @@
 module TogglIntegration
   class Team
-    rattr_initialize :name, :members, :projects
+    attr_reader :name, :members, :projects, :id
+
+    def initialize(name, members, projects, id = nil)
+      @name = name
+      @members = members
+      @projects = projects
+      @id = id
+    end
 
     def self.from_api_request(api, team)
       new(team['name'],
           team_members(api, team),
           team_projects(team),
+          team['pid']
          )
     end
 

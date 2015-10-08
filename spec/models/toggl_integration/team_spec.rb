@@ -18,11 +18,13 @@ describe TogglIntegration::Team do
   describe '.from_api_request' do
     it 'returns new team with members' do
       team = TogglIntegration::Team.from_api_request(toggl_api, team1)
+      expect(team.id).to eq(team1[:id])
       expect(team.name).to eq('Team1')
       expect(team.projects).to eq(['Team1'])
       expect(team.members).to eq(['john.doe', 'jane.kovalsky'])
 
       team = TogglIntegration::Team.from_api_request(toggl_api, team2)
+      expect(team.id).to eq(team2[:id])
       expect(team.name).to eq('Team2')
       expect(team.projects).to eq(['Team2'])
       expect(team.members).to eq(['james.bond'])
