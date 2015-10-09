@@ -2,7 +2,7 @@ module TogglIntegration
   class MainController < ApplicationController
     CACHE_KEY_NAME = 'toggl_calculated_diff'.freeze
 
-    expose(:validation_errors) { DataGuru::Client.new.errors }
+    expose(:validation_errors) { data_guru.errors }
     expose(:diff_errors) { @diff.errors }
     expose(:toggl_log) { Actions::Log.new(calculated_diff).call }
     expose(:missing_teams) { calculated_diff[:missing_teams] }
