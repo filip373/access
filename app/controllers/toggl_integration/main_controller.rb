@@ -29,13 +29,17 @@ module TogglIntegration
 
     def calculated_diff
       Rails.cache.fetch CACHE_KEY_NAME do
-        @diff ||= Actions::Diff.new(local_teams, Api.new)
+        @diff ||= Actions::Diff.new(expected_teams, current_teams)
         @diff.call
       end
     end
 
-    def local_teams
-      Teams.all
+    def current_teams
+      TeamRepository.build_from_toggl_api(toggl_api, UserRepository.new).all
+    end
+
+    def expected_teams
+      TeamRepository.build_from_data_guru(data_guru).all
     end
   end
 end

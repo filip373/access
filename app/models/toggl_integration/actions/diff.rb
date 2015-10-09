@@ -1,11 +1,11 @@
 module TogglIntegration
   module Actions
     class Diff
-      attr_reader :local_teams, :errors
+      attr_reader :local_teams, :current_teams, :errors
 
-      def initialize(local_teams, toggl_api)
+      def initialize(local_teams, current_teams)
         @local_teams = local_teams
-        @toggl_api = toggl_api
+        @current_teams = current_teams
         @errors = []
       end
 
@@ -26,24 +26,17 @@ module TogglIntegration
 
       private
 
-      # This method is time expensive (calls remote API).
-      def server_teams
-        @server_teams ||= @toggl_api.list_teams.map do |team|
-          Team.from_api_request(@toggl_api, team)
-        end
-      end
-
       def diff_teams
         local_teams.each do |local_team|
-          server_team = server_teams.find { |st| st.name.downcase == local_team.name.downcase }
+          server_team = current_teams.find { |st| st.name.downcase == local_team.name.downcase }
           if server_team
             diff_teams_members(local_team, server_team)
-            server_teams.delete(server_team)
+            current_teams.delete(server_team)
           else
             diff_hash[:create_teams] << local_team
           end
         end
-        diff_hash[:missing_teams].concat server_teams if server_teams.any?
+        diff_hash[:missing_teams].concat current_teams if current_teams.any?
       end
 
       def diff_teams_members(local_team, server_team)
