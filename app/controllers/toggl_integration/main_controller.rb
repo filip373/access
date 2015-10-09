@@ -6,7 +6,8 @@ module TogglIntegration
     expose(:diff_errors) { @diff.errors }
     expose(:toggl_log) { Actions::Log.new(calculated_diff).call }
     expose(:missing_teams) { calculated_diff[:missing_teams] }
-    expose(:workspace_id) { Api.new.workspace['id'] }
+    expose(:toggl_api) { Api.new(AppConfig.toggl_token, AppConfig.company) }
+    expose(:workspace_id) { toggl_api.workspace['id'] }
 
     def show_diff
       reset_diff

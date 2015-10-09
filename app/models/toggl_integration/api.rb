@@ -1,9 +1,10 @@
 module TogglIntegration
   class Api
-    attr_reader :toggl_client
+    attr_reader :toggl_client, :company_name
 
-    def initialize(token: AppConfig.toggl_token)
+    def initialize(token, company_name)
       @toggl_client = TogglV8::API.new(token)
+      @company_name = company_name
     end
 
     def list_teams
@@ -21,7 +22,7 @@ module TogglIntegration
 
     def workspace
       @workspace ||=
-        toggl_client.workspaces.find { |workspace| workspace['name'] == AppConfig.company }
+        toggl_client.workspaces.find { |workspace| workspace['name'] == company_name }
     end
 
     private
