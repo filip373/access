@@ -19,10 +19,8 @@ describe TogglIntegration::Actions::Diff do
     end
     let(:server_teams) { [server_team1, server_team2, server_team5] }
 
-    let(:toggl_api) { double(:toggl_api) }
     let(:diff) do
-      diff = described_class.new(local_teams, toggl_api)
-      allow(diff).to receive(:server_teams) { server_teams }
+      diff = described_class.new(local_teams, server_teams)
       diff
     end
     let(:diff_result) { diff.call }
