@@ -11,7 +11,7 @@ module TogglIntegration
 
     def show_diff
       reset_diff
-      UpdateRepo.now!
+      # data_guru.refresh
       calculated_diff
     end
 
@@ -19,7 +19,7 @@ module TogglIntegration
     end
 
     def cleanup_teams
-      # Action::CleanupTeams.new(missing_teams, toggl_api).call
+      Actions::CleanupTeams.new(missing_teams, toggl_api).call
     end
 
     private
@@ -32,7 +32,6 @@ module TogglIntegration
       Rails.cache.fetch CACHE_KEY_NAME do
         @diff ||= Actions::Diff.new(expected_teams,
                                     current_teams,
-                                    expected_memebers_repository,
                                     current_members_repository)
         @diff.call
       end
@@ -43,15 +42,14 @@ module TogglIntegration
     end
 
     def expected_teams
-      TeamRepository.build_from_data_guru(DataGuru.client.new).all
+      TeamRepository.build_from_data_guru(
+        DataGuru::Client.new,
+        UserRepository.new,
+        MemberRepository.build_from_toggl_api(toggl_api)).all
     end
 
     def current_members_repository
       MemberRepository.build_from_toggl_api(toggl_api)
-    end
-
-    def expected_memebers_repository
-      MemberRepository.build_from_data_guru(DataGuru.client.new)
     end
   end
 end
