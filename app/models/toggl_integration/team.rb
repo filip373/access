@@ -12,7 +12,7 @@ module TogglIntegration
     def to_yaml
       {
         name: name,
-        members: members || [],
+        members: members.map(&:repo_id).select(&:present?) || [],
         projects: projects || [],
       }.stringify_keys.to_yaml
     end
