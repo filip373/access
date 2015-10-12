@@ -2,7 +2,7 @@ module TogglIntegration
   class GenerateController < ApplicationController
     def permissions
       Generate::TogglPermissions.new(
-        toggl_api,
+        toggl_teams,
         permissions_dir,
       ).call
 
@@ -18,7 +18,11 @@ module TogglIntegration
     end
 
     def toggl_api
-      Api.new
+      Api.new(AppConfig.toggl_token, AppConfig.company)
+    end
+
+    def toggl_teams
+      TeamRepository.build_from_toggl_api(toggl_api, UserRepository.new).all
     end
   end
 end
