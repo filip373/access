@@ -27,21 +27,4 @@ describe TogglIntegration::MemberRepository do
       end
     end
   end
-
-  describe '#find_by_toggl_id' do
-    context 'member exists' do
-      it 'returns member with given toggl user id' do
-        member = repository.find_by_toggl_id(member1['uid'])
-        expect(member.emails).to include member1['email']
-        expect(member.toggl_id).to eq member1['uid'].to_i
-      end
-    end
-
-    context 'member does not exist' do
-      it 'returns nil' do
-        member = repository.find_by_toggl_id('13')
-        expect(member).to be_nil
-      end
-    end
-  end
 end
