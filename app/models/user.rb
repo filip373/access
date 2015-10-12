@@ -1,5 +1,3 @@
-class UserError < StandardError; end
-
 class User
   attr_accessor :name, :full_name, :github, :emails, :rollbar, :external
 
