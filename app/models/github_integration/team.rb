@@ -5,10 +5,28 @@ module GithubIntegration
     def self.from_api_request(client, team)
       new(
         team.name,
-        client.list_team_members(team.id).map(&:login),
-        client.list_team_repos(team.id).map(&:name).uniq,
+        api_team_members(client, team),
+        api_team_repos(client, team),
         team.permission,
       )
+    end
+
+    def self.from_storage(team)
+      new(
+        team.id,
+        team.members,
+        team.repos,
+        team.permission
+      )
+    end
+
+    def to_h
+      {
+        name: name,
+        members: members,
+        repos: repos,
+        permission: permission
+      }
     end
 
     def to_yaml
@@ -17,6 +35,16 @@ module GithubIntegration
         members: members || [],
         repos: repos || [],
       }.stringify_keys.to_yaml
+    end
+
+    private
+
+    def self.api_team_members(client, team)
+      client.list_team_members(team.id).map(&:login)
+    end
+
+    def self.api_team_repos(client, team)
+      client.list_team_repos(team.id).map(&:name).uniq
     end
   end
 end
