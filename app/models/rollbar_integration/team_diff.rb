@@ -104,7 +104,7 @@ module RollbarIntegration
                 rollbar_api.list_all_team_members(server_team['id'])
                 .map do |e|
                   begin
-                    yaml_user = repo.find_by_email(e.emails.first)
+                    yaml_user = repo.find_by_email(e.email)
                   rescue => exception
                     custom_error = "#{exception} rollbar_user: #{e}, team: #{server_team}"
                     @errors.push(custom_error)
