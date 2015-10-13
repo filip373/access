@@ -3,7 +3,7 @@ require 'rails_helper'
 describe TogglIntegration::Team do
   describe '#to_yaml' do
     it 'returns new team with members' do
-      team = TogglIntegration::Team.new(
+      team = described_class.new(
         'Team1',
         [
           TogglIntegration::Member.new(emails: ['john.doe@gmail.com'],
