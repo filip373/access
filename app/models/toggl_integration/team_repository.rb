@@ -8,7 +8,7 @@ module TogglIntegration
 
     def self.build_from_data_guru(dg_client, user_repository, toggl_members_repository)
       teams = dg_client.toggl_teams.map do |team|
-        members = team.members.map do |repo_member|
+        members = team.members.try(:map) do |repo_member|
           member_data =
             begin
               user_repository.find(repo_member)
@@ -20,7 +20,7 @@ module TogglIntegration
           toggl_id = toggl_member.toggl_id if toggl_member
           Member.new(emails: emails, repo_id: repo_member, toggl_id: toggl_id)
         end
-        Team.new(team.name, members, team.projects)
+        Team.new(team.name, members || [], team.projects)
       end
       new(all: teams)
     end
