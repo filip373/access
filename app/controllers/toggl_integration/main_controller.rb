@@ -11,11 +11,12 @@ module TogglIntegration
 
     def show_diff
       reset_diff
-      # data_guru.refresh
+      data_guru.refresh
       calculated_diff
     end
 
     def sync
+      Actions::Sync.new(calculated_diff, toggl_api).call
     end
 
     def cleanup_teams
