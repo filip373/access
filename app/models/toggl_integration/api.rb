@@ -1,7 +1,6 @@
 module TogglIntegration
   class Api
-    class ProjectUser < Struct.new(:id, :uid)
-    end
+    ProjectUser = Struct.new(:id, :uid)
 
     attr_reader :toggl_client, :company_name
 
