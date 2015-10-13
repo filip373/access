@@ -18,7 +18,6 @@ module RollbarIntegration
       members_diff
       projects_diff
     rescue StandardError => e
-      Rollbar.error(e)
     ensure
       blk.call(diff_hash, @errors)
       terminate
@@ -108,7 +107,6 @@ module RollbarIntegration
                     yaml_user = repo.find_by_email(e.emails.first)
                   rescue => exception
                     custom_error = "#{exception} rollbar_user: #{e}, team: #{server_team}"
-                    Rollbar.error(custom_error)
                     @errors.push(custom_error)
                     [nil, nil]
                   else
