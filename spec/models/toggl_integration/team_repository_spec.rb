@@ -5,9 +5,11 @@ describe TogglIntegration::TeamRepository do
 
   describe '.build_from_data_guru' do
     let(:dg_client) { double(:dg_client, toggl_teams: []) }
+    let(:member_repo) { double(:member_repo, find: []) }
+    let(:toggl_members_repo) { double(:member_repo, find_by_emails: []) }
 
     it 'creates a repo object' do
-      expect(described_class.build_from_data_guru(dg_client))
+      expect(described_class.build_from_data_guru(dg_client, member_repo, toggl_members_repo))
         .to be_an_instance_of(described_class)
     end
   end
@@ -38,7 +40,12 @@ describe TogglIntegration::TeamRepository do
       expect(team.id).to eq team1['id']
       expect(team.name).to eq team1['name']
       expect(team.projects).to eq [team1['name']]
-      expect(team.members).to eq(['john.doe', 'jane.kovalsky'])
+      expect(team.members).to eq([
+        TogglIntegration::Member.new(
+          emails: ['email_1@gmail.com'], repo_id: 'john.doe', toggl_id: 1),
+        TogglIntegration::Member.new(
+          emails: ['email_2@gmail.com'], repo_id: 'jane.kovalsky', toggl_id: 2),
+      ])
     end
   end
 end

@@ -1,6 +1,6 @@
 RSpec.shared_context 'toggl_api' do
   let(:toggl_api) do
-    double.tap do |api|
+    double(:toggl_api).tap do |api|
       allow(api).to receive(:list_teams) { all_teams }
       allow(api).to receive(:list_all_members) { all_members }
       allow(api).to receive(:list_team_members).with(team1['id']) { team1_members }
