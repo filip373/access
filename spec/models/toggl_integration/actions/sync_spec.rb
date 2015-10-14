@@ -12,7 +12,7 @@ describe TogglIntegration::Actions::Sync do
     {
       create_teams: { new_team1 => [member1], new_team2 => [member2] },
       add_members: { team1 => [member1, member2] },
-      remove_members: { team2 => [member2] },
+      deactivate_members: Set.new([member2])
     }
   end
   let(:sync) { described_class.new(diffs, toggl_api) }
@@ -28,7 +28,7 @@ describe TogglIntegration::Actions::Sync do
         .and_return('name' => 'Team2', 'id' => '2')
 
       expect(toggl_api).to receive(:add_member_to_team).exactly(4).times
-      expect(toggl_api).to receive(:remove_member_from_team).once
+      expect(toggl_api).to receive(:deactivate_member).once
       sync.call
     end
   end

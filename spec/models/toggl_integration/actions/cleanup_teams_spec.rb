@@ -8,9 +8,9 @@ describe TogglIntegration::Actions::CleanupTeams do
   let(:cleanup_teams) { described_class.new(server_teams, toggl_api) }
 
   describe '#call' do
-    it 'calls api delete_team method' do
-      expect(toggl_api).to receive(:delete_team).with(team1.id)
-      expect(toggl_api).to receive(:delete_team).with(team2.id)
+    it 'calls api deactivate_team method' do
+      expect(toggl_api).to receive(:deactivate_team).with(team1.id)
+      expect(toggl_api).to receive(:deactivate_team).with(team2.id)
       cleanup_teams.call
     end
   end
