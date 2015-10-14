@@ -20,8 +20,8 @@ module TogglIntegration
         @diff_hash ||= {
           create_teams: {},
           add_members: {},
-          remove_members: {},
           missing_teams: [],
+          deactivate_members: Set.new,
         }
       end
 
@@ -70,8 +70,13 @@ module TogglIntegration
             diff_hash_array(:add_members, server_team).concat normalize_members(local_member)
           end
         end
-        if server_team_members.any?
-          diff_hash_array(:remove_members, server_team).concat server_team_members
+        select_for_deactivation(server_team_members) if server_team_members.any?
+      end
+
+      def select_for_deactivation(server_team_members)
+        # Will deactivate only these members who has no repo identifiers.
+        server_team_members.each do |member|
+          diff_hash[:deactivate_members] << member unless member.repo_id?
         end
       end
 
