@@ -11,9 +11,7 @@ RSpec.describe TogglIntegration::Actions::Log do
       add_members: {
         team => [TogglIntegration::Member.new(emails: ['first.dude@gmail.com'])],
       },
-      remove_members: {
-        team => [TogglIntegration::Member.new(emails: ['second.dude@gmail.com'])],
-      },
+      deactivate_members: [TogglIntegration::Member.new(emails: ['second.dude@gmail.com'])],
     }
   end
 
@@ -21,7 +19,7 @@ RSpec.describe TogglIntegration::Actions::Log do
     {
       create_teams: {},
       add_members: {},
-      remove_members: {},
+      deactivate_members: [],
     }
   end
 
@@ -34,7 +32,7 @@ RSpec.describe TogglIntegration::Actions::Log do
     it { is_expected.to include "[api] create team #{new_team.name}" }
     it { is_expected.to include "[api] add member #{diff[:create_teams][new_team][0].emails.first} to team #{new_team.name}" }
     it { is_expected.to include "[api] add member #{diff[:add_members][team][0].emails.first} to team #{team.name}" }
-    it { is_expected.to include "[api] remove member #{diff[:remove_members][team][0].emails.first} from team #{team.name}" }
+    it { is_expected.to include "[api] deactivate member #{diff[:deactivate_members][0].emails.first}" }
   end
   # rubocop:enable Metrics/LineLength
 

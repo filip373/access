@@ -15,7 +15,7 @@ module TogglIntegration
       def generate_log
         log_creating_teams
         log_inviting_members
-        log_removing_members
+        log_deactivate_members
         @log << 'There are no changes.' if @log.size == 0
         @log
       end
@@ -37,11 +37,9 @@ module TogglIntegration
         end
       end
 
-      def log_removing_members
-        @diff_hash[:remove_members].each do |team, members|
-          members.each do |member|
-            @log << "[api] remove member #{member.emails.first} from team #{team.name}"
-          end
+      def log_deactivate_members
+        @diff_hash[:deactivate_members].each do |member|
+          @log << "[api] deactivate member #{member.emails.first}"
         end
       end
     end
