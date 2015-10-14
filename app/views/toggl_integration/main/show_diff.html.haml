@@ -15,9 +15,9 @@
 
   - if validation_errors.empty? && missing_teams.any?
     %h2 Stranded teams
-    %h3 Following teams are on Toggl, but can't be found in permissions repository - they most likely should be deleted.
+    %h3 Following teams are on Toggl, but can't be found in permissions repository - they most likely should be archived.
     %ul.list-group
       - missing_teams.each do |team|
         = link_to team.name, toggl_project_path(workspace_id, team.id), class: 'list-group-item'
     = form_tag toggl_cleanup_teams_path, method: :delete do
-      = button_tag "Ok, it makes sense to remove these teams!", type: :submit, class: 'btn btn-primary btn-lg', 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> I\'m on it...".html_safe
+      = button_tag "Ok, it makes sense to archive these teams!", type: :submit, class: 'btn btn-primary btn-lg', 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> I\'m on it...".html_safe
