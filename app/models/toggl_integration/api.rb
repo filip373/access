@@ -108,7 +108,7 @@ module TogglIntegration
     end
 
     def build_preload_projects_users_thread_block(input_queue, result_queue)
-      -> (api) do
+      lambda  do |api|
         until input_queue.empty?
           begin
             team_id = input_queue.pop(true)
@@ -116,7 +116,7 @@ module TogglIntegration
             result_queue << [team_id, project_users]
           rescue ThreadError # normal if queue empty
           rescue RuntimeError => e
-            if  e.message.match /Too many requests/i
+            if e.message.match(/Too many requests/i)
               input_queue << team_id
               sleep(1)
             else
