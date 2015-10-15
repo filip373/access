@@ -46,7 +46,7 @@ module TogglIntegration
       TeamRepository.build_from_data_guru(
         DataGuru::Client.new,
         UserRepository.new,
-        MemberRepository.build_from_toggl_api(toggl_api)).all
+        current_members_repository).all
     end
 
     def current_members_repository
