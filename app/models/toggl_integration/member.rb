@@ -21,5 +21,13 @@ module TogglIntegration
       return false unless self.class == other.class
       emails == other.emails && toggl_id == other.toggl_id && repo_id == other.repo_id
     end
+
+    def eql?(other)
+      self == other
+    end
+
+    def hash
+      [@emails, @toggl_id, @repo_id].hash
+    end
   end
 end
