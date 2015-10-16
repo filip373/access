@@ -1,7 +1,7 @@
 module GithubIntegration
   class SyncJob
-    def perform(api, diff)
-      ping_messages { GithubIntegration::Actions::Sync.new(api).now!(diff) }
+    def perform(api, diff, gh_teams)
+      ping_messages { GithubIntegration::Actions::Sync.new(api, diff, gh_teams_names_and_ids).now! }
     end
 
     private
