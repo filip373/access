@@ -22,7 +22,7 @@ module GithubIntegration
 
       def remove_stranded_teams
         stranded_teams.each do |team|
-          gh_api.remove_team(team)
+          gh_api.remove_team(team.id)
         end
       end
     end
