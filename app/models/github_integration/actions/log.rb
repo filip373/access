@@ -1,9 +1,10 @@
 module GithubIntegration
   module Actions
     class Log
-      def initialize(diff_hash)
-        @diff_hash = diff_hash
+      attr_reader :diff, :log
+      def initialize(diff)
         @log = []
+        @diff = diff.show_by_team
       end
 
       def now!
@@ -13,74 +14,45 @@ module GithubIntegration
       private
 
       def generate_log
-        log_creating_teams
-        log_adding_members
-        log_removing_members
-        log_adding_repos
-        log_removing_repos
-        log_changing_permissions
-        @log << 'There are no changes.' if @log.size == 0
-        @log
+        diff.each { |team_name, changes| log_team(team_name, changes) }
+        log << 'There are no changes.' if log.empty?
+        log
       end
 
-      def log_creating_teams
-        @diff_hash[:create_teams].each do |team, h|
-          @log << "[api] create team #{team.name}"
-
-          if h[:add_members].present?
-            h[:add_members].each do |m|
-              @log << "[api] add member #{m} to team #{team.name}"
-            end
-          end
-
-          if h[:add_repos].present?
-            h[:add_repos].each do |r|
-              @log << "[api] add repo #{r} to team #{team.name}"
-            end
-          end
-
-          unless h[:add_permissions].empty?
-            @log << "[api] add permissions #{team.name} - #{h[:add_permissions]}"
-          end
-        end
+      def log_team(team_name, changes)
+        log_adding(team_name, changes[:add])
+        log_removing(team_name, changes[:remove])
       end
 
-      def log_changing_permissions
-        @diff_hash[:change_permissions].each do |team, permissions|
-          @log << "[api] change permissions #{team.name} - #{permissions}"
-        end
+      def log_adding(team_name, changes)
+        log_adding_members(team_name, changes[:members])
+        log_adding_repos(team_name, changes[:repos])
+        log_changing_permissions(team_name, changes[:permission])
       end
 
-      def log_adding_members
-        @diff_hash[:add_members].each do |team, members|
-          members.each do |m|
-            @log << "[api] add member #{m} to team #{team.name}"
-          end
-        end
+      def log_removing(team_name, changes)
+        log_removing_members(team_name, changes[:members])
+        log_removing_repos(team_name, changes[:repos])
       end
 
-      def log_removing_members
-        @diff_hash[:remove_members].each do |team, members|
-          members.each do |m|
-            @log << "[api] remove member #{m} from team #{team.name}"
-          end
-        end
+      def log_changing_permissions(team_name, permission)
+        log << "[gh] change permissions #{team_name} - #{permission}"
       end
 
-      def log_adding_repos
-        @diff_hash[:add_repos].each do |team, repos|
-          repos.each do |r|
-            @log << "[api] add repo #{r} to team #{team.name}"
-          end
-        end
+      def log_adding_members(team_name, members)
+        members.each { |m| log << "[gh] add member #{m} to team #{team_name}" }
       end
 
-      def log_removing_repos
-        @diff_hash[:remove_repos].each do |team, repos|
-          repos.each do |r|
-            @log << "[api] remove repo #{r} from team #{team.name}"
-          end
-        end
+      def log_removing_members(team_name, members)
+        members.each { |m| log << "[gh] remove member #{m} from team #{team_name}" }
+      end
+
+      def log_adding_repos(team_name, repos)
+        repos.each { |r| log << "[gh] add repo #{r} to team #{team_name}" }
+      end
+
+      def log_removing_repos(team_name, repos)
+        repos.each { |r| log << "[gh] remove repo #{r} from team #{team_name}" }
       end
     end
   end
