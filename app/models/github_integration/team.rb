@@ -1,22 +1,30 @@
 module GithubIntegration
   class Team
-    rattr_initialize :name, :members, :repos, :permission
+    attr_accessor :name, :members, :repos, :permission, :id
+    def initialize(name:, members:, repos:, permission:, id: nil)
+      self.name = name
+      self.membes = members
+      self.repos = repos
+      self.permision = permission
+      self.id = id
+    end
 
     def self.from_api_request(client, team)
       new(
-        team.name,
-        api_team_members(client, team),
-        api_team_repos(client, team),
-        team.permission,
+        name: team['name'],
+        members: api_team_members(client, team['id']),
+        repos: api_team_repos(client, team['id']),
+        permission: team['permission'],
+        id: team['id'],
       )
     end
 
     def self.from_storage(team)
       new(
-        team.id,
-        team.members,
-        team.repos,
-        team.permission,
+        name: team.id,
+        members: team.members,
+        repos: team.repos,
+        permission: team.permission,
       )
     end
 
@@ -37,13 +45,13 @@ module GithubIntegration
       }.stringify_keys.to_yaml
     end
 
-    def self.api_team_members(client, team)
-      client.list_team_members(team.id).map(&:login)
+    def self.api_team_members(client, team_id)
+      client.list_team_members(team_id).map(&:login)
     end
     private_class_method :api_team_members
 
-    def self.api_team_repos(client, team)
-      client.list_team_repos(team.id).map(&:name).uniq
+    def self.api_team_repos(client, team_id)
+      client.list_team_repos(team_id).map(&:name).uniq
     end
     private_class_method :api_team_repos
   end
