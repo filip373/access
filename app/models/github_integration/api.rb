@@ -20,33 +20,33 @@ module GithubIntegration
       yield(response) if block_given?
     end
 
-    def remove_team(team)
-      client.organizations.teams.delete(team.id)
+    def remove_team(team_id)
+      client.organizations.teams.delete(team_id)
     end
 
-    def add_member(member, team)
-      client.put_request("/teams/#{team.id}/memberships/#{member}")
+    def add_member(member, team_id)
+      client.put_request("/teams/#{team_id}/memberships/#{member}")
     rescue Github::Error::NotFound
       nil
     end
 
-    def remove_member(member, team)
-      client.delete_request("/teams/#{team.id}/memberships/#{member}")
+    def remove_member(member, team_id)
+      client.delete_request("/teams/#{team_id}/memberships/#{member}")
     end
 
-    def add_repo(repo, team)
+    def add_repo(repo, team_id)
       find_or_create_repo(repo)
-      client.orgs.teams.add_repo(team.id, company_name, repo)
+      client.orgs.teams.add_repo(team_id, company_name, repo)
     end
 
-    def remove_repo(repo_name, team)
-      list_team_repos(team.id).select { |e| e.name == repo_name }.each do |repo|
-        client.delete_request("/teams/#{team.id}/repos/#{repo.owner.login}/#{repo_name}")
+    def remove_repo(repo_name, team_id)
+      list_team_repos(team_id).select { |e| e.name == repo_name }.each do |repo|
+        client.delete_request("/teams/#{team_id}/repos/#{repo.owner.login}/#{repo_name}")
       end
     end
 
-    def add_permission(permission, team)
-      client.organizations.teams.edit(team.id, name: team.name, permission: permission)
+    def add_permission(permission, team_id)
+      client.organizations.teams.edit(team_id, name: team.name, permission: permission)
     end
 
     def list_org_members(org_name)
