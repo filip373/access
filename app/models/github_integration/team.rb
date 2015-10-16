@@ -16,7 +16,7 @@ module GithubIntegration
         team.id,
         team.members,
         team.repos,
-        team.permission
+        team.permission,
       )
     end
 
@@ -25,7 +25,7 @@ module GithubIntegration
         name: name,
         members: members,
         repos: repos,
-        permission: permission
+        permission: permission,
       }
     end
 
@@ -37,14 +37,14 @@ module GithubIntegration
       }.stringify_keys.to_yaml
     end
 
-    private
-
     def self.api_team_members(client, team)
       client.list_team_members(team.id).map(&:login)
     end
+    private_class_method :api_team_members
 
     def self.api_team_repos(client, team)
       client.list_team_repos(team.id).map(&:name).uniq
     end
+    private_class_method :api_team_repos
   end
 end
