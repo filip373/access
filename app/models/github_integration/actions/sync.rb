@@ -1,81 +1,69 @@
 module GithubIntegration
   module Actions
     class Sync
-      def initialize(gh_api)
-        @gh_api = gh_api
+      pattr_initialize :gh_api, :diff, :names_and_ids do
+        @remove = diff.remove_hash
+        @add = diff.add_hash
       end
+      att_reader :remove, :add
 
-      def now!(diff)
-        sync(diff)
+      def now!
+        add.each { |team_name, changes| sync_add_team(team_name.downcase, team_changes) }
+        remove.each { |team_name, changes| sync_remove_team(team_name.downcase, team_changes) }
       end
 
       private
 
-      def sync(diff)
-        create_teams(diff[:create_teams])
-        sync_members(diff[:add_members], diff[:remove_members])
-        sync_repos(diff[:add_repos], diff[:remove_repos])
-        sync_teams_permissions(diff[:change_permissions])
+      def sync_add_team(team_name, team_changes)
+        team_id = get_team_id(team_name)
+
+        sync_add_members(team_id, team_changes[:members])
+        sync_add_repos(team_id, team_changes[:repos])
+        sync_add_permission(team_id, team_changes[:permission])
       end
 
-      def sync_members(members_to_add, members_to_remove)
-        members_to_add.each do |team, members|
-          members.each do |member|
-            @gh_api.add_member(member, team)
-          end
-        end
-
-        members_to_remove.each do |team, members|
-          members.each do |member|
-            @gh_api.remove_member(member, team)
-          end
-        end
+      def sync_add_members(team_id, members)
+        members.each { |member| gh_api.add_member(member, team_id) }
       end
 
-      def sync_repos(repos_to_add, repos_to_remove)
-        repos_to_add.each do |team, repos|
-          repos.each do |repo|
-            @gh_api.add_repo(repo, team)
-          end
-        end
-
-        repos_to_remove.each do |team, repos|
-          repos.each do |repo|
-            @gh_api.remove_repo(repo, team)
-          end
-        end
+      def sync_add_repos(team_id, repos)
+        repos.each { |repo| gh_api.add_repo(repo, team_id) }
       end
 
-      def sync_teams_permissions(change_permissions)
-        change_permissions.each do |team, permissions|
-          @gh_api.add_permission(permissions, team)
-        end
+      def sync_add_permission(team_id, permission)
+        gh_api.add_permission(permission, team_id)
       end
 
-      def create_teams(teams_to_create)
-        teams_to_create.each do |team, h|
-          @gh_api.create_team(team.name, h[:add_permissions]) do |created_team|
-            new_team_add_members(h[:add_members], created_team)
-            new_team_add_repos(h[:add_repos], created_team)
-            new_team_add_permissions(h[:add_permissions], created_team)
-          end
-        end
+      def sync_remove_team(team_name, team_changes)
+        team_id = get_team_id(team_name)
+
+        sync_remove_members(team_id, team_changes[:members])
+        sync_remove_repos(team_id, team_changes[:repos])
+        sync_remove_permission(team_id, team_changes[:permission])
       end
 
-      def new_team_add_members(members, team)
-        members.each do |member|
-          @gh_api.add_member(member, team)
-        end
+      def sync_remove_members(team_id, members)
+        members.each { |member| gh_api.remove_member(member, team_id) }
       end
 
-      def new_team_add_repos(repos, team)
-        repos.each do |repo|
-          @gh_api.add_repo(repo, team)
-        end
+      def sync_remove_repos(team_id, repos)
+        repos.each { |repo| gh_api.remove_repo(repo, team_id) }
       end
 
-      def new_team_add_permissions(permissions, team)
-        @gh_api.add_permission(permissions, team)
+      def get_team_id(team_name)
+        team_id = names_and_ids[team_name]
+        team_id || create_team(team_name)
+      end
+
+      def create_team(team_name)
+        team = gh_api.create_team(name: team_name, permission: default_permission)
+        names_and_ids[team['name']] = team['id']
+        team['id']
+      end
+
+      def default_permission
+        # This will be replaced after DataGuru::Configuration exposes default values for attributes
+        'push'
       end
     end
   end
