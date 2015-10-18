@@ -1,11 +1,11 @@
 module GithubIntegration
   module Actions
     class Sync
-      pattr_initialize :gh_api, :diff, :names_and_ids do
+      pattr_initialize(:gh_api, :diff, :names_and_ids) do
         @remove = diff.remove_hash
         @add = diff.add_hash
       end
-      att_reader :remove, :add
+      attr_reader :remove, :add
 
       def now!
         add.each { |team_name, changes| sync_add_team(team_name.downcase, team_changes) }
