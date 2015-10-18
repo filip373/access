@@ -3,9 +3,9 @@ module GithubIntegration
     attr_accessor :name, :members, :repos, :permission, :id
     def initialize(name:, members:, repos:, permission:, id: nil)
       self.name = name
-      self.membes = members
+      self.members = members
       self.repos = repos
-      self.permision = permission
+      self.permission = permission
       self.id = id
     end
 
