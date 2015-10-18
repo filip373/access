@@ -1,6 +1,6 @@
 module GithubIntegration
   class TeamLog
-    pattr_initialize :team_name, :changes { @log = [] }
+    pattr_initialize(:team_name, :changes) { @log = [] }
     attr_reader :log
 
     def now!
