@@ -4,11 +4,33 @@ module RollbarIntegration
     attr_accessor :id
 
     def self.from_api_request(api, team)
-      new(
+      t = new(
         team.name,
         prepare_members(api, team),
         api.list_team_projects(team.id).map(&:name).uniq.compact,
       )
+      t.id = team['id']
+      t
+    end
+
+    def self.from_dataguru(dg_team)
+      new(
+        dg_team.id,
+        dg_team.members,
+        dg_team.projects
+      )
+    end
+
+    def self.all_from_dataguru(dg_teams)
+      dg_teams.map do |dg_team|
+        from_dataguru(dg_team)
+      end
+    end
+
+    def self.all_from_api(rollbar_api)
+      rollbar_api.list_teams.map do |team|
+        from_api_request(rollbar_api, team)
+      end
     end
 
     def to_yaml

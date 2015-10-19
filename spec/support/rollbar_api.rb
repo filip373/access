@@ -83,6 +83,7 @@ RSpec.shared_context 'rollbar_api' do
     Hashie::Mash.new(
       id: 1,
       username: 'member1',
+      email: 'member1@foo.pl',
       emails: ['member1@foo.pl'],
     )
   end
@@ -91,6 +92,7 @@ RSpec.shared_context 'rollbar_api' do
     Hashie::Mash.new(
       id: 2,
       username: 'member2',
+      email: 'member2@foo.pl',
       emails: ['member2@foo.pl'],
     )
   end
@@ -99,6 +101,7 @@ RSpec.shared_context 'rollbar_api' do
     Hashie::Mash.new(
       id: 3,
       username: 'member3',
+      email: 'member3@foo.pl',
       emails: ['member3@foo.pl'],
     )
   end
@@ -107,6 +110,7 @@ RSpec.shared_context 'rollbar_api' do
     Hashie::Mash.new(
       id: 5,
       username: 'member5',
+      email: 'member5@foo.pl',
       emails: ['member5@foo.pl'],
     )
   end
@@ -115,6 +119,7 @@ RSpec.shared_context 'rollbar_api' do
     Hashie::Mash.new(
       id: 6,
       username: 'member6',
+      email: 'member6@foo.pl',
       emails: ['member6@foo.pl'],
     )
   end

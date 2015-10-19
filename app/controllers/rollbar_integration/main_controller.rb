@@ -1,14 +1,15 @@
 module RollbarIntegration
   class MainController < ApplicationController
     expose(:validation_errors) { DataGuru::Client.new.errors }
-    expose(:expected_teams) { Teams.all }
-    expose(:rollbar_teams) { rollbar_api.list_teams }
+    expose(:dataguru_teams) { RollbarIntegration::Team.all_from_dataguru(data_guru.rollbar_teams) }
+    expose(:rollbar_teams) { RollbarIntegration::Team.all_from_api(rollbar_api) }
+
     expose(:pending_invitations) do
       Actions::ListPendingInvitations.new(rollbar_api).now!
     end
     expose(:rollbar_log) { Actions::Log.new(calculated_diff).now! }
     expose(:teams_cleanup) do
-      Actions::CleanupTeams.new(expected_teams, rollbar_teams, rollbar_api)
+      Actions::CleanupTeams.new(dataguru_teams, rollbar_teams, rollbar_api)
     end
     expose(:missing_teams) { teams_cleanup.stranded_teams }
     expose(:diff_errors) { @diff.errors.uniq.sort { |a, b| a.to_s <=> b.to_s } }
@@ -39,7 +40,7 @@ module RollbarIntegration
 
     def calculated_diff
       Rails.cache.fetch 'rollbar_calculated_diff' do
-        @diff ||= Actions::Diff.new(expected_teams, rollbar_teams, rollbar_api)
+        @diff ||= Actions::Diff.new(dataguru_teams, rollbar_teams)
         @diff.now!
       end
     end

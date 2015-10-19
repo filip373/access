@@ -13,8 +13,8 @@ module RollbarIntegration
 
       def sync(diff)
         create_teams(diff[:create_teams])
-        sync_members(diff[:add_members], diff[:remove_members])
         sync_projects(diff[:add_projects], diff[:remove_projects])
+        sync_members(diff[:add_members], diff[:remove_members])
       end
 
       def sync_members(teams_with_members_to_add, teams_with_members_to_remove)
@@ -25,6 +25,7 @@ module RollbarIntegration
       def sync_projects(projects_to_add, projects_to_remove)
         projects_to_add.each do |team, projects|
           projects.each do |_project_name, project|
+            project = @rollbar_api.create_project(project.name) if project.id.nil?
             @rollbar_api.add_project_to_team(project.id, team.id)
           end
         end
@@ -46,13 +47,16 @@ module RollbarIntegration
       end
 
       def new_team_add_members(members, team)
+        return if members.nil?
         members.each do |_key, member|
           @rollbar_api.invite_member_to_team(member.emails.first, team.id)
         end
       end
 
       def new_team_add_projects(projects, team)
+        return if projects.nil?
         projects.each do |_project_name, project|
+          project = @rollbar_api.create_project(project.name) if project.id.nil?
           @rollbar_api.add_project_to_team(project.id, team.id)
         end
       end
