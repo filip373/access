@@ -31,9 +31,9 @@ google_defaults: &google_defaults
 
 
 defaults: &defaults
-  rollbar_token: fake-token
   rollbar:
-    token: 908ad329113949c6978d9bbdd99d7855
+    organization_token:
+    notification_token:
   company: netguru
   office_email: 'depens-on-environment'
   cache_data: true

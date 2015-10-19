@@ -1,5 +1,6 @@
 development:
-  rollbar_token: token-from-rollbar-so
+  rollbar:
+    notification_token: notification-token-from-rollbar
   permissions_repo:
     url: your-url-to-permissions-repo
   dataguru:

@@ -2,7 +2,7 @@ module RollbarIntegration
   class Api
     attr_accessor :client
 
-    def initialize(token: AppConfig.rollbar.token)
+    def initialize(token: AppConfig.rollbar.organization_token)
       self.client = Client.new(token)
     end
 
