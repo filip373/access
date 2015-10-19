@@ -46,12 +46,12 @@ module GithubIntegration
     end
 
     def self.api_team_members(client, team_id)
-      client.list_team_members(team_id).map(&:login)
+      client.list_team_members(team_id).map { |member| member['login'] }
     end
     private_class_method :api_team_members
 
     def self.api_team_repos(client, team_id)
-      client.list_team_repos(team_id).map(&:name).uniq
+      client.list_team_repos(team_id).map { |repo| repo['name'] }.uniq
     end
     private_class_method :api_team_repos
   end
