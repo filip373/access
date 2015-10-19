@@ -28,6 +28,10 @@ google_defaults: &google_defaults
   email:
     account_using_instruction: |
                                 Short description how to use account creation details, how to login in using 2step. This should be overriden in sec-config.
+  defaults:
+    group:
+      privacy: false
+      archive: true
 
 
 defaults: &defaults

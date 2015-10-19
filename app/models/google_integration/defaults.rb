@@ -5,12 +5,7 @@ module GoogleIntegration
     end
 
     def self.defaults_hash
-      return {} unless File.file?(default_yaml)
-      YAML.load_file(default_yaml)
-    end
-
-    def self.default_yaml
-      Rails.root.join(AppConfig.permissions_repo.checkout_dir, 'google_defaults.yml')
+      AppConfig.google.defaults
     end
 
     def self.method_missing(method)
