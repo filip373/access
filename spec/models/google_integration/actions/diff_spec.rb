@@ -64,9 +64,6 @@ RSpec.describe GoogleIntegration::Actions::Diff do
     end
 
     context 'defaults are not set' do
-      before do
-        allow(GoogleIntegration::Defaults).to receive(:default_yaml) { '' }
-      end
       context 'localy is open, but on google it is a closed group' do
         let(:group_settings) do
           privacy_closed
