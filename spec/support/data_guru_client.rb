@@ -1,5 +1,30 @@
 RSpec.shared_context 'data_guru' do
-  let(:users) { [] }
+  let(:users) do
+    [
+      OpenStruct.new(
+        name: 'First Member',
+        github: 'first.mbr',
+        rollbar: 'member1',
+        emails: ['member1@foo.pl'],
+      ),
+      OpenStruct.new(
+        name: 'Second Member',
+        github: 'scnd.mbr',
+        rollbar: 'member2',
+        emails: ['member2@foo.pl'],
+      ),
+      OpenStruct.new(
+        name: 'Sixsth Member',
+        github: 'sth.mbr',
+        emails: ['member6@foo.pl'],
+      ),
+      OpenStruct.new(
+        name: 'Third Member',
+        github: 'thrd.mbr',
+        emails: ['member3@foo.pl'],
+      ),
+    ]
+  end
   let(:gh_teams) do
     [
       OpenStruct.new(
@@ -16,7 +41,28 @@ RSpec.shared_context 'data_guru' do
       ),
     ]
   end
-  let(:google_groups) { [] }
+  let(:google_groups) do
+    [
+      OpenStruct.new(
+        id: 'group1',
+        domain_membership: false,
+        members: ['second.member'],
+        aliases: ['alias2'],
+        private: false,
+      ),
+      OpenStruct.new(
+        id: 'new_group',
+        domain_membership: true,
+        members: ['first.member', 'second.member'],
+        aliases: ['alias1', 'alias2'],
+      ),
+      OpenStruct.new(
+        id: 'support_group',
+        domain_membership: true,
+        members: ['first.member'],
+      ),
+    ]
+  end
   let(:rollbar_teams) { [] }
   let(:toggl_teams) { [] }
   let(:errors) { [] }
