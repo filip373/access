@@ -51,8 +51,8 @@ defaults: &defaults
   google:
     <<: *google_defaults
   dataguru:
-    git_repo_url: http://url-to-repo-with-permissions
-    git_repo_temp_dir: 'tmp/permissions'
+    api_url: 'https://dataguruapi.com'
+    access_token: 'secret-token-for-dataguru'
   toggl_token: fake-token
 
 test:
