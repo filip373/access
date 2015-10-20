@@ -2,12 +2,12 @@ require 'rails_helper'
 
 RSpec.describe GithubIntegration::MainController do
   include_context 'gh_api'
+  include_context 'data_guru'
 
   before(:each) do
     allow(controller).to receive(:gh_auth_required).and_return(true)
     allow(GithubIntegration::Api).to receive(:new).and_return(gh_api)
-    allow(DataGuru::Client).to receive(:new).and_return(DataGuru::Client.new)
-    allow(DataGuru::Client.new).to receive(:refresh).and_return(true)
+    allow(DataGuru::Client).to receive(:new).and_return(data_guru)
   end
 
   describe 'GET show_diff' do

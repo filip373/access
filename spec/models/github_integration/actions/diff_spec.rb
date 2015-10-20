@@ -2,13 +2,15 @@ require 'rails_helper'
 
 RSpec.describe GithubIntegration::Actions::Diff do
   include_context 'gh_api'
+  include_context 'data_guru'
 
   before(:each) do
     Celluloid.shutdown
     Celluloid.boot
+    allow(DataGuru::Client).to receive(:new).and_return(data_guru)
   end
 
-  let(:expected_teams) { GithubIntegration::Teams.all }
+  let(:expected_teams) { GithubIntegration::Teams.all(data_guru.github_teams) }
   let(:new_team) do
     expected_teams.find { |team| team.name == 'team2' }
   end
