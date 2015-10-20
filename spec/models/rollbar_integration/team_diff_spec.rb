@@ -6,6 +6,7 @@ RSpec.describe RollbarIntegration::TeamDiff do
   before(:each) do
     Celluloid.shutdown
     Celluloid.boot
+    allow(RollbarIntegration::Api).to receive(:new).and_return(rollbar_api)
   end
 
   let(:yaml_team1) { expected_teams.find { |t| t.name == 'team1' } }
