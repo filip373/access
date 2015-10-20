@@ -71,6 +71,27 @@ To import users data from Google API and Gitgub Api to permissions directory you
 
 Since it has created the users yml files, you can push them to your permissions repository on github.
 
+### Configure DataGuru gem
+To make DataGuru gem work properly, you have to set up DataGuru-API first:
+
+https://github.com/netguru/data_guru-api
+
+In DataGuru-API you should set `git_repo_url` to your permissions repo url.
+
+Then you need to specify `api-url` and `access_token` in your `sec_config.yml` :
+
+```
+dataguru:
+    api_url: 'url of DataGuru-API'
+    access_token: 'access token from DataGuru-API'
+```
+
+Start DataGuru-API server on a port different than Access app, for example:
+
+```
+$ rails server -p 3001
+```
+
 ### Adding / editing users
 Before you add team to google group or github team you have to first create a data file for this user:
 
