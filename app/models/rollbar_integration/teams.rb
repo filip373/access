@@ -1,6 +1,6 @@
 module RollbarIntegration
   class Teams
-    def self.all
+    def self.all(raw_data)
       raw_data.map do |team|
         Team.new(
           team.name,
@@ -8,10 +8,6 @@ module RollbarIntegration
           team.projects,
         )
       end
-    end
-
-    def self.raw_data
-      DataGuru::Client.new.rollbar_teams
     end
   end
 end

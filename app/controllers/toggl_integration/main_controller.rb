@@ -44,7 +44,7 @@ module TogglIntegration
 
     def expected_teams
       TeamRepository.build_from_data_guru(
-        DataGuru::Client.new,
+        data_guru,
         UserRepository.new,
         current_members_repository).all
     end

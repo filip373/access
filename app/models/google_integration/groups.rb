@@ -1,6 +1,6 @@
 module GoogleIntegration
   class Groups
-    def self.all
+    def self.all(raw_data)
       raw_data.map do |group|
         Group.new(
           group.id,
@@ -15,12 +15,6 @@ module GoogleIntegration
 
     def self.find_by(name:)
       all.find { |group| group.name == name }
-    end
-
-    private
-
-    def self.raw_data
-      DataGuru::Client.new.google_groups
     end
   end
 end

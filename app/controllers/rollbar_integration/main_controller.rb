@@ -1,6 +1,6 @@
 module RollbarIntegration
   class MainController < ApplicationController
-    expose(:validation_errors) { DataGuru::Client.new.errors }
+    expose(:validation_errors) { data_guru.errors }
     expose(:dataguru_teams) { RollbarIntegration::Team.all_from_dataguru(data_guru.rollbar_teams) }
     expose(:rollbar_teams) { RollbarIntegration::Team.all_from_api(rollbar_api) }
 
