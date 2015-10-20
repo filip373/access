@@ -2,14 +2,14 @@ require 'rails_helper'
 
 RSpec.describe GoogleIntegration::MainController do
   include_context 'google_api'
+  include_context 'data_guru'
   it_behaves_like 'a google_api'
 
   before(:each) do
     allow(controller).to receive(:google_auth_required).and_return(true)
     allow(controller).to receive(:gh_auth_required).and_return(true)
     allow(GoogleIntegration::Api).to receive(:new).and_return(google_api)
-    allow(DataGuru::Client).to receive(:new).and_return(DataGuru::Client.new)
-    allow(DataGuru::Client.new).to receive(:refresh).and_return(true)
+    allow(DataGuru::Client).to receive(:new).and_return(data_guru)
   end
 
   context 'is permitted to manage google groups' do

@@ -2,10 +2,12 @@ require 'rails_helper'
 
 RSpec.describe RollbarIntegration::Actions::Diff do
   include_context 'rollbar_api'
+  include_context 'data_guru'
 
   before(:each) do
     Celluloid.shutdown
     Celluloid.boot
+    allow(DataGuru::Client).to receive(:new).and_return(data_guru)
   end
 
   let(:new_team) do

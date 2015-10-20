@@ -2,8 +2,13 @@ require 'rails_helper'
 
 RSpec.describe GoogleIntegration::Actions::AccountsDiff do
   include_context 'google_api'
+  include_context 'data_guru'
 
   subject { described_class.new(google_api).now! }
+
+  before do
+    allow(DataGuru::Client).to receive(:new).and_return(data_guru)
+  end
 
   it { is_expected.to be_a Array }
   it { is_expected.to_not be_nil }

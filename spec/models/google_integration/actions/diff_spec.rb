@@ -1,7 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe GoogleIntegration::Actions::Diff do
-  let(:expected_groups) { GoogleIntegration::Groups.all }
+  include_context 'data_guru'
+
+  let(:expected_groups) { GoogleIntegration::Groups.all(data_guru.google_groups) }
   let(:group1) do
     Hashie::Mash.new(
       id: 1,

@@ -2,11 +2,13 @@ require 'rails_helper'
 
 RSpec.describe RollbarIntegration::TeamDiff do
   include_context 'rollbar_api'
+  include_context 'data_guru'
 
   before(:each) do
     Celluloid.shutdown
     Celluloid.boot
     allow(RollbarIntegration::Api).to receive(:new).and_return(rollbar_api)
+    allow(DataGuru::Client).to receive(:new).and_return(data_guru)
   end
 
   let(:yaml_team1) { expected_teams.find { |t| t.name == 'team1' } }

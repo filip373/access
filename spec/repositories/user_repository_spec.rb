@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 describe UserRepository do
+  include_context 'data_guru'
+
   let(:janusz) do
     {
       id: 'janusz.nowak',
@@ -73,6 +75,7 @@ describe UserRepository do
   end
 
   before do
+    allow(DataGuru::Client).to receive(:new).and_return(data_guru)
     subject do
       described_class.new(users_data)
     end
