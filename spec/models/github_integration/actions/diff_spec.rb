@@ -7,6 +7,8 @@ RSpec.describe GithubIntegration::Actions::Diff do
   before(:each) do
     Celluloid.shutdown
     Celluloid.boot
+    allow(DataGuru::Client).to receive(:new).and_return(data_guru)
+    DataGuru::Client.new.users
   end
 
   let(:expected_teams) { GithubIntegration::Teams.all(data_guru.github_teams) }
