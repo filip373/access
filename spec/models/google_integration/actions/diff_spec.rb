@@ -32,6 +32,10 @@ RSpec.describe GoogleIntegration::Actions::Diff do
     end
   end
 
+  before(:each) do
+    allow(DataGuru::Client).to receive(:new).and_return(data_guru)
+  end
+
   subject { described_class.new(expected_groups, google_api).now! }
 
   it { is_expected.to be_a Hash }
