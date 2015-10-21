@@ -43,6 +43,12 @@ RSpec.shared_context 'data_guru' do
         repos: ['repo2'],
         permission: 'push',
       ),
+      OpenStruct.new(
+        id: 'team_empty',
+        members: [],
+        repos: [],
+        permission: 'push',
+      ),
     ]
   end
   let(:google_groups) do
