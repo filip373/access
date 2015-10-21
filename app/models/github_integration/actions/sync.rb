@@ -8,8 +8,8 @@ module GithubIntegration
       attr_reader :remove, :add
 
       def now!
-        add.each { |team_name, changes| sync_add_team(team_name.downcase, team_changes) }
-        remove.each { |team_name, changes| sync_remove_team(team_name.downcase, team_changes) }
+        add.each { |team_name, changes| sync_add_team(team_name.downcase, changes) }
+        remove.each { |team_name, changes| sync_remove_team(team_name.downcase, changes) }
       end
 
       private
