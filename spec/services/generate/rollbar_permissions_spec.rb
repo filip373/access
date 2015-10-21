@@ -2,6 +2,11 @@ require 'rails_helper'
 
 describe Generate::RollbarPermissions do
   include_context 'rollbar_api'
+  include_context 'data_guru'
+
+  before(:each) do
+    allow(DataGuru::Client).to receive(:new).and_return(data_guru)
+  end
 
   describe '.new' do
     let(:instantiated_user) do
