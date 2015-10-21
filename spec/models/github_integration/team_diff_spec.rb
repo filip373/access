@@ -2,13 +2,15 @@ require 'rails_helper'
 
 RSpec.describe GithubIntegration::TeamDiff do
   include_context 'gh_api'
+  include_context 'data_guru'
 
   before(:each) do
     Celluloid.shutdown
     Celluloid.boot
+    allow(DataGuru::Client).to receive(:new).and_return(data_guru)
   end
 
-  let(:expected_teams) { GithubIntegration::Teams.all }
+  let(:expected_teams) { GithubIntegration::Teams.all(data_guru.github_teams) }
 
   let(:expected_team1) { expected_teams.find { |t| t.name == 'team1' } }
   let(:diff_hash) do
