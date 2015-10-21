@@ -15,12 +15,9 @@ RSpec.describe RollbarIntegration::Actions::Diff do
     expected_teams.find { |team| team.name == 'team2' }
   end
 
-  subject do
-   DataGuru::Client.new.users
-   described_class.new(expected_teams, existing_teams).now!
+  it 'is returns a hash' do
+    expect(described_class.new(expected_teams, existing_teams).now!).to be_a(Hash)
   end
-
-  it { is_expected.to be_a Hash }
 
   context 'members in yml is empty' do
     let(:empty_members) { expected_teams.find { |t| t.name == 'team_empty' }.members }

@@ -9,10 +9,9 @@ module RollbarIntegration
       @diff_hash = diff_hash
       @dataguru_team = dataguru_team
       @rollbar_team = rollbar_team || create_rollbar_team
-      @rollbar_api = rollbar_api
+      @rollbar_api = Api.new
       @errors = []
       @repo = UserRepository.new
-      @rollbar_api = Api.new
     end
 
     def diff(blk)
