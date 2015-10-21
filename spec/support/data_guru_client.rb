@@ -2,23 +2,27 @@ RSpec.shared_context 'data_guru' do
   let(:users) do
     [
       OpenStruct.new(
+        id: 'first.member',
         name: 'First Member',
         github: 'first.mbr',
         rollbar: 'member1',
         emails: ['member1@foo.pl'],
       ),
       OpenStruct.new(
+        id: 'second.member',
         name: 'Second Member',
         github: 'scnd.mbr',
         rollbar: 'member2',
         emails: ['member2@foo.pl'],
       ),
       OpenStruct.new(
+        id: 'sixth.member',
         name: 'Sixsth Member',
         github: 'sth.mbr',
         emails: ['member6@foo.pl'],
       ),
       OpenStruct.new(
+        id: 'third.member',
         name: 'Third Member',
         github: 'thrd.mbr',
         emails: ['member3@foo.pl'],
