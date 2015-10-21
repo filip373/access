@@ -6,7 +6,6 @@ RSpec.shared_context 'gh_api' do
       allow(api).to receive(:list_team_members) do |arg|
         existing_teams[arg - 1].members
       end
-      allow(api).to receive(:remove_team)
       allow(api).to receive(:list_team_repos) { |arg| existing_teams[arg - 1].repos }
       allow(api).to receive(:team_member_pending?) do |team_id, user_name|
         team_id == 1 && user_name == 'thrd.mbr'

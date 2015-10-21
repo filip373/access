@@ -29,7 +29,7 @@ RSpec.shared_context 'data_guru' do
       ),
     ]
   end
-  let(:gh_teams) do
+  let(:github_teams) do
     [
       OpenStruct.new(
         id: 'team1',
@@ -74,7 +74,7 @@ RSpec.shared_context 'data_guru' do
   let(:data_guru) do
     double.tap do |dg|
       allow(dg).to receive(:users) { users }
-      allow(dg).to receive(:github_teams) { gh_teams }
+      allow(dg).to receive(:github_teams) { github_teams }
       allow(dg).to receive(:google_groups) { google_groups }
       allow(dg).to receive(:rollbar_teams) { rollbar_teams }
       allow(dg).to receive(:toggl_teams) { toggl_teams }

@@ -2,8 +2,13 @@ require 'rails_helper'
 
 RSpec.describe RollbarIntegration::Team do
   include_context 'rollbar_api'
+  include_context 'data_guru'
 
   let(:team) { OpenStruct.new(id: 1, name: 'team1') }
+
+  before(:each) do
+    allow(DataGuru::Client).to receive(:new).and_return(data_guru)
+  end
 
   describe '.from_api_request' do
     subject { described_class.from_api_request(rollbar_api, team) }

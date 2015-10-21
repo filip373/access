@@ -8,6 +8,7 @@ RSpec.describe RollbarIntegration::Actions::Diff do
     Celluloid.shutdown
     Celluloid.boot
     allow(DataGuru::Client).to receive(:new).and_return(data_guru)
+    allow(RollbarIntegration::Api).to receive(:new).and_return(rollbar_api)
   end
 
   let(:new_team) do
