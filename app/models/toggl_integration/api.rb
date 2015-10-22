@@ -12,11 +12,9 @@ module TogglIntegration
 
     def list_teams(preload_members: true)
       @teams ||= toggl_client.projects(workspace['id'], active: true)
-      if preload_members
-        team_ids = @teams.map { |team| team['id'] }
-        preload_projects_users(team_ids)
-      end
-      @teams
+      return @teams unless preload_members
+      team_ids = @teams.map { |team| team['id'] }
+      preload_projects_users(team_ids)
     end
 
     def list_all_members
