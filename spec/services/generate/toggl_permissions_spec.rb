@@ -1,30 +1,36 @@
 require 'rails_helper'
 
 describe Generate::TogglPermissions do
-  include_context 'toggl_api'
-
-  before do
-    repo = double(:user_repository)
-    allow(UserRepository).to receive(:new) { repo }
-
-    allow(repo).to receive(:find_by_email)
-      .with(member1['email']) { OpenStruct.new(id: 'john.doe') }
-    allow(repo).to receive(:find_by_email)
-      .with(member2['email']) { OpenStruct.new(id: 'jane.kovalsky') }
-    allow(repo).to receive(:find_by_email)
-      .with(member3['email']) { OpenStruct.new(id: 'james.bond') }
-  end
-
-  describe '#call', skip: 'Fails on CircleCI because it tries to save file on disk' do
+  describe '#call' do
+    let(:toggl_teams) do
+      [
+        TogglIntegration::Team.new(
+          "team1",
+          [
+            TogglIntegration::Member.new(emails: ["john.doe@gmail.com"], repo_id: "john.doe"),
+            TogglIntegration::Member.new(emails: ["james.bond@gmail.com"], repo_id: "james.bond")
+          ],
+          ["team1"]),
+        TogglIntegration::Team.new(
+          "team2 with spaces",
+          [
+            TogglIntegration::Member.new(emails: ["john.doe@gmail.com"], repo_id: "john.doe"),
+            TogglIntegration::Member.new(emails: ["james.bond@gmail.com"], repo_id: "james.bond")
+          ],
+          ["team2 with spaces"])
+      ]
+    end
     let(:permissions_dir) { Rails.root.join('spec/tmp/permissions') }
     let(:toggl_teams_dir) { permissions_dir.join('toggl_teams') }
 
     let(:team1_path) { toggl_teams_dir.join('team1.yml') }
+    let(:team2_path) { toggl_teams_dir.join('team2_with_spaces.yml') }
 
     let(:team1_yaml) { YAML.load(File.open(team1_path)) }
+    let(:team2_yaml) { YAML.load(File.open(team2_path)) }
 
     before do
-      described_class.new(toggl_api, permissions_dir).call
+      described_class.new(toggl_teams, permissions_dir).call
     end
 
     after do
@@ -46,25 +52,16 @@ describe Generate::TogglPermissions do
     end
 
     it 'creates yaml file with name attribute' do
-      expect(team1_yaml['name']).to eq 'Team1'
+      expect(team1_yaml['name']).to eq 'team1'
     end
 
     context 'team name contains spaces' do
-      let(:team1) do
-        Hashie::Mash.new(
-          name: 'team1 with spaces',
-          id: 1,
-          account_id: 1,
-        )
-      end
-      let(:team1_path) { toggl_teams_dir.join('team1_with_spaces.yml') }
-
       it 'creates yaml file with slugified filename' do
-        expect(File.exist?(team1_path)).to be_truthy
+        expect(File.exist?(team2_path)).to be_truthy
       end
 
       it 'creates yaml file with name attribute' do
-        expect(team1_yaml['name']).to eq 'team1 with spaces'
+        expect(team2_yaml['name']).to eq 'team2 with spaces'
       end
     end
   end
