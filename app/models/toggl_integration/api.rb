@@ -22,9 +22,9 @@ module TogglIntegration
     end
 
     def list_team_members(team_id)
-      list_projects_users(team_id).map do |project_user|
-        member_by_uid(project_user.uid)
-      end.select { |member| !member['inactive'] }
+      list_projects_users(team_id)
+        .map { |project_user| member_by_uid(project_user.uid) }
+        .select { |member| !member['inactive'] }
     end
 
     def deactivate_team(team_id)
