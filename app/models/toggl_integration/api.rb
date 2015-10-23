@@ -15,6 +15,7 @@ module TogglIntegration
       return @teams unless preload_members
       team_ids = @teams.map { |team| team['id'] }
       preload_projects_users(team_ids)
+      @teams
     end
 
     def list_all_members
