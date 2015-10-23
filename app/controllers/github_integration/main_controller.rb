@@ -9,6 +9,7 @@ module GithubIntegration
     expose(:teams_cleanup) { Actions::CleanupTeams.new(expected_teams, gh_teams, gh_api) }
     expose(:missing_teams) { teams_cleanup.stranded_teams }
     expose(:diff_errors) { @diff.errors }
+    expose(:user_repo) { UserRepository.new(data_guru.users) }
     expose(:insecure_users) do
       Actions::ListInsecureUsers.new(
         gh_api.list_org_members_without_2fa(AppConfig.company),
@@ -41,7 +42,7 @@ module GithubIntegration
 
     def calculated_diff
       Rails.cache.fetch 'github_calculated_diff' do
-        @diff ||= Actions::Diff.new(expected_teams, gh_teams, gh_api)
+        @diff ||= Actions::Diff.new(expected_teams, gh_teams, gh_api, user_repo)
         @diff.now!
       end
     end

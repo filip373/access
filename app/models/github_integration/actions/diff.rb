@@ -5,7 +5,7 @@ module GithubIntegration
 
       attr_reader :errors
 
-      def initialize(expected_teams, gh_teams, gh_api)
+      def initialize(expected_teams, gh_teams, gh_api, user_repo)
         @expected_teams = expected_teams
         @gh_teams = gh_teams
         @gh_api = gh_api
@@ -18,6 +18,7 @@ module GithubIntegration
           change_permissions: {},
         }
         @errors = []
+        @repo = user_repo
         @total_diff_condition = Celluloid::Condition.new
       end
 
@@ -34,7 +35,7 @@ module GithubIntegration
             @total_diff_condition.signal(diff) if all_team_diffs_finished?
           end
           gh_expected_team = gh_team(expected_team.name)
-          team_diff = TeamDiff.new(expected_team, gh_expected_team, @gh_api, @diff_hash)
+          team_diff = TeamDiff.new(expected_team, gh_expected_team, @gh_api, @diff_hash, @repo)
           team_diff.async.diff(blk)
         end
         @total_diff_condition.wait # Wait till all pools (threads) are done

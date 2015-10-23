@@ -2,13 +2,13 @@ module GithubIntegration
   class TeamDiff
     include Celluloid
 
-    def initialize(expected_team, gh_team, gh_api, diff_hash)
+    def initialize(expected_team, gh_team, gh_api, diff_hash, user_repo)
       @diff_hash = diff_hash
       @expected_team = expected_team
       @gh_team = gh_team || create_gh_team
       @gh_api = gh_api
       @errors = []
-      @repo = UserRepository.new
+      @repo = user_repo
     end
 
     def diff(blk)

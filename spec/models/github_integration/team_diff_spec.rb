@@ -23,6 +23,7 @@ RSpec.describe GithubIntegration::TeamDiff do
       change_permissions: {},
     }
   end
+  let(:user_repo) { UserRepository.new(data_guru.users) }
 
   describe '#diff' do
     context 'run asyncronisouly' do
@@ -34,19 +35,19 @@ RSpec.describe GithubIntegration::TeamDiff do
 
       let(:condition) { Celluloid::Condition.new }
       it 'is alive' do
-        team_diff = described_class.new(expected_team1, team1, gh_api, diff_hash)
+        team_diff = described_class.new(expected_team1, team1, gh_api, diff_hash, user_repo)
         expect(team_diff).to be_alive
       end
 
       it 'call blk' do
-        team_diff = described_class.new(expected_team1, team1, gh_api, diff_hash)
+        team_diff = described_class.new(expected_team1, team1, gh_api, diff_hash, user_repo)
         allow(blk).to receive(:call)
         team_diff.diff(blk)
         expect(blk).to have_received(:call)
       end
 
       it 'works in another thread' do
-        team_diff = described_class.new(expected_team1, team1, gh_api, diff_hash)
+        team_diff = described_class.new(expected_team1, team1, gh_api, diff_hash, user_repo)
         expect(diff_hash[:add_members]).to be_empty
 
         team_diff.async.diff(blk)
@@ -60,7 +61,7 @@ RSpec.describe GithubIntegration::TeamDiff do
         blk = lambda do |_diff, errors|
           condition.signal(errors)
         end
-        team_diff = described_class.new(expected_team1, team1, gh_api, diff_hash)
+        team_diff = described_class.new(expected_team1, team1, gh_api, diff_hash, user_repo)
         team_diff.async.diff(blk)
         errors = condition.wait
         expect(errors).to_not be_empty

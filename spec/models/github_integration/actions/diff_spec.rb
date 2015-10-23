@@ -15,8 +15,9 @@ RSpec.describe GithubIntegration::Actions::Diff do
   let(:new_team) do
     expected_teams.find { |team| team.name == 'team2' }
   end
+  let(:user_repo) { UserRepository.new(data_guru.users) }
 
-  subject { described_class.new(expected_teams, existing_teams, gh_api).now! }
+  subject { described_class.new(expected_teams, existing_teams, gh_api, user_repo).now! }
 
   it { is_expected.to be_a Hash }
 
