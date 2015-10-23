@@ -13,6 +13,7 @@ RSpec.describe RollbarIntegration::TeamDiff do
 
   let(:yaml_team1) { expected_teams.find { |t| t.name == 'team1' } }
   let(:yaml_new_team) { expected_teams.find { |t| t.name == 'new_team' } }
+  let(:user_repo) { UserRepository.new(data_guru.users) }
   let(:diff_hash) do
     {
       create_teams: {},
@@ -33,19 +34,19 @@ RSpec.describe RollbarIntegration::TeamDiff do
 
       let(:condition) { Celluloid::Condition.new }
       it 'is alive' do
-        team_diff = described_class.new(yaml_team1, team1, diff_hash)
+        team_diff = described_class.new(yaml_team1, team1, diff_hash, user_repo)
         expect(team_diff).to be_alive
       end
 
       it 'call blk' do
-        team_diff = described_class.new(yaml_team1, team1, diff_hash)
+        team_diff = described_class.new(yaml_team1, team1, diff_hash, user_repo)
         allow(blk).to receive(:call)
         team_diff.diff(blk)
         expect(blk).to have_received(:call)
       end
 
       it 'works in another thread' do
-        team_diff = described_class.new(yaml_team1, team1, diff_hash)
+        team_diff = described_class.new(yaml_team1, team1, diff_hash, user_repo)
         expect(diff_hash[:add_members]).to be_empty
 
         team_diff.async.diff(blk)
@@ -59,7 +60,7 @@ RSpec.describe RollbarIntegration::TeamDiff do
         blk = lambda do |_diff, errors|
           condition.signal(errors)
         end
-        team_diff = described_class.new(yaml_team1, team1, diff_hash)
+        team_diff = described_class.new(yaml_team1, team1, diff_hash, user_repo)
         team_diff.async.diff(blk)
         errors = condition.wait
         expect(errors).to_not be_empty
@@ -77,7 +78,7 @@ RSpec.describe RollbarIntegration::TeamDiff do
           let(:existing_projects) { [project1, project2, project3] }
 
           before do
-            team_diff = described_class.new(yaml_team1, team1, diff_hash)
+            team_diff = described_class.new(yaml_team1, team1, diff_hash, user_repo)
             team_diff.diff(blk)
           end
 
@@ -98,7 +99,7 @@ RSpec.describe RollbarIntegration::TeamDiff do
           let(:existing_projects) { [project1] }
 
           before do
-            team_diff = described_class.new(yaml_team1, team1, diff_hash)
+            team_diff = described_class.new(yaml_team1, team1, diff_hash, user_repo)
             team_diff.diff(blk)
           end
 
@@ -120,7 +121,7 @@ RSpec.describe RollbarIntegration::TeamDiff do
           let(:existing_members) { [member1] }
 
           before do
-            team_diff = described_class.new(yaml_team1, team1, diff_hash)
+            team_diff = described_class.new(yaml_team1, team1, diff_hash, user_repo)
             team_diff.diff(blk)
           end
 
@@ -140,7 +141,7 @@ RSpec.describe RollbarIntegration::TeamDiff do
           let(:existing_members) { [member1, member2, member3] }
 
           before do
-            team_diff = described_class.new(yaml_team1, team1, diff_hash)
+            team_diff = described_class.new(yaml_team1, team1, diff_hash, user_repo)
             team_diff.diff(blk)
           end
 
@@ -160,7 +161,7 @@ RSpec.describe RollbarIntegration::TeamDiff do
           let(:existing_teams) { [team1] }
 
           before do
-            team_diff = described_class.new(yaml_new_team, nil, diff_hash)
+            team_diff = described_class.new(yaml_new_team, nil, diff_hash, user_repo)
             team_diff.diff(blk)
           end
           it { expect(diff_hash[:create_teams][yaml_new_team]).to_not be_empty }

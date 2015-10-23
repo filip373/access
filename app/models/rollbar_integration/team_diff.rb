@@ -5,13 +5,13 @@ module RollbarIntegration
     attr_reader :dataguru_team, :rollbar_team, :repo, :rollbar_api
     attr_accessor :diff_hash
 
-    def initialize(dataguru_team, rollbar_team, diff_hash)
+    def initialize(dataguru_team, rollbar_team, diff_hash, user_repo)
       @diff_hash = diff_hash
       @dataguru_team = dataguru_team
       @rollbar_team = rollbar_team || create_rollbar_team
       @rollbar_api = Api.new
       @errors = []
-      @repo = UserRepository.new
+      @repo = user_repo
     end
 
     def diff(blk)

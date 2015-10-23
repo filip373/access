@@ -4,7 +4,7 @@ module RollbarIntegration
       include Celluloid
 
       attr_reader :errors
-      def initialize(dataguru_teams, rollbar_teams)
+      def initialize(dataguru_teams, rollbar_teams, user_repo)
         @dataguru_teams = dataguru_teams
         @rollbar_teams = rollbar_teams
         @diff_hash = {
@@ -15,6 +15,7 @@ module RollbarIntegration
           remove_projects: {}
         }
         @errors = []
+        @repo = user_repo
         @total_diff_condition = Celluloid::Condition.new
       end
 
@@ -31,7 +32,7 @@ module RollbarIntegration
             @total_diff_condition.signal(diff) if all_team_diffs_finished?
           end
           rollbar_team = @rollbar_teams.find { |t| t.name.downcase == dataguru_team.name.downcase }
-          team_diff = TeamDiff.new(dataguru_team, rollbar_team, @diff_hash)
+          team_diff = TeamDiff.new(dataguru_team, rollbar_team, @diff_hash, @repo)
           team_diff.async.diff(blk)
         end
         @total_diff_condition.wait

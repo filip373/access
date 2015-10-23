@@ -14,6 +14,7 @@ module RollbarIntegration
     expose(:missing_teams) { teams_cleanup.stranded_teams }
     expose(:diff_errors) { @diff.errors.uniq.sort { |a, b| a.to_s <=> b.to_s } }
     expose(:rollbar_api) { Api.new }
+    expose(:user_repo) { UserRepository.new(data_guru.users) }
 
     after_filter :clean_diff_actor
 
@@ -40,7 +41,7 @@ module RollbarIntegration
 
     def calculated_diff
       Rails.cache.fetch 'rollbar_calculated_diff' do
-        @diff ||= Actions::Diff.new(dataguru_teams, rollbar_teams)
+        @diff ||= Actions::Diff.new(dataguru_teams, rollbar_teams, user_repo)
         @diff.now!
       end
     end

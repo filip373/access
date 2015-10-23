@@ -14,9 +14,10 @@ RSpec.describe RollbarIntegration::Actions::Diff do
   let(:new_team) do
     expected_teams.find { |team| team.name == 'team2' }
   end
+  let(:user_repo) { UserRepository.new(data_guru.users) }
 
   it 'is returns a hash' do
-    expect(described_class.new(expected_teams, existing_teams).now!).to be_a(Hash)
+    expect(described_class.new(expected_teams, existing_teams, user_repo).now!).to be_a(Hash)
   end
 
   context 'members in yml is empty' do
