@@ -1,5 +1,7 @@
 module TogglIntegration
   class GenerateController < ApplicationController
+    expose(:user_repo) { UserRepository.new(data_guru.users) }
+
     def permissions
       Generate::TogglPermissions.new(
         toggl_teams,
@@ -22,7 +24,7 @@ module TogglIntegration
     end
 
     def toggl_teams
-      TeamRepository.build_from_toggl_api(toggl_api, UserRepository.new).all
+      TeamRepository.build_from_toggl_api(toggl_api, user_repo).all
     end
   end
 end
