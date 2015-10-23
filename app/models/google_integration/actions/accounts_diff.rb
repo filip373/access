@@ -1,9 +1,9 @@
 module GoogleIntegration
   module Actions
     class AccountsDiff
-      def initialize(google_api)
+      def initialize(google_api, user_repo)
         @google_api = google_api
-        @repo = UserRepository.new
+        @repo = user_repo
       end
 
       def now!

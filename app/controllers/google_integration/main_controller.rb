@@ -14,6 +14,7 @@ module GoogleIntegration
 
     expose(:missing_accounts) { calculated_missing_accounts }
     expose(:groups_from_google_api) { api_groups.map { |data| Group.from_google_api(data) } }
+    expose(:user_repo) { UserRepository.new(data_guru.users) }
 
     def show_diff
       reset_diff
@@ -33,7 +34,7 @@ module GoogleIntegration
     end
 
     def create_accounts
-      created_accounts = Actions::CreateAccounts.new(google_api).now!(missing_accounts)
+      created_accounts = Actions::CreateAccounts.new(google_api, user_repo).now!(missing_accounts)
       created_accounts.each do |login, account|
         ::AccountCreationNotifierMailer.new_account(login, account).deliver
       end
@@ -68,7 +69,7 @@ module GoogleIntegration
 
     def calculated_missing_accounts
       Rails.cache.fetch 'google_calculated_missing_accounts' do
-        Actions::AccountsDiff.new(google_api).now!
+        Actions::AccountsDiff.new(google_api, user_repo).now!
       end
     end
 
