@@ -1,6 +1,6 @@
 module Generate
   class RollbarPermissions
-    pattr_initialize :rollbar_api, :permissions_dir
+    pattr_initialize :rollbar_api, :permissions_dir, :user_repo
 
     def call
       recreate_rollbar_dir
@@ -16,7 +16,7 @@ module Generate
 
     def teams
       rollbar_api.list_teams.map do |team|
-        RollbarIntegration::Team.from_api_request(rollbar_api, team)
+        RollbarIntegration::Team.from_api_request(rollbar_api, team, user_repo)
       end
     end
 

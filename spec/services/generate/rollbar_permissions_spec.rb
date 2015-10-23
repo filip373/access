@@ -4,6 +4,8 @@ describe Generate::RollbarPermissions do
   include_context 'rollbar_api'
   include_context 'data_guru'
 
+  let(:user_repo) { UserRepository.new(data_guru.users) }
+
   before(:each) do
     allow(DataGuru::Client).to receive(:new).and_return(data_guru)
   end
@@ -13,6 +15,7 @@ describe Generate::RollbarPermissions do
       described_class.new(
         instance_double('rollbarApi'),
         Rails.root.join('path'),
+        user_repo,
       )
     end
 
@@ -29,7 +32,7 @@ describe Generate::RollbarPermissions do
     let(:team1_yaml) { YAML.load(File.open(team1_path)) }
 
     before do
-      described_class.new(rollbar_api, permissions_dir).call
+      described_class.new(rollbar_api, permissions_dir, user_repo).call
     end
 
     after do

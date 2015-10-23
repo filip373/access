@@ -3,10 +3,10 @@ module RollbarIntegration
     rattr_initialize :name, :members, :projects
     attr_accessor :id
 
-    def self.from_api_request(api, team)
+    def self.from_api_request(api, team, user_repo)
       t = new(
         team.name,
-        prepare_members(api, team),
+        prepare_members(api, team, user_repo),
         api.list_team_projects(team.id).map(&:name).uniq.compact,
       )
       t.id = team['id']
@@ -27,9 +27,9 @@ module RollbarIntegration
       end
     end
 
-    def self.all_from_api(rollbar_api)
+    def self.all_from_api(rollbar_api, user_repo)
       rollbar_api.list_teams.map do |team|
-        from_api_request(rollbar_api, team)
+        from_api_request(rollbar_api, team, user_repo)
       end
     end
 
@@ -41,10 +41,10 @@ module RollbarIntegration
       }.stringify_keys.to_yaml
     end
 
-    def self.prepare_members(api, team)
+    def self.prepare_members(api, team, user_repo)
       api.list_all_team_members(team.id).map do |rollbar_user|
         begin
-          user = UserRepository.new.find_by_email(rollbar_user.email).id
+          user = user_repo.find_by_email(rollbar_user.email).id
         rescue
           Rollbar.info("There is no user with email: #{rollbar_user.email}")
         end

@@ -5,13 +5,14 @@ RSpec.describe RollbarIntegration::Team do
   include_context 'data_guru'
 
   let(:team) { OpenStruct.new(id: 1, name: 'team1') }
+  let(:user_repo) { UserRepository.new(data_guru.users) }
 
   before(:each) do
     allow(DataGuru::Client).to receive(:new).and_return(data_guru)
   end
 
   describe '.from_api_request' do
-    subject { described_class.from_api_request(rollbar_api, team) }
+    subject { described_class.from_api_request(rollbar_api, team, user_repo) }
     it 'returns team object' do
       expect(subject).to be_a described_class
     end

@@ -1,8 +1,9 @@
 module RollbarIntegration
   class MainController < ApplicationController
     expose(:validation_errors) { data_guru.errors }
+    expose(:user_repo) { UserRepository.new(data_guru.users) }
     expose(:dataguru_teams) { RollbarIntegration::Team.all_from_dataguru(data_guru.rollbar_teams) }
-    expose(:rollbar_teams) { RollbarIntegration::Team.all_from_api(rollbar_api) }
+    expose(:rollbar_teams) { RollbarIntegration::Team.all_from_api(rollbar_api, user_repo) }
 
     expose(:pending_invitations) do
       Actions::ListPendingInvitations.new(rollbar_api).now!
@@ -14,7 +15,6 @@ module RollbarIntegration
     expose(:missing_teams) { teams_cleanup.stranded_teams }
     expose(:diff_errors) { @diff.errors.uniq.sort { |a, b| a.to_s <=> b.to_s } }
     expose(:rollbar_api) { Api.new }
-    expose(:user_repo) { UserRepository.new(data_guru.users) }
 
     after_filter :clean_diff_actor
 
