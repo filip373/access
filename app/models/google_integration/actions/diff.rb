@@ -3,7 +3,7 @@ module GoogleIntegration
     class Diff
       attr_reader :api_groups
 
-      def initialize(expected_groups, google_api)
+      def initialize(expected_groups, google_api, user_repo)
         @expected_groups = expected_groups
         @google_api = google_api
         @diff_hash = {
@@ -18,6 +18,7 @@ module GoogleIntegration
           change_archive: {},
           change_privacy: {},
         }
+        @repo = user_repo
       end
 
       def now!
@@ -37,7 +38,7 @@ module GoogleIntegration
           add_group_errors(google_group)
           privacy_diff(google_group, expected_group)
           archive_diff(google_group, expected_group.archive?)
-          members_diff(google_group, expected_group.users)
+          members_diff(google_group, expected_group.users(@repo))
           aliases_diff(google_group, expected_group.aliases)
           domain_membership_diff(google_group, expected_group.domain_membership)
         end

@@ -22,8 +22,8 @@ module GoogleIntegration
       "#{name}@#{AppConfig.google.main_domain}"
     end
 
-    def build_users
-      u = UserRepository.new.find_many(members)
+    def build_users(user_repo)
+      u = user_repo.find_many(members)
       u.map do |name, data|
         if data.emails.present?
           data.emails.first
@@ -33,9 +33,9 @@ module GoogleIntegration
       end
     end
 
-    def users
+    def users(user_repo)
       return [] unless members.present?
-      @users ||= build_users
+      @users ||= build_users(user_repo)
     end
 
     def archive?

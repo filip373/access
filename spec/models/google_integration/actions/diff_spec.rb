@@ -31,12 +31,13 @@ RSpec.describe GoogleIntegration::Actions::Diff do
       allow(api).to receive(:errors) { {} }
     end
   end
+  let(:user_repo) { UserRepository.new(data_guru.users) }
 
   before(:each) do
     allow(DataGuru::Client).to receive(:new).and_return(data_guru)
   end
 
-  subject { described_class.new(expected_groups, google_api).now! }
+  subject { described_class.new(expected_groups, google_api, user_repo).now! }
 
   it { is_expected.to be_a Hash }
 

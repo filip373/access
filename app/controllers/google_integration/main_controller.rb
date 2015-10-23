@@ -51,7 +51,7 @@ module GoogleIntegration
 
     def calculated_diff
       Rails.cache.fetch 'google_calculated_diff' do
-        @google_diff ||= Actions::Diff.new(expected_groups, google_api)
+        @google_diff ||= Actions::Diff.new(expected_groups, google_api, user_repo)
         @google_diff.now!
       end
     end
