@@ -34,7 +34,7 @@ module TogglIntegration
     end
 
     def add_member_to_team(member, team)
-      user = list_projects_users(team.id).find { |user| user['uid'] == member.toggl_id }
+      user = list_projects_users(team.id).find { |u| u['uid'] == member.toggl_id }
       if user
         activate_member(member.toggl_id)
       else
