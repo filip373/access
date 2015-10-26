@@ -15,7 +15,7 @@ module RollbarIntegration
 
     def self.from_dataguru(dg_team)
       new(
-        dg_team.id,
+        dg_team.name,
         dg_team.members,
         dg_team.projects
       )
