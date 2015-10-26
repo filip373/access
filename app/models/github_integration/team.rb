@@ -11,6 +11,17 @@ module GithubIntegration
       )
     end
 
+    def self.all(dg_teams)
+      dg_teams.map do |team|
+        new(
+          team.id,
+          team.members,
+          team.repos,
+          team.permission,
+        )
+      end
+    end
+
     def to_yaml
       {
         permission: permission,

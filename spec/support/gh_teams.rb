@@ -1,5 +1,6 @@
 RSpec.shared_context 'gh_teams' do
   include_context 'users'
+  include_context 'data_guru'
 
   let(:team_alfa) do
     {
@@ -52,7 +53,7 @@ RSpec.shared_context 'gh_teams' do
     GithubIntegration::Team.new(*team_new.values)
   end
 
-  let(:expected_teams) { GithubIntegration::Teams.all }
+  let(:expected_teams) { GithubIntegration::Team.all(data_guru.github_teams) }
 
   before do
     allow(DataGuru::Client).to receive(:github_teams) { teams_data }

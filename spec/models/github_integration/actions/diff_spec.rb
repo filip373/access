@@ -11,7 +11,7 @@ RSpec.describe GithubIntegration::Actions::Diff do
     DataGuru::Client.new.users
   end
 
-  let(:expected_teams) { GithubIntegration::Teams.all(data_guru.github_teams) }
+  let(:expected_teams) { GithubIntegration::Team.all(data_guru.github_teams) }
   let(:new_team) do
     expected_teams.find { |team| team.name == 'team2' }
   end

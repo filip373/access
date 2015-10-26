@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe GithubIntegration::Actions::CleanupTeams do
   include_context 'data_guru'
 
-  let(:expected_teams) { GithubIntegration::Teams.all(data_guru.github_teams) }
+  let(:expected_teams) { GithubIntegration::Team.all(data_guru.github_teams) }
   let(:team1) do
     Hashie::Mash.new(
       name: 'team1',

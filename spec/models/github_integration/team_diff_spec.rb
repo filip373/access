@@ -10,7 +10,7 @@ RSpec.describe GithubIntegration::TeamDiff do
     allow(DataGuru::Client).to receive(:new).and_return(data_guru)
   end
 
-  let(:expected_teams) { GithubIntegration::Teams.all(data_guru.github_teams) }
+  let(:expected_teams) { GithubIntegration::Team.all(data_guru.github_teams) }
 
   let(:expected_team1) { expected_teams.find { |t| t.name == 'team1' } }
   let(:diff_hash) do
