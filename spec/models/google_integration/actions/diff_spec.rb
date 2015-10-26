@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe GoogleIntegration::Actions::Diff do
   include_context 'data_guru'
 
-  let(:expected_groups) { GoogleIntegration::Groups.all(data_guru.google_groups) }
+  let(:expected_groups) { GoogleIntegration::Group.all(data_guru.google_groups) }
   let(:group1) do
     Hashie::Mash.new(
       id: 1,

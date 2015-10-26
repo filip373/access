@@ -6,6 +6,19 @@ module GoogleIntegration
 
     delegate :open?, :closed?, :who_can_view_group, to: :privacy
 
+    def self.all(dg_groups)
+      dg_groups.map do |group|
+        new(
+          group.id,
+          group.members,
+          group.aliases,
+          group.domain_membership,
+          GroupPrivacy.from_bool(group.private).to_s,
+          group.archive,
+        )
+      end
+    end
+
     def self.from_google_api(group)
       privacy = GoogleIntegration::GroupPrivacy.from_google_api(group)
       new(
