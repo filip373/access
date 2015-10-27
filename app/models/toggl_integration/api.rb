@@ -56,8 +56,9 @@ module TogglIntegration
     end
 
     def workspace
-      @workspace ||=
-      toggl_client.workspaces.find { |workspace| workspace['name'] == company_name }
+      @workspace ||= toggl_client.workspaces.find do |w|
+        w['name'] == company_name
+      end
     end
 
     private
