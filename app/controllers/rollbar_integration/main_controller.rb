@@ -1,7 +1,7 @@
 module RollbarIntegration
   class MainController < ApplicationController
     expose(:validation_errors) { data_guru.errors }
-    expose(:user_repo) { UserRepository.new(data_guru.users) }
+    expose(:user_repo) { UserRepository.new(data_guru.users.all) }
     expose(:dataguru_teams) { RollbarIntegration::Team.all_from_dataguru(data_guru.rollbar_teams) }
     expose(:rollbar_teams) { RollbarIntegration::Team.all_from_api(rollbar_api, user_repo) }
 
