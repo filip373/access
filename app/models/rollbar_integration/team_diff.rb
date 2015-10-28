@@ -44,8 +44,7 @@ module RollbarIntegration
     end
 
     def add_members
-      members_to_add = @dataguru_team.members - @rollbar_team.members
-      @repo.find_many(members_to_add)
+      dataguru_members.reject { |key, _e| rollbar_members.keys.include?(key) }
     end
 
     def remove_members
