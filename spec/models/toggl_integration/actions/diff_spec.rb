@@ -85,7 +85,7 @@ describe TogglIntegration::Actions::Diff do
       expect(diff_result[:create_teams].size).to eq 3
       expect(diff_result[:create_teams][local_team3]).to eq([toggl_doe, toggl_bond])
       expect(diff_result[:create_teams][local_team4]).to eq [toggl_doe]
-      expect(diff_result[:create_teams][local_team5]).to eq []
+      expect(diff_result[:create_teams][local_team5]).to eq [local_luke]
     end
 
     it 'returns list of missing teams' do
@@ -95,9 +95,8 @@ describe TogglIntegration::Actions::Diff do
 
     it 'returns list of errors' do
       diff.call
-      expect(diff.errors.count).to eq(2)
-      expect(diff.errors[0]).to include('User lucky.luke has no account')
-      expect(diff.errors[1]).to include('User batman has no email')
+      expect(diff.errors.count).to eq(1)
+      expect(diff.errors[0]).to include('User batman has no email')
     end
   end
 end

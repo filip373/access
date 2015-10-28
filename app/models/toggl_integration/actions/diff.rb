@@ -35,11 +35,7 @@ module TogglIntegration
             next
           end
           toggl_member = toggl_members_repo.find_by_emails(*member.emails)
-          unless toggl_member
-            @errors << "User #{member.repo_id} has no account in Toggle app."
-            next
-          end
-          result << toggl_member
+          result << (toggl_member.nil? ? member : toggl_member)
         end
         result
       end
