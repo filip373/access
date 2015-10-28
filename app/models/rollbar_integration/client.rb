@@ -12,6 +12,8 @@ module RollbarIntegration
     def get_all_pages(url, options = {})
       list = []
       counter = 1
+      list += get(url, options)
+      return list
       loop do
         options = { query: { page: counter } }
         tmp_list = get(url, options)
