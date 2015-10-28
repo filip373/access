@@ -11,7 +11,7 @@ RSpec.describe TogglIntegration::Actions::Log do
       add_members: {
         team => [
           TogglIntegration::Member.new(emails: ['first.dude@gmail.com'], toggl_id: 2),
-          TogglIntegration::Member.new(emails: ['second.dude@gmail.com'], toggl_id: nil)
+          TogglIntegration::Member.new(emails: ['second.dude@gmail.com'], toggl_id: nil),
         ],
       },
       deactivate_members: [TogglIntegration::Member.new(emails: ['second.dude@gmail.com'])],

@@ -85,9 +85,9 @@ module RollbarIntegration
 
     def rollbar_projects
       @rollbar_projects ||= if rollbar_team.respond_to?(:fake)
-                             []
-                           else
-                             prepare_rollbar_projects_hash
+                              []
+                            else
+                              prepare_rollbar_projects_hash
                            end
     end
 
