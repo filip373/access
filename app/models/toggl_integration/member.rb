@@ -29,5 +29,9 @@ module TogglIntegration
     def hash
       [@emails, @toggl_id, @repo_id].hash
     end
+
+    def default_email
+      @emails.first
+    end
   end
 end
