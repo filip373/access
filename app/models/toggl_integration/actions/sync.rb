@@ -33,8 +33,18 @@ module TogglIntegration
 
       def add_team_members(team, members)
         members.each do |member|
+          member = invite_member(member) unless member.toggl_id?
           toggl_api.add_member_to_team(member, team)
         end
+      end
+
+      def invite_member(member)
+        @sent_invitations ||= {}
+        return @sent_invitations[member] if @sent_invitations.key?(member)
+        invitation_result = toggl_api.invite_member(member)
+        invited_member = TogglIntegration::Member.new(
+          emails: member.emails, repo_id: member.repo_id, toggl_id: invitation_result['uid'])
+        @sent_invitations[member] = invited_member
       end
     end
   end
