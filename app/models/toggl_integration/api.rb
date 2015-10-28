@@ -43,6 +43,10 @@ module TogglIntegration
       end
     end
 
+    def invite_member(member)
+      toggl_client.invite_member(workspace['id'], member.default_email)
+    end
+
     def deactivate_member(member)
       workspace_user = list_all_members.find { |m| m['uid'] == member.toggl_id }
       return workspace_user if workspace_user['inactive']
