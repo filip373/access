@@ -49,7 +49,10 @@ module RollbarIntegration
     end
 
     def remove_members
-      rollbar_members.reject { |key, _e| dataguru_members.keys.include?(key) }
+      members_to_remove = @rollbar_team.members.map(&:username) - @dataguru_team.members
+      @rollbar_team.members.each_with_object({}) do |member, memo|
+        memo[member.username] = member
+      end
     end
 
     def add_projects
