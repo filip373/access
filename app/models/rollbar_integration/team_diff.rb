@@ -44,14 +44,13 @@ module RollbarIntegration
     end
 
     def add_members
-      members_to_add = @dataguru_team.members - @rollbar_team.members
-      @repo.find_many(members_to_add)
+      dataguru_members.reject { |key, _e| rollbar_members.keys.include?(key) }
     end
 
     def remove_members
-      members_to_remove = @rollbar_team.members.map(&:username) - @dataguru_team.members
+      members_to_remove = @rollbar_team.members.map(&:username) - dataguru_members.keys
       @rollbar_team.members.each_with_object({}) do |member, memo|
-        memo[member.username] = member
+        memo[member.username] = member if members_to_remove.include?(member.username)
       end
     end
 
@@ -60,7 +59,10 @@ module RollbarIntegration
     end
 
     def remove_projects
-      rollbar_projects.reject { |key, _e| dataguru_projects.keys.include?(key) }
+      projects_to_remove = @rollbar_team.projects.map(&:name) - @dataguru_team.projects
+      @rollbar_team.projects.each_with_object({}) do |project, memo|
+        memo[project.name] = project if projects_to_remove.include?(project.name)
+      end
     end
 
     def create_rollbar_team

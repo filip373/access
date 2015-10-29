@@ -71,7 +71,7 @@ RSpec.describe RollbarIntegration::TeamDiff do
       describe 'diff hash values' do
         context 'remove_projects key - there is one project less in yaml than in server' do
           let(:project3) do
-            Hashie::Mash.new(
+            OpenStruct.new(
               id: 2,
               name: 'project3',
             )

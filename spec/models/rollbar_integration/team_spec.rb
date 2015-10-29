@@ -13,6 +13,8 @@ RSpec.describe RollbarIntegration::Team do
 
   describe '.from_api_request' do
     subject { described_class.from_api_request(rollbar_api, team, user_repo) }
+    let(:members_usernames) { subject.members.map(&:username) }
+
     it 'returns team object' do
       expect(subject).to be_a described_class
     end
@@ -22,13 +24,13 @@ RSpec.describe RollbarIntegration::Team do
     end
 
     it 'creates team with members' do
-      expect(subject.members).to match_array(['first.member', 'second.member'])
+      expect(members_usernames).to match_array(['first.member', 'second.member'])
     end
 
     context 'one member has not corresponging yaml with email' do
       let(:existing_members) { [member1, member2, member5] }
       it 'not list that member in members' do
-        expect(subject.members).to match_array(['first.member', 'second.member'])
+        expect(members_usernames).to match_array(['first.member', 'second.member'])
       end
     end
   end

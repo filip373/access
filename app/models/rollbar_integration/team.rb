@@ -37,7 +37,7 @@ module RollbarIntegration
       {
         name: name,
         members: members || [],
-        projects: projects || [],
+        projects: projects.map(&:name) || [],
       }.stringify_keys.to_yaml
     end
 
@@ -53,14 +53,14 @@ module RollbarIntegration
     def self.prepare_members(api, team, user_repo)
       api.list_all_team_members(team.id).map do |rollbar_user|
         begin
-          user = user_repo.find_by_email(rollbar_user.email).id
+          user = OpenStruct.new(
+            username: user_repo.find_by_email(rollbar_user.email).id,
+            id: rollbar_user.id,
+          )
         rescue
           Rollbar.info("There is no user with email: #{rollbar_user.email}")
         end
-        OpenStruct.new(
-          username: user,
-          id: rollbar_user.id,
-        )
+        user
       end.compact
     end
   end
