@@ -39,7 +39,7 @@ module TogglIntegration
 
       def log_deactivate_members
         @diff_hash[:deactivate_members].each do |member|
-          @log << "[api] deactivate member #{member.emails.first}"
+          @log << "[api] deactivate member #{member.default_email}"
         end
       end
 
