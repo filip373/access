@@ -3,7 +3,6 @@ module RollbarIntegration
     expose(:validation_errors) { data_guru.errors }
     expose(:user_repo) { UserRepository.new(data_guru.users.all) }
     expose(:dataguru_teams) { RollbarIntegration::Team.all_from_dataguru(data_guru.rollbar_teams) }
-    expose(:rollbar_teams) { RollbarIntegration::Team.all_from_api(rollbar_api, user_repo) }
 
     expose(:pending_invitations) do
       Actions::ListPendingInvitations.new(rollbar_api).now!
@@ -18,9 +17,15 @@ module RollbarIntegration
 
     after_filter :clean_diff_actor
 
-    def show_diff
+    def pre_heat_cache
       reset_diff
       data_guru.refresh
+      rollbar_teams
+      redirect_to action: :show_diff
+    end
+
+    def show_diff
+      build_projects_for_teams
       calculated_diff
     end
 
@@ -48,6 +53,14 @@ module RollbarIntegration
 
     def clean_diff_actor
       @diff.try(:terminate)
+    end
+
+    def rollbar_teams
+      @rollbar_teams ||= RollbarIntegration::Team.all_from_api(rollbar_api, user_repo)
+    end
+
+    def build_projects_for_teams
+      @rollbar_teams = RollbarIntegration::Team.add_projects(rollbar_teams, rollbar_api)
     end
   end
 end

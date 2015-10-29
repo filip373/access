@@ -1,13 +1,13 @@
 module RollbarIntegration
   class Team
     rattr_initialize :name, :members, :projects
-    attr_accessor :id
+    attr_accessor :id, :projects
 
     def self.from_api_request(api, team, user_repo)
       t = new(
         team.name,
         prepare_members(api, team, user_repo),
-        prepare_projects(api, team.id),
+        [],
       )
       t.id = team['id']
       t
@@ -24,6 +24,12 @@ module RollbarIntegration
     def self.all_from_dataguru(dg_teams)
       dg_teams.map do |dg_team|
         from_dataguru(dg_team)
+      end
+    end
+
+    def self.add_projects(rollbar_teams, api)
+      rollbar_teams.each do |team|
+        team.projects = prepare_projects(api, team.id)
       end
     end
 
