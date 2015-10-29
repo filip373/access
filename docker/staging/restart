@@ -1,0 +1,24 @@
+#!/bin/bash
+
+OLDID=`docker ps --format "{{.ID}} {{.Image}}" | grep "access_staging" | awk '{ print $1 }'`
+
+set -e
+REVISION=`cat REVISION`
+OPTIONS=`cat .dockerrc 2> /dev/null`
+
+echo "Starting new container..."
+docker run  --name access_$REVISION $OPTIONS access_staging:latest
+
+set +e
+if [[ $OLDID ]]
+  then
+    echo "Cleanup: stopping & removing old container in 10 seconds..."
+    sleep 10
+    docker stop $OLDID
+    docker rm $OLDID
+    docker rmi access_staging:current
+fi
+
+echo "Tagging latest image with current..."
+docker tag -f access_staging:latest access_staging:current
+
