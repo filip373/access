@@ -5,7 +5,7 @@ module Generate
     def call
       recreate_rollbar_dir
 
-      teams.each do |team|
+      full_teams.each do |team|
         File.open(rollbar_dir.join("#{file_name(team.name)}.yml"), 'w') do |f|
           f.write team.to_yaml
         end
@@ -15,9 +15,13 @@ module Generate
     private
 
     def teams
-      rollbar_api.list_teams.map do |team|
+      @teams ||= rollbar_api.list_teams.map do |team|
         RollbarIntegration::Team.from_api_request(rollbar_api, team, user_repo)
       end
+    end
+
+    def full_teams
+      RollbarIntegration::Team.add_projects(teams, rollbar_api)
     end
 
     def rollbar_dir

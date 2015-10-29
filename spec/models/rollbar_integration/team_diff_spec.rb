@@ -14,7 +14,8 @@ RSpec.describe RollbarIntegration::TeamDiff do
   let(:yaml_team1) { expected_teams.find { |t| t.name == 'team1' } }
   let(:yaml_new_team) { expected_teams.find { |t| t.name == 'new_team' } }
   let(:user_repo) { UserRepository.new(data_guru.users) }
-  let(:rb_team1) { RollbarIntegration::Team.from_api_request(rollbar_api, team1, user_repo) }
+  let(:rb_teams) { RollbarIntegration::Team.from_api_request(rollbar_api, team1, user_repo) }
+  let(:rb_team1) { RollbarIntegration::Team.add_projects([rb_teams], rollbar_api).first }
   let(:diff_hash) do
     {
       create_teams: {},
