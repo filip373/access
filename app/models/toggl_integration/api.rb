@@ -8,6 +8,7 @@ module TogglIntegration
     def initialize(token, company_name)
       @toggl_client = TogglV8::API.new(token)
       @company_name = company_name
+      @token = token
     end
 
     def list_teams(preload_members: true)
@@ -102,7 +103,7 @@ module TogglIntegration
       team_ids.each { |team_id| input << team_id unless projects_users.key?(team_id.to_i) }
       threads = (1..THREAD_POOL_SIZE).map do
         thread_block = build_preload_projects_users_thread_block(input, result)
-        Thread.new(dup, &thread_block)
+        Thread.new(self.class.new(@token, @company_name), &thread_block)
       end
       threads.each(&:join)
       until result.empty?
@@ -112,7 +113,7 @@ module TogglIntegration
     end
 
     def build_preload_projects_users_thread_block(input_queue, result_queue)
-      lambda  do |api|
+      lambda do |api|
         until input_queue.empty?
           begin
             team_id = input_queue.pop(true)
