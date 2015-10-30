@@ -17,7 +17,7 @@ module TogglIntegration
     end
 
     def sync
-      Actions::Sync.new(calculated_diff, toggl_api).call
+      Actions::SyncJob.new(calculated_diff, toggl_api).call
     end
 
     def cleanup_teams
