@@ -8,7 +8,7 @@ describe TogglIntegration::Actions::Sync do
   let(:team2) { double(:team2) }
   let(:member1) { double(:member1, toggl_id?: true) }
   let(:member2) { double(:member2, toggl_id?: true) }
-  let(:member3) { double(:member3, toggl_id?: false, emails: ['john@doe.com'], repo_id: 'jd') }
+  let(:member3) { double(:member3, toggl_id?: false, emails: ['john@doe.com'], id: 'jd') }
   let(:diffs) do
     {
       create_teams: { new_team1 => [member1], new_team2 => [member2, member3] },

@@ -42,9 +42,9 @@ describe TogglIntegration::TeamRepository do
       expect(team.projects).to eq [team1['name']]
       expect(team.members).to eq([
         TogglIntegration::Member.new(
-          emails: ['email_1@gmail.com'], repo_id: 'john.doe', toggl_id: 1),
+          emails: ['email_1@gmail.com'], id: 'john.doe', toggl_id: 1),
         TogglIntegration::Member.new(
-          emails: ['email_2@gmail.com'], repo_id: 'jane.kovalsky', toggl_id: 2),
+          emails: ['email_2@gmail.com'], id: 'jane.kovalsky', toggl_id: 2),
       ])
     end
   end

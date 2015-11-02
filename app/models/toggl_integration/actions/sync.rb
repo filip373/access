@@ -43,7 +43,7 @@ module TogglIntegration
         return @sent_invitations[member] if @sent_invitations.key?(member)
         invitation_result = toggl_api.invite_member(member)
         invited_member = TogglIntegration::Member.new(
-          emails: member.emails, repo_id: member.repo_id, toggl_id: invitation_result['uid'])
+          emails: member.emails, id: member.id, toggl_id: invitation_result['uid'])
         @sent_invitations[member] = invited_member
       end
     end

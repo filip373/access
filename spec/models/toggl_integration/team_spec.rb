@@ -7,9 +7,9 @@ describe TogglIntegration::Team do
         'Team1',
         [
           TogglIntegration::Member.new(emails: ['john.doe@gmail.com'],
-                                       repo_id: 'john.doe'),
+                                       id: 'john.doe'),
           TogglIntegration::Member.new(emails: ['jane.kovalsky@gmail.com'],
-                                       repo_id: 'jane.kovalsky'),
+                                       id: 'jane.kovalsky'),
         ],
         ['Team1'],
       )

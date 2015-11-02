@@ -31,7 +31,7 @@ module TogglIntegration
         result = []
         members.each do |member|
           if member.emails.empty?
-            @errors << "User #{member.repo_id} has no email."
+            @errors << "User #{member.id} has no email."
             next
           end
           toggl_member = toggl_members_repo.find_by_emails(*member.emails)
@@ -72,7 +72,7 @@ module TogglIntegration
       def select_for_deactivation(server_team_members)
         # Will deactivate only these members who has no repo identifiers.
         server_team_members.each do |member|
-          diff_hash[:deactivate_members] << member unless member.repo_id?
+          diff_hash[:deactivate_members] << member unless member.id?
         end
       end
 

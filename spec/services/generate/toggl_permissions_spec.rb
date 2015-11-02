@@ -7,15 +7,15 @@ describe Generate::TogglPermissions do
         TogglIntegration::Team.new(
           "team1",
           [
-            TogglIntegration::Member.new(emails: ["john.doe@gmail.com"], repo_id: "john.doe"),
-            TogglIntegration::Member.new(emails: ["james.bond@gmail.com"], repo_id: "james.bond")
+            TogglIntegration::Member.new(emails: ["john.doe@gmail.com"], id: "john.doe"),
+            TogglIntegration::Member.new(emails: ["james.bond@gmail.com"], id: "james.bond")
           ],
           ["team1"]),
         TogglIntegration::Team.new(
           "team2 with spaces",
           [
-            TogglIntegration::Member.new(emails: ["john.doe@gmail.com"], repo_id: "john.doe"),
-            TogglIntegration::Member.new(emails: ["james.bond@gmail.com"], repo_id: "james.bond")
+            TogglIntegration::Member.new(emails: ["john.doe@gmail.com"], id: "john.doe"),
+            TogglIntegration::Member.new(emails: ["james.bond@gmail.com"], id: "james.bond")
           ],
           ["team2 with spaces"])
       ]

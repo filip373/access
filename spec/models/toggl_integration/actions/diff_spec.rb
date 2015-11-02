@@ -3,16 +3,16 @@ require 'rails_helper'
 describe TogglIntegration::Actions::Diff do
   describe '#call' do
     let(:local_doe) do
-      TogglIntegration::Member.new(emails: ['john.doe@gmail.com'], repo_id: 'john.doe')
+      TogglIntegration::Member.new(emails: ['john.doe@gmail.com'], id: 'john.doe')
     end
     let(:local_bond) do
-      TogglIntegration::Member.new(emails: ['james.bond@gmail.com'], repo_id: 'james.bond')
+      TogglIntegration::Member.new(emails: ['james.bond@gmail.com'], id: 'james.bond')
     end
     let(:local_luke) do
-      TogglIntegration::Member.new(emails: ['lucky.luke@gmail.com'], repo_id: 'lucky.luke')
+      TogglIntegration::Member.new(emails: ['lucky.luke@gmail.com'], id: 'lucky.luke')
     end
     let(:local_batman) do
-      TogglIntegration::Member.new(emails: [], repo_id: 'batman')
+      TogglIntegration::Member.new(emails: [], id: 'batman')
     end
 
     let(:local_team1) { TogglIntegration::Team.new('team1', [local_doe, local_bond], ['team1']) }
@@ -24,22 +24,22 @@ describe TogglIntegration::Actions::Diff do
 
     let(:toggl_doe) do
       TogglIntegration::Member.new(
-        emails: ['john.doe@gmail.com'], toggl_id: '1', repo_id: 'john.doe')
+        emails: ['john.doe@gmail.com'], toggl_id: '1', id: 'john.doe')
     end
     let(:toggl_wayne) do
       TogglIntegration::Member.new(
-        emails: ['john.wayne@gmail.com'], toggl_id: '2', repo_id: 'john.wayne')
+        emails: ['john.wayne@gmail.com'], toggl_id: '2', id: 'john.wayne')
     end
     let(:toggl_bond) do
       TogglIntegration::Member.new(
-        emails: ['james.bond@gmail.com'], toggl_id: '3', repo_id: 'james.bond')
+        emails: ['james.bond@gmail.com'], toggl_id: '3', id: 'james.bond')
     end
-    let(:toggl_without_repo_id) do
+    let(:toggl_without_id) do
       TogglIntegration::Member.new(emails: ['inactive@gmail.com'], toggl_id: '4')
     end
 
     let(:toggl_team1) do
-      TogglIntegration::Team.new('team1', [toggl_doe, toggl_without_repo_id], ['team1'], '1')
+      TogglIntegration::Team.new('team1', [toggl_doe, toggl_without_id], ['team1'], '1')
     end
     let(:toggl_team2) do
       TogglIntegration::Team.new('team2', [toggl_doe, toggl_bond, toggl_wayne], ['team2'], '2')
@@ -56,7 +56,7 @@ describe TogglIntegration::Actions::Diff do
 
     let(:toggl_members_repo) do
       TogglIntegration::MemberRepository.new(
-        all: [toggl_doe, toggl_bond, toggl_wayne, toggl_without_repo_id])
+        all: [toggl_doe, toggl_bond, toggl_wayne, toggl_without_id])
     end
     let(:diff) do
       described_class.new(local_teams, toggl_teams, toggl_members_repo)
@@ -77,7 +77,7 @@ describe TogglIntegration::Actions::Diff do
     it 'returns list of members to remove' do
       diff_result = diff.call
       expect(diff_result[:deactivate_members].size).to eq 1
-      expect(diff_result[:deactivate_members]).to eq Set.new([toggl_without_repo_id])
+      expect(diff_result[:deactivate_members]).to eq Set.new([toggl_without_id])
     end
 
     it 'returns list of teams to create' do

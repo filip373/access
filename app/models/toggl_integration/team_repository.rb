@@ -18,7 +18,7 @@ module TogglIntegration
           emails = member_data ? member_data.emails : []
           toggl_member = toggl_members_repository.find_by_emails(*emails) if emails.any?
           toggl_id = toggl_member.toggl_id if toggl_member
-          Member.new(emails: emails, repo_id: repo_member, toggl_id: toggl_id)
+          Member.new(emails: emails, id: repo_member, toggl_id: toggl_id)
         end
         Team.new(team.name, members || [], team.projects)
       end
@@ -39,7 +39,7 @@ module TogglIntegration
     def self.team_members(api, team, user_repository)
       api.list_team_members(team['id']).map do |api_member|
         member = Member.new(emails: [api_member['email']], toggl_id: api_member['uid'])
-        member.repo_id =
+        member.id =
           begin
             user_repository.find_by_email(api_member['email']).id
           rescue
