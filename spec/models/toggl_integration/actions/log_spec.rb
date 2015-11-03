@@ -14,6 +14,12 @@ RSpec.describe TogglIntegration::Actions::Log do
           TogglIntegration::Member.new(emails: ['second.dude@gmail.com'], toggl_id: nil),
         ],
       },
+      remove_members: {
+        team => [
+          TogglIntegration::Member.new(emails: ['remove.him@gmail.com'], toggl_id: nil),
+          TogglIntegration::Member.new(emails: ['remove.her@gmail.com'], toggl_id: nil),
+        ],
+      },
       deactivate_members: [TogglIntegration::Member.new(emails: ['second.dude@gmail.com'])],
     }
   end
@@ -22,6 +28,7 @@ RSpec.describe TogglIntegration::Actions::Log do
     {
       create_teams: {},
       add_members: {},
+      remove_members: {},
       deactivate_members: [],
     }
   end
@@ -31,10 +38,12 @@ RSpec.describe TogglIntegration::Actions::Log do
 
   # rubocop:disable Metrics/LineLength
   context 'with changes' do
-    it { is_expected.to satisfy { |s| s.size == 5 } }
+    it { is_expected.to satisfy { |s| s.size == 7 } }
     it { is_expected.to include "[api] create team #{new_team.name}" }
     it { is_expected.to include "[api] add member #{diff[:create_teams][new_team][0].default_email} to team #{new_team.name}" }
     it { is_expected.to include "[api] add member #{diff[:add_members][team][0].default_email} to team #{team.name}" }
+    it { is_expected.to include "[api] remove member #{diff[:remove_members][team][0].default_email} from team #{team.name}" }
+    it { is_expected.to include "[api] remove member #{diff[:remove_members][team][1].default_email} from team #{team.name}" }
     it { is_expected.to include "[api] invite member #{diff[:add_members][team][1].default_email} to team #{team.name}" }
     it { is_expected.to include "[api] deactivate member #{diff[:deactivate_members][0].default_email}" }
   end
