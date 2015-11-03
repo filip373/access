@@ -14,6 +14,9 @@ describe TogglIntegration::Actions::Diff do
     let(:local_batman) do
       TogglIntegration::Member.new(emails: [], id: 'batman')
     end
+    let(:local_without_team) do
+      TogglIntegration::Member.new(emails: ['without_team@gmail.com'], id: 'without_team')
+    end
 
     let(:local_team1) { TogglIntegration::Team.new('team1', [local_doe, local_bond], ['team1']) }
     let(:local_team2) { TogglIntegration::Team.new('team2', [local_doe], ['team2']) }
@@ -37,6 +40,9 @@ describe TogglIntegration::Actions::Diff do
     let(:toggl_without_id) do
       TogglIntegration::Member.new(emails: ['inactive@gmail.com'], toggl_id: '4')
     end
+    let(:toggl_without_team) do
+      TogglIntegration::Member.new(emails: ['without_team@gmail.com'], toggl_id: '5')
+    end
 
     let(:toggl_team1) do
       TogglIntegration::Team.new('team1', [toggl_doe, toggl_without_id], ['team1'], '1')
@@ -56,14 +62,15 @@ describe TogglIntegration::Actions::Diff do
 
     let(:toggl_members_repo) do
       TogglIntegration::MemberRepository.new(
-        all: [toggl_doe, toggl_bond, toggl_wayne, toggl_without_id])
+        all: [toggl_doe, toggl_bond, toggl_wayne, toggl_without_id, toggl_without_team])
     end
     let(:user_repository) do
       UserRepository.new([
         local_doe,
         local_bond,
         local_luke,
-        local_batman
+        local_batman,
+        local_without_team
       ])
     end
     let(:diff) do
@@ -108,8 +115,10 @@ describe TogglIntegration::Actions::Diff do
 
     it 'returns list of errors' do
       diff.call
-      expect(diff.errors.count).to eq(1)
+      # expect(diff.errors.count).to eq(2)
       expect(diff.errors[0]).to include('User batman has no email')
+      expect(diff.errors[1]).to include(
+        "User #{toggl_without_team.default_email} has no team assigned")
     end
   end
 end

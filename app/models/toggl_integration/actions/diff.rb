@@ -85,8 +85,21 @@ module TogglIntegration
       def find_members_without_permissions
         @toggl_members_repo.all.each do |member|
           user = @user_repo.find_by_email(member.default_email) rescue nil
-          diff_hash[:deactivate_members] << member unless user
+          if user
+            unless has_team_assigned?(user)
+              @errors << "User #{member.default_email} has no team assigned."
+            end
+          else
+            diff_hash[:deactivate_members] << member
+          end
         end
+      end
+
+      def has_team_assigned?(member)
+        local_teams.each do |team|
+          return true if team.members.any? { |m| m.id == member.id }
+        end
+        false
       end
     end
   end
