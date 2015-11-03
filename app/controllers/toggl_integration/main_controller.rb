@@ -34,6 +34,7 @@ module TogglIntegration
       Rails.cache.fetch CACHE_KEY_NAME do
         @diff ||= Actions::Diff.new(expected_teams,
                                     current_teams,
+                                    user_repo,
                                     current_members_repository)
         @diff.call
       end
