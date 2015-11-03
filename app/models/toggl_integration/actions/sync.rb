@@ -5,6 +5,7 @@ module TogglIntegration
 
       def call
         add_members
+        remove_members
         deactivate_members
         create_teams
       end
@@ -14,6 +15,14 @@ module TogglIntegration
       def add_members
         diffs[:add_members].each do |team, members|
           add_team_members(team, members)
+        end
+      end
+
+      def remove_members
+        diffs[:remove_members].each do |team, members|
+          members.each do |member|
+            toggl_api.remove_member_from_team(member, team)
+          end
         end
       end
 

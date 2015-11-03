@@ -9,10 +9,12 @@ describe TogglIntegration::Actions::Sync do
   let(:member1) { double(:member1, toggl_id?: true) }
   let(:member2) { double(:member2, toggl_id?: true) }
   let(:member3) { double(:member3, toggl_id?: false, emails: ['john@doe.com'], id: 'jd') }
+  let(:member4) { double(:member4, toggl_id?: true, emails: ['remove.him@google.com'], id: 'rh') }
   let(:diffs) do
     {
       create_teams: { new_team1 => [member1], new_team2 => [member2, member3] },
       add_members: { team1 => [member1, member2, member3] },
+      remove_members: { team1 => [member4] },
       deactivate_members: Set.new([member2]),
     }
   end
@@ -31,6 +33,7 @@ describe TogglIntegration::Actions::Sync do
       expect(toggl_api).to receive(:add_member_to_team).exactly(6).times
       expect(toggl_api).to receive(:deactivate_member).once
       expect(toggl_api).to receive(:invite_member).and_return('uid' => 1).once
+      expect(toggl_api).to receive(:remove_member_from_team).with(member4, team1).once
       sync.call
     end
   end
