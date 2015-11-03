@@ -1,18 +1,20 @@
 module TogglIntegration
   module Actions
     class Diff
-      attr_reader :local_teams, :current_teams, :errors, :toggl_members_repo
+      attr_reader :local_teams, :current_teams, :errors, :toggl_members_repo, :user_repo
 
-      def initialize(local_teams, current_teams, toggl_members_repo)
+      def initialize(local_teams, current_teams, user_repo, toggl_members_repo)
         @local_teams = local_teams
         @current_teams = current_teams
         @toggl_members_repo = toggl_members_repo
+        @user_repo = user_repo
         @errors = []
       end
 
       def call
         reset_diff_hash
         diff_teams
+        find_members_without_teams
         diff_hash
       end
 
@@ -20,6 +22,7 @@ module TogglIntegration
         @diff_hash ||= {
           create_teams: {},
           add_members: {},
+          remove_members: {},
           missing_teams: [],
           deactivate_members: Set.new,
         }
@@ -66,13 +69,8 @@ module TogglIntegration
             diff_hash_array(:add_members, server_team).concat normalize_members(local_member)
           end
         end
-        select_for_deactivation(server_team_members) if server_team_members.any?
-      end
-
-      def select_for_deactivation(server_team_members)
-        # Will deactivate only these members who has no repo identifiers.
-        server_team_members.each do |member|
-          diff_hash[:deactivate_members] << member unless member.id?
+        if server_team_members.any?
+          diff_hash_array(:remove_members, server_team).concat server_team_members
         end
       end
 
@@ -82,6 +80,13 @@ module TogglIntegration
 
       def reset_diff_hash
         @diff_hash = nil
+      end
+
+      def find_members_without_teams
+        @toggl_members_repo.all.each do |member|
+          user = @user_repo.find_by_email(member.default_email) rescue nil
+          diff_hash[:deactivate_members] << member unless user
+        end
       end
     end
   end

@@ -58,8 +58,16 @@ describe TogglIntegration::Actions::Diff do
       TogglIntegration::MemberRepository.new(
         all: [toggl_doe, toggl_bond, toggl_wayne, toggl_without_id])
     end
+    let(:user_repository) do
+      UserRepository.new([
+        local_doe,
+        local_bond,
+        local_luke,
+        local_batman
+      ])
+    end
     let(:diff) do
-      described_class.new(local_teams, toggl_teams, toggl_members_repo)
+      described_class.new(local_teams, toggl_teams, user_repository, toggl_members_repo)
     end
 
     it 'returns hash with differences' do
@@ -74,10 +82,15 @@ describe TogglIntegration::Actions::Diff do
       expect(diff_result[:add_members][toggl_team1]).to eq [toggl_bond]
     end
 
+    it 'returns list of members to deactivate' do
+      diff_result = diff.call
+      expect(diff_result[:deactivate_members]).to eq Set.new([toggl_without_id, toggl_wayne])
+    end
+
     it 'returns list of members to remove' do
       diff_result = diff.call
-      expect(diff_result[:deactivate_members].size).to eq 1
-      expect(diff_result[:deactivate_members]).to eq Set.new([toggl_without_id])
+      expect(diff_result[:remove_members][toggl_team1].size).to eq 1
+      expect(diff_result[:remove_members][toggl_team1]).to eq [toggl_without_id]
     end
 
     it 'returns list of teams to create' do
