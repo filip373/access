@@ -44,6 +44,12 @@ module TogglIntegration
       end
     end
 
+    def remove_member_from_team(member, team)
+      project_users = list_projects_users(team.id)
+      project_user_id = project_users.find { |pu| pu.uid == member.toggl_id }.id
+      toggl_client.delete_project_user(project_user_id)
+    end
+
     def invite_member(member)
       toggl_client.invite_member(workspace['id'], member.default_email)
     end
