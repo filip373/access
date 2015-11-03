@@ -14,7 +14,7 @@ module TogglIntegration
       def call
         reset_diff_hash
         diff_teams
-        find_members_without_teams
+        find_members_without_permissions
         diff_hash
       end
 
@@ -82,7 +82,7 @@ module TogglIntegration
         @diff_hash = nil
       end
 
-      def find_members_without_teams
+      def find_members_without_permissions
         @toggl_members_repo.all.each do |member|
           user = @user_repo.find_by_email(member.default_email) rescue nil
           diff_hash[:deactivate_members] << member unless user
