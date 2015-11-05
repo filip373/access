@@ -1,3 +1,0 @@
-#!/bin/bash
-
-docker build -t access_production:latest -f docker/production/Dockerfile --pull .

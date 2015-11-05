@@ -1,3 +1,0 @@
-#!/bin/bash
-
-docker build -t access_staging:latest -f docker/staging/Dockerfile --pull .
