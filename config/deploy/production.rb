@@ -7,3 +7,5 @@ end
 
 set :branch, "production"
 set :stage,  "production"
+
+set :docker_dockerfile, "docker/production/Dockerfile"
