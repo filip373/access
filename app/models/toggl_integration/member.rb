@@ -1,12 +1,13 @@
 module TogglIntegration
   class Member
-    attr_reader :emails, :toggl_id
+    attr_reader :emails, :toggl_id, :inactive
     attr_accessor :id
 
-    def initialize(emails:, toggl_id: nil, id: nil)
+    def initialize(emails:, toggl_id: nil, id: nil, inactive: false)
       @emails = emails
       @toggl_id = toggl_id.to_i unless toggl_id.nil?
       @id = id
+      @inactive = inactive
     end
 
     def toggl_id?
@@ -15,6 +16,14 @@ module TogglIntegration
 
     def id?
       !id.nil?
+    end
+
+    def inactive?
+      inactive
+    end
+
+    def active?
+      !inactive
     end
 
     def ==(other)

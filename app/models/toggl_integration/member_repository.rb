@@ -12,7 +12,11 @@ module TogglIntegration
 
     def self.build_from_toggl_api(toggl_api)
       members = toggl_api.list_all_members.map do |member|
-        Member.new(emails: [member['email']], toggl_id: member['uid'])
+        Member.new(
+          emails: [member['email']],
+          toggl_id: member['uid'],
+          inactive: member['inactive']
+        )
       end
       new(all: members)
     end
