@@ -38,7 +38,10 @@ describe TogglIntegration::Actions::Diff do
         emails: ['james.bond@gmail.com'], toggl_id: '3', id: 'james.bond')
     end
     let(:toggl_without_id) do
-      TogglIntegration::Member.new(emails: ['inactive@gmail.com'], toggl_id: '4')
+      TogglIntegration::Member.new(emails: ['without_id@gmail.com'], toggl_id: '4')
+    end
+    let(:toggl_inactive) do
+      TogglIntegration::Member.new(emails: ['inactive@gmail.com'], toggl_id: '6', inactive: true)
     end
     let(:toggl_without_team) do
       TogglIntegration::Member.new(emails: ['without_team@gmail.com'], toggl_id: '5')
@@ -62,7 +65,13 @@ describe TogglIntegration::Actions::Diff do
 
     let(:toggl_members_repo) do
       TogglIntegration::MemberRepository.new(
-        all: [toggl_doe, toggl_bond, toggl_wayne, toggl_without_id, toggl_without_team])
+        all: [
+          toggl_doe,
+          toggl_bond,
+          toggl_wayne,
+          toggl_without_id,
+          toggl_inactive,
+          toggl_without_team])
     end
     let(:user_repository) do
       UserRepository.new([
