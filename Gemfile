@@ -31,7 +31,7 @@ gem 'togglv8'
 
 gem 'airbrussh', require: false
 gem 'capistrano'
-gem 'capistrano-docker', github: 'netguru/capistrano-docker', tag: 'v0.2.1'
+gem 'capistrano-docker', github: 'netguru/capistrano-docker', tag: 'v0.2.3'
 
 group :development do
   gem 'better_errors'

@@ -1,9 +1,9 @@
 GIT
   remote: git://github.com/netguru/capistrano-docker.git
-  revision: d14dac8250ecabb07150132454b0d4d5d7c67dc8
-  tag: v0.2.1
+  revision: 06e123f6444773bc1e1269fd5cc1e17c1fe83324
+  tag: v0.2.3
   specs:
-    capistrano-docker (0.2.1)
+    capistrano-docker (0.2.3)
       capistrano (>= 3.1)
 
 GEM
