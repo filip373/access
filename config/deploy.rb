@@ -9,3 +9,4 @@ set :deploy_to, ENV["DEPLOY_PATH"]
 set :docker_copy_data, %w(config/sec_config.yml config/keys)
 set :docker_volumes, -> { ["#{fetch(:deploy_to)}/shared/log:/var/www/app/log"] }
 set :docker_additional_options, -> { "--env-file #{fetch(:deploy_to)}/shared/envfile" }
+set :docker_apparmor_profile, "docker-ptrace"
