@@ -9,10 +9,6 @@ Sample permissions directory looks like this: https://github.com/netguru/access-
 ## Table of contents
 
 - [Setup] (#setup)
-  - [Configure the google api] (#configure-the-google-api)
-  - [Configure the access app `sec_config.yml`] (#configure-the-access-app-sec_configyml)
-  - [Import data from services] (#import-data-from-services)
-- [Adding / editing users] (#adding--editing-users)
 - [Github] (#github)
   - [Adding / editing github teams] (#adding--editing-github-teams)
   - [User naming within permissions repo] (#user-naming-within-permissions-repo)
@@ -35,71 +31,7 @@ Sample permissions directory looks like this: https://github.com/netguru/access-
 
 ## Setup
 
-### Configure the google
-Enable the following APIs:
-
-- Groups Settings API
-- Admin SDK
-- Google+ API
-
-### Configure the access app `sec_config.yml`
-Sec-config is file which override `config.yml`. In that file you should have most of the configuration of the access app.
-
-### Import data from services
-Before you start using the access app you first need to create a `permissions` repo. We created a feature to help you to import the data from services used by your organization configured in your `sec_config.yml`
-
-```yaml
-your_environment:
-  features:
-    generate_permissions: true
-```
-
-After enabling this feature, you can go to main page and generate necessary files. The files will reside in your rails root directory at `tmp/new_permissions` dir ready to be copied to your `permissions` repo.
-
-#### Github Teams
-To import github data from Github API to permissions directory you just need click button 'Generate github teams' on main page of the access app. Files will be saved in the directory specified in `sec_config.yml` in `AppConfig.permissions_repo.checkout_dir` in subdirectory `/github_teams`.
-
-Since it has created the github teams yml files, you can push them to your permissions repository on github.
-
-#### Google Groups
-To import google data from Google API to permissions directory you just need click button 'Generate google groups' on main page of the access app. Files will be saved in the directory specified in `sec_config.yml` in `AppConfig.permissions_repo.checkout_dir` in subdirectory `/google_groups`.
-
-Since it has created the google groups yml files, you can push them to your permissions repository on github.
-
-#### Users
-To import users data from Google API and Gitgub Api to permissions directory you just need click button 'Generate usrs' on main page of the access app. Files will be saved in the directory specified in `sec_config.yml` in `AppConfig.permissions_repo.checkout_dir` in subdirectory `/users`.
-
-Since it has created the users yml files, you can push them to your permissions repository on github.
-
-### Configure DataGuru gem
-To make DataGuru gem work properly, you have to set up DataGuru-API first:
-
-https://github.com/netguru/data_guru-api
-
-In DataGuru-API you should set `git_repo_url` to your permissions repo url.
-
-Then you need to specify `api-url` and `access_token` in your `sec_config.yml` :
-
-```
-dataguru:
-    api_url: 'url of DataGuru-API'
-    access_token: 'access token from DataGuru-API'
-```
-
-Start DataGuru-API server on a port different than Access app, for example:
-
-```
-$ rails server -p 3001
-```
-
-### Adding / editing users
-Before you add team to google group or github team you have to first create a data file for this user:
-
-- define new user data file in 'users' directory named 'first_name.last_name.yml'
-- add users name to the file
-- add users github handle to the file
-
-Sample user file: https://github.com/netguru/access-permissions-sample/blob/master/users/jane.doe.yml
+Please, see at [development documentation](https://github.com/netguru/access/docs/development.md).
 
 ## Github
 
