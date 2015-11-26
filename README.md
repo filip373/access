@@ -31,7 +31,7 @@ Sample permissions directory looks like this: https://github.com/netguru/access-
 
 ## Setup
 
-Please, see at [development documentation](https://github.com/netguru/access/doc/development.md).
+Please, see at [development documentation](https://github.com/netguru/access/blob/master/doc/development.md).
 
 ## Github
 
