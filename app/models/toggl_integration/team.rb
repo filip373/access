@@ -1,6 +1,6 @@
 module TogglIntegration
   class Team
-    attr_reader :name, :members, :projects, :id
+    attr_reader :name, :members, :projects, :tasks, :id
 
     def initialize(name:, members:, projects:, tasks:, id:)
       @name = name
