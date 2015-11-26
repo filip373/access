@@ -40,6 +40,8 @@ module TogglIntegration
       new(all: teams)
     end
 
+    private
+
     def self.team_members(api, team, user_repository)
       api.list_team_members(team['id']).map do |api_member|
         member = Member.new(emails: [api_member['email']], toggl_id: api_member['uid'])
@@ -60,7 +62,5 @@ module TogglIntegration
     def self.team_projects_tasks(team)
       [team['tasks']]
     end
-
-    private_class_method :team_members, :team_projects, :team_projects_tasks
   end
 end

@@ -49,6 +49,15 @@ module TogglIntegration
       toggl_client.delete_project_user(project_user_id)
     end
 
+    def add_task_to_project(task, project)
+      params = { 'name' => task.name, 'pid' => project.id }
+      toggl_client.create_task(params)
+    end
+
+    def remove_tasks_from_project(tasks_ids)
+      toggl_client.delete_task(tasks_ids.join(','))
+    end
+
     def invite_member(member)
       toggl_client.invite_member(workspace['id'], member.default_email)
     end
@@ -95,6 +104,14 @@ module TogglIntegration
       end
     end
 
+    def projects_tasks
+      @projects_tasks ||= {}
+    end
+
+    def list_projects_tasks(team_id)
+      projects_tasks = toggl_client.get_project_tasks(team_id.to_i)
+    end
+
     def activate_member(uid)
       workspace_user = list_all_members.find { |m| m['uid'] == uid }
       return workspace_user unless workspace_user['inactive']
@@ -112,7 +129,7 @@ module TogglIntegration
       end
       threads.each(&:join)
       until result.empty?
-        team_id, project_users = result.pop
+        team_id, project_users, project_tasks = result.pop
         projects_users[team_id.to_i] = project_users
       end
     end
@@ -123,7 +140,8 @@ module TogglIntegration
           begin
             team_id = input_queue.pop(true)
             project_users = api.send(:list_projects_users, team_id)
-            result_queue << [team_id, project_users]
+            project_tasks = api.send(:list_projects_tasks, team_id)
+            result_queue << [team_id, project_users, project_tasks]
           rescue ThreadError # normal if queue empty
           rescue RuntimeError => e
             if e.message.match(/Too many requests/i)
