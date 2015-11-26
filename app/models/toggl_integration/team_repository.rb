@@ -20,17 +20,21 @@ module TogglIntegration
           toggl_id = toggl_member.toggl_id if toggl_member
           Member.new(emails: emails, id: repo_member, toggl_id: toggl_id)
         end
-        Team.new(team.name, members || [], team.projects)
+        Team.new(name: team.name,
+                 members: members || [],
+                 projects: team.projects,
+                 tasks: team.tasks)
       end
       new(all: teams)
     end
 
     def self.build_from_toggl_api(toggl_api, user_repository)
       teams = toggl_api.list_teams.map do |team|
-        Team.new(team['name'],
-                 team_members(toggl_api, team, user_repository),
-                 [team['name']],
-                 team['id'],
+        Team.new(name: team['name'],
+                 members: team_members(toggl_api, team, user_repository),
+                 projects: [team['name']],
+                 tasks: [team['tasks']],
+                 id: team['id'],
                 )
       end
       new(all: teams)
@@ -53,6 +57,10 @@ module TogglIntegration
       [team['name']]
     end
 
-    private_class_method :team_members, :team_projects
+    def self.team_projects_tasks(team)
+      [team['tasks']]
+    end
+
+    private_class_method :team_members, :team_projects, :team_projects_tasks
   end
 end
