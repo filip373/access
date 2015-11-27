@@ -49,8 +49,8 @@ module TogglIntegration
       toggl_client.delete_project_user(project_user_id)
     end
 
-    def add_task_to_project(task, project)
-      params = { 'name' => task.name, 'pid' => project.id }
+    def add_task_to_project(task_name, project_id)
+      params = { 'name' => task_name, 'pid' => project_id }
       toggl_client.create_task(params)
     end
 
@@ -109,7 +109,13 @@ module TogglIntegration
     end
 
     def list_projects_tasks(team_id)
-      projects_tasks = toggl_client.get_project_tasks(team_id.to_i)
+      team_id = team_id.to_i
+      if projects_tasks.key?(team_id)
+        projects_tasks[team_id]
+      else
+        projects_tasks[team_id] = toggl_client.get_project_tasks(team_id)
+        projects_tasks
+      end
     end
 
     def activate_member(uid)
@@ -124,17 +130,19 @@ module TogglIntegration
       result = Queue.new
       team_ids.each { |team_id| input << team_id unless projects_users.key?(team_id.to_i) }
       threads = (1..THREAD_POOL_SIZE).map do
-        thread_block = build_preload_projects_users_thread_block(input, result)
+        thread_block = build_preload_projects_users_with_tasks_thread_block(input, result)
         Thread.new(self.class.new(@token, @company_name), &thread_block)
       end
       threads.each(&:join)
       until result.empty?
         team_id, project_users, project_tasks = result.pop
-        projects_users[team_id.to_i] = project_users
+        team_id = team_id.to_i
+        projects_users[team_id] = project_users
+        projects_tasks[team_id] = project_tasks
       end
     end
 
-    def build_preload_projects_users_thread_block(input_queue, result_queue)
+    def build_preload_projects_users_with_tasks_thread_block(input_queue, result_queue)
       lambda do |api|
         until input_queue.empty?
           begin
