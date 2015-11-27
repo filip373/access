@@ -26,5 +26,6 @@ module TogglIntegration
 
     def hash
       [name, pid].hash
+    end
   end
 end
