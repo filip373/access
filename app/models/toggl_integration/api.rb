@@ -114,7 +114,6 @@ module TogglIntegration
         projects_tasks[team_id]
       else
         projects_tasks[team_id] = toggl_client.get_project_tasks(team_id)
-        projects_tasks
       end
     end
 
