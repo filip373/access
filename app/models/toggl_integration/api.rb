@@ -15,8 +15,12 @@ module TogglIntegration
       @teams ||= toggl_client.projects(workspace['id'], active: true)
       return @teams unless preload_members
       team_ids = @teams.map { |team| team['id'] }
-      preload_projects_users(team_ids)
+      preload_projects_users_with_tasks(team_ids)
       @teams
+    end
+
+    def list_all_tasks(team_id)
+      list_projects_tasks(team_id)
     end
 
     def list_all_members
@@ -124,7 +128,7 @@ module TogglIntegration
       toggl_client.update_workspace_user(workspace_user['id'], params)
     end
 
-    def preload_projects_users(team_ids)
+    def preload_projects_users_with_tasks(team_ids)
       input = Queue.new
       result = Queue.new
       team_ids.each { |team_id| input << team_id unless projects_users.key?(team_id.to_i) }
