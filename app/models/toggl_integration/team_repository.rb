@@ -23,7 +23,7 @@ module TogglIntegration
         Team.new(name: team.name,
                  members: members || [],
                  projects: team.projects,
-                 tasks: team.tasks)
+                 tasks: team.tasks || [])
       end
       new(all: teams)
     end
