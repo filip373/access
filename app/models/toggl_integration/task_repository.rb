@@ -8,10 +8,7 @@ module TogglIntegration
 
     def self.build_from_toggl_api(toggl_api, project_id)
       tasks = toggl_api.get_project_tasks(project_id).map do |task|
-        Task.new(
-          name: task['name'],
-          pid: task['pid'],
-        )
+        Task.new(name: task['name'], pid: task['pid'])
       end
       new(all: tasks)
     end
