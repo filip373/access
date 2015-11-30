@@ -54,12 +54,16 @@ module TogglIntegration
     end
 
     def add_task_to_project(task_name, project_id)
-      params = { 'name' => task_name, 'pid' => project_id }
+      params = { name: task_name, pid: project_id }
       toggl_client.create_task(params)
     end
 
     def remove_tasks_from_project(tasks_ids)
-      toggl_client.delete_task(tasks_ids.join(','))
+      if [String].include? tasks_ids.class
+        toggl_client.delete_task(tasks_ids.to_i)
+      elsif !tasks_ids.empty?
+        toggl_client.delete_task(tasks_ids.join(','))
+      end
     end
 
     def invite_member(member)
