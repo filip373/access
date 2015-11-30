@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 gem 'rails', '~> 4.2'
 
-gem 'thin'§§
+gem 'thin'
 gem 'attr_extras'
 gem 'awesome_print'
 gem 'celluloid'
