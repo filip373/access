@@ -8,7 +8,7 @@ module TogglIntegration
 
     def self.build_from_toggl_api(toggl_api)
       tasks = toggl_api.list_teams.each do |team|
-        toggl_api.list_all_tasks(team.id).map do |task|
+        toggl_api.list_all_tasks(team['id']).map do |task|
           Task.new(name: task['name'], pid: task['pid'])
         end
       end
