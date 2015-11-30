@@ -48,7 +48,7 @@ module TogglIntegration
       def create_teams
         diffs[:create_teams].each do |team, members|
           new_team = toggl_api.create_team(team)
-          new_team = Team.new(new_team['name'], [], [new_team['name']], new_team['id'])
+          new_team = Team.new(new_team['name'], new_team['members'], [], [new_team['tasks']], new_team['id'])
           add_team_members(new_team, members)
         end
       end
