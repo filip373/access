@@ -16,6 +16,7 @@ module TogglIntegration
       def call
         reset_diff_hash
         find_members_without_permissions
+        diff_teams
         diff_hash
       end
 
@@ -62,7 +63,7 @@ module TogglIntegration
         result
       end
 
-
+      def diff_teams
         server_teams = current_teams.dup
         local_teams.each do |local_team|
           server_team = server_teams.find { |st| st.name.downcase == local_team.name.downcase }
@@ -81,7 +82,6 @@ module TogglIntegration
       def diff_teams_members(local_team, server_team)
         return unless local_team.name == server_team.name
         server_team_members = server_team.members.dup
-
         local_team.members.each do |local_member|
           server_member = server_team_members.find { |sm| (sm.emails & local_member.emails).any? }
           if server_member
@@ -97,13 +97,12 @@ module TogglIntegration
       def diff_teams_tasks(local_team, server_team)
         return unless local_team.name == server_team.name
         server_team_tasks = server_team.tasks.dup
-
         local_team.tasks.each do |local_task|
-          server_task = server_team_tasks.find { |st| (st.tasks & local_task.tasks).any? }
+          server_task = server_team_tasks.find { |st| st.name == local_task.name }
           if server_task
             server_team_tasks.delete(server_task)
           else
-            diff_hash_array(:add_tasks, server_team).concat normalize_tasks(local_task)
+            diff_hash_array(:create_tasks, server_team).concat normalize_tasks(local_task)
           end
         end
         diff_hash_array(:remove_tasks, server_team)
