@@ -2,8 +2,20 @@ require 'rails_helper'
 
 describe TogglIntegration::Actions::CleanupTeams do
   let(:toggl_api) { double(:toggl_api) }
-  let(:team1) { TogglIntegration::Team.new('Team1', ['john.doe'], ['Team1'], '1') }
-  let(:team2) { TogglIntegration::Team.new('Team1', ['john.doe'], ['Team1'], '1') }
+  let(:team1) do
+    TogglIntegration::Team.new(name: 'Team1',
+                               members: ['john.doe'],
+                               projects: ['Team1'],
+                               tasks: [],
+                               id: '1')
+  end
+  let(:team2) do
+    TogglIntegration::Team.new(name: 'Team1',
+                               members: ['john.doe'],
+                               projects: ['Team1'],
+                               tasks: [],
+                               id: '1')
+  end
   let(:server_teams) { [team1, team2] }
   let(:cleanup_teams) { described_class.new(server_teams, toggl_api) }
 
