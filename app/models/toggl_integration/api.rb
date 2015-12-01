@@ -59,7 +59,7 @@ module TogglIntegration
     end
 
     def remove_tasks_from_project(tasks_ids)
-      if [String].include? tasks_ids.class
+      if tasks_ids.is_a? String
         toggl_client.delete_task(tasks_ids.to_i)
       elsif !tasks_ids.empty?
         toggl_client.delete_task(tasks_ids.join(','))
