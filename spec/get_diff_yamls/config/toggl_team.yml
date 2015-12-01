@@ -1,0 +1,17 @@
+---
+members:
+  required: true
+  default_value: []
+  value_type: array
+projects:
+  required: true
+  default_value: []
+  value_type: array
+name:
+  required: true
+  default_value:
+  value_type: string
+tasks:
+  required: true
+  default_value: []
+  value_type: array
