@@ -67,9 +67,5 @@ module TogglIntegration
     def self.team_projects(team)
       [team['name']]
     end
-
-    def get_project_id(name)
-
-    end
   end
 end
