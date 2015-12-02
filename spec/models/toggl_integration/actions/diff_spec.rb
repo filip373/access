@@ -23,7 +23,7 @@ describe TogglIntegration::Actions::Diff do
         name: 'team1',
         members: [local_doe, local_bond],
         projects: ['team1'],
-        tasks: [],
+        tasks: [task_2, task_3],
       )
     end
     let(:local_team2) do
@@ -31,7 +31,7 @@ describe TogglIntegration::Actions::Diff do
         name: 'team2',
         members: [local_doe],
         projects: ['team2'],
-        tasks: [],
+        tasks: [task_1, task_4],
       )
     end
     let(:local_team3) do
@@ -39,7 +39,7 @@ describe TogglIntegration::Actions::Diff do
         name: 'team3',
         members: [local_doe, local_bond],
         projects: ['team3'],
-        tasks: [],
+        tasks: [task_1],
       )
     end
     let(:local_team4) do
@@ -47,7 +47,7 @@ describe TogglIntegration::Actions::Diff do
         name: 'team4',
         members: [local_doe],
         projects: ['team4'],
-        tasks: [],
+        tasks: [task_2, task_3, task_4],
       )
     end
     let(:local_team5) do
@@ -55,7 +55,7 @@ describe TogglIntegration::Actions::Diff do
         name: 'team5',
         members: [local_luke, local_batman],
         projects: ['team5'],
-        tasks: [],
+        tasks: [task_1, task_2, task_3, task_4],
       )
     end
     let(:local_teams) { [local_team1, local_team2, local_team3, local_team4, local_team5] }
@@ -89,7 +89,7 @@ describe TogglIntegration::Actions::Diff do
         members: [toggl_doe, toggl_without_id],
         projects: ['team1'],
         id: '1',
-        tasks: [],
+        tasks: [task_1, task_2],
       )
     end
     let(:toggl_team2) do
@@ -98,7 +98,7 @@ describe TogglIntegration::Actions::Diff do
         members: [toggl_doe, toggl_bond, toggl_wayne],
         projects: ['team2'],
         id: '2',
-        tasks: [],
+        tasks: [task_3, task_4],
       )
     end
     let(:toggl_team6) do
@@ -107,7 +107,7 @@ describe TogglIntegration::Actions::Diff do
         members: [toggl_doe, toggl_bond, toggl_wayne],
         projects: ['team6'],
         id: '6',
-        tasks: [],
+        tasks: [task_3],
       )
     end
     let(:toggl_teams) { [toggl_team1, toggl_team2, toggl_team6] }
@@ -132,10 +132,12 @@ describe TogglIntegration::Actions::Diff do
       ])
     end
 
-    let(:task_1) { TogglIntegration::Task.new(name: 'Task_1', pid: 1) }
-    let(:task_2) { TogglIntegration::Task.new(name: 'Task_2', pid: 2) }
-    let(:task_3) { TogglIntegration::Task.new(name: 'Task_3', pid: 3) }
-    let(:task_4) { TogglIntegration::Task.new(name: 'Task_4', pid: 4) }
+    let(:task_1) { TogglIntegration::Task.new(name: 'Task_1', pid: '1') }
+    let(:task_2) { TogglIntegration::Task.new(name: 'Task_2', pid: '2') }
+    let(:task_3) { TogglIntegration::Task.new(name: 'Task_3', pid: '3') }
+    let(:task_4) { TogglIntegration::Task.new(name: 'Task_4', pid: '4') }
+
+    let(:toggl_tasks) { [task_1, task_2, task_3, task_4] }
 
     let(:toggl_tasks_repo) do
       TogglIntegration::TaskRepository.new(
@@ -192,6 +194,17 @@ describe TogglIntegration::Actions::Diff do
     it 'returns list of missing teams' do
       diff_result = diff.call
       expect(diff_result[:missing_teams]).to eq [toggl_team6]
+    end
+
+    it 'returns list of tasks to create' do
+      diff_result = diff.call
+      expect(diff_result[:create_tasks][local_team5]).to eq [task_1, task_2, task_3, task_4]
+    end
+
+    it 'returns list of tasks to remove' do
+      diff_result = diff.call
+      expect(diff_result[:remove_tasks][toggl_team1].size).to eq 1
+      expect(diff_result[:remove_tasks][toggl_team1]).to eq [task_1]
     end
 
     it 'returns list of errors' do
