@@ -18,11 +18,46 @@ describe TogglIntegration::Actions::Diff do
       TogglIntegration::Member.new(emails: ['without_team@gmail.com'], id: 'without_team')
     end
 
-    let(:local_team1) { TogglIntegration::Team.new(name: 'team1', members: [local_doe, local_bond], projects: ['team1'], tasks: []) }
-    let(:local_team2) { TogglIntegration::Team.new(name: 'team2', members: [local_doe], projects: ['team2'], tasks: []) }
-    let(:local_team3) { TogglIntegration::Team.new(name: 'team3', members: [local_doe, local_bond], projects: ['team3'], tasks: []) }
-    let(:local_team4) { TogglIntegration::Team.new(name: 'team4', members: [local_doe], projects: ['team4'], tasks: []) }
-    let(:local_team5) { TogglIntegration::Team.new(name: 'team5', members: [local_luke, local_batman], projects: ['team5'], tasks: []) }
+    let(:local_team1) do
+      TogglIntegration::Team.new(
+        name: 'team1',
+        members: [local_doe, local_bond],
+        projects: ['team1'],
+        tasks: [],
+      )
+    end
+    let(:local_team2) do
+      TogglIntegration::Team.new(
+        name: 'team2',
+        members: [local_doe],
+        projects: ['team2'],
+        tasks: [],
+      )
+    end
+    let(:local_team3) do
+      TogglIntegration::Team.new(
+        name: 'team3',
+        members: [local_doe, local_bond],
+        projects: ['team3'],
+        tasks: [],
+      )
+    end
+    let(:local_team4) do
+      TogglIntegration::Team.new(
+        name: 'team4',
+        members: [local_doe],
+        projects: ['team4'],
+        tasks: [],
+      )
+    end
+    let(:local_team5) do
+      TogglIntegration::Team.new(
+        name: 'team5',
+        members: [local_luke, local_batman],
+        projects: ['team5'],
+        tasks: [],
+      )
+    end
     let(:local_teams) { [local_team1, local_team2, local_team3, local_team4, local_team5] }
 
     let(:toggl_doe) do
@@ -41,17 +76,30 @@ describe TogglIntegration::Actions::Diff do
       TogglIntegration::Member.new(emails: ['without_id@gmail.com'], toggl_id: '4')
     end
     let(:toggl_inactive) do
-      TogglIntegration::Member.new(emails: ['inactive@gmail.com'], toggl_id: '6', inactive: true)
+      TogglIntegration::Member.new(
+        emails: ['inactive@gmail.com'], toggl_id: '6', inactive: true)
     end
     let(:toggl_without_team) do
       TogglIntegration::Member.new(emails: ['without_team@gmail.com'], toggl_id: '5')
     end
 
     let(:toggl_team1) do
-      TogglIntegration::Team.new(name: 'team1', members: [toggl_doe, toggl_without_id], projects: ['team1'], id: '1', tasks: [])
+      TogglIntegration::Team.new(
+        name: 'team1',
+        members: [toggl_doe, toggl_without_id],
+        projects: ['team1'],
+        id: '1',
+        tasks: [],
+      )
     end
     let(:toggl_team2) do
-      TogglIntegration::Team.new(name: 'team2', members: [toggl_doe, toggl_bond, toggl_wayne], projects: ['team2'], id: '2', tasks: [])
+      TogglIntegration::Team.new(
+        name: 'team2',
+        members: [toggl_doe, toggl_bond, toggl_wayne],
+        projects: ['team2'],
+        id: '2',
+        tasks: [],
+      )
     end
     let(:toggl_team6) do
       TogglIntegration::Team.new(
@@ -96,12 +144,18 @@ describe TogglIntegration::Actions::Diff do
           task_2,
           task_3,
           task_4,
-        ]
+        ],
       )
     end
 
     let(:diff) do
-      described_class.new(local_teams, toggl_teams, user_repository, toggl_members_repo, toggl_tasks_repo)
+      described_class.new(
+        local_teams,
+        toggl_teams,
+        user_repository,
+        toggl_members_repo,
+        toggl_tasks_repo,
+      )
     end
 
     it 'returns hash with differences' do
