@@ -17,7 +17,7 @@ module RollbarIntegration
       new(
         dg_team.name,
         dg_team.members,
-        dg_team.projects
+        dg_team.projects,
       )
     end
 

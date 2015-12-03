@@ -12,7 +12,7 @@ module RollbarIntegration
           add_members: {},
           remove_members: {},
           add_projects: {},
-          remove_projects: {}
+          remove_projects: {},
         }
         @errors = []
         @repo = user_repo
