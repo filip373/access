@@ -2,11 +2,12 @@ require 'rails_helper'
 
 describe TogglIntegration::Actions::CleanupTeams do
   let(:toggl_api) { double(:toggl_api) }
+  let(:task) { TogglIntegration::Task.new(name: 'Task_1', pid: '1') }
   let(:team1) do
     TogglIntegration::Team.new(name: 'Team1',
                                members: ['john.doe'],
                                projects: ['Team1'],
-                               tasks: [],
+                               tasks: [task],
                                id: '1')
   end
   let(:team2) do
