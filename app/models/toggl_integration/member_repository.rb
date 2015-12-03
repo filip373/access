@@ -15,7 +15,7 @@ module TogglIntegration
         Member.new(
           emails: [member['email']],
           toggl_id: member['uid'],
-          inactive: member['inactive']
+          inactive: member['inactive'],
         )
       end
       new(all: members)
