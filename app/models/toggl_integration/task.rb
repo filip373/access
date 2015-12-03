@@ -1,15 +1,15 @@
 module TogglIntegration
   class Task
-    attr_reader :name, :pid, :id
+    attr_reader :name, :pid, :wid
 
-    def initialize(name:, pid:, id: nil)
+    def initialize(name:, pid:)
       @name = name
       @pid = pid
-      @id = id
+      @wid = wid
     end
 
-    def task_id?
-      !id.nil?
+    def wid?
+      !wid.nil?
     end
 
     def name?

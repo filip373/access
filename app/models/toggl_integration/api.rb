@@ -54,8 +54,8 @@ module TogglIntegration
     end
 
     def add_task_to_project(task_name, project_id)
-      params = { name: task_name, pid: project_id }
-      toggl_client.create_task(params)
+      params = { name: task_name, pid: project_id, wid: workspace['id'] }
+      p toggl_client.create_task(params)
     end
 
     def remove_tasks_from_project(tasks_ids)
