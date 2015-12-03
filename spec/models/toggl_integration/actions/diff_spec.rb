@@ -79,7 +79,7 @@ describe TogglIntegration::Actions::Diff do
         local_bond,
         local_luke,
         local_batman,
-        local_without_team
+        local_without_team,
       ])
     end
     let(:diff) do

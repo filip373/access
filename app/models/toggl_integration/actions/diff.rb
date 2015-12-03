@@ -84,7 +84,11 @@ module TogglIntegration
 
       def find_members_without_permissions
         @toggl_members_repo.all.select(&:active?).each do |member|
-          user = @user_repo.find_by_email(member.default_email) rescue nil
+          user = begin
+                   @user_repo.find_by_email(member.default_email)
+                 rescue
+                   nil
+                 end
           if user
             unless has_team_assigned?(user)
               @errors << "User #{member.default_email} has no team assigned."

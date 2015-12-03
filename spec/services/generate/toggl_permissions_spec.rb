@@ -5,19 +5,19 @@ describe Generate::TogglPermissions do
     let(:toggl_teams) do
       [
         TogglIntegration::Team.new(
-          "team1",
+          'team1',
           [
-            TogglIntegration::Member.new(emails: ["john.doe@gmail.com"], id: "john.doe"),
-            TogglIntegration::Member.new(emails: ["james.bond@gmail.com"], id: "james.bond")
+            TogglIntegration::Member.new(emails: ['john.doe@gmail.com'], id: 'john.doe'),
+            TogglIntegration::Member.new(emails: ['james.bond@gmail.com'], id: 'james.bond'),
           ],
-          ["team1"]),
+          ['team1']),
         TogglIntegration::Team.new(
-          "team2 with spaces",
+          'team2 with spaces',
           [
-            TogglIntegration::Member.new(emails: ["john.doe@gmail.com"], id: "john.doe"),
-            TogglIntegration::Member.new(emails: ["james.bond@gmail.com"], id: "james.bond")
+            TogglIntegration::Member.new(emails: ['john.doe@gmail.com'], id: 'john.doe'),
+            TogglIntegration::Member.new(emails: ['james.bond@gmail.com'], id: 'james.bond'),
           ],
-          ["team2 with spaces"])
+          ['team2 with spaces']),
       ]
     end
     let(:permissions_dir) { Rails.root.join('spec/tmp/permissions') }
