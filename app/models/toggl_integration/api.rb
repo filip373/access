@@ -19,12 +19,6 @@ module TogglIntegration
       @teams
     end
 
-    # name of the method was chosen here to keep compatible
-    # with a convention used in this file
-    def list_all_tasks(team_id)
-      list_projects_tasks(team_id)
-    end
-
     def list_all_members
       @workspace_users ||= toggl_client.workspace_users(workspace['id'])
     end
@@ -120,6 +114,10 @@ module TogglIntegration
         projects_tasks[team_id] = toggl_client.get_project_tasks(team_id)
       end
     end
+
+    # name of the method was chosen here to keep compatible
+    # with a convention used in this file
+    alias_method :list_all_tasks, :list_projects_tasks
 
     def activate_member(uid)
       workspace_user = list_all_members.find { |m| m['uid'] == uid }
