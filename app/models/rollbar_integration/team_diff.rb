@@ -17,7 +17,6 @@ module RollbarIntegration
     def diff(blk)
       members_diff
       projects_diff
-    rescue StandardError => e
     ensure
       blk.call(diff_hash, @errors)
       terminate
@@ -26,21 +25,31 @@ module RollbarIntegration
     private
 
     def members_diff
-      if rollbar_team.id.present?
-        diff_hash[:add_members][rollbar_team] = add_members
-        diff_hash[:remove_members][rollbar_team] = remove_members
-      elsif !dataguru_members.empty?
-        diff_hash[:create_teams][rollbar_team][:add_members] = dataguru_members
-      end
+      return operate_on_members(rollbar_team) if rollbar_team.id.present?
+      operate_on_teams(rollbar_team) unless dataguru_members.empty?
+    end
+
+    def operate_on_members(rollbar_team)
+      diff_hash[:add_members][rollbar_team] = add_members
+      diff_hash[:remove_members][rollbar_team] = remove_members
+    end
+
+    def operate_on_teams(rollbar_team)
+      diff_hash[:create_teams][rollbar_team][:add_members] = dataguru_members
     end
 
     def projects_diff
-      if rollbar_team.id.present?
-        diff_hash[:add_projects][rollbar_team] = add_projects
-        diff_hash[:remove_projects][rollbar_team] = remove_projects
-      elsif !dataguru_projects.empty?
-        diff_hash[:create_teams][rollbar_team][:add_projects] = dataguru_projects
-      end
+      return operate_projects_diff(rollbar_team) if rollbar_team.id.present?
+      add_projects_to_team unless dataguru_projects.empty?
+    end
+
+    def operate_projects_diff(rollbar_team)
+      diff_hash[:add_projects][rollbar_team] = add_projects
+      diff_hash[:remove_projects][rollbar_team] = remove_projects
+    end
+
+    def add_projects_to_team
+      diff_hash[:create_teams][rollbar_team][:add_projects] = dataguru_projects
     end
 
     def add_members
@@ -93,7 +102,7 @@ module RollbarIntegration
                               []
                             else
                               prepare_rollbar_projects_hash
-                           end
+                            end
     end
 
     def rollbar_members
@@ -107,21 +116,25 @@ module RollbarIntegration
 
     def prepare_rollbar_members_hash
       hash = Hash[
-                rollbar_api.list_all_team_members(rollbar_team.id)
-                .map do |e|
-                  begin
-                    dataguru_user = repo.find_by_email(e.email)
-                  rescue => exception
-                    custom_error = "#{exception} rollbar_user: #{e}, team: #{rollbar_team}"
-                    @errors.push(custom_error)
-                    [nil, nil]
-                  else
-                    [dataguru_user.id, e]
-                  end
-                end
-              ]
+        list_all_team_members(rollbar_team.id)
+        .map { |e| user_id_with_email(e) }
+        ]
       hash.delete(nil)
       hash
+    end
+
+    def user_id_with_email(e)
+      dataguru_user = repo.find_by_email(e.email)
+    rescue => exception
+      custom_error = "#{exception} rollbar_user: #{e}, team: #{rollbar_team}"
+      @errors.push(custom_error)
+      [nil, nil]
+    else
+      [dataguru_user.id, e]
+    end
+
+    def list_all_team_members(id)
+      rollbar_api.list_all_team_members(id)
     end
 
     def prepare_rollbar_projects_hash
