@@ -25,7 +25,7 @@ tasks: []
 projects:
 - Team1
 EOS
-)
+      )
     end
   end
 end
