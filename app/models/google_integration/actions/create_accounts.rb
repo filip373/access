@@ -16,16 +16,17 @@ module GoogleIntegration
 
       def create_accounts(accounts)
         accounts.each do |login|
-          create_account(login)
-          sleep(5)
-          generate_codes(login)
-          sleep(5)
-          reset_password(login)
-          sleep(10)
-          @create_accounts[login][:codes] = get_codes(login).take(3)
-          sleep(10)
+          call_and_sleep(5) { create_account(login) }
+          call_and_sleep(5) { generate_codes(login) }
+          call_and_sleep(10) { reset_password(login) }
+          @create_accounts[login][:codes] = call_and_sleep(10) { get_codes(login).take(3) }
           post_filters(login)
         end
+      end
+
+      def call_and_sleep(time, &block)
+        sleep(time)
+        block.call if block_given?
       end
 
       def create_account(login)
