@@ -6,6 +6,7 @@ module GoogleIntegration
       def initialize(diff_hash)
         @diff_hash = diff_hash
         @log = []
+        @errors = log_errors
       end
 
       def now!
@@ -13,7 +14,6 @@ module GoogleIntegration
       end
 
       def generate_log
-        @errors = log_errors
         log_creating_groups
         log_adding_members
         log_removing_members
@@ -23,11 +23,15 @@ module GoogleIntegration
         log_removing_memberships
         log_changing_archive
         log_changing_privacy
-        @log << 'There are no changes.' if @log.size == 0
-        @log
+        no_changes_in_log
       end
 
       private
+
+      def no_changes_in_log
+        @log << 'There are no changes.' if @log.size == 0
+        @log
+      end
 
       def log_errors
         Hash(@diff_hash[:errors]).map do |key, errors|
