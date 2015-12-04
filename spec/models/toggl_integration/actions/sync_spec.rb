@@ -38,7 +38,7 @@ describe TogglIntegration::Actions::Sync do
       expect(toggl_api).to receive(:add_task_to_project).twice
 
       expect(toggl_api).to receive(:remove_tasks_from_project)
-        .with(["3"])
+        .with(['3'])
         .once
 
       expect(toggl_api).to receive(:add_member_to_team).exactly(6).times
