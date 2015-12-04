@@ -58,16 +58,20 @@ module RollbarIntegration
 
     def self.prepare_members(api, team, user_repo)
       api.list_all_team_members(team.id).map do |rollbar_user|
-        begin
-          user = OpenStruct.new(
-            username: user_repo.find_by_email(rollbar_user.email).id,
-            id: rollbar_user.id,
-          )
-        rescue
-          Rollbar.info("There is no user with email: #{rollbar_user.email}")
-        end
-        user
+        create_user(user_repo, rollbar_user)
       end.compact
+    end
+
+    def self.create_user(user_repo, rollbar_user)
+      begin
+        user = OpenStruct.new(
+          username: user_repo.find_by_email(rollbar_user.email).id,
+          id: rollbar_user.id,
+        )
+      rescue
+        Rollbar.info("There is no user with email: #{rollbar_user.email}")
+      end
+      user
     end
   end
 end
