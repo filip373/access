@@ -150,20 +150,22 @@ module GoogleIntegration
       end
     end
 
-    def create_user(params)
-      force_user_authorization do
-        request(
-          api_method: directory_api.users.insert,
-          body_object: {
-            name: {
-              familyName: params[:last_name],
-              givenName: params[:first_name],
-            },
-            primaryEmail: params[:email],
-            password: params[:password],
+    def create_user(_params)
+      force_user_authorization { request(params_request_for_creating_user) }
+    end
+
+    def params_request_for_creating_user
+      {
+        api_method: directory_api.users.insert,
+        body_object: {
+          name: {
+            familyName: params[:last_name],
+            givenName: params[:first_name],
           },
-        )
-      end
+          primaryEmail: params[:email],
+          password: params[:password],
+        },
+      }
     end
 
     def list_users
@@ -211,7 +213,8 @@ module GoogleIntegration
       force_user_authorization do
         Dir.glob("#{Rails.root}/static_data/gmail_filters/*").each do |filter|
           filter = File.read(filter)
-          url = "https://apps-apis.google.com/a/feeds/emailsettings/2.0/#{AppConfig.google.main_domain}/#{login}/filter"
+          url = 'https://apps-apis.google.com/a/feeds/emailsettings/2.0/'\
+                "#{AppConfig.google.main_domain}/#{login}/filter"
           client.execute(
             uri: url,
             body: filter,
