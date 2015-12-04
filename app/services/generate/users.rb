@@ -33,14 +33,18 @@ module Generate
       gh_users.map do |gh_user|
         gh_user = gh_api.get_user(gh_user['login'])
         user = match_google_user(gh_user)
-        if user.present?
-          user.github = gh_user['login']
-          user.external = false
-          nil
-        else
-          new_user_from_github(gh_user)
-        end
+        add_info_about_user_from_gh(user, gh_user)
       end.compact
+    end
+
+    def add_info_about_user_from_gh(user, gh_user)
+      if user.present?
+        user.github = gh_user['login']
+        user.external = false
+        nil
+      else
+        new_user_from_github(gh_user)
+      end
     end
 
     def new_user_from_github(gh_user)
