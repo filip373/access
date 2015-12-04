@@ -35,17 +35,17 @@ module GithubIntegration
     end
 
     def members_diff(team, members_names)
-      return unless team.respond_to?(:id)
-      current_members = team.respond_to?(:fake) ? [] : list_team_members(team['id'])
-      operate_on_members_diff(team, members_names, current_members)
+      if team.respond_to?(:id)
+        current_members = compute_current_members(team)
+        @diff_hash[:add_members][team] = exclude_pending_members(
+          members_names - current_members, team.id)
+        @diff_hash[:remove_members][team] = current_members - members_names
+      end
+      @diff_hash[:create_teams][team][:add_members] = members_names unless members_names.empty?
     end
 
-    def operate_on_members_diff(team, members_names)
-      @diff_hash[:add_members][team] = exclude_pending_members(
-        members,
-      )
-      @diff_hash[:remove_members][team] = current_members - members_names
-      @diff_hash[:create_teams][team][:add_members] = members_names unless members_names.empty?
+    def compute_current_members(team)
+      team.respond_to?(:fake) ? [] : list_team_members(team['id'])
     end
 
     def repos_diff(team, repos_names)
@@ -59,7 +59,8 @@ module GithubIntegration
     end
 
     def list_team_members(team_id)
-      @gh_api.list_team_members(team_id).map { |e| e['login'].downcase }
+      r = @gh_api.list_team_members(team_id)
+      r.map { |e| e['login'].downcase }
     end
 
     def map_users_to_members
