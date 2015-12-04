@@ -43,8 +43,6 @@ module TogglIntegration
       new(all: teams)
     end
 
-    private
-
     def self.team_tasks(api, team)
       api.list_all_tasks(team['id']).map do |task|
         Task.new(name: task['name'], pid: team['id'])
