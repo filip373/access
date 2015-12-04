@@ -6,29 +6,32 @@ module TogglIntegration
       self.all = all
     end
 
-    def self.build_from_data_guru(dg_client, user_repository, toggl_members_repository)
+    def self.build_from_data_guru(dg_client, user_repository, _toggl_members_repository)
       teams = dg_client.toggl_teams.map do |team|
-        members = team.members.try(:map) do |repo_member|
-          member_data =
-            begin
-              user_repository.find(repo_member)
-            rescue
-              nil
-            end
-          emails = member_data ? member_data.emails : []
-          toggl_member = toggl_members_repository.find_by_emails(*emails) if emails.any?
-          toggl_id = toggl_member.toggl_id if toggl_member
-          Member.new(emails: emails, id: repo_member, toggl_id: toggl_id)
-        end
-        tasks = team.tasks.try(:map) do |repo_task|
-          Task.new(name: repo_task, pid: team.id)
-        end
+        members = prepare_members(user_repository)
+        tasks = team.tasks.try(:map) { |repo_task| Task.new(name: repo_task, pid: team.id) }
         Team.new(name: team.name,
                  members: members || [],
                  projects: team.projects,
                  tasks: tasks || [])
       end
       new(all: teams)
+    end
+
+    def prepare_members(user_repo)
+      team.members.try(:map) do |repo_member|
+        member_data = prepare_member_data(user_repo, repo_member)
+        emails = member_data ? member_data.emails : []
+        toggl_member = toggl_members_repository.find_by_emails(*emails) if emails.any?
+        toggl_id = toggl_member.toggl_id if toggl_member
+        Member.new(emails: emails, id: repo_member, toggl_id: toggl_id)
+      end
+    end
+
+    def prepare_member_data(user_repo, repo_member)
+      user_repo.find(repo_member)
+    rescue
+      nil
     end
 
     def self.build_from_toggl_api(toggl_api, user_repository)
