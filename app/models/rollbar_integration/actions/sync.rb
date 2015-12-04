@@ -23,13 +23,20 @@ module RollbarIntegration
       end
 
       def sync_projects(projects_to_add, projects_to_remove)
+        sync_projects_to_add(projects_to_add)
+        sync_projects_to_remove(projects_to_remove)
+      end
+
+      def sync_projects_to_add(projects_to_add)
         projects_to_add.each do |team, projects|
           projects.each do |_project_name, project|
             project = @rollbar_api.create_project(project.name) if project.id.nil?
             @rollbar_api.add_project_to_team(project.id, team.id)
           end
         end
+      end
 
+      def sync_projects_to_remove(projects_to_remove)
         projects_to_remove.each do |team, projects|
           projects.each do |_project_name, project|
             @rollbar_api.remove_project_from_team(project.id, team.id)
