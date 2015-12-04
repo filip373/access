@@ -1,19 +1,31 @@
 development:
-  rollbar:
-    notification_token: notification-token-from-rollbar
-  permissions_repo:
-    url: your-url-to-permissions-repo
   dataguru:
-    git_repo_url: http://url-to-repo-with-permissions
-    git_repo_temp_dir: 'tmp/permissions'
+    access_token:
+    api_url:
   github:
-    client_id: gh-client-id
-    client_secret: gh-secret
+    client_id:
+    client_secret:
   google:
-    client_id: google-client-id
-    client_secret: google-client-secret
-    scope: google-scope
-  slack:
-    webhook_url: webhook-url
-    default_channel: 'channel-with-no-hash-sign'
-  toggl_token: token-from-toggl-account
+    client_id:
+    client_secret:
+    domain_member_id:
+    email:
+      account_using_instruction: >
+        Short description how to use account creation details,
+        how to login in using 2step.
+    p12_key_path:
+    p12_key_secret:
+    scope:
+    service_account_email:
+    supporter_email:
+  permissions_repo:
+    url:
+    checkout_dir:
+  rollbar:
+    notification_token:
+    organization_token:
+  secret_key_base:
+  # slack:
+  #   webhook_url:
+  #   default_channel:
+  toggl_token:
