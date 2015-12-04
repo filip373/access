@@ -72,10 +72,6 @@ module RollbarIntegration
       client.delete("/api/1/team/#{team_id}/project/#{project_id}")
     end
 
-    def cancel_invitation(invitation_id)
-      client.delete("/api/1/invite/#{invitation_id}")
-    end
-
     private
 
     def get_member(user_id)
