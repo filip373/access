@@ -5,20 +5,20 @@ describe Generate::TogglPermissions do
     let(:toggl_teams) do
       [
         TogglIntegration::Team.new(
-          name: "team1",
+          name: 'team1',
           members: [
-            TogglIntegration::Member.new(emails: ["john.doe@gmail.com"], id: "john.doe"),
-            TogglIntegration::Member.new(emails: ["james.bond@gmail.com"], id: "james.bond")
+            TogglIntegration::Member.new(emails: ['john.doe@gmail.com'], id: 'john.doe'),
+            TogglIntegration::Member.new(emails: ['james.bond@gmail.com'], id: 'james.bond'),
           ],
-          projects: ["team1"],
+          projects: ['team1'],
           tasks: []),
         TogglIntegration::Team.new(
-          name: "team2 with spaces",
+          name: 'team2 with spaces',
           members: [
-            TogglIntegration::Member.new(emails: ["john.doe@gmail.com"], id: "john.doe"),
-            TogglIntegration::Member.new(emails: ["james.bond@gmail.com"], id: "james.bond")
+            TogglIntegration::Member.new(emails: ['john.doe@gmail.com'], id: 'john.doe'),
+            TogglIntegration::Member.new(emails: ['james.bond@gmail.com'], id: 'james.bond'),
           ],
-          projects: ["team2 with spaces"],
+          projects: ['team2 with spaces'],
           tasks: []),
       ]
     end
