@@ -54,19 +54,27 @@ module GoogleIntegration
       def log_creating_groups
         @diff_hash[:create_groups].each do |group, h|
           @log << "[api] create group #{group.email}"
-
-          h[:add_members].each do |m|
-            @log << "[api] add member #{m} to group #{group.email}"
-          end if h[:add_members]
-
-          h[:add_aliases].each do |r|
-            @log << "[api] add alias #{r} to group #{group.email}"
-          end if h[:add_aliases]
-
-          unless h[:add_membership].nil?
-            @log << "[api] add domain membership to group #{group.email}"
-          end
+          add_members_message(h, group)
+          add_aliases_message(h, group)
+          add_membership_message(h, group)
         end
+      end
+
+      def add_membership_message(h, group)
+        return if h[:add_membership].nil?
+        @log << "[api] add domain membership to group #{group.email}"
+      end
+
+      def add_members_message(h, group)
+        h[:add_members].each do |m|
+          @log << "[api] add member #{m} to group #{group.email}"
+        end if h[:add_members]
+      end
+
+      def add_aliases_message(h, group)
+        h[:add_aliases].each do |r|
+          @log << "[api] add alias #{r} to group #{group.email}"
+        end if h[:add_aliases]
       end
 
       def log_adding_memberships
