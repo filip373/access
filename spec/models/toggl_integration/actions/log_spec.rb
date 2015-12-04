@@ -5,7 +5,10 @@ RSpec.describe TogglIntegration::Actions::Log do
     TogglIntegration::Team.new(name: 'Team', members: ['john.doe'], projects: ['Team'], tasks: [])
   end
   let(:new_team) do
-    TogglIntegration::Team.new(name: 'NewTeam', members: ['john.doe'], projects: ['NewTeam'], tasks: [])
+    TogglIntegration::Team.new(name: 'NewTeam',
+                               members: ['john.doe'],
+                               projects: ['NewTeam'],
+                               tasks: [])
   end
   let(:task_1) { TogglIntegration::Task.new(name: 'Task_1', pid: 1) }
   let(:task_2) { TogglIntegration::Task.new(name: 'Task_2', pid: 2) }
