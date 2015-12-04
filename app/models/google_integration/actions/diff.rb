@@ -6,18 +6,7 @@ module GoogleIntegration
       def initialize(expected_groups, google_api, user_repo)
         @expected_groups = expected_groups
         @google_api = google_api
-        @diff_hash = {
-          errors: {},
-          create_groups: {},
-          add_members: {},
-          remove_members: {},
-          add_aliases: {},
-          remove_aliases: {},
-          add_membership: {},
-          remove_membership: {},
-          change_archive: {},
-          change_privacy: {},
-        }
+        @diff_hash = empty_diff_hash
         @repo = user_repo
       end
 
@@ -32,17 +21,29 @@ module GoogleIntegration
 
       private
 
+      def empty_diff_hash
+        {
+          errors: {}, create_groups: {}, add_members: {}, change_privacy: {},
+          remove_members: {}, add_aliases: {}, remove_aliases: {},
+          add_membership: {}, remove_membership: {}, change_archive: {}
+        }
+      end
+
       def generate_diff
         @expected_groups.each do |expected_group|
           google_group = find_or_create_google_group(expected_group)
           add_group_errors(google_group)
-          privacy_diff(google_group, expected_group)
-          archive_diff(google_group, expected_group.archive?)
-          members_diff(google_group, expected_group.users(@repo))
-          aliases_diff(google_group, expected_group.aliases)
+          difference_resources(google_group, expected_group)
           domain_membership_diff(google_group, expected_group.domain_membership)
         end
         @diff_hash[:errors].update @google_api.errors
+      end
+
+      def difference_resources(google_group, expected_group)
+        privacy_diff(google_group, expected_group)
+        archive_diff(google_group, expected_group.archive?)
+        members_diff(google_group, expected_group.users(@repo))
+        aliases_diff(google_group, expected_group.aliases)
       end
 
       def add_group_errors(group)
@@ -69,9 +70,7 @@ module GoogleIntegration
 
       def members_diff(group, expected_members)
         if group.respond_to?(:id)
-          current_members = list_group_members(group)
-          add = expected_members - current_members
-          remove = current_members - expected_members
+          add, remove = compute_members(group, expected_members)
           @diff_hash[:add_members][group] = add if add.present?
           @diff_hash[:remove_members][group] = remove if remove.present?
         else
@@ -81,26 +80,32 @@ module GoogleIntegration
         end
       end
 
+      def compute_members(group, expected_members)
+        current_members = list_group_members(group)
+        [expected_members - current_members, current_members - expected_members]
+      end
+
       def domain_membership_diff(group, expected_membership)
         if group.respond_to?(:id)
           domain_membership = domain_membership?(group)
+          difference_membership(expected_membership, domain_membership, group)
+        end
+        return unless expected_membership.present?
+        @diff_hash[:create_groups][group][:add_membership] = expected_membership
+      end
 
-          if expected_membership && expected_membership != domain_membership
-            @diff_hash[:add_membership][group] = expected_membership
-          elsif domain_membership && expected_membership != domain_membership
-            @diff_hash[:remove_membership][group] = expected_membership
-          end
-        elsif expected_membership.present?
-          @diff_hash[:create_groups][group][:add_membership] = expected_membership
+      def difference_membership(expected, domain, group)
+        if expected && expected != domain
+          @diff_hash[:add_membership][group] = expected
+        elsif domain && expected != domain
+          @diff_hash[:remove_membership][group] = expected
         end
       end
 
       def aliases_diff(group, aliases)
         aliases ||= []
         if group.respond_to?(:id) # persisted
-          current_aliases = list_group_aliases(group['email'])
-          add = aliases - current_aliases
-          remove = current_aliases - aliases
+          add, remove = *compute_aliases(group, aliases)
           @diff_hash[:add_aliases][group] = add if add.present?
           @diff_hash[:remove_aliases][group] = remove if remove.present?
         elsif aliases.present?
@@ -108,8 +113,13 @@ module GoogleIntegration
         end
       end
 
+      def compute_aliases(group, aliases)
+        current_aliases = list_group_aliases(group['email'])
+        [aliases - current_aliases, current_aliases - aliases]
+      end
+
       def domain_membership?(group)
-        !!group.members.find { |member| member['id'] == AppConfig.google.domain_member_id }
+        !group.members.find { |member| member['id'] == AppConfig.google.domain_member_id }.nil?
       end
 
       def list_group_members(group)
