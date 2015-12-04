@@ -71,13 +71,21 @@ module TogglIntegration
       def process_local_team(local_team, server_teams)
         server_team = server_teams.find { |st| st.name.downcase == local_team.name.downcase }
         if server_team.present?
-          diff_teams_members(local_team, server_team)
-          diff_teams_tasks(local_team, server_team)
+          diffs_teams(local_team, server_team)
           server_teams.delete(server_team)
         else
-          diff_hash_array(:create_teams, local_team).concat normalize_members(*local_team.members)
-          diff_hash_array(:create_tasks, local_team).concat normalize_tasks(*local_team.tasks)
+          diffs_hash_array(local_team)
         end
+      end
+
+      def diffs_teams(local_team, server_team)
+        diff_teams_members(local_team, server_team)
+        diff_teams_tasks(local_team, server_team)
+      end
+
+      def diffs_hash_array(local_team)
+        diff_hash_array(:create_teams, local_team).concat normalize_members(*local_team.members)
+        diff_hash_array(:create_tasks, local_team).concat normalize_tasks(*local_team.tasks)
       end
 
       def diff_teams_members(local_team, server_team)
@@ -130,11 +138,7 @@ module TogglIntegration
 
       def find_members_without_permissions
         @toggl_members_repo.all.select(&:active?).each do |member|
-          user = begin
-                   @user_repo.find_by_email(member.default_email)
-                 rescue
-                   nil
-                 end
+          user = find_user_by_email(member.default_email)
           if user.present?
             unless team_assigned?(user)
               @errors << "User #{member.default_email} has no team assigned."
@@ -143,6 +147,12 @@ module TogglIntegration
             diff_hash[:deactivate_members] << member
           end
         end
+      end
+
+      def find_user_by_email(email)
+        @user_repo.find_by_email(email)
+      rescue
+        nil
       end
 
       def team_assigned?(member)
