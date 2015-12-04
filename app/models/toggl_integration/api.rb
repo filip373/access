@@ -131,16 +131,24 @@ module TogglIntegration
     def preload_projects_users_with_tasks(team_ids)
       input = Queue.new
       result = Queue.new
-      team_ids.each { |team_id| input << team_id unless projects_users.key?(team_id.to_i) }
-      threads = (1..THREAD_POOL_SIZE).map do
-        thread_block = build_preload_projects_users_with_tasks_thread_block(input, result)
-        Thread.new(self.class.new(@token, @company_name), &thread_block)
-      end
+      prepare_teams_ids(team_ids)
+      threads = start_threads(input, result)
       threads.each(&:join)
       until result.empty?
         team_id, project_users, project_tasks = result.pop
         projects_users[team_id.to_i] = project_users
         projects_tasks[team_id.to_i] = project_tasks
+      end
+    end
+
+    def prepare_teams_ids(team_ids)
+      team_ids.each { |team_id| input << team_id unless projects_users.key?(team_id.to_i) }
+    end
+
+    def start_threads(input, result)
+      (1..THREAD_POOL_SIZE).map do
+        thread_block = build_preload_projects_users_with_tasks_thread_block(input, result)
+        Thread.new(self.class.new(@token, @company_name), &thread_block)
       end
     end
 
