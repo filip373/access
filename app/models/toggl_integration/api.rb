@@ -19,6 +19,8 @@ module TogglIntegration
       @teams
     end
 
+    # name of the method was chosen here to keep compatible
+    # with a convention used in this file
     def list_all_tasks(team_id)
       list_projects_tasks(team_id)
     end
@@ -59,11 +61,7 @@ module TogglIntegration
     end
 
     def remove_tasks_from_project(tasks_ids)
-      if tasks_ids.is_a? String
-        toggl_client.delete_task(tasks_ids.to_i)
-      elsif !tasks_ids.empty?
-        toggl_client.delete_task(tasks_ids.join(','))
-      end
+      toggl_client.delete_task(tasks_ids.join(',')) unless tasks_ids.empty?
     end
 
     def invite_member(member)
@@ -83,9 +81,7 @@ module TogglIntegration
     end
 
     def workspace
-      @workspace ||= toggl_client.workspaces.find do |w|
-        w['name'] == company_name
-      end
+      @workspace ||= toggl_client.workspaces.find { |w| w['name'] == company_name }
     end
 
     private
@@ -143,9 +139,8 @@ module TogglIntegration
       threads.each(&:join)
       until result.empty?
         team_id, project_users, project_tasks = result.pop
-        team_id = team_id.to_i
-        projects_users[team_id] = project_users
-        projects_tasks[team_id] = project_tasks
+        projects_users[team_id.to_i] = project_users
+        projects_tasks[team_id.to_i] = project_tasks
       end
     end
 
