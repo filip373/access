@@ -65,7 +65,7 @@ RSpec.shared_context 'data_guru' do
         id: 'new_group',
         domain_membership: true,
         members: ['first.member', 'second.member'],
-        aliases: ['alias1', 'alias2'],
+        aliases: %w(alias1 alias2),
       ),
       OpenStruct.new(
         id: 'support_group',

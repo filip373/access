@@ -19,10 +19,6 @@ module TogglIntegration
       @teams
     end
 
-    def list_all_tasks(team_id)
-      list_projects_tasks(team_id)
-    end
-
     def list_all_members
       @workspace_users ||= toggl_client.workspace_users(workspace['id'])
     end
@@ -54,16 +50,12 @@ module TogglIntegration
     end
 
     def add_task_to_project(task_name, project_id)
-      params = { name: task_name, pid: project_id }
+      params = { name: task_name, pid: project_id, wid: workspace['id'] }
       toggl_client.create_task(params)
     end
 
     def remove_tasks_from_project(tasks_ids)
-      if [String].include? tasks_ids.class
-        toggl_client.delete_task(tasks_ids.to_i)
-      elsif !tasks_ids.empty?
-        toggl_client.delete_task(tasks_ids.join(','))
-      end
+      toggl_client.delete_task(tasks_ids.join(',')) unless tasks_ids.empty?
     end
 
     def invite_member(member)
@@ -83,9 +75,7 @@ module TogglIntegration
     end
 
     def workspace
-      @workspace ||= toggl_client.workspaces.find do |w|
-        w['name'] == company_name
-      end
+      @workspace ||= toggl_client.workspaces.find { |w| w['name'] == company_name }
     end
 
     private
@@ -125,6 +115,10 @@ module TogglIntegration
       end
     end
 
+    # name of the method was chosen here to keep compatible
+    # with a convention used in this file
+    alias_method :list_all_tasks, :list_projects_tasks
+
     def activate_member(uid)
       workspace_user = list_all_members.find { |m| m['uid'] == uid }
       return workspace_user unless workspace_user['inactive']
@@ -135,17 +129,24 @@ module TogglIntegration
     def preload_projects_users_with_tasks(team_ids)
       input = Queue.new
       result = Queue.new
-      team_ids.each { |team_id| input << team_id unless projects_users.key?(team_id.to_i) }
-      threads = (1..THREAD_POOL_SIZE).map do
-        thread_block = build_preload_projects_users_with_tasks_thread_block(input, result)
-        Thread.new(self.class.new(@token, @company_name), &thread_block)
-      end
+      prepare_teams_ids(team_ids)
+      threads = start_threads(input, result)
       threads.each(&:join)
       until result.empty?
         team_id, project_users, project_tasks = result.pop
-        team_id = team_id.to_i
-        projects_users[team_id] = project_users
-        projects_tasks[team_id] = project_tasks
+        projects_users[team_id.to_i] = project_users
+        projects_tasks[team_id.to_i] = project_tasks
+      end
+    end
+
+    def prepare_teams_ids(team_ids)
+      team_ids.each { |team_id| input << team_id unless projects_users.key?(team_id.to_i) }
+    end
+
+    def start_threads(input, result)
+      (1..THREAD_POOL_SIZE).map do
+        thread_block = build_preload_projects_users_with_tasks_thread_block(input, result)
+        Thread.new(self.class.new(@token, @company_name), &thread_block)
       end
     end
 

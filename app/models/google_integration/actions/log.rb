@@ -6,6 +6,7 @@ module GoogleIntegration
       def initialize(diff_hash)
         @diff_hash = diff_hash
         @log = []
+        @errors = log_errors
       end
 
       def now!
@@ -13,7 +14,6 @@ module GoogleIntegration
       end
 
       def generate_log
-        @errors = log_errors
         log_creating_groups
         log_adding_members
         log_removing_members
@@ -23,11 +23,15 @@ module GoogleIntegration
         log_removing_memberships
         log_changing_archive
         log_changing_privacy
-        @log << 'There are no changes.' if @log.size == 0
-        @log
+        no_changes_in_log
       end
 
       private
+
+      def no_changes_in_log
+        @log << 'There are no changes.' if @log.size == 0
+        @log
+      end
 
       def log_errors
         Hash(@diff_hash[:errors]).map do |key, errors|
@@ -50,19 +54,27 @@ module GoogleIntegration
       def log_creating_groups
         @diff_hash[:create_groups].each do |group, h|
           @log << "[api] create group #{group.email}"
-
-          h[:add_members].each do |m|
-            @log << "[api] add member #{m} to group #{group.email}"
-          end if h[:add_members]
-
-          h[:add_aliases].each do |r|
-            @log << "[api] add alias #{r} to group #{group.email}"
-          end if h[:add_aliases]
-
-          unless h[:add_membership].nil?
-            @log << "[api] add domain membership to group #{group.email}"
-          end
+          add_members_message(h, group)
+          add_aliases_message(h, group)
+          add_membership_message(h, group)
         end
+      end
+
+      def add_membership_message(h, group)
+        return if h[:add_membership].nil?
+        @log << "[api] add domain membership to group #{group.email}"
+      end
+
+      def add_members_message(h, group)
+        h[:add_members].each do |m|
+          @log << "[api] add member #{m} to group #{group.email}"
+        end if h[:add_members]
+      end
+
+      def add_aliases_message(h, group)
+        h[:add_aliases].each do |r|
+          @log << "[api] add alias #{r} to group #{group.email}"
+        end if h[:add_aliases]
       end
 
       def log_adding_memberships

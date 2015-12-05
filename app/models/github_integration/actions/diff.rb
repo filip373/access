@@ -9,14 +9,7 @@ module GithubIntegration
         @expected_teams = expected_teams
         @gh_teams = gh_teams
         @gh_api = gh_api
-        @diff_hash = {
-          create_teams: {},
-          add_members: {},
-          remove_members: {},
-          add_repos: {},
-          remove_repos: {},
-          change_permissions: {},
-        }
+        @diff_hash = empty_diff_hash
         @errors = []
         @repo = user_repo
         @total_diff_condition = Celluloid::Condition.new
@@ -27,6 +20,17 @@ module GithubIntegration
       end
 
       private
+
+      def empty_diff_hash
+        {
+          create_teams: {},
+          add_members: {},
+          remove_members: {},
+          add_repos: {},
+          remove_repos: {},
+          change_permissions: {},
+        }
+      end
 
       def generate_diff
         @expected_teams.each do |expected_team|
