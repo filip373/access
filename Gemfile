@@ -43,6 +43,7 @@ group :development do
   gem 'httplog'
   gem 'quiet_assets'
   gem 'rspec-rails'
+  gem 'rubocop-rspec'
 end
 
 group :development, :test do

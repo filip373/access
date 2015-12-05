@@ -1,91 +1,76 @@
 google_defaults: &google_defaults
-  domain_member_id: 'This little guy is in sec-config.'
+  application_name: Access
+  application_version: 0.0.1
+  defaults:
+    group:
+      archive: true
+      private: false
+  groups_whitelist: [/.*/]
   main_domain: netguru.pl
-  other_domains:
-    - netguru.co
-    - netguru.pl
+  managers:
+    groups: [support_group]
+  other_domains: [netguru.co, netguru.pl]
   scope:
-    - 'email'
-    - 'profile'
+    - email
+    - profile
     - 'https://www.googleapis.com/auth/plus.me'
     - 'https://www.googleapis.com/auth/apps.groups.settings'
     - 'https://www.googleapis.com/auth/admin.directory.user'
     - 'https://www.googleapis.com/auth/admin.directory.group'
     - 'https://www.googleapis.com/auth/admin.directory.user.security'
-  client_id: 'I couldnt possibly be any more in sec_config, than I am now. Just sayin'
-  client_secret: 'Same here, bro. Totally and utterly in sec_config. Chillin'
-  service_account_email: 'mail@sec_config'
-  p12_key_path: 'config/keys/google-service-account-key.p12'
-  p12_key_secret: 'notasecret'
-  supporter_email: 'supporter@your.company.dev'
-  application_name: 'Access'
-  application_version: '0.0.1'
-  managers:
-    groups:
-      - 'support_group'
-  groups_whitelist:
-    - /.*/
-  email:
-    account_using_instruction: |
-                                Short description how to use account creation details, how to login in using 2step. This should be overriden in sec-config.
-  defaults:
-    group:
-      private: false
-      archive: true
 
 defaults: &defaults
-  rollbar:
-    organization_token:
-    notification_token:
-  company: netguru
-  office_email: 'depens-on-environment'
   cache_data: true
-  permissions_repo:
-    url: http://url-to-repo-with-permissions
-    checkout_dir: 'tmp/permissions'
-  secret_key_base: "i-m-so-overriden-in-the-sec-config"
-  github:
-    client_id: a
-    client_secret: b
+  company: netguru-access-test
+  features:
+    generate_permissions: true
+    use_service_account: true
   google:
     <<: *google_defaults
+  github:
+    client_id:
+    client_secret:
   dataguru:
     api_url: 'https://dataguruapi.com'
-    access_token: 'secret-token-for-dataguru'
-  toggl_token: fake-token
+    access_token:
+  rollbar:
+    notification_token:
+    organization_token:
 
 test:
   <<: *defaults
+  company: netguru
+  office_email: dummy
+  secret_key_base: dummy
   permissions_repo:
-    checkout_dir: 'spec/get_diff_yamls'
+    checkout_dir: spec/get_diff_yamls
   google:
     <<: *google_defaults
-    groups_whitelist:
-      - 'group1@netguru.pl'
-  features:
-    use_service_account: true
-    generate_permissions: true
+    client_id: dummy
+    client_secret: dummy
+    domain_member_id: dummy
+    email:
+      account_using_instruction: dummy
+    groups_whitelist: [group1@netguru.pl]
 
 development:
   <<: *defaults
-  cache_data: true
-  features:
-    generate_permissions: true
-    use_service_account: true
+  office_email:
 
 staging:
   <<: *defaults
+  office_email:
 
 production:
   <<: *defaults
-  office_email: 'office@netguru.pl'
+  office_email: office@netguru.pl
   github:
-    client_id: <%= ENV["GH_CLIENT_ID"] %>
-    client_secret: <%= ENV["GH_CLIENT_SECRET"] %>
+    client_id: <%= ENV['GH_CLIENT_ID'] %>
+    client_secret: <%= ENV['GH_CLIENT_SECRET'] %>
   google:
-    client_id: <%= ENV["GOOGLE_CLIENT_ID"] %>
-    client_secret: <%= ENV["GOOGLE_CLIENT_SECRET"] %>
-    scope: <%= ENV["GOOGLE_SCOPE"] %>
+    client_id: <%= ENV['GOOGLE_CLIENT_ID'] %>
+    client_secret: <%= ENV['GOOGLE_CLIENT_SECRET'] %>
+    scope: <%= ENV['GOOGLE_SCOPE'] %>
   slack:
-    webhook_url: <%= ENV["SLACK_WEBHOOK_URL"] %>
-    default_channel: <%= ENV["SLACK_DEFAULT_CHANNEL"] %>
+    webhook_url: <%= ENV['SLACK_WEBHOOK_URL'] %>
+    default_channel: <%= ENV['SLACK_DEFAULT_CHANNEL'] %>
