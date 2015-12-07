@@ -9,7 +9,7 @@ module RollbarIntegration
     end
     expose(:rollbar_log) { Actions::Log.new(calculated_diff).now! }
     expose(:teams_cleanup) do
-      Actions::CleanupTeams.new(dataguru_teams, rollbar_teams, rollbar_api)
+      Actions::CleanupTeams.new(dataguru_teams, rollbar_teams, AuditedApi.new(rollbar_api))
     end
     expose(:missing_teams) { teams_cleanup.stranded_teams }
     expose(:diff_errors) { @diff.errors.uniq.sort { |a, b| a.to_s <=> b.to_s } }
@@ -30,7 +30,7 @@ module RollbarIntegration
     end
 
     def sync
-      SyncJob.new.perform(rollbar_api, calculated_diff)
+      SyncJob.new.perform(AuditedApi.new(rollbar_api), calculated_diff)
       reset_diff
     end
 

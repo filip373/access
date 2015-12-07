@@ -6,7 +6,7 @@ module GithubIntegration
     expose(:expected_teams) { GithubIntegration::Team.all(data_guru.github_teams) }
     expose(:gh_teams) { gh_api.list_teams }
     expose(:gh_log) { Actions::Log.new(calculated_diff).now! }
-    expose(:teams_cleanup) { Actions::CleanupTeams.new(expected_teams, gh_teams, gh_api) }
+    expose(:teams_cleanup) { Actions::CleanupTeams.new(expected_teams, gh_teams, AuditedApi.new(gh_api)) }
     expose(:missing_teams) { teams_cleanup.stranded_teams }
     expose(:diff_errors) { @diff.errors }
     expose(:user_repo) { UserRepository.new(data_guru.users.all) }
@@ -26,7 +26,7 @@ module GithubIntegration
     end
 
     def sync
-      SyncJob.new.perform(gh_api, calculated_diff)
+      SyncJob.new.perform(AuditedApi.new(gh_api), calculated_diff)
       reset_diff
     end
 

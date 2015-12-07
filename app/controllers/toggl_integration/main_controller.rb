@@ -17,11 +17,11 @@ module TogglIntegration
     end
 
     def sync
-      Actions::SyncJob.new(calculated_diff, toggl_api).call
+      Actions::SyncJob.new(calculated_diff, AuditedApi.new(toggl_api)).call
     end
 
     def cleanup_teams
-      Actions::CleanupTeams.new(missing_teams, toggl_api).call
+      Actions::CleanupTeams.new(missing_teams, AuditedApi.new(toggl_api)).call
     end
 
     private
