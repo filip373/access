@@ -22,7 +22,7 @@ RSpec.describe AuditedApi do
       subject
       expect(buffer_dev.buffer).to eq(
         <<-EOS
-INFO 2015-12-04 12:00:00 +0100: [Dummy] Called method: foo_bar_baz
+INFO 2015-12-04 12:00:00 +0100: [Dummy] Called method: foo_bar_baz(one, two)
   With args:    1, 1
   Got response: 2
 

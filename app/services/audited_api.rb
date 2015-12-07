@@ -11,7 +11,7 @@ class AuditedApi
     response = object.public_send(method_name, *args)
     logger.info(object.class.to_s) do
       <<-EOS
-Called method: #{method_name}
+Called method: #{method_name}(#{get_method_signature(method_name)})
   With args:    #{format_args(args)}
   Got response: #{format_response(response)}
       EOS
@@ -20,6 +20,10 @@ Called method: #{method_name}
   end
 
   private
+
+  def get_method_signature(method_name)
+    object.method(method_name).parameters.map(&:last).flatten.join(', ')
+  end
 
   def format_args(args)
     args.map do |arg|
