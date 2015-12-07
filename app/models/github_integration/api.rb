@@ -18,6 +18,7 @@ module GithubIntegration
         permission: permission,
       )
       yield(response) if block_given?
+      response
     end
 
     def remove_team(team)
