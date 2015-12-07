@@ -1,9 +1,9 @@
 class AuditedApi
-  attr_accessor :object, :logger
+  attr_reader :object, :logger
 
   def initialize(object, logger = AuditLogger.new(Rails.root.join('log', 'audit.log')))
-    self.object = object
-    self.logger = logger
+    @object = object
+    @logger = logger
   end
 
   def method_missing(*args)
