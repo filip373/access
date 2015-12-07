@@ -30,8 +30,8 @@ module TogglIntegration
 
     # name of the method was chosen here to keep compatible
     # with a convention used in this file
-    def list_all_tasks
-      list_projects_tasks
+    def list_all_tasks(id)
+      list_projects_tasks(id)
     end
 
     def deactivate_team(team_id)
