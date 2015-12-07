@@ -28,6 +28,12 @@ module TogglIntegration
         .map { |project_user| member_by_uid(project_user.uid) }
     end
 
+    # name of the method was chosen here to keep compatible
+    # with a convention used in this file
+    def list_all_tasks
+      list_projects_tasks
+    end
+
     def deactivate_team(team_id)
       params = { 'active' => false }
       toggl_client.update_project(team_id, params)
@@ -115,10 +121,6 @@ module TogglIntegration
       end
     end
 
-    # name of the method was chosen here to keep compatible
-    # with a convention used in this file
-    alias_method :list_all_tasks, :list_projects_tasks
-
     def activate_member(uid)
       workspace_user = list_all_members.find { |m| m['uid'] == uid }
       return workspace_user unless workspace_user['inactive']
@@ -129,7 +131,7 @@ module TogglIntegration
     def preload_projects_users_with_tasks(team_ids)
       input = Queue.new
       result = Queue.new
-      prepare_teams_ids(team_ids)
+      input << cleanup_team_ids(team_ids)
       threads = start_threads(input, result)
       threads.each(&:join)
       until result.empty?
@@ -139,8 +141,8 @@ module TogglIntegration
       end
     end
 
-    def prepare_teams_ids(team_ids)
-      team_ids.each { |team_id| input << team_id unless projects_users.key?(team_id.to_i) }
+    def cleanup_team_ids(team_ids)
+      team_ids.select { |team_id| projects_users.key?(team_id.to_i) }
     end
 
     def start_threads(input, result)
