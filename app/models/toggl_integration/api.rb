@@ -84,6 +84,25 @@ module TogglIntegration
       @workspace ||= toggl_client.workspaces.find { |w| w['name'] == company_name }
     end
 
+    def list_projects_tasks(team_id)
+      if projects_tasks.key?(team_id)
+        projects_tasks[team_id]
+      else
+        projects_tasks[team_id] = toggl_client.get_project_tasks(team_id)
+      end
+    end
+
+    def list_projects_users(team_id)
+      if projects_users.key?(team_id)
+        projects_users[team_id]
+      else
+        projects_users = toggl_client.get_project_users(team_id)
+        projects_users[team_id] = projects_users.each_with_object([]) do |pu, users|
+          users << ProjectUser.new(pu['id'], pu['uid'])
+        end
+      end
+    end
+
     private
 
     def member_by_uid(member_uid)
@@ -96,29 +115,8 @@ module TogglIntegration
       @projects_users ||= {}
     end
 
-    def list_projects_users(team_id)
-      team_id = team_id.to_i
-      if projects_users.key?(team_id)
-        projects_users[team_id]
-      else
-        projects_users = toggl_client.get_project_users(team_id)
-        projects_users[team_id] = projects_users.each_with_object([]) do |pu, users|
-          users << ProjectUser.new(pu['id'], pu['uid'])
-        end
-      end
-    end
-
     def projects_tasks
       @projects_tasks ||= {}
-    end
-
-    def list_projects_tasks(team_id)
-      team_id = team_id.to_i
-      if projects_tasks.key?(team_id)
-        projects_tasks[team_id]
-      else
-        projects_tasks[team_id] = toggl_client.get_project_tasks(team_id)
-      end
     end
 
     def activate_member(uid)
@@ -131,7 +129,7 @@ module TogglIntegration
     def preload_projects_users_with_tasks(team_ids)
       input = Queue.new
       result = Queue.new
-      input << cleanup_team_ids(team_ids)
+      cleanup_team_ids(team_ids, input)
       threads = start_threads(input, result)
       threads.each(&:join)
       until result.empty?
@@ -141,8 +139,8 @@ module TogglIntegration
       end
     end
 
-    def cleanup_team_ids(team_ids)
-      team_ids.select { |team_id| projects_users.key?(team_id.to_i) }
+    def cleanup_team_ids(team_ids, input)
+      team_ids.each { |team_id| input << team_id unless projects_users.key?(team_id.to_i) }
     end
 
     def start_threads(input, result)
@@ -157,8 +155,8 @@ module TogglIntegration
         until input_queue.empty?
           begin
             team_id = input_queue.pop(true)
-            project_users = api.send(:list_projects_users, team_id)
-            project_tasks = api.send(:list_projects_tasks, team_id)
+            project_users = api.list_projects_users(team_id)
+            project_tasks = api.list_projects_tasks(team_id)
             result_queue << [team_id, project_users, project_tasks]
           rescue ThreadError # normal if queue empty
           rescue RuntimeError => e
