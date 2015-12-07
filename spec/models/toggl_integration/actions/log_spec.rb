@@ -57,7 +57,7 @@ RSpec.describe TogglIntegration::Actions::Log do
 
   # rubocop:disable Metrics/LineLength
   context 'with changes' do
-    it { is_expected.to satisfy { |s| s.size == 11 } }
+    it { is_expected.to satisfy { |s| s.size == 10 } }
     it { is_expected.to include "[api] create team #{new_team.name}" }
     it { is_expected.to include "[api] add member #{diff[:create_teams][new_team][0].default_email} to team #{new_team.name}" }
     it { is_expected.to include "[api] add member #{diff[:add_members][team][0].default_email} to team #{team.name}" }
