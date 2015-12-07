@@ -25,7 +25,6 @@ module TogglIntegration
 
       def log_creating_tasks
         @diff_hash[:create_tasks].each do |team, tasks|
-          @log << "[api] create task for #{team.name}"
           tasks.each do |task|
             log_create_task(task, team)
           end
