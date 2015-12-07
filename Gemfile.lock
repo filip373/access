@@ -361,6 +361,7 @@ GEM
       oj
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
+    zonebie (0.5.1)
 
 PLATFORMS
   ruby
@@ -405,6 +406,7 @@ DEPENDENCIES
   thin
   timecop
   togglv8
+  zonebie
 
 BUNDLED WITH
    1.10.6

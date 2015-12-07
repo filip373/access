@@ -51,4 +51,5 @@ end
 
 group :test do
   gem 'timecop'
+  gem 'zonebie'
 end
