@@ -8,9 +8,22 @@ module TogglIntegration
         remove_members
         deactivate_members
         create_teams
+        create_tasks
+        remove_tasks
       end
 
       private
+
+      def create_tasks
+        diffs[:create_tasks].each do |team, tasks|
+          tasks.each { |task| toggl_api.add_task_to_project(task.name, team.id) }
+        end
+      end
+
+      def remove_tasks
+        pids = diffs[:remove_tasks].values.flatten.map(&:pid)
+        toggl_api.remove_tasks_from_project(pids)
+      end
 
       def add_members
         diffs[:add_members].each do |team, members|
@@ -35,7 +48,12 @@ module TogglIntegration
       def create_teams
         diffs[:create_teams].each do |team, members|
           new_team = toggl_api.create_team(team)
-          new_team = Team.new(new_team['name'], [], [new_team['name']], new_team['id'])
+          new_team = Team.new(
+            name: new_team['name'],
+            members: new_team['members'],
+            projects: [],
+            tasks: [new_team['tasks']],
+            id: new_team['id'])
           add_team_members(new_team, members)
         end
       end

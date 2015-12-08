@@ -1,11 +1,12 @@
 module TogglIntegration
   class Team
-    attr_reader :name, :members, :projects, :id
+    attr_reader :name, :members, :projects, :tasks, :id
 
-    def initialize(name, members, projects, id = nil)
+    def initialize(name:, members:, projects:, tasks:, id: nil)
       @name = name
       @members = members
       @projects = projects
+      @tasks = tasks
       @id = id
     end
 
@@ -13,6 +14,7 @@ module TogglIntegration
       {
         name: name,
         members: members.map(&:id).select(&:present?) || [],
+        tasks: tasks || [],
         projects: projects || [],
       }.stringify_keys.to_yaml
     end

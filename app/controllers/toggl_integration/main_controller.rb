@@ -35,7 +35,8 @@ module TogglIntegration
         @diff ||= Actions::Diff.new(expected_teams,
                                     current_teams,
                                     user_repo,
-                                    current_members_repository)
+                                    current_members_repository,
+                                    current_tasks_repository)
         @diff.call
       end
     end
@@ -53,6 +54,10 @@ module TogglIntegration
 
     def current_members_repository
       MemberRepository.build_from_toggl_api(toggl_api)
+    end
+
+    def current_tasks_repository
+      TaskRepository.build_from_toggl_api(toggl_api)
     end
   end
 end
