@@ -2,7 +2,7 @@ module TogglIntegration
   class Task
     attr_reader :id, :name, :pid, :wid
 
-    def initialize(id:, name:, pid:, wid: nil)
+    def initialize(id: nil, name:, pid:, wid: nil)
       @name = name
       @pid = pid
       @wid = wid
