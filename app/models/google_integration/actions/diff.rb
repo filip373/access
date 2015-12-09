@@ -73,10 +73,8 @@ module GoogleIntegration
           add, remove = compute_members(group, expected_members)
           @diff_hash[:add_members][group] = add if add.present?
           @diff_hash[:remove_members][group] = remove if remove.present?
-        else
-          if expected_members.present?
-            @diff_hash[:create_groups][group][:add_members] = expected_members
-          end
+        elsif expected_members.present?
+          @diff_hash[:create_groups][group][:add_members] = expected_members
         end
       end
 
@@ -89,9 +87,9 @@ module GoogleIntegration
         if group.respond_to?(:id)
           domain_membership = domain_membership?(group)
           difference_membership(expected_membership, domain_membership, group)
+        elsif expected_membership
+          @diff_hash[:create_groups][group][:add_membership] = expected_membership
         end
-        return unless expected_membership.present?
-        @diff_hash[:create_groups][group][:add_membership] = expected_membership
       end
 
       def difference_membership(expected, domain, group)
