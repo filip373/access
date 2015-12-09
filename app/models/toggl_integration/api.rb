@@ -61,7 +61,7 @@ module TogglIntegration
     end
 
     def remove_tasks_from_project(tasks_ids)
-      toggl_client.delete_task(tasks_ids.join(',')) unless tasks_ids.empty?
+      toggl_client.delete_task tasks_ids
     end
 
     def invite_member(member)

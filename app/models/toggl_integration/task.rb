@@ -1,11 +1,16 @@
 module TogglIntegration
   class Task
-    attr_reader :name, :pid, :wid
+    attr_reader :id, :name, :pid, :wid
 
-    def initialize(name:, pid:)
+    def initialize(id:, name:, pid:, wid: nil)
       @name = name
       @pid = pid
       @wid = wid
+      @id = id
+    end
+
+    def id?
+      !id.nil?
     end
 
     def wid?
@@ -31,6 +36,15 @@ module TogglIntegration
 
     def hash
       [name, pid].hash
+    end
+
+    def to_yaml
+      {
+        name: name,
+        members: members.map(&:id).select(&:present?) || [],
+        tasks: tasks || [],
+        projects: projects || [],
+      }.stringify_keys.to_yaml
     end
   end
 end
