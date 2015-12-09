@@ -15,21 +15,21 @@ module GoogleIntegration
         create_groups(diff[:create_groups])
         sync_groups_archive_settings(diff[:change_archive])
         sync_groups_privacy_settings(diff[:change_privacy])
-        call_sync_domain_memberships
-        call_sync_members
-        call_sync_aliases
+        call_sync_domain_memberships(diff)
+        call_sync_members(diff)
+        call_sync_aliases(diff)
       end
 
-      def call_sync_domain_memberships
-        sync_domain_memberships(diff[:add_membership], diff[:remove_membership]) if
-          diff[:remove_membership]
+      def call_sync_domain_memberships(diff)
+        return if diff[:remove_membership].nil?
+        sync_domain_memberships(diff[:add_membership], diff[:remove_membership])
       end
 
-      def call_sync_members
+      def call_sync_members(diff)
         sync_members(diff[:add_members], diff[:remove_members]) if diff[:remove_members]
       end
 
-      def call_sync_aliases
+      def call_sync_aliases(diff)
         sync_aliases(diff[:add_aliases], diff[:remove_aliases]) if diff[:remove_aliases]
       end
 
