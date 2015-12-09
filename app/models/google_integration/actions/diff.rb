@@ -73,7 +73,7 @@ module GoogleIntegration
           add, remove = compute_members(group, expected_members)
           @diff_hash[:add_members][group] = add if add.present?
           @diff_hash[:remove_members][group] = remove if remove.present?
-        elsif expected_members.present?
+        elsif expected_members.any?
           @diff_hash[:create_groups][group][:add_members] = expected_members
         end
       end
