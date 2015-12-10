@@ -5,33 +5,19 @@ module GoogleIntegration
         @google_api = google_api
       end
 
+      # rubocop:disable Metrics/AbcSize
       def now!(diff)
-        sync(diff)
+        create_groups(Array(diff[:create_groups]))
+        sync_groups_archive_settings(Array(diff[:change_archive]))
+        sync_groups_privacy_settings(Array(diff[:change_privacy]))
+        sync_domain_memberships(Array(diff[:add_membership]),
+                                Array(diff[:remove_membership]))
+        sync_members(Array(diff[:add_members]), Array(diff[:remove_members]))
+        sync_aliases(Array(diff[:add_aliases]), Array(diff[:remove_aliases]))
       end
+      # rubocop:enable Metrics/AbcSize
 
       private
-
-      def sync(diff)
-        create_groups(diff[:create_groups])
-        sync_groups_archive_settings(diff[:change_archive])
-        sync_groups_privacy_settings(diff[:change_privacy])
-        call_sync_domain_memberships
-        call_sync_members
-        call_sync_aliases
-      end
-
-      def call_sync_domain_memberships
-        sync_domain_memberships(diff[:add_membership], diff[:remove_membership]) if
-          diff[:remove_membership]
-      end
-
-      def call_sync_members
-        sync_members(diff[:add_members], diff[:remove_members]) if diff[:remove_members]
-      end
-
-      def call_sync_aliases
-        sync_aliases(diff[:add_aliases], diff[:remove_aliases]) if diff[:remove_aliases]
-      end
 
       def sync_members(members_to_add, members_to_remove)
         members_to_remove.each do |group, members|
