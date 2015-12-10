@@ -12,9 +12,9 @@ module GoogleIntegration
       private
 
       def sync(diff)
-        create_groups(diff[:create_groups])
-        sync_groups_archive_settings(diff[:change_archive])
-        sync_groups_privacy_settings(diff[:change_privacy])
+        create_groups(Array(diff[:create_groups]))
+        sync_groups_archive_settings(Array(diff[:change_archive]))
+        sync_groups_privacy_settings(Array(diff[:change_privacy]))
         call_sync_domain_memberships(diff)
         call_sync_members(diff)
         call_sync_aliases(diff)
