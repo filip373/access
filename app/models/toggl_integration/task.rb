@@ -9,20 +9,8 @@ module TogglIntegration
       @id = id
     end
 
-    def id?
-      !id.nil?
-    end
-
-    def wid?
-      !wid.nil?
-    end
-
     def name?
       !name.nil?
-    end
-
-    def project_id?
-      !pid.nil?
     end
 
     def ==(other)
@@ -35,7 +23,7 @@ module TogglIntegration
     end
 
     def hash
-      [name, pid].hash
+      [id, name, pid, wid].hash
     end
 
     def to_yaml
