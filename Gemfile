@@ -26,8 +26,7 @@ gem 'sass-rails'
 gem 'skylight'
 gem 'slack-notifier'
 gem 'sprockets'
-# waiting for https://github.com/kanet77/togglv8/pull/6
-gem 'togglv8', git: 'https://github.com/railsware/togglv8'
+gem 'togglv8', '~> 1.0.2'
 
 # deployment
 
