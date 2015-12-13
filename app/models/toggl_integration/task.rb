@@ -25,14 +25,5 @@ module TogglIntegration
     def hash
       [id, name, pid, wid].hash
     end
-
-    def to_yaml
-      {
-        name: name,
-        members: members.map(&:id).select(&:present?) || [],
-        tasks: tasks || [],
-        projects: projects || [],
-      }.stringify_keys.to_yaml
-    end
   end
 end
