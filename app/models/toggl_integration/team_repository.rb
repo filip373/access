@@ -47,9 +47,10 @@ module TogglIntegration
     end
 
     def self.team_tasks(api, team)
-      api.list_all_tasks(team['id']).map do |task|
-        Task.new(id: task['id'], name: task['name'], pid: team['id'], wid: team['wid'])
-      end
+      TogglIntegration::TaskRepository
+        .build_from_toggl_api(api)
+        .all
+        .select { |task| task.pid == team['id'] }
     end
 
     def self.team_members(api, team, user_repository)

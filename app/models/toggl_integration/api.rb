@@ -61,7 +61,8 @@ module TogglIntegration
     end
 
     def remove_tasks_from_project(tasks_ids)
-      toggl_client.delete_task tasks_ids
+      toggl_client.delete_task tasks_ids.first if tasks_ids.size == 1
+      toggl_client.delete_tasks tasks_ids
     end
 
     def invite_member(member)
