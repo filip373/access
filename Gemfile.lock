@@ -402,7 +402,7 @@ DEPENDENCIES
   slack-notifier
   sprockets
   thin
-  togglv8 (~> 1.0.2)
+  togglv8
 
 BUNDLED WITH
    1.10.6

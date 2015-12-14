@@ -2,7 +2,6 @@ source 'https://rubygems.org'
 
 gem 'rails', '~> 4.2'
 
-gem 'thin'
 gem 'attr_extras'
 gem 'awesome_print'
 gem 'celluloid'
@@ -26,7 +25,8 @@ gem 'sass-rails'
 gem 'skylight'
 gem 'slack-notifier'
 gem 'sprockets'
-gem 'togglv8', '~> 1.0.2'
+gem 'thin'
+gem 'togglv8'
 
 # deployment
 
