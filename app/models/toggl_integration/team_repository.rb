@@ -9,7 +9,7 @@ module TogglIntegration
     def self.build_from_data_guru(dg_client, user_repository, toggl_members_repository)
       teams = dg_client.toggl_teams.map do |team|
         members = prepare_members(team, user_repository, toggl_members_repository)
-        tasks = team.tasks.try(:map) { |repo_task| Task.new(name: repo_task, pid: team.id) }
+        tasks = team.tasks.try(:map) { |task| Task.new(id: nil, name: task, pid: team.id) }
         Team.new(name: team.name,
                  members: members || [],
                  projects: team.projects,
@@ -47,9 +47,10 @@ module TogglIntegration
     end
 
     def self.team_tasks(api, team)
-      api.list_all_tasks(team['id']).map do |task|
-        Task.new(name: task['name'], pid: team['id'])
-      end
+      TogglIntegration::TaskRepository
+        .build_from_toggl_api(api)
+        .all
+        .select { |task| task.pid == team['id'] }
     end
 
     def self.team_members(api, team, user_repository)

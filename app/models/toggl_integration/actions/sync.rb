@@ -21,7 +21,7 @@ module TogglIntegration
       end
 
       def remove_tasks
-        pids = diffs[:remove_tasks].values.flatten.map(&:pid)
+        pids = diffs[:remove_tasks].values.flatten.map(&:id)
         toggl_api.remove_tasks_from_project(pids)
       end
 

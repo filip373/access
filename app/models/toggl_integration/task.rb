@@ -1,23 +1,16 @@
 module TogglIntegration
   class Task
-    attr_reader :name, :pid, :wid
+    attr_reader :id, :name, :pid, :wid
 
-    def initialize(name:, pid:)
+    def initialize(id: nil, name:, pid:, wid: nil)
       @name = name
       @pid = pid
       @wid = wid
-    end
-
-    def wid?
-      !wid.nil?
+      @id = id
     end
 
     def name?
       !name.nil?
-    end
-
-    def project_id?
-      !pid.nil?
     end
 
     def ==(other)
@@ -30,7 +23,7 @@ module TogglIntegration
     end
 
     def hash
-      [name, pid].hash
+      [id, name, pid, wid].hash
     end
   end
 end

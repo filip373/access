@@ -10,9 +10,9 @@ describe TogglIntegration::Actions::Sync do
   let(:member2) { double(:member2, toggl_id?: true) }
   let(:member3) { double(:member3, toggl_id?: false, emails: ['john@doe.com'], id: 'jd') }
   let(:member4) { double(:member4, toggl_id?: true, emails: ['remove.him@google.com'], id: 'rh') }
-  let(:task_1) { double(:task_1, name: 'task_1', pid: '1') }
-  let(:task_2) { double(:task_2, name: 'task_2', pid: '2') }
-  let(:task_3) { double(:task_3, name: 'task_3', pid: '3') }
+  let(:task_1) { double(:task_1, name: 'task_1', id: '1') }
+  let(:task_2) { double(:task_2, name: 'task_2', id: '2') }
+  let(:task_3) { double(:task_3, name: 'task_3', id: '3') }
   let(:diffs) do
     {
       create_teams: { new_team1 => [member1], new_team2 => [member2, member3] },
