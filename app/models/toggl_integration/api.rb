@@ -89,7 +89,9 @@ module TogglIntegration
       if projects_tasks.key?(team_id)
         projects_tasks[team_id]
       else
-        projects_tasks[team_id] = toggl_client.get_project_tasks(team_id)
+        projects_tasks[team_id] = safe_fetch do
+          toggl_client.get_project_tasks(team_id)
+        end
       end
     end
 
@@ -97,7 +99,9 @@ module TogglIntegration
       if projects_users.key?(team_id)
         projects_users[team_id]
       else
-        projects_users = toggl_client.get_project_users(team_id)
+        projects_users = safe_fetch do
+          toggl_client.get_project_users(team_id)
+        end
         projects_users[team_id] = projects_users.each_with_object([]) do |pu, users|
           users << ProjectUser.new(pu['id'], pu['uid'])
         end
@@ -105,6 +109,18 @@ module TogglIntegration
     end
 
     private
+
+    def safe_fetch
+      tries ||= 10
+      yield
+    rescue RuntimeError => e
+      if e.message.include?('429') && !(tries -= 1).zero? # too many requests
+        sleep 1
+        retry
+      else
+        raise e
+      end
+    end
 
     def member_by_uid(member_uid)
       @members_by_uid ||=
