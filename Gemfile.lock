@@ -6,6 +6,16 @@ GIT
     capistrano-docker (0.2.3)
       capistrano (>= 3.1)
 
+GIT
+  remote: https://github.com/netguru/data_guru
+  revision: 1784c7597db9cf30431e4cbbe3337a8fde928fe6
+  branch: one-click-integration
+  specs:
+    data_guru (0.4.0)
+      activesupport
+      git
+      httparty
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -99,10 +109,6 @@ GEM
     coderay (1.1.0)
     colorize (0.7.7)
     columnize (0.9.0)
-    data_guru (0.4.0)
-      activesupport
-      git
-      httparty
     debug_inspector (0.0.2)
     decent_exposure (2.3.2)
     descendants_tracker (0.0.4)
@@ -367,7 +373,7 @@ DEPENDENCIES
   capistrano
   capistrano-docker!
   celluloid
-  data_guru
+  data_guru!
   decent_exposure
   font-awesome-rails
   github_api
