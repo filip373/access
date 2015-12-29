@@ -2,7 +2,7 @@ class UserRepository
   attr_accessor :users_data, :errors
 
   def initialize(users_data = nil)
-    @users_data = users_data || DataGuru::Client.new.users
+    @users_data = users_data || DataGuru::Client.new.members
     @errors = []
   end
 

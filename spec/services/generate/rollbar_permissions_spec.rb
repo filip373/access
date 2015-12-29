@@ -4,7 +4,7 @@ describe Generate::RollbarPermissions do
   include_context 'rollbar_api'
   include_context 'data_guru'
 
-  let(:user_repo) { UserRepository.new(data_guru.users) }
+  let(:user_repo) { UserRepository.new(data_guru.members) }
 
   before(:each) do
     allow(DataGuru::Client).to receive(:new).and_return(data_guru)

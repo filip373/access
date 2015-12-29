@@ -80,7 +80,7 @@ RSpec.shared_context 'data_guru' do
 
   let(:data_guru) do
     double.tap do |dg|
-      allow(dg).to receive(:users) { users }
+      allow(dg).to receive(:members) { users }
       allow_any_instance_of(Array).to receive(:all) { users }
       allow(dg).to receive(:github_teams) { github_teams }
       allow(dg).to receive(:google_groups) { google_groups }

@@ -1,6 +1,6 @@
 module TogglIntegration
   class GenerateController < ApplicationController
-    expose(:user_repo) { UserRepository.new(data_guru.users) }
+    expose(:user_repo) { UserRepository.new(data_guru.members) }
 
     def permissions
       Generate::TogglPermissions.new(

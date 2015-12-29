@@ -23,7 +23,7 @@ RSpec.describe GithubIntegration::TeamDiff do
       change_permissions: {},
     }
   end
-  let(:user_repo) { UserRepository.new(data_guru.users) }
+  let(:user_repo) { UserRepository.new(data_guru.members) }
 
   describe '#diff' do
     context 'run asyncronisouly' do

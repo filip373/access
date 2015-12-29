@@ -31,7 +31,7 @@ RSpec.describe GoogleIntegration::Actions::Diff do
       allow(api).to receive(:errors) { {} }
     end
   end
-  let(:user_repo) { UserRepository.new(data_guru.users) }
+  let(:user_repo) { UserRepository.new(data_guru.members) }
 
   before(:each) do
     allow(DataGuru::Client).to receive(:new).and_return(data_guru)

@@ -5,7 +5,7 @@ RSpec.describe GoogleIntegration::Actions::CreateAccounts do
   include_context 'data_guru'
 
   let(:accounts) { ['first.member', 'second.member'] }
-  let(:user_repo) { UserRepository.new(data_guru.users) }
+  let(:user_repo) { UserRepository.new(data_guru.members) }
   subject { described_class.new(google_api, user_repo).now!(accounts) }
   before do
     allow_any_instance_of(described_class).to receive(:sleep)

@@ -8,7 +8,7 @@ module TogglIntegration
     expose(:missing_teams) { calculated_diff[:missing_teams] }
     expose(:toggl_api) { Api.new(AppConfig.toggl_token, AppConfig.company) }
     expose(:workspace_id) { toggl_api.workspace['id'] }
-    expose(:user_repo) { UserRepository.new(data_guru.users.all) }
+    expose(:user_repo) { UserRepository.new(data_guru.members.all) }
 
     def show_diff
       reset_diff

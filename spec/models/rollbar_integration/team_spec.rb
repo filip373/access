@@ -5,7 +5,7 @@ RSpec.describe RollbarIntegration::Team do
   include_context 'data_guru'
 
   let(:team) { OpenStruct.new(id: 1, name: 'team1') }
-  let(:user_repo) { UserRepository.new(data_guru.users) }
+  let(:user_repo) { UserRepository.new(data_guru.members) }
 
   before(:each) do
     allow(DataGuru::Client).to receive(:new).and_return(data_guru)

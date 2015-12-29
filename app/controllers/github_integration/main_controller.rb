@@ -9,11 +9,11 @@ module GithubIntegration
     expose(:teams_cleanup) { Actions::CleanupTeams.new(expected_teams, gh_teams, gh_api) }
     expose(:missing_teams) { teams_cleanup.stranded_teams }
     expose(:diff_errors) { @diff.errors }
-    expose(:user_repo) { UserRepository.new(data_guru.users.all) }
+    expose(:user_repo) { UserRepository.new(data_guru.members.all) }
     expose(:insecure_users) do
       Actions::ListInsecureUsers.new(
         gh_api.list_org_members_without_2fa(AppConfig.company),
-        data_guru.users,
+        data_guru.members,
         data_guru.github_teams).call
     end
 
