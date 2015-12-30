@@ -61,7 +61,7 @@ module TogglIntegration
     end
 
     def remove_tasks_from_project(tasks_ids)
-      toggl_client.update_tasks(tasks_ids, active: false)
+      toggl_client.update_tasks(tasks_ids, active: false) if tasks_ids.any?
     end
 
     def invite_member(member)
