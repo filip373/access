@@ -124,7 +124,7 @@ module GoogleIntegration
       end
 
       def log_adding_user_aliases
-        @diff_hash[:adde_user_aliases].each do |user, aliases|
+        @diff_hash[:add_user_aliases].each do |user, aliases|
           aliases.each do |a|
             @log << "[api] add user alias #{a} to user #{user.email}"
           end
