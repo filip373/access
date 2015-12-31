@@ -168,6 +168,21 @@ module GoogleIntegration
       }
     end
 
+    def add_user_alias(google_user, google_user_alias)
+      request(
+        api_method: directory_api.users.aliases.insert,
+        parameters: { userKey: google_user },
+        body_object: { alias: google_user_alias },
+      )
+    end
+
+    def remove_user_alias(google_user, google_user_alias)
+      request(
+        api_method: directory_api.users.aliases.delete,
+        parameters: { userKey: google_user, alias: google_user_alias }
+      )
+    end
+
     def list_users
       request(
         api_method: directory_api.users.list,
