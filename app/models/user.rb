@@ -6,7 +6,8 @@ class User
     attr_reader :errors
   end
 
-  def initialize(name:, full_name: '', github: '', emails: [''], rollbar: '', external: false, aliases: [''])
+  def initialize(name:, full_name: '', github: '', emails: [''], rollbar: '',
+                 external: false, aliases: [''])
     @name = name
     @full_name = full_name
     @github = github

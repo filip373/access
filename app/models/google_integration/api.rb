@@ -179,7 +179,7 @@ module GoogleIntegration
     def remove_user_alias(google_user, google_user_alias)
       request(
         api_method: directory_api.users.aliases.delete,
-        parameters: { userKey: google_user, alias: google_user_alias }
+        parameters: { userKey: google_user, alias: google_user_alias },
       )
     end
 

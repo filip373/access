@@ -115,7 +115,7 @@ module GoogleIntegration
         end
       end
 
-      def  compute_user_aliases(google_aliases, dg_aliases)
+      def compute_user_aliases(google_aliases, dg_aliases)
         [dg_aliases - google_aliases, google_aliases - dg_aliases]
       end
 
