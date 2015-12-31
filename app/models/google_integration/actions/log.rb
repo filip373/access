@@ -126,7 +126,7 @@ module GoogleIntegration
       def log_adding_user_aliases
         @diff_hash[:add_user_aliases].each do |user, aliases|
           aliases.each do |a|
-            @log << "[api] add user alias #{a} to user #{user.email}"
+            @log << "[api] add user alias #{a} to user #{user.id}"
           end
         end if @diff_hash[:add_user_aliases]
       end
@@ -134,7 +134,7 @@ module GoogleIntegration
       def log_removing_user_aliases
         @diff_hash[:remove_user_aliases].each do |user, aliases|
           aliases.each do |a|
-            @log << "[api] remove user alias #{a} from user #{user.email}"
+            @log << "[api] remove user alias #{a} from user #{user.id}"
           end
         end if @diff_hash[:remove_user_aliases]
       end
