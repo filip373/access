@@ -23,6 +23,8 @@ module GoogleIntegration
         log_removing_memberships
         log_changing_archive
         log_changing_privacy
+        log_adding_user_aliases
+        log_removing_user_aliases
         no_changes_in_log
       end
 
@@ -119,6 +121,22 @@ module GoogleIntegration
             @log << "[api] remove alias #{a} from group #{group.email}"
           end
         end if @diff_hash[:remove_aliases]
+      end
+
+      def log_adding_user_aliases
+        @diff_hash[:adde_user_aliases].each do |user, aliases|
+          aliases.each do |a|
+            @log << "[api] add user alias #{a} to user #{user.email}"
+          end
+        end if @diff_hash[:add_user_aliases]
+      end
+
+      def log_removing_user_aliases
+        @diff_hash[:remove_user_aliases].each do |user, aliases|
+          aliases.each do |a|
+            @log << "[api] remove user alias #{a} from user #{user.email}"
+          end
+        end if @diff_hash[:remove_user_aliases]
       end
     end
   end
