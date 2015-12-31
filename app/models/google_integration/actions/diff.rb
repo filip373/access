@@ -20,7 +20,7 @@ module GoogleIntegration
       end
 
       def api_users
-        @api_users ||= @google_api.list_users
+        @api_users ||= @google_api.list_users.reject { |u| u['suspended'] }
       end
 
       private
