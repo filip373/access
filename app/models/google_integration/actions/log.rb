@@ -13,6 +13,7 @@ module GoogleIntegration
         generate_log
       end
 
+      # rubocop:disable Metrics/MethodLength
       def generate_log
         log_creating_groups
         log_adding_members
@@ -27,6 +28,7 @@ module GoogleIntegration
         log_removing_user_aliases
         no_changes_in_log
       end
+      # rubocop:enable Metrics/MethodLength
 
       private
 

@@ -106,6 +106,7 @@ module GoogleIntegration
         end
       end
 
+      # rubocop:disable Metrics/MethodLength
       def user_aliases_diff(google_users, dataguru_users)
         google_users.each do |google_user|
           begin
@@ -114,11 +115,12 @@ module GoogleIntegration
                                                dg_user.aliases)
             @diff_hash[:add_user_aliases][dg_user] = add
             @diff_hash[:remove_user_aliases][dg_user] = remove
-          rescue UserError => e
+          rescue UserError
             next
           end
         end
       end
+      # rubocop:enable Metrics/MethodLength
 
       def compute_user_aliases(google_aliases, dg_aliases)
         google_aliases = google_aliases.map { |a| a.split('@').first }

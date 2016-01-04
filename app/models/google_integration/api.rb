@@ -1,6 +1,7 @@
 require 'google/api_client'
 require 'google/api_client/client_secrets'
 
+# rubocop:disable Metrics/ClassLength
 module GoogleIntegration
   class Api
     attr_reader :errors, :authorization_client
