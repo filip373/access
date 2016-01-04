@@ -7,7 +7,7 @@ module GoogleIntegration
     private
 
     def ping_messages
-      notification_ping! 'Synchronizing google groups...'
+      notification_ping! 'Synchronizing google directory...'
       yield
       notification_ping! 'Synchronization done! High Five!'
     end

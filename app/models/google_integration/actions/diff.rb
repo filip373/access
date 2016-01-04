@@ -1,7 +1,7 @@
 module GoogleIntegration
   module Actions
     class Diff
-      attr_reader :api_groups
+      attr_reader :api_groups, :api_users
 
       def initialize(expected_groups, google_api, user_repo)
         @expected_groups = expected_groups
@@ -19,13 +19,18 @@ module GoogleIntegration
         @api_groups ||= @google_api.list_groups_full_info
       end
 
+      def api_users
+        @api_users ||= @google_api.list_users.reject { |u| u['suspended'] }
+      end
+
       private
 
       def empty_diff_hash
         {
           errors: {}, create_groups: {}, add_members: {}, change_privacy: {},
           remove_members: {}, add_aliases: {}, remove_aliases: {},
-          add_membership: {}, remove_membership: {}, change_archive: {}
+          add_membership: {}, remove_membership: {}, change_archive: {},
+          add_user_aliases: {}, remove_user_aliases: {}
         }
       end
 
@@ -36,6 +41,7 @@ module GoogleIntegration
           difference_resources(google_group, expected_group)
           domain_membership_diff(google_group, expected_group.domain_membership)
         end
+        user_aliases_diff(api_users, @repo)
         @diff_hash[:errors].update @google_api.errors
       end
 
@@ -98,6 +104,27 @@ module GoogleIntegration
         elsif domain && expected != domain
           @diff_hash[:remove_membership][group] = expected
         end
+      end
+
+      # rubocop:disable Metrics/MethodLength
+      def user_aliases_diff(google_users, dataguru_users)
+        google_users.each do |google_user|
+          begin
+            dg_user = dataguru_users.find_by_email(google_user['primaryEmail'])
+            add, remove = compute_user_aliases(google_user['aliases'] || [],
+                                               dg_user.aliases)
+            @diff_hash[:add_user_aliases][dg_user] = add
+            @diff_hash[:remove_user_aliases][dg_user] = remove
+          rescue UserError
+            next
+          end
+        end
+      end
+      # rubocop:enable Metrics/MethodLength
+
+      def compute_user_aliases(google_aliases, dg_aliases)
+        google_aliases = google_aliases.map { |a| a.split('@').first }
+        [dg_aliases - google_aliases, google_aliases - dg_aliases]
       end
 
       def aliases_diff(group, aliases)
