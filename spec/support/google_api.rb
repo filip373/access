@@ -37,7 +37,7 @@ RSpec.shared_context 'google_api' do
         name: 'first.member',
         email: 'first.member@netguru.pl',
         primaryEmail: 'member1@foo.pl',
-        aliases: ['firsto', 'elfirsto'],
+        aliases: %w(firsto elfirsto),
       ),
       Hashie::Mash.new(
         name: 'fourth.member',
@@ -49,7 +49,7 @@ RSpec.shared_context 'google_api' do
         name: 'first.member1',
         email: 'member1@foo.pl',
         primaryEmail: 'member3@foo.pl',
-        aliases: [],
+        aliases: nil,
       ),
     ]
   end

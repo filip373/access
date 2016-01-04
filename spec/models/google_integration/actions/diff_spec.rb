@@ -29,13 +29,13 @@ RSpec.describe GoogleIntegration::Actions::Diff do
       Hashie::Mash.new(
         name: 'first.member',
         primaryEmail: 'member1@foo.pl',
-        aliases: ['firsto', 'elfirsto']
+        aliases: %w(firsto elfirsto),
       ),
       Hashie::Mash.new(
         name: 'second.member',
         primaryEmail: 'member2@foo.pl',
         aliases: [],
-      )
+      ),
     ]
   end
   let(:new_group) { expected_groups.find { |g| g.name == 'new_group' } }

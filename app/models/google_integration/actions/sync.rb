@@ -100,7 +100,8 @@ module GoogleIntegration
       end
 
       def remove_user_alias(user, google_alias)
-        @google_api.remove_user_alias(user.email, google_alias)
+        google_email_alias = "#{google_alias}@#{AppConfig.google.main_domain}"
+        @google_api.remove_user_alias(user.emails.first, google_email_alias)
       end
 
       def remove_member(group, member)
@@ -124,7 +125,8 @@ module GoogleIntegration
       end
 
       def add_user_alias(user, google_alias)
-        @google_api.add_user_alias(user.email, google_alias)
+        google_email_alias = "#{google_alias}@#{AppConfig.google.main_domain}"
+        @google_api.add_user_alias(user.emails.first, google_email_alias)
       end
 
       def add_domain_membership(group)

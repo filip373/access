@@ -108,14 +108,20 @@ module GoogleIntegration
 
       def user_aliases_diff(google_users, dataguru_users)
         google_users.each do |google_user|
-          dg_user = dataguru_users.find_by_email(google_user['primaryEmail'])
-          add, remove = compute_user_aliases(google_user['aliases'], dg_user.aliases)
-          @diff_hash[:add_user_aliases][dg_user] = add
-          @diff_hash[:remove_user_aliases][dg_user] = remove
+          begin
+            dg_user = dataguru_users.find_by_email(google_user['primaryEmail'])
+            add, remove = compute_user_aliases(google_user['aliases'] || [],
+                                               dg_user.aliases)
+            @diff_hash[:add_user_aliases][dg_user] = add
+            @diff_hash[:remove_user_aliases][dg_user] = remove
+          rescue UserError => e
+            next
+          end
         end
       end
 
       def compute_user_aliases(google_aliases, dg_aliases)
+        google_aliases = google_aliases.map { |a| a.split('@').first }
         [dg_aliases - google_aliases, google_aliases - dg_aliases]
       end
 
