@@ -28,6 +28,7 @@ gem 'sprockets'
 gem 'thin'
 gem 'togglv8'
 
+gem 'sidekiq'
 # deployment
 
 gem 'airbrussh', require: false
