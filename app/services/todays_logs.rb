@@ -3,5 +3,7 @@ class TodaysLogs
     File.open(Rails.root.join('log/audit.log'), 'r') do |f|
       f.grep(/#{date.to_s}/)
     end
+  rescue
+    []
   end
 end
