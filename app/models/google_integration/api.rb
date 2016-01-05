@@ -15,6 +15,10 @@ module GoogleIntegration
       authorize_client!
     end
 
+    def namespace
+      @namespace ||= :google
+    end
+
     # groups
 
     def add_member(group_id, user_email)

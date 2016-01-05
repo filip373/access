@@ -7,6 +7,10 @@ module GithubIntegration
       self.company_name = company_name
     end
 
+    def namespace
+      @namespace ||= :github
+    end
+
     def client
       @client ||= Github.new(oauth_token: token, org: company_name, auto_pagination: true)
     end
