@@ -8,7 +8,9 @@ module GoogleIntegration
     expose(:google_log_errors) { log.errors }
     expose(:google_log) { log.log }
     expose(:groups_cleanup) do
-      Actions::CleanupGroups.new(expected_groups, AuditedApi.new(google_api, current_user), api_groups)
+      Actions::CleanupGroups.new(expected_groups,
+                                 AuditedApi.new(google_api, current_user),
+                                 api_groups)
     end
     expose(:missing_groups) { groups_cleanup.stranded_groups }
 
