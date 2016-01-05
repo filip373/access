@@ -8,7 +8,7 @@ module GithubIntegration
     expose(:gh_log) { Actions::Log.new(calculated_diff).now! }
     expose(:teams_cleanup) { Actions::CleanupTeams.new(expected_teams, gh_teams, gh_api) }
     expose(:missing_teams) { teams_cleanup.stranded_teams }
-    expose(:diff_errors) { @diff.errors }
+    expose(:diff_errors) { @diff_errors }
     expose(:user_repo) { UserRepository.new(data_guru.users.all) }
     expose(:insecure_users) do
       Actions::ListInsecureUsers.new(
@@ -19,10 +19,18 @@ module GithubIntegration
 
     after_filter :clean_diff_actor
 
+    def calculate_diff
+      self.gh_log = []
+      diff_status = Rails.cache.fetch('github_performing_diff')
+      if diff_status.nil?
+        data_guru.refresh
+        ::GithubWorkers::DiffWorker.perform_async(session[:gh_token])
+      else diff_status == false
+        redirect_to github_show_diff_path
+      end
+    end
+
     def show_diff
-      reset_diff
-      data_guru.refresh
-      calculated_diff
     end
 
     def sync
@@ -34,17 +42,25 @@ module GithubIntegration
       teams_cleanup.now!
     end
 
+    def refresh_cache
+      reset_diff
+      redirect_to github_calculate_diff_path
+    end
+
     private
 
     def reset_diff
-      Rails.cache.delete 'github_calculated_diff'
+      Rails.cache.delete('github_calculated_diff')
+      Rails.cache.delete('github_calculated_errors')
+      Rails.cache.delete('github_performing_diff')
     end
 
     def calculated_diff
-      Rails.cache.fetch 'github_calculated_diff' do
-        @diff ||= Actions::Diff.new(expected_teams, gh_teams, gh_api, user_repo)
-        @diff.now!
-      end
+      Rails.cache.fetch('github_calculated_diff')
+    end
+
+    def calc_diff_errors
+      Rails.cache.fetch('github_calculated_errors')
     end
 
     def clean_diff_actor
