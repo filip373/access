@@ -1,5 +1,6 @@
 GithubApp::Application.routes.draw do
   root 'main#index'
+  get '/todays-logs', to: 'main#todays_logs', as: :todays_logs
 
   # AUTH
 
