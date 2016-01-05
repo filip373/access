@@ -17,6 +17,8 @@ GithubApp::Application.routes.draw do
   namespace :github, module: :github_integration do
     controller :main do
       get :show_diff
+      get :calculate_diff
+      get :refresh_cache
       post :sync
       delete :cleanup_teams
     end
