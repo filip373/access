@@ -8,7 +8,6 @@ RSpec.describe GithubIntegration::MainController do
     allow(controller).to receive(:gh_auth_required).and_return(true)
     allow(GithubIntegration::Api).to receive(:new).and_return(gh_api)
     allow(DataGuru::Client).to receive(:new).and_return(data_guru)
-    allow(GithubWorkers::DiffWorker).to receive(:perform_async)
   end
 
   describe 'GET calculate_diff' do
@@ -29,6 +28,26 @@ RSpec.describe GithubIntegration::MainController do
       end
 
       it { expect(response).to redirect_to(:github_show_diff) }
+    end
+  end
+
+  describe 'GET refresh_cache' do
+    before do
+      Rails.cache.write('github_calculated_diff', {})
+      Rails.cache.write('github_calculated_errors', [])
+      Rails.cache.write('github_performing_diff', false)
+    end
+
+    it 'clear cache' do
+      get :refresh_cache
+      expect(Rails.cache.read('github_calculated_diff')).to be_nil
+      expect(Rails.cache.read('github_calculated_errors')).to be_nil
+      expect(Rails.cache.read('github_performing_diff')).to be_nil
+    end
+
+    it 'redirects to calculating diff page' do
+      get :refresh_cache
+      expect(response).to redirect_to(:github_calculate_diff)
     end
   end
 
