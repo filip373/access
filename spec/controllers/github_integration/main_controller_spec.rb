@@ -8,32 +8,34 @@ RSpec.describe GithubIntegration::MainController do
     allow(controller).to receive(:gh_auth_required).and_return(true)
     allow(GithubIntegration::Api).to receive(:new).and_return(gh_api)
     allow(DataGuru::Client).to receive(:new).and_return(data_guru)
+    allow(GithubWorkers::DiffWorker).to receive(:perform_async)
+  end
+
+  describe 'GET calculate_diff' do
+    context 'without cache' do
+      it 'renders calculating diff page' do
+        Rails.cache.delete('github_performing_diff')
+        get :calculate_diff
+        expect(response).to render_template('calculate_diff')
+      end
+    end
+
+    context 'with cache' do
+      before do
+        Rails.cache.fetch('github_performing_diff') do
+          true
+        end
+        get :calculate_diff
+      end
+
+      it { expect(response).to redirect_to(:github_show_diff) }
+    end
   end
 
   describe 'GET show_diff' do
     before { get :show_diff }
 
-    it { expect(controller.gh_log).to be_a Array }
-    it { expect(controller.validation_errors).to be_a Array }
-    it { expect(controller.missing_teams).to be_a Array }
     it { expect(response).to render_template('show_diff') }
-
-    it 'run diff action once' do
-      allow(GithubIntegration::Actions::Diff).to receive(:new)
-      controller.send(:calculated_diff)
-      expect(GithubIntegration::Actions::Diff).to_not have_received(:new)
-    end
-
-    it 'caches gh_diff value' do
-      expect(Rails.cache.read('github_calculated_diff')).to_not be_nil
-      expect(Rails.cache.read('github_calculated_diff')).to be_a Hash
-      expect(Rails.cache.read('github_calculated_diff')).to_not be_empty
-    end
-
-    it 'terminates diff actor' do
-      diff = assigns(:diff)
-      expect(diff.alive?).to_not eq(true)
-    end
   end
 
   describe 'POST sync' do
@@ -44,7 +46,7 @@ RSpec.describe GithubIntegration::MainController do
     it 'resets cache' do
       allow(Rails.cache).to receive(:delete)
       post :sync
-      expect(Rails.cache).to have_received(:delete)
+      expect(Rails.cache).to have_received(:delete).exactly(3).times
     end
 
     it 'use cached gh_diff value' do
