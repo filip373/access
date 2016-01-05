@@ -1,6 +1,5 @@
 module GithubWorkers
   class Base
-
     private
 
     def data_guru

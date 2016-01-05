@@ -25,7 +25,7 @@ module GithubIntegration
       if diff_status.nil?
         data_guru.refresh
         ::GithubWorkers::DiffWorker.perform_async(session[:gh_token])
-      else diff_status == false
+      elsif diff_status == false
         redirect_to github_show_diff_path
       end
     end
