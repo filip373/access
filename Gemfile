@@ -49,3 +49,7 @@ end
 group :development, :test do
   gem 'letter_opener'
 end
+
+group :test do
+  gem 'rspec-sidekiq'
+end
