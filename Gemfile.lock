@@ -112,10 +112,6 @@ GEM
     concurrent-ruby (1.0.0)
     connection_pool (2.2.0)
     daemons (1.2.3)
-    data_guru (0.4.0)
-      activesupport
-      git
-      httparty
     debug_inspector (0.0.2)
     decent_exposure (2.3.2)
     descendants_tracker (0.0.4)
