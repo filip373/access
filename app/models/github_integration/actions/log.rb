@@ -39,7 +39,7 @@ module GithubIntegration
             end
           end
 
-          unless h[:add_permissions].empty?
+          unless h[:add_permissions].blank?
             @log << "[api] add permissions #{team.name} - #{h[:add_permissions]}"
           end
         end

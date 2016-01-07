@@ -15,7 +15,7 @@ class UserRepository
         users_data.find { |u| u.id == name }
       end
     user || fail(UserError,
-                 "Unknown user #{name}. It's not in directory users or it is in wrong directory")
+                 "Unknown user #{name}. It's not in members/ directory or it is in wrong directory")
   end
 
   def find_by_email(email)
