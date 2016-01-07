@@ -44,7 +44,7 @@ class AuditedApi
   end
 
   def get_arg_value(arg)
-    arg.try(:name) || arg.try(:fetch, :email, nil) || arg.try(:default_email) || arg.to_s
+    arg.try(:name) || arg.try(:default_email) || arg.to_s
   end
 
   def username

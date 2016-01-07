@@ -29,10 +29,12 @@ en:
     remove_member_from_team: "remove member %{user_id} from team %{team_id}"
     invite_member_to_team: "invite member %{email} to team %{team_id}"
     cancel_invitation: "cancel invitation %{invitation_id}"
-  toggle:
+  toggl:
     deactivate_team: "deactivate team %{team_id}"
     add_member_to_team: "add member %{member} to team %{team}"
     remove_member_from_team: "remove member %{member} from team %{team}"
     invite_member: "invite member %{member}"
     deactivate_member: "deactivate member %{member}"
     create_team: "create team %{team}"
+    add_task_to_project: "add task %{task_name} to project %{project_id}"
+    remove_tasks_from_project: "remove tasks %{tasks_ids}"
