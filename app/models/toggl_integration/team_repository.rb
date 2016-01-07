@@ -20,7 +20,7 @@ module TogglIntegration
           toggl_id = toggl_member.toggl_id if toggl_member
           Member.new(emails: emails, id: repo_member, toggl_id: toggl_id)
         end
-        Team.new(team.name, members || [], team.projects)
+        Team.new(team.name, members || [], team.project)
       end
       new(all: teams)
     end
