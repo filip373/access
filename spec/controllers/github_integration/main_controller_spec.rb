@@ -65,7 +65,9 @@ RSpec.describe GithubIntegration::MainController do
     it 'resets cache' do
       allow(Rails.cache).to receive(:delete)
       post :sync
-      expect(Rails.cache).to have_received(:delete).exactly(3).times
+      expect(Rails.cache).to have_received(:delete).with('github_calculated_diff')
+      expect(Rails.cache).to have_received(:delete).with('github_calculated_errors')
+      expect(Rails.cache).to have_received(:delete).with('github_performing_diff')
     end
 
     it 'use cached gh_diff value' do
