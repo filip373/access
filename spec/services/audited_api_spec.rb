@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe AuditedApi do
-  let(:now) { Time.parse('2015-12-04 12:00') }
+  let(:now) { Time.zone.parse('2015-12-04 12:00') }
   before { Timecop.freeze(now) }
   before { I18n.backend.store_translations(:en, dummy: { foo_bar_baz: '%{one} + %{two}' }) }
   before { I18n.backend.store_translations(:en, dummy: { fizz_bazz: 'name: %{object_with_name}' }) }
@@ -18,7 +18,9 @@ RSpec.describe AuditedApi do
 
     it 'logs the message' do
       subject
-      expect(buffer_dev.buffer).to eq "#{now}: [#{dummy_instance.namespace}] #{user.email} -- ERROR -- 1 + 1\n"
+      expect(buffer_dev.buffer).to eq(
+        "#{now}: [#{dummy_instance.namespace}] #{user.email} -- ERROR -- 1 + 1\n",
+      )
     end
 
     it 'returns the proxied method response' do
@@ -31,7 +33,9 @@ RSpec.describe AuditedApi do
 
       it 'logs the the name' do
         subject
-        expect(buffer_dev.buffer).to eq "#{now}: [#{dummy_instance.namespace}] #{user.email} -- ERROR -- name: Szymon\n"
+        expect(buffer_dev.buffer).to eq(
+          "#{now}: [#{dummy_instance.namespace}] #{user.email} -- ERROR -- name: Szymon\n",
+        )
       end
     end
   end
