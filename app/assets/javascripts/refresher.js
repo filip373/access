@@ -5,7 +5,7 @@ $(document).ready(function() {
     setInterval(function() {
       elem.html("Wait " + seconds + " seconds or ");
       seconds--;
-      if(seconds == 0) {
+      if(seconds === 0) {
         location.reload();
       }
     }, 1000);
