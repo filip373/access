@@ -11,7 +11,7 @@ module GithubWorkers
     end
 
     def user_repo
-      @user_repo ||= UserRepository.new(data_guru.users.all)
+      @user_repo ||= UserRepository.new(data_guru.members.all)
     end
 
     def gh_api
