@@ -11,6 +11,7 @@ GithubApp::Application.configure do
   config.active_support.deprecation = :notify
 
   config.log_formatter = ::Logger::Formatter.new
+  config.active_job.queue_adapter = :sidekiq
 
 
 
