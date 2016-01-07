@@ -1,7 +1,11 @@
+require 'sidekiq/web'
 GithubApp::Application.routes.draw do
   root 'main#index'
   get '/todays-logs', to: 'main#todays_logs', as: :todays_logs
 
+  constraints lambda { |request| request.session[:gh_token].present? } do
+    mount Sidekiq::Web => '/sidekiq'
+  end
   # AUTH
 
   scope :auth do
@@ -18,6 +22,8 @@ GithubApp::Application.routes.draw do
   namespace :github, module: :github_integration do
     controller :main do
       get :show_diff
+      get :calculate_diff
+      get :refresh_cache
       post :sync
       delete :cleanup_teams
     end

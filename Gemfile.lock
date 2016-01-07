@@ -99,6 +99,8 @@ GEM
     coderay (1.1.0)
     colorize (0.7.7)
     columnize (0.9.0)
+    concurrent-ruby (1.0.0)
+    connection_pool (2.2.0)
     daemons (1.2.3)
     data_guru (0.4.0)
       activesupport
@@ -254,6 +256,8 @@ GEM
     quiet_assets (1.1.0)
       railties (>= 3.1, < 5.0)
     rack (1.6.4)
+    rack-protection (1.5.3)
+      rack
     rack-test (0.6.3)
       rack (>= 1.0)
     rails (4.2.4)
@@ -285,6 +289,7 @@ GEM
     rb-fsevent (0.9.6)
     rb-inotify (0.9.5)
       ffi (>= 0.5.0)
+    redis (3.2.2)
     retriable (1.4.1)
     rollbar (2.4.0)
       multi_json
@@ -308,6 +313,9 @@ GEM
       rspec-expectations (~> 3.3.0)
       rspec-mocks (~> 3.3.0)
       rspec-support (~> 3.3.0)
+    rspec-sidekiq (2.1.0)
+      rspec (~> 3.0, >= 3.0.0)
+      sidekiq (>= 2.4.0)
     rspec-support (3.3.0)
     rubocop (0.34.2)
       astrolabe (~> 1.3)
@@ -325,12 +333,20 @@ GEM
       sprockets-rails (>= 2.0, < 4.0)
       tilt (>= 1.1, < 3)
     shellany (0.0.1)
+    sidekiq (4.0.2)
+      concurrent-ruby (~> 1.0)
+      connection_pool (~> 2.2, >= 2.2.0)
+      redis (~> 3.2, >= 3.2.1)
     signet (0.6.1)
       addressable (~> 2.3)
       extlib (~> 0.9)
       faraday (~> 0.9)
       jwt (~> 1.5)
       multi_json (~> 1.10)
+    sinatra (1.4.6)
+      rack (~> 1.4)
+      rack-protection (~> 1.4)
+      tilt (>= 1.3, < 3)
     skylight (0.8.1)
       activesupport (>= 3.0.0)
     slack-notifier (1.3.1)
@@ -398,8 +414,11 @@ DEPENDENCIES
   rails (~> 4.2)
   rollbar
   rspec-rails
+  rspec-sidekiq
   rubocop-rspec
   sass-rails
+  sidekiq
+  sinatra
   skylight
   slack-notifier
   sprockets

@@ -13,4 +13,5 @@ GithubApp::Application.configure do
   config.log_formatter = ::Logger::Formatter.new
   config.action_mailer.delivery_method = :test
   config.action_mailer.perform_deliveries = :test
+  config.active_job.queue_adapter = :inline
 end

@@ -28,6 +28,8 @@ gem 'sprockets'
 gem 'thin'
 gem 'togglv8'
 
+gem 'sinatra', require: false
+gem 'sidekiq'
 # deployment
 
 gem 'airbrussh', require: false
@@ -50,6 +52,7 @@ group :development, :test do
 end
 
 group :test do
+  gem 'rspec-sidekiq'
   gem 'timecop'
   gem 'zonebie'
 end
