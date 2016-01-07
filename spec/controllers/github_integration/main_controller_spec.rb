@@ -22,7 +22,7 @@ RSpec.describe GithubIntegration::MainController do
     context 'with cache' do
       before do
         Rails.cache.fetch('github_performing_diff') do
-          true
+          false
         end
         get :calculate_diff
       end
