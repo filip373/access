@@ -11,6 +11,10 @@ module TogglIntegration
       @token = token
     end
 
+    def namespace
+      @namespace ||= :toggl
+    end
+
     def list_teams(preload_members: true)
       @teams ||= toggl_client.projects(workspace['id'], active: true)
       return @teams unless preload_members

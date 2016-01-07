@@ -1,0 +1,8 @@
+.container
+  .row
+    - if todays_logs.any?
+      %code.col-xs-12
+        - todays_logs.each do |log|
+          %p= log
+    - else
+      %h1.text-center No syncs done today

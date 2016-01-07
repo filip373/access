@@ -5,5 +5,5 @@
     .collapse.navbar-collapse
       %ul.nav.navbar-nav
       %ul.nav.navbar-nav.navbar-right
-        %li
-          = link_to 'relogin google', google_oauth2_path if session[:credentials].present?
+        %li= link_to 'Todays logs', todays_logs_path
+        %li= link_to 'relogin google', google_oauth2_path if session[:credentials].present?
