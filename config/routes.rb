@@ -1,7 +1,10 @@
 require 'sidekiq/web'
 GithubApp::Application.routes.draw do
   root 'main#index'
-  mount Sidekiq::Web => '/sidekiq'
+
+  constraints lambda { |request| request.session[:gh_token].present? } do
+    mount Sidekiq::Web => '/sidekiq'
+  end
   # AUTH
 
   scope :auth do
