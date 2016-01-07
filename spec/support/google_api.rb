@@ -36,14 +36,21 @@ RSpec.shared_context 'google_api' do
       Hashie::Mash.new(
         name: 'first.member',
         email: 'first.member@netguru.pl',
-        primaryEmail: 'first.member@netguru.pl',
+        primaryEmail: 'member1@foo.pl',
+        aliases: %w(firsto elfirsto),
       ),
       Hashie::Mash.new(
         name: 'fourth.member',
         email: 'fourth@netguru.pl',
-        primaryEmail: 'fourth@netguru.pl',
+        primaryEmail: 'member2@foo.pl',
+        aliases: ['secundo'],
       ),
-      Hashie::Mash.new(id: AppConfig.google.domain_member_id),
+      Hashie::Mash.new(
+        name: 'first.member1',
+        email: 'member1@foo.pl',
+        primaryEmail: 'member3@foo.pl',
+        aliases: nil,
+      ),
     ]
   end
 end

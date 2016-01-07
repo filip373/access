@@ -1,6 +1,7 @@
 require 'google/api_client'
 require 'google/api_client/client_secrets'
 
+# rubocop:disable Metrics/ClassLength
 module GoogleIntegration
   class Api
     attr_reader :errors, :authorization_client
@@ -12,6 +13,10 @@ module GoogleIntegration
       @credentials = credentials
       @authorization_client = authorization.new(credentials: credentials).authorize!
       authorize_client!
+    end
+
+    def namespace
+      @namespace ||= :google
     end
 
     # groups
@@ -166,6 +171,21 @@ module GoogleIntegration
           password: params[:password],
         },
       }
+    end
+
+    def add_user_alias(google_user, google_user_alias)
+      request(
+        api_method: directory_api.users.aliases.insert,
+        parameters: { userKey: google_user },
+        body_object: { alias: google_user_alias },
+      )
+    end
+
+    def remove_user_alias(google_user, google_user_alias)
+      request(
+        api_method: directory_api.users.aliases.delete,
+        parameters: { userKey: google_user, alias: google_user_alias },
+      )
     end
 
     def list_users

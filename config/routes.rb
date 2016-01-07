@@ -1,6 +1,7 @@
 require 'sidekiq/web'
 GithubApp::Application.routes.draw do
   root 'main#index'
+  get '/todays-logs', to: 'main#todays_logs', as: :todays_logs
 
   constraints lambda { |request| request.session[:gh_token].present? } do
     mount Sidekiq::Web => '/sidekiq'

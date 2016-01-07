@@ -53,4 +53,6 @@ end
 
 group :test do
   gem 'rspec-sidekiq'
+  gem 'timecop'
+  gem 'zonebie'
 end

@@ -24,11 +24,26 @@ RSpec.describe GoogleIntegration::Actions::Diff do
       whoCanViewGroup: 'ALL_MEMBERS_CAN_VIEW',
     )
   end
+  let(:members) do
+    [
+      Hashie::Mash.new(
+        name: 'first.member',
+        primaryEmail: 'member1@foo.pl',
+        aliases: %w(firsto elfirsto),
+      ),
+      Hashie::Mash.new(
+        name: 'second.member',
+        primaryEmail: 'member2@foo.pl',
+        aliases: [],
+      ),
+    ]
+  end
   let(:new_group) { expected_groups.find { |g| g.name == 'new_group' } }
   let(:google_api) do
     double.tap do |api|
       allow(api).to receive(:list_groups_full_info) { [group1] }
       allow(api).to receive(:errors) { {} }
+      allow(api).to receive(:list_users) { members }
     end
   end
   let(:user_repo) { UserRepository.new(data_guru.users) }
@@ -56,6 +71,18 @@ RSpec.describe GoogleIntegration::Actions::Diff do
     end
     it { expect(subject[:create_groups][new_group][:add_aliases]).to eq %w(alias1 alias2) }
     it { expect(subject[:create_groups][new_group][:add_membership]).to eq(true) }
+  end
+
+  context 'user aliases' do
+    it 'correctly computes aliases to add' do
+      expect(subject[:add_user_aliases][data_guru.users[0]]).to eq([])
+      expect(subject[:add_user_aliases][data_guru.users[1]]).to eq(['secundo'])
+    end
+
+    it 'correcly computes aliases to remove' do
+      expect(subject[:remove_user_aliases][data_guru.users[0]]).to eq(['elfirsto'])
+      expect(subject[:remove_user_aliases][data_guru.users[1]]).to eq([])
+    end
   end
 
   describe '#privacy_diff' do

@@ -6,6 +6,10 @@ module RollbarIntegration
       self.client = Client.new(token)
     end
 
+    def namespace
+      @namespace ||= :rollbar
+    end
+
     def list_teams
       client.get('/api/1/teams')
         .reject { |e| e.name == 'Owners' }
