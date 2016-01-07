@@ -1,6 +1,7 @@
+require 'sidekiq/web'
 GithubApp::Application.routes.draw do
   root 'main#index'
-
+  mount Sidekiq::Web => '/sidekiq'
   # AUTH
 
   scope :auth do
