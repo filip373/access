@@ -28,6 +28,7 @@ gem 'sprockets'
 gem 'thin'
 gem 'togglv8'
 
+gem 'sinatra', require: false
 gem 'sidekiq'
 # deployment
 
