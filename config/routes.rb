@@ -14,6 +14,14 @@ GithubApp::Application.routes.draw do
     end
   end
 
+  namespace :one_click, module: :one_click_integration do
+    controller :main do
+      get :show_diff
+      post :sync
+      delete :cleanup_all
+    end
+  end
+
   namespace :github, module: :github_integration do
     controller :main do
       get :show_diff
