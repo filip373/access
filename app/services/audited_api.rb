@@ -1,5 +1,4 @@
 class AuditedApi
-  SUCCESSFUL_STATUS_CODES = 200...300
   attr_reader :object, :user, :logger
 
   def initialize(object, user, logger = AuditLogger.new(Rails.root.join('log', 'audit.log')))
@@ -26,7 +25,7 @@ class AuditedApi
 
   def log(method_name, response, arguments)
     args = map_arguments(method_name, arguments)
-    result = SUCCESSFUL_STATUS_CODES.include?(status_code(response).to_i) ? 'OK' : 'ERROR'
+    result = response.nil? ? 'ERROR' : 'OK'
     "#{username} -- #{result} -- #{I18n.t(method_name, args)}"
   end
 

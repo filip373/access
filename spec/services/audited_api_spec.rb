@@ -19,7 +19,7 @@ RSpec.describe AuditedApi do
     it 'logs the message' do
       subject
       expect(buffer_dev.buffer).to eq(
-        "#{now}: [#{dummy_instance.namespace}] #{user.email} -- ERROR -- 1 + 1\n",
+        "#{now}: [#{dummy_instance.namespace}] #{user.email} -- OK -- 1 + 1\n",
       )
     end
 
@@ -34,7 +34,7 @@ RSpec.describe AuditedApi do
       it 'logs the the name' do
         subject
         expect(buffer_dev.buffer).to eq(
-          "#{now}: [#{dummy_instance.namespace}] #{user.email} -- ERROR -- name: Szymon\n",
+          "#{now}: [#{dummy_instance.namespace}] #{user.email} -- OK -- name: Szymon\n",
         )
       end
     end
