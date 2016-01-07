@@ -25,6 +25,7 @@ describe TogglIntegration::TeamRepository do
         .with(member2['email']) { OpenStruct.new(id: 'jane.kovalsky') }
       allow(user_repo).to receive(:find_by_email)
         .with(member3['email']) { OpenStruct.new(id: 'james.bond') }
+      allow(team_repo).to receive(:list_all_tasks) { [] }
     end
 
     it 'creates a repo object' do

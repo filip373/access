@@ -11,11 +11,15 @@ module TogglIntegration
       @token = token
     end
 
+    def namespace
+      @namespace ||= :toggl
+    end
+
     def list_teams(preload_members: true)
       @teams ||= toggl_client.projects(workspace['id'], active: true)
       return @teams unless preload_members
       team_ids = @teams.map { |team| team['id'] }
-      preload_projects_users(team_ids)
+      preload_projects_users_with_tasks(team_ids)
       @teams
     end
 
@@ -26,6 +30,12 @@ module TogglIntegration
     def list_team_members(team_id)
       list_projects_users(team_id)
         .map { |project_user| member_by_uid(project_user.uid) }
+    end
+
+    # name of the method was chosen here to keep compatible
+    # with a convention used in this file
+    def list_all_tasks(id)
+      list_projects_tasks(id)
     end
 
     def deactivate_team(team_id)
@@ -49,6 +59,15 @@ module TogglIntegration
       toggl_client.delete_project_user(project_user_id)
     end
 
+    def add_task_to_project(task_name, project_id)
+      params = { name: task_name, pid: project_id, wid: workspace['id'] }
+      toggl_client.create_task(params.stringify_keys)
+    end
+
+    def remove_tasks_from_project(tasks_ids)
+      toggl_client.update_tasks(tasks_ids, active: false) if tasks_ids.any?
+    end
+
     def invite_member(member)
       toggl_client.invite_member(workspace['id'], member.default_email)
     end
@@ -66,12 +85,45 @@ module TogglIntegration
     end
 
     def workspace
-      @workspace ||= toggl_client.workspaces.find do |w|
-        w['name'] == company_name
+      @workspace ||= toggl_client.workspaces.find { |w| w['name'] == company_name }
+    end
+
+    def list_projects_tasks(team_id)
+      if projects_tasks.key?(team_id)
+        projects_tasks[team_id]
+      else
+        projects_tasks[team_id] = safe_fetch do
+          toggl_client.get_project_tasks(team_id)
+        end
+      end
+    end
+
+    def list_projects_users(team_id)
+      if projects_users.key?(team_id)
+        projects_users[team_id]
+      else
+        projects_users = safe_fetch do
+          toggl_client.get_project_users(team_id)
+        end
+        projects_users[team_id] = projects_users.each_with_object([]) do |pu, users|
+          users << ProjectUser.new(pu['id'], pu['uid'])
+        end
       end
     end
 
     private
+
+    def safe_fetch
+      tries ||= 10
+      yield
+    rescue RuntimeError => e
+      if e.message.include?('429') && !(tries -= 1).zero? # too many requests
+        sleep 1
+        retry
+      else
+        raise e
+      end
+    end
 
     def member_by_uid(member_uid)
       @members_by_uid ||=
@@ -83,16 +135,8 @@ module TogglIntegration
       @projects_users ||= {}
     end
 
-    def list_projects_users(team_id)
-      team_id = team_id.to_i
-      if projects_users.key?(team_id)
-        projects_users[team_id]
-      else
-        projects_users = toggl_client.get_project_users(team_id)
-        projects_users[team_id] = projects_users.each_with_object([]) do |pu, users|
-          users << ProjectUser.new(pu['id'], pu['uid'])
-        end
-      end
+    def projects_tasks
+      @projects_tasks ||= {}
     end
 
     def activate_member(uid)
@@ -102,28 +146,38 @@ module TogglIntegration
       toggl_client.update_workspace_user(workspace_user['id'], params)
     end
 
-    def preload_projects_users(team_ids)
+    def preload_projects_users_with_tasks(team_ids)
       input = Queue.new
       result = Queue.new
-      team_ids.each { |team_id| input << team_id unless projects_users.key?(team_id.to_i) }
-      threads = (1..THREAD_POOL_SIZE).map do
-        thread_block = build_preload_projects_users_thread_block(input, result)
-        Thread.new(self.class.new(@token, @company_name), &thread_block)
-      end
+      cleanup_team_ids(team_ids, input)
+      threads = start_threads(input, result)
       threads.each(&:join)
       until result.empty?
-        team_id, project_users = result.pop
+        team_id, project_users, project_tasks = result.pop
         projects_users[team_id.to_i] = project_users
+        projects_tasks[team_id.to_i] = project_tasks
       end
     end
 
-    def build_preload_projects_users_thread_block(input_queue, result_queue)
+    def cleanup_team_ids(team_ids, input)
+      team_ids.each { |team_id| input << team_id unless projects_users.key?(team_id.to_i) }
+    end
+
+    def start_threads(input, result)
+      (1..THREAD_POOL_SIZE).map do
+        thread_block = build_preload_projects_users_with_tasks_thread_block(input, result)
+        Thread.new(self.class.new(@token, @company_name), &thread_block)
+      end
+    end
+
+    def build_preload_projects_users_with_tasks_thread_block(input_queue, result_queue)
       lambda do |api|
         until input_queue.empty?
           begin
             team_id = input_queue.pop(true)
-            project_users = api.send(:list_projects_users, team_id)
-            result_queue << [team_id, project_users]
+            project_users = api.list_projects_users(team_id)
+            project_tasks = api.list_projects_tasks(team_id)
+            result_queue << [team_id, project_users, project_tasks]
           rescue ThreadError # normal if queue empty
           rescue RuntimeError => e
             if e.message.match(/Too many requests/i)

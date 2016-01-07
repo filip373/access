@@ -25,24 +25,34 @@ module GithubIntegration
 
       def log_creating_teams
         @diff_hash[:create_teams].each do |team, h|
-          @log << "[api] create team #{team.name}"
-
-          if h[:add_members].present?
-            h[:add_members].each do |m|
-              @log << "[api] add member #{m} to team #{team.name}"
-            end
-          end
-
-          if h[:add_repos].present?
-            h[:add_repos].each do |r|
-              @log << "[api] add repo #{r} to team #{team.name}"
-            end
-          end
-
-          unless h[:add_permissions].blank?
-            @log << "[api] add permissions #{team.name} - #{h[:add_permissions]}"
-          end
+          message_for_team(team)
+          message_for_members(team, h)
+          message_for_repos(team, h)
+          message_for_permissions(team, h)
         end
+      end
+
+      def message_for_team(team)
+        @log << "[api] create team #{team.name}"
+      end
+
+      def message_for_members(team, h)
+        return unless h[:add_members].present?
+        h[:add_members].each do |m|
+          @log << "[api] add member #{m} to team #{team.name}"
+        end
+      end
+
+      def message_for_repos(team, h)
+        return unless h[:add_repos].present?
+        h[:add_repos].each do |r|
+          @log << "[api] add repo #{r} to team #{team.name}"
+        end
+      end
+
+      def message_for_permissions(team, h)
+        return if h[:add_permissions].empty?
+        @log << "[api] add permissions #{team.name} - #{h[:add_permissions]}"
       end
 
       def log_changing_permissions

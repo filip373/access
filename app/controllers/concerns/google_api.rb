@@ -63,12 +63,15 @@ module GoogleApi
 
   def permitted_members
     return [] unless AppConfig.google.managers?
+    prepare_permitted_memerbs.compact.uniq
+  end
 
+  def prepare_permitted_memerbs
     Array(AppConfig.google.managers.groups).flat_map do |group_name|
       google_api
         .list_members("#{group_name}@#{AppConfig.google.main_domain}")
         .map { |member| member['email'] }
-    end.compact.uniq
+    end
   end
 
   def google_authorization

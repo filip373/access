@@ -5,20 +5,20 @@ module GoogleIntegration
         @google_api = google_api
       end
 
+      # rubocop:disable Metrics/AbcSize
       def now!(diff)
-        sync(diff)
+        create_groups(Array(diff[:create_groups]))
+        sync_groups_archive_settings(Array(diff[:change_archive]))
+        sync_groups_privacy_settings(Array(diff[:change_privacy]))
+        sync_domain_memberships(Array(diff[:add_membership]),
+                                Array(diff[:remove_membership]))
+        sync_members(Array(diff[:add_members]), Array(diff[:remove_members]))
+        sync_aliases(Array(diff[:add_aliases]), Array(diff[:remove_aliases]))
+        sync_user_aliases(Array(diff[:add_user_aliases]), Array(diff[:remove_user_aliases]))
       end
+      # rubocop:enable Metrics/AbcSize
 
       private
-
-      def sync(diff)
-        create_groups(diff[:create_groups])
-        sync_groups_archive_settings(diff[:change_archive])
-        sync_groups_privacy_settings(diff[:change_privacy])
-        sync_domain_memberships(diff[:add_membership], diff[:remove_membership]) if diff[:remove_membership]
-        sync_members(diff[:add_members], diff[:remove_members]) if diff[:remove_members]
-        sync_aliases(diff[:add_aliases], diff[:remove_aliases]) if diff[:remove_aliases]
-      end
 
       def sync_members(members_to_add, members_to_remove)
         members_to_remove.each do |group, members|
@@ -40,6 +40,20 @@ module GoogleIntegration
         aliases_to_remove.each do |group, aliases|
           aliases.each do |google_alias|
             remove_alias(group, google_alias)
+          end
+        end
+      end
+
+      def sync_user_aliases(aliases_to_add, aliases_to_remove)
+        aliases_to_add.each do |user, aliases|
+          aliases.each do |google_user_alias|
+            add_user_alias(user, google_user_alias)
+          end
+        end
+
+        aliases_to_remove.each do |user, aliases|
+          aliases.each do |google_user_alias|
+            remove_user_alias(user, google_user_alias)
           end
         end
       end
@@ -85,6 +99,11 @@ module GoogleIntegration
         @google_api.remove_alias(group.email, Helpers::User.username_to_email(google_alias))
       end
 
+      def remove_user_alias(user, google_alias)
+        google_email_alias = "#{google_alias}@#{AppConfig.google.main_domain}"
+        @google_api.remove_user_alias(user.emails.first, google_email_alias)
+      end
+
       def remove_member(group, member)
         @google_api.remove_member(group.email, member)
       end
@@ -103,6 +122,11 @@ module GoogleIntegration
         aliases.each do |google_alias|
           @google_api.add_alias(group.email, Helpers::User.username_to_email(google_alias))
         end
+      end
+
+      def add_user_alias(user, google_alias)
+        google_email_alias = "#{google_alias}@#{AppConfig.google.main_domain}"
+        @google_api.add_user_alias(user.emails.first, google_email_alias)
       end
 
       def add_domain_membership(group)

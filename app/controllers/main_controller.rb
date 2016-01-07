@@ -3,6 +3,7 @@ class MainController < ApplicationController
   before_action :check_permissions
 
   expose(:validation_errors) { data_guru.errors }
+  expose(:todays_logs) { TodaysLogs.call }
 
   def check_permissions
     data_guru.refresh

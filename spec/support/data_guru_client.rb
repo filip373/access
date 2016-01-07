@@ -7,6 +7,7 @@ RSpec.shared_context 'data_guru' do
         github: 'first.mbr',
         rollbar: 'member1',
         emails: ['member1@foo.pl'],
+        aliases: ['firsto'],
       ),
       OpenStruct.new(
         id: 'second.member',
@@ -14,18 +15,21 @@ RSpec.shared_context 'data_guru' do
         github: 'scnd.mbr',
         rollbar: 'member2',
         emails: ['member2@foo.pl'],
+        aliases: ['secundo'],
       ),
       OpenStruct.new(
         id: 'sixth.member',
         name: 'Sixsth Member',
         github: 'sth.mbr',
         emails: ['member6@foo.pl'],
+        aliases: ['sixstho'],
       ),
       OpenStruct.new(
         id: 'third.member',
         name: 'Third Member',
         github: 'thrd.mbr',
         emails: ['member3@foo.pl'],
+        aliases: [],
       ),
     ]
   end

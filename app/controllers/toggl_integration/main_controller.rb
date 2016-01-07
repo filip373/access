@@ -17,11 +17,11 @@ module TogglIntegration
     end
 
     def sync
-      Actions::SyncJob.new(calculated_diff, toggl_api).call
+      Actions::SyncJob.new(calculated_diff, AuditedApi.new(toggl_api, current_user)).call
     end
 
     def cleanup_teams
-      Actions::CleanupTeams.new(missing_teams, toggl_api).call
+      Actions::CleanupTeams.new(missing_teams, AuditedApi.new(toggl_api, current_user)).call
     end
 
     private
@@ -35,7 +35,8 @@ module TogglIntegration
         @diff ||= Actions::Diff.new(expected_teams,
                                     current_teams,
                                     user_repo,
-                                    current_members_repository)
+                                    current_members_repository,
+                                    current_tasks_repository)
         @diff.call
       end
     end
@@ -53,6 +54,10 @@ module TogglIntegration
 
     def current_members_repository
       MemberRepository.build_from_toggl_api(toggl_api)
+    end
+
+    def current_tasks_repository
+      TaskRepository.build_from_toggl_api(toggl_api)
     end
   end
 end

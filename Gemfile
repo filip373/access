@@ -26,8 +26,11 @@ gem 'sass-rails'
 gem 'skylight'
 gem 'slack-notifier'
 gem 'sprockets'
+gem 'thin'
 gem 'togglv8'
 
+gem 'sinatra', require: false
+gem 'sidekiq'
 # deployment
 
 gem 'airbrussh', require: false
@@ -47,4 +50,10 @@ end
 
 group :development, :test do
   gem 'letter_opener'
+end
+
+group :test do
+  gem 'rspec-sidekiq'
+  gem 'timecop'
+  gem 'zonebie'
 end

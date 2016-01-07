@@ -1,6 +1,7 @@
 require 'google/api_client'
 require 'google/api_client/client_secrets'
 
+# rubocop:disable Metrics/ClassLength
 module GoogleIntegration
   class Api
     attr_reader :errors, :authorization_client
@@ -12,6 +13,10 @@ module GoogleIntegration
       @credentials = credentials
       @authorization_client = authorization.new(credentials: credentials).authorize!
       authorize_client!
+    end
+
+    def namespace
+      @namespace ||= :google
     end
 
     # groups
@@ -150,20 +155,37 @@ module GoogleIntegration
       end
     end
 
-    def create_user(params)
-      force_user_authorization do
-        request(
-          api_method: directory_api.users.insert,
-          body_object: {
-            name: {
-              familyName: params[:last_name],
-              givenName: params[:first_name],
-            },
-            primaryEmail: params[:email],
-            password: params[:password],
+    def create_user(_params)
+      force_user_authorization { request(params_request_for_creating_user) }
+    end
+
+    def params_request_for_creating_user
+      {
+        api_method: directory_api.users.insert,
+        body_object: {
+          name: {
+            familyName: params[:last_name],
+            givenName: params[:first_name],
           },
-        )
-      end
+          primaryEmail: params[:email],
+          password: params[:password],
+        },
+      }
+    end
+
+    def add_user_alias(google_user, google_user_alias)
+      request(
+        api_method: directory_api.users.aliases.insert,
+        parameters: { userKey: google_user },
+        body_object: { alias: google_user_alias },
+      )
+    end
+
+    def remove_user_alias(google_user, google_user_alias)
+      request(
+        api_method: directory_api.users.aliases.delete,
+        parameters: { userKey: google_user, alias: google_user_alias },
+      )
     end
 
     def list_users
@@ -211,7 +233,8 @@ module GoogleIntegration
       force_user_authorization do
         Dir.glob("#{Rails.root}/static_data/gmail_filters/*").each do |filter|
           filter = File.read(filter)
-          url = "https://apps-apis.google.com/a/feeds/emailsettings/2.0/#{AppConfig.google.main_domain}/#{login}/filter"
+          url = 'https://apps-apis.google.com/a/feeds/emailsettings/2.0/'\
+                "#{AppConfig.google.main_domain}/#{login}/filter"
           client.execute(
             uri: url,
             body: filter,

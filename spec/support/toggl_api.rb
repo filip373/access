@@ -5,6 +5,7 @@ RSpec.shared_context 'toggl_api' do
       allow(api).to receive(:list_all_members) { all_members }
       allow(api).to receive(:list_team_members).with(team1['id']) { team1_members }
       allow(api).to receive(:list_team_members).with(team2['id']) { team2_members }
+      allow(api).to receive(:list_all_tasks) { all_tasks }
     end
   end
 
@@ -70,6 +71,21 @@ RSpec.shared_context 'toggl_api' do
     }
   end
 
+  let(:task_1) do
+    {
+      'pid' => '1',
+      'name' => 'task_1',
+    }
+  end
+
+  let(:task_2) do
+    {
+      'pid' => '2',
+      'name' => 'task_2',
+    }
+  end
+
+  let(:all_tasks) { [task_1, task_2] }
   let(:all_teams) { [team1, team2] }
   let(:all_members) { [member1, member2, member3] }
   let(:team1_members) { [member1, member2] }

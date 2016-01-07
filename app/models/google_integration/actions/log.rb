@@ -6,14 +6,15 @@ module GoogleIntegration
       def initialize(diff_hash)
         @diff_hash = diff_hash
         @log = []
+        @errors = log_errors
       end
 
       def now!
         generate_log
       end
 
+      # rubocop:disable Metrics/MethodLength
       def generate_log
-        @errors = log_errors
         log_creating_groups
         log_adding_members
         log_removing_members
@@ -23,11 +24,18 @@ module GoogleIntegration
         log_removing_memberships
         log_changing_archive
         log_changing_privacy
+        log_adding_user_aliases
+        log_removing_user_aliases
+        no_changes_in_log
+      end
+      # rubocop:enable Metrics/MethodLength
+
+      private
+
+      def no_changes_in_log
         @log << 'There are no changes.' if @log.size == 0
         @log
       end
-
-      private
 
       def log_errors
         Hash(@diff_hash[:errors]).map do |key, errors|
@@ -50,19 +58,27 @@ module GoogleIntegration
       def log_creating_groups
         @diff_hash[:create_groups].each do |group, h|
           @log << "[api] create group #{group.email}"
-
-          h[:add_members].each do |m|
-            @log << "[api] add member #{m} to group #{group.email}"
-          end if h[:add_members]
-
-          h[:add_aliases].each do |r|
-            @log << "[api] add alias #{r} to group #{group.email}"
-          end if h[:add_aliases]
-
-          unless h[:add_membership].nil?
-            @log << "[api] add domain membership to group #{group.email}"
-          end
+          add_members_message(h, group)
+          add_aliases_message(h, group)
+          add_membership_message(h, group)
         end
+      end
+
+      def add_membership_message(h, group)
+        return if h[:add_membership].nil?
+        @log << "[api] add domain membership to group #{group.email}"
+      end
+
+      def add_members_message(h, group)
+        h[:add_members].each do |m|
+          @log << "[api] add member #{m} to group #{group.email}"
+        end if h[:add_members]
+      end
+
+      def add_aliases_message(h, group)
+        h[:add_aliases].each do |r|
+          @log << "[api] add alias #{r} to group #{group.email}"
+        end if h[:add_aliases]
       end
 
       def log_adding_memberships
@@ -107,6 +123,22 @@ module GoogleIntegration
             @log << "[api] remove alias #{a} from group #{group.email}"
           end
         end if @diff_hash[:remove_aliases]
+      end
+
+      def log_adding_user_aliases
+        @diff_hash[:add_user_aliases].each do |user, aliases|
+          aliases.each do |a|
+            @log << "[api] add user alias #{a} to user #{user.id}"
+          end
+        end if @diff_hash[:add_user_aliases]
+      end
+
+      def log_removing_user_aliases
+        @diff_hash[:remove_user_aliases].each do |user, aliases|
+          aliases.each do |a|
+            @log << "[api] remove user alias #{a} from user #{user.id}"
+          end
+        end if @diff_hash[:remove_user_aliases]
       end
     end
   end

@@ -49,19 +49,22 @@ describe User do
         name: 'mariusz.blaszczak',
         full_name: 'Mariusz Blaszczak',
         github: 'blaszczakm',
+        aliases: [],
       )
     end
 
     let(:yaml_object) { YAML.load user.to_yaml }
 
-    it { expect(yaml_object.keys.count).to eq 4 }
+    it { expect(yaml_object.keys.count).to eq 5 }
     it { expect(yaml_object.keys.first).to eq 'name' }
     it { expect(yaml_object.keys.second).to eq 'github' }
     it { expect(yaml_object.keys.third).to eq 'external' }
     it { expect(yaml_object.keys.fourth).to eq 'emails' }
+    it { expect(yaml_object.keys.fifth).to eq 'aliases' }
     it { expect(yaml_object.values.first).to eq user.full_name }
     it { expect(yaml_object.values.second).to eq user.github }
     it { expect(yaml_object.values.third).to eq user.external }
     it { expect(yaml_object.values.fourth).to eq user.emails }
+    it { expect(yaml_object.values.fifth).to eq user.aliases }
   end
 end

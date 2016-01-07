@@ -26,7 +26,12 @@ class UserRepository
   end
 
   def find_many(names)
-    users = names.map do |n|
+    users = find_users_by_name(names)
+    prepare_array_with_names(users)
+  end
+
+  def find_users_by_name(names)
+    names.map do |n|
       begin
         user = find(n)
       rescue StandardError => e
@@ -36,6 +41,9 @@ class UserRepository
         [user.id, user]
       end
     end
+  end
+
+  def prepare_array_with_names(users)
     users.compact.each_with_object({}) do |user, memo|
       next unless user.is_a?(Array)
       memo[user.first] = user.last

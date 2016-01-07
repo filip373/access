@@ -6,6 +6,10 @@ module RollbarIntegration
       self.client = Client.new(token)
     end
 
+    def namespace
+      @namespace ||= :rollbar
+    end
+
     def list_teams
       client.get('/api/1/teams')
         .reject { |e| e.name == 'Owners' }
@@ -70,10 +74,6 @@ module RollbarIntegration
 
     def remove_project_from_team(project_id, team_id)
       client.delete("/api/1/team/#{team_id}/project/#{project_id}")
-    end
-
-    def cancel_invitation(invitation_id)
-      client.delete("/api/1/invite/#{invitation_id}")
     end
 
     private
