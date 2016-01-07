@@ -24,7 +24,7 @@ module GithubIntegration
       diff_status = Rails.cache.fetch('github_performing_diff')
       if diff_status.nil?
         data_guru.refresh
-        ::GithubWorkers::DiffWorker.perform_async(session[:gh_token])
+        ::GithubWorkers::DiffWorker.perform_later(session[:gh_token])
       elsif diff_status == false
         redirect_to github_show_diff_path
       end

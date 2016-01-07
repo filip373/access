@@ -1,7 +1,5 @@
 module GithubWorkers
   class DiffWorker < Base
-    include Sidekiq::Worker
-
     def perform(session_token)
       @session_token = session_token
       set_performing_flag

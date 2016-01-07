@@ -1,5 +1,5 @@
 module GithubWorkers
-  class Base
+  class Base < ActiveJob::Base
     private
 
     def data_guru
