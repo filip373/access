@@ -39,4 +39,50 @@ RSpec.describe AuditedApi do
       end
     end
   end
+
+  describe 'missing action translations' do
+    subject { instance.foo(1, 2) }
+    context 'when env is development' do
+      before { allow(Rails).to receive(:env).and_return('development'.inquiry) }
+
+      it 'raises an exception' do
+        expect { subject }.to raise_error I18n::MissingTranslationData
+      end
+    end
+
+    context 'when env is production' do
+      before { allow(Rails.env).to receive(:production?).and_return(true) }
+
+      it 'logs a warning' do
+        subject
+        log_content = "translation missing: en.#{dummy_instance.namespace}.foo"
+        expect(buffer_dev.buffer).to eq(
+          "#{now}: [#{dummy_instance.namespace}] #{user.email} -- #{log_content}\n",
+        )
+      end
+    end
+  end
+
+  describe 'missing interpolation argument in action translation' do
+    before { I18n.backend.store_translations(:en, dummy: { foo_bar_baz: '%{first} + %{two}' }) }
+    subject { instance.foo_bar_baz(1, 1) }
+
+    context 'when in development env' do
+      it 'raises an exception' do
+        expect { subject }.to raise_error I18n::MissingInterpolationArgument
+      end
+    end
+
+    context 'when in production env' do
+      before { allow(Rails.env).to receive(:production?).and_return(true) }
+
+      it 'logs a warning' do
+        subject
+        log_content = 'missing interpolation argument :first in "%{first} + %{two}" ({:one=>"1", :two=>"1"} given)'
+        expect(buffer_dev.buffer).to eq(
+          "#{now}: [#{dummy_instance.namespace}] #{user.email} -- #{log_content}\n",
+        )
+      end
+    end
+  end
 end
