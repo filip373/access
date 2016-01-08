@@ -5,6 +5,8 @@ RUN /opt/node/install
 
 ENV APP_HOME /var/www/app
 ENV RAILS_ENV=production
+ENV REDIS_URL=redis://redis:6379/0
+
 
 # throw errors if Gemfile has been modified since Gemfile.lock
 RUN bundle config --global frozen 1
@@ -17,8 +19,6 @@ RUN bundle install --jobs=8 --retry=3 --without development test --deployment
 
 ADD . $APP_HOME/
 ADD docker/production/entrypoint.sh /entrypoint.sh
-
-RUN bundle exec rake assets:precompile
 
 EXPOSE 3000
 
