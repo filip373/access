@@ -6,16 +6,6 @@ GIT
     capistrano-docker (0.2.5)
       capistrano (>= 3.1)
 
-GIT
-  remote: https://github.com/netguru/data_guru
-  revision: 1784c7597db9cf30431e4cbbe3337a8fde928fe6
-  branch: one-click-integration
-  specs:
-    data_guru (0.4.0)
-      activesupport
-      git
-      httparty
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -112,6 +102,10 @@ GEM
     concurrent-ruby (1.0.0)
     connection_pool (2.2.0)
     daemons (1.2.3)
+    data_guru (1.0.0)
+      activesupport
+      git
+      httparty
     debug_inspector (0.0.2)
     decent_exposure (2.3.2)
     descendants_tracker (0.0.4)
@@ -210,7 +204,7 @@ GEM
     method_source (0.8.2)
     mime-types (2.6.2)
     mini_portile (0.6.2)
-    minitest (5.8.1)
+    minitest (5.8.3)
     multi_json (1.11.0)
     multi_xml (0.5.5)
     multipart-post (2.0.0)
@@ -397,7 +391,7 @@ DEPENDENCIES
   capistrano
   capistrano-docker!
   celluloid
-  data_guru!
+  data_guru
   decent_exposure
   font-awesome-rails
   github_api
@@ -434,4 +428,4 @@ DEPENDENCIES
   zonebie
 
 BUNDLED WITH
-   1.10.6
+   1.11.2
