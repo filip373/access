@@ -13,4 +13,5 @@ set :docker_volumes, [
   "#{shared_path}/log:/var/www/app/log",
 ]
 set :docker_additional_options, -> { "--env-file #{fetch(:deploy_to)}/shared/envfile" }
+set :docker_links, %w(redis_ambassador:redis)
 set :docker_apparmor_profile, "docker-ptrace"
