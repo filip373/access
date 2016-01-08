@@ -20,8 +20,6 @@ RUN bundle install --jobs=8 --retry=3 --without development test --deployment
 ADD . $APP_HOME/
 ADD docker/production/entrypoint.sh /entrypoint.sh
 
-RUN bundle exec rake assets:precompile
-
 EXPOSE 3000
 
 ENTRYPOINT ["/entrypoint.sh"]

@@ -11,6 +11,8 @@ set :docker_volumes, [
   "#{shared_path}/config/sec_config.yml:/var/www/app/config/sec_config.yml",
 
   "#{shared_path}/log:/var/www/app/log",
+
+  "#{fetch(:application)}_#{fetch(:stage)}_assets:/var/www/app/public/assets"
 ]
 set :docker_additional_options, -> { "--env-file #{fetch(:deploy_to)}/shared/envfile" }
 set :docker_links, %w(redis_ambassador:redis)
