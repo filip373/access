@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe GoogleIntegration::Actions::AccountsDiff do
   include_context 'google_api'
   include_context 'data_guru'
-  let(:user_repo) { UserRepository.new(data_guru.users) }
+  let(:user_repo) { UserRepository.new(data_guru.members) }
 
   subject { described_class.new(google_api, user_repo).now! }
 

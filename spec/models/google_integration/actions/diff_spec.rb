@@ -46,7 +46,7 @@ RSpec.describe GoogleIntegration::Actions::Diff do
       allow(api).to receive(:list_users) { members }
     end
   end
-  let(:user_repo) { UserRepository.new(data_guru.users) }
+  let(:user_repo) { UserRepository.new(data_guru.members) }
 
   before(:each) do
     allow(DataGuru::Client).to receive(:new).and_return(data_guru)
@@ -75,13 +75,13 @@ RSpec.describe GoogleIntegration::Actions::Diff do
 
   context 'user aliases' do
     it 'correctly computes aliases to add' do
-      expect(subject[:add_user_aliases][data_guru.users[0]]).to eq([])
-      expect(subject[:add_user_aliases][data_guru.users[1]]).to eq(['secundo'])
+      expect(subject[:add_user_aliases][data_guru.members[0]]).to eq([])
+      expect(subject[:add_user_aliases][data_guru.members[1]]).to eq(['secundo'])
     end
 
     it 'correcly computes aliases to remove' do
-      expect(subject[:remove_user_aliases][data_guru.users[0]]).to eq(['elfirsto'])
-      expect(subject[:remove_user_aliases][data_guru.users[1]]).to eq([])
+      expect(subject[:remove_user_aliases][data_guru.members[0]]).to eq(['elfirsto'])
+      expect(subject[:remove_user_aliases][data_guru.members[1]]).to eq([])
     end
   end
 

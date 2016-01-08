@@ -16,7 +16,7 @@ module GoogleIntegration
 
     expose(:missing_accounts) { calculated_missing_accounts }
     expose(:groups_from_google_api) { api_groups.map { |data| Group.from_google_api(data) } }
-    expose(:user_repo) { UserRepository.new(data_guru.users.all) }
+    expose(:user_repo) { UserRepository.new(data_guru.members.all) }
 
     def show_diff
       reset_diff

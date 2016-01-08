@@ -8,14 +8,14 @@ RSpec.describe GithubIntegration::Actions::Diff do
     Celluloid.shutdown
     Celluloid.boot
     allow(DataGuru::Client).to receive(:new).and_return(data_guru)
-    DataGuru::Client.new.users
+    DataGuru::Client.new.members
   end
 
   let(:expected_teams) { GithubIntegration::Team.all(data_guru.github_teams) }
   let(:new_team) do
     expected_teams.find { |team| team.name == 'team2' }
   end
-  let(:user_repo) { UserRepository.new(data_guru.users) }
+  let(:user_repo) { UserRepository.new(data_guru.members) }
 
   subject { described_class.new(expected_teams, existing_teams, gh_api, user_repo).now! }
 

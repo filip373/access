@@ -1,6 +1,6 @@
 module RollbarIntegration
   class GenerateController < ApplicationController
-    expose(:user_repo) { UserRepository.new(data_guru.users) }
+    expose(:user_repo) { UserRepository.new(data_guru.members) }
     expose(:rollbar_api) { Api.new }
 
     def permissions

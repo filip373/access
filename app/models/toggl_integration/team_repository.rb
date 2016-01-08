@@ -12,7 +12,7 @@ module TogglIntegration
         tasks = team.tasks.try(:map) { |task| Task.new(id: nil, name: task, pid: team.id) }
         Team.new(name: team.name,
                  members: members || [],
-                 projects: team.projects,
+                 projects: team.project,
                  tasks: tasks || [])
       end
       new(all: teams)
