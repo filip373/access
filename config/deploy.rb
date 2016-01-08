@@ -6,7 +6,11 @@ set :application, 'access'
 set :repo_url, 'git://github.com/netguru/access.git'
 set :deploy_to, ENV["DEPLOY_PATH"]
 
-set :docker_copy_data, %w(config/sec_config.yml config/keys)
-set :docker_volumes, -> { ["#{fetch(:deploy_to)}/shared/log:/var/www/app/log"] }
+set :docker_volumes, [
+  "#{shared_path}/config/keys:/var/www/app/config/keys",
+  "#{shared_path}/config/sec_config.yml:/var/www/app/config/sec_config.yml",
+
+  "#{shared_path}/log:/var/www/app/log",
+]
 set :docker_additional_options, -> { "--env-file #{fetch(:deploy_to)}/shared/envfile" }
 set :docker_apparmor_profile, "docker-ptrace"
