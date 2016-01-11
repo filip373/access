@@ -10,11 +10,13 @@
   - if log_empty?(rollbar_log)
     %h3 Move along, nothing to see here.
     = link_to "Wicked!", root_path, class: 'btn btn-primary btn-lg'
+    = link_to 'Refresh cache!', rollbar_refresh_cache_path, class: 'btn btn-primary btn-lg'
   - else
     %h3 Please confirm changes below:
     = render "rollbar_log"
-    = form_tag rollbar_sync_path, method: :post do
+    = form_tag rollbar_sync_path, class: 'inline', method: :post do
       = button_tag "Confirm changes", type: :submit, class: 'btn btn-primary btn-lg', 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> I\'m on it...".html_safe
+    = link_to 'Refresh cache', rollbar_refresh_cache_path, class: 'btn btn-primary btn-lg', 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> I\m on it...".html_safe
 
   - if validation_errors.empty? && missing_teams.any?
     %h2 Stranded teams
