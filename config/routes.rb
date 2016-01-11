@@ -46,7 +46,8 @@ GithubApp::Application.routes.draw do
   namespace :rollbar, module: :rollbar_integration do
     get 'generate_permissions', to: 'generate#permissions'
     controller :main do
-      get :pre_heat_cache
+      get :calculate_diff
+      get :refresh_cache
       get :show_diff
       post :sync
       delete :cleanup_teams
