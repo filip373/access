@@ -10,10 +10,8 @@ class AuditedApi
   def method_missing(*args)
     method_name = args.shift
     response = object.public_send(method_name, *args)
-
-    logger.info(object.try(:namespace)) do
-      log(method_name, response, args)
-    end
+    message = transform_action_to_log(method_name, response, args).push(object.namespace)
+    logger.add(*message)
     response
   end
 
@@ -23,10 +21,14 @@ class AuditedApi
 
   private
 
-  def log(method_name, response, arguments)
+  def transform_action_to_log(method_name, response, arguments)
     args = map_arguments(method_name, arguments)
     result = response.nil? ? 'ERROR' : 'OK'
-    "#{username} -- #{result} -- #{I18n.t(method_name, args)}"
+    log_content = I18n.t(method_name, args.merge(raise: true))
+    [Logger::ERROR, "#{username} -- #{result} -- #{log_content}"]
+  rescue I18n::MissingTranslationData, I18n::MissingInterpolationArgument => e
+    return [Logger::WARN, "#{username} -- #{e}"] if Rails.env.production?
+    raise e
   end
 
   def get_method_signature(method_name)
