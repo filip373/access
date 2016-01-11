@@ -1,6 +1,6 @@
 en:
   github:
-    create_team: "create team %{team}"
+    create_team: "create team %{team_name}"
     remove_team: "remove team %{team}"
     add_member: "add member %{member} to team %{team}"
     remove_member: "remove member %{member} from team %{team}"
