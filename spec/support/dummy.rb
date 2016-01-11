@@ -7,6 +7,10 @@ class Dummy
     object_with_name.name
   end
 
+  def foo(some_arg, another_arg)
+    [some_arg, another_arg]
+  end
+
   def namespace
     @namespace ||= :dummy
   end
