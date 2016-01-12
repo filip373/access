@@ -59,6 +59,8 @@ GithubApp::Application.routes.draw do
   namespace :toggl, module: :toggl_integration do
     get 'generate_permissions', to: 'generate#permissions'
     controller :main do
+      get :calculate_diff
+      get :refresh_cache
       get :show_diff
       post :sync
       delete :cleanup_teams
