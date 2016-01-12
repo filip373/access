@@ -155,11 +155,11 @@ module GoogleIntegration
       end
     end
 
-    def create_user(_params)
-      force_user_authorization { request(params_request_for_creating_user) }
+    def create_user(params)
+      force_user_authorization { request(params_request_for_creating_user(params)) }
     end
 
-    def params_request_for_creating_user
+    def params_request_for_creating_user(params)
       {
         api_method: directory_api.users.insert,
         body_object: {
