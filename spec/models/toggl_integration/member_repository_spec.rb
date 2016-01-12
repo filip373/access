@@ -7,7 +7,7 @@ describe TogglIntegration::MemberRepository do
 
   describe '#all' do
     it 'returns all members' do
-      expect(repository.all.count).to eq 3
+      expect(repository.all.count).to eq 4
     end
   end
 
