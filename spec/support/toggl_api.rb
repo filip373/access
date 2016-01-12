@@ -47,6 +47,14 @@ RSpec.shared_context 'toggl_api' do
     }
   end
 
+  let(:member4) do
+    {
+      'id' => '104',
+      'uuid' => '3',
+      'email' => 'member1@foo.pl',
+    }
+  end
+
   let(:team_member1) do
     {
       'id' => '201',
@@ -87,7 +95,7 @@ RSpec.shared_context 'toggl_api' do
 
   let(:all_tasks) { [task_1, task_2] }
   let(:all_teams) { [team1, team2] }
-  let(:all_members) { [member1, member2, member3] }
+  let(:all_members) { [member1, member2, member3, member4] }
   let(:team1_members) { [member1, member2] }
   let(:team2_members) { [member3] }
 end
