@@ -25,8 +25,7 @@ gem 'slack-notifier'
 gem 'sprockets'
 gem 'thin'
 gem 'togglv8'
-gem 'jira-ruby', :require => 'jira'
-
+gem 'jira-ruby', require: 'jira'
 
 # Auth
 gem 'omniauth'
