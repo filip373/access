@@ -13,4 +13,10 @@ class ApplicationController < ActionController::Base
   def current_user
     @current_user ||= OpenStruct.new(session[:current_user])
   end
+
+  def jira_credentials
+    return if session[:jira_credentials].nil?
+    return if Time.zone.at(session[:jira_credentials][:expires_at]) < Time.zone.now
+    @jira_credentials ||= OpenStruct.new(session[:jira_credentials])
+  end
 end

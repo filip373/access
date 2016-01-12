@@ -36,6 +36,10 @@ defaults: &defaults
   rollbar:
     notification_token:
     organization_token:
+  jira:
+    consumer_key: 'get a key'
+    private_key_path: '/path/to/your/private/key'
+    site: 'https://your-jira-address'
 
 test:
   <<: *defaults
