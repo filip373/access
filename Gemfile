@@ -15,8 +15,6 @@ gem 'httparty'
 gem 'jquery-rails'
 gem 'konf'
 gem 'netguru_theme'
-gem 'omniauth'
-gem 'omniauth-github'
 gem 'pry-byebug'
 gem 'pry-rails'
 gem 'pry-stack_explorer'
@@ -27,6 +25,13 @@ gem 'slack-notifier'
 gem 'sprockets'
 gem 'thin'
 gem 'togglv8'
+gem 'jira-ruby', :require => 'jira'
+
+
+# Auth
+gem 'omniauth'
+gem 'omniauth-github'
+gem 'omniauth-jira'
 
 gem 'sinatra', require: false
 gem 'sidekiq'
