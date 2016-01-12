@@ -29,3 +29,7 @@ development:
   #   webhook_url:
   #   default_channel:
   toggl_token:
+  jira:
+    consumer_key: 'get a key'
+    private_key_path: '/path/to/your/private/key'
+    site: 'https://your-jira-address'

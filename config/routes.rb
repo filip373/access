@@ -17,6 +17,10 @@ GithubApp::Application.routes.draw do
     namespace :github, module: :github_integration do
       get :callback, to: 'session#create'
     end
+
+    namespace :jira, module: :jira_integration do
+      get :callback, to: 'session#create'
+    end
   end
 
   namespace :github, module: :github_integration do
@@ -28,6 +32,12 @@ GithubApp::Application.routes.draw do
       delete :cleanup_teams
     end
     get 'generate_permissions', to: 'generate#permissions'
+  end
+
+  namespace :jira, module: :jira_integration do
+    controller :main do
+      get :index
+    end
   end
 
   ## INTEGRATIONS
