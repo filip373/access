@@ -9,7 +9,7 @@ describe GithubWorkers::DiffWorker do
     allow(DataGuru::Client).to receive(:new).and_return(data_guru)
   end
 
-  let(:token) { "some-random-token" }
+  let(:token) { 'some-random-token' }
   it { is_expected.to be_processed_in :default }
 
   it 'saves the status of performing diff' do
