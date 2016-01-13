@@ -8,6 +8,10 @@ module RollbarWorkers
       unset_performing_flag
     end
 
+    def self.applicable_to?(label)
+      label == :rollbar
+    end
+
     private
 
     def calculated_diff
