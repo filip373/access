@@ -8,6 +8,10 @@ module GithubWorkers
       unset_performing_flag
     end
 
+    def self.applicable_to?(label)
+      label == :github
+    end
+
     private
 
     def calculated_diff(expected_teams, gh_teams, gh_api, user_repo)
