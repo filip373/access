@@ -25,7 +25,7 @@ class CalculateDiffStrategist
     when :github
       return 'github_performing_diff'
     when :rollbar
-      return 'rollbar_performing_diff'
+      return 'rollbar_performing_teams'
     end
   end
 
