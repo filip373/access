@@ -6,7 +6,14 @@ RSpec.describe CalculateDiffStrategist do
   let(:label) { :toggl }
   let(:session_token) { 'some-random-token' }
   let(:controller) { double('Controller') }
-  subject { described_class.new(controller, label, data_guru, session_token) }
+  subject do
+    described_class.new(
+      controller: controller,
+      label: label,
+      data_guru: data_guru,
+      session_token: session_token,
+    )
+  end
 
   describe 'running with correct label' do
     before do

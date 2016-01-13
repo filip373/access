@@ -9,7 +9,12 @@ module TogglIntegration
     expose(:user_repo) { UserRepository.new(data_guru.members.all) }
 
     def calculate_diff
-      CalculateDiffStrategist.new(self, :toggl, data_guru, session[:gh_token]).call
+      CalculateDiffStrategist.new(
+        controller: self,
+        label: :toggl,
+        data_guru: data_guru,
+        session_token: session[:gh_token],
+      ).call
     end
 
     def show_diff
