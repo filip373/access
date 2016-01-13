@@ -22,7 +22,6 @@ module GithubIntegration
     after_filter :clean_diff_actor
 
     def calculate_diff
-      self.gh_log = []
       CalculateDiffStrategist.new(
         controller: self,
         label: :github,

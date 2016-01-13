@@ -18,7 +18,6 @@ module RollbarIntegration
     after_filter :clean_diff_actor
 
     def calculate_diff
-      self.rollbar_log = []
       CalculateDiffStrategist.new(
         controller: self,
         label: :rollbar,
