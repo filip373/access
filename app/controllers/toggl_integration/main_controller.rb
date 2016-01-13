@@ -9,13 +9,7 @@ module TogglIntegration
     expose(:user_repo) { UserRepository.new(data_guru.members.all) }
 
     def calculate_diff
-      diff_status = Rails.cache.fetch('toggl_performing_diff')
-      if diff_status.nil?
-        data_guru.refresh
-        ::TogglWorkers::DiffWorker.perform_later(session[:gh_token])
-      elsif diff_status == false
-        redirect_to toggl_show_diff_path
-      end
+      CalculateDiffStrategist.new(self, :toggl, data_guru, session[:gh_token]).call
     end
 
     def show_diff
