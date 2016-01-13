@@ -19,13 +19,12 @@ module RollbarIntegration
 
     def calculate_diff
       self.rollbar_log = []
-      diff_status = Rails.cache.fetch('rollbar_performing_teams')
-      if diff_status.nil?
-        data_guru.refresh
-        ::RollbarWorkers::TeamsWorker.perform_later(session[:gh_token])
-      elsif diff_status == false
-        redirect_to action: :show_diff
-      end
+      CalculateDiffStrategist.new(
+        controller: self,
+        label: :rollbar,
+        data_guru: data_guru,
+        session_token: session[:gh_token],
+      ).call
     end
 
     def show_diff

@@ -23,13 +23,12 @@ module GithubIntegration
 
     def calculate_diff
       self.gh_log = []
-      diff_status = Rails.cache.fetch('github_performing_diff')
-      if diff_status.nil?
-        data_guru.refresh
-        ::GithubWorkers::DiffWorker.perform_later(session[:gh_token])
-      elsif diff_status == false
-        redirect_to github_show_diff_path
-      end
+      CalculateDiffStrategist.new(
+        controller: self,
+        label: :github,
+        data_guru: data_guru,
+        session_token: session[:gh_token],
+      ).call
     end
 
     def show_diff
