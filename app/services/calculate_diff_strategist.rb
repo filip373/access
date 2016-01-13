@@ -2,7 +2,7 @@ class CalculateDiffStrategist
   WORKERS = [
     ::TogglWorkers::DiffWorker,
     ::GithubWorkers::DiffWorker,
-    ::RollbarWorkers::TeamsWorker
+    ::RollbarWorkers::TeamsWorker,
   ].freeze
 
   def initialize(controller, label, data_guru, session_token)
