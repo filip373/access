@@ -8,6 +8,10 @@ module TogglWorkers
       unset_performing_flag
     end
 
+    def self.applicable_to?(label)
+      label == :toggl
+    end
+
     private
 
     def set_performing_flag

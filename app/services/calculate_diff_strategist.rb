@@ -1,4 +1,10 @@
 class CalculateDiffStrategist
+  WORKERS = [
+    ::TogglWorkers::DiffWorker,
+    ::GithubWorkers::DiffWorker,
+    ::RollbarWorkers::TeamsWorker
+  ].freeze
+
   def initialize(controller, label, data_guru, session_token)
     @controller = controller
     @label = label
@@ -30,14 +36,7 @@ class CalculateDiffStrategist
   end
 
   def worker_strategy
-    case @label
-    when :toggl
-      return ::TogglWorkers::DiffWorker
-    when :github
-      return ::GithubWorkers::DiffWorker
-    when :rollbar
-      return ::RollbarWorkers::TeamsWorker
-    end
+    WORKERS.find { |worker| worker.applicable_to?(@label) }
   end
 
   def redirect_strategy
