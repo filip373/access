@@ -46,13 +46,13 @@ module GoogleIntegration
       def log_changing_privacy
         @diff_hash[:change_privacy].each do |group, privacy|
           @log << "[api] change group #{group.email} privacy settings to #{privacy}"
-        end
+        end if @diff_hash[:change_privacy].present?
       end
 
       def log_changing_archive
         @diff_hash[:change_archive].each do |group, flag|
           @log << "[api] change group #{group.email} archive settings to #{flag}"
-        end
+        end if @diff_hash[:change_archive].present?
       end
 
       def log_creating_groups
@@ -61,7 +61,7 @@ module GoogleIntegration
           add_members_message(h, group)
           add_aliases_message(h, group)
           add_membership_message(h, group)
-        end
+        end if @diff_hash[:create_groups].present?
       end
 
       def add_membership_message(h, group)
