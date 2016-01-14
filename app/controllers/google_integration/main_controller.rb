@@ -18,12 +18,25 @@ module GoogleIntegration
     expose(:groups_from_google_api) { api_groups.map { |data| Group.from_google_api(data) } }
     expose(:user_repo) { UserRepository.new(data_guru.members.all) }
 
+    def calculate_diff
+      credentials = session[:credentials].each_with_object({}) { |(k, v), h| h[k] = v }
+      CalculateDiffStrategist.new(
+        controller: self,
+        label: :google,
+        data_guru: data_guru,
+        session_token: credentials,
+      ).call
+    end
+
     def show_diff
-      reset_diff
-      data_guru.refresh
     end
 
     def show_groups
+    end
+
+    def refresh_cache
+      reset_diff
+      redirect_to google_calculate_diff_path
     end
 
     def sync
@@ -49,17 +62,31 @@ module GoogleIntegration
       Rails.cache.delete 'google_calculated_diff'
       Rails.cache.delete 'google_calculated_missing_accounts'
       Rails.cache.delete 'google_api_groups'
+      Rails.cache.delete 'google_performing_diff'
     end
 
     def calculated_diff
-      Rails.cache.fetch 'google_calculated_diff' do
-        @google_diff ||= Actions::Diff.new(expected_groups, google_api, user_repo)
-        @google_diff.now!
-      end
+      build_cached_diff
+    end
+
+    def build_cached_diff
+      {
+        errors: Rails.cache.read('google_diff_errors'),
+        create_groups: Rails.cache.read('google_diff_create_groups'),
+        add_members: Rails.cache.read('google_diff_add_members'),
+        change_privacy: Rails.cache.read('google_diff_change_privacy'),
+        remove_members: Rails.cache.read('google_diff_remove_members'),
+        add_aliases: Rails.cache.read('google_diff_add_aliases'),
+        remove_aliases: Rails.cache.read('google_diff_remove_aliases'),
+        add_membership: Rails.cache.read('google_diff_add_membership'),
+        remove_membership: Rails.cache.read('google_diff_remove_membership'),
+        change_archive: Rails.cache.read('google_diff_change_archive'),
+        add_user_aliases: Rails.cache.read('google_diff_add_user_aliases'),
+        remove_user_aliases: Rails.cache.read('google_diff_remove_user_aliases'),
+      }
     end
 
     def prepare_sync
-      calculated_diff
       api_groups
     end
 

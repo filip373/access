@@ -2,6 +2,7 @@ class CalculateDiffStrategist
   WORKERS = [
     ::TogglWorkers::DiffWorker,
     ::GithubWorkers::DiffWorker,
+    ::GoogleWorkers::DiffWorker,
     ::RollbarWorkers::TeamsWorker,
   ].freeze
   private_constant :WORKERS
@@ -35,6 +36,8 @@ class CalculateDiffStrategist
       return 'github_performing_diff'
     when :rollbar
       return 'rollbar_performing_teams'
+    when :google
+      return 'google_performing_diff'
     end
   end
 

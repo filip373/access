@@ -44,6 +44,8 @@ GithubApp::Application.routes.draw do
 
   namespace :google, module: :google_integration do
     controller :main do
+      get :calculate_diff
+      get :refresh_cache
       get :show_diff
       get :show_groups
       post :sync

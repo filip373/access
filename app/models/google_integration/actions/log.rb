@@ -44,19 +44,19 @@ module GoogleIntegration
       end
 
       def log_changing_privacy
-        @diff_hash[:change_privacy].each do |group, privacy|
+        Hash(@diff_hash[:change_privacy]).each do |group, privacy|
           @log << "[api] change group #{group.email} privacy settings to #{privacy}"
         end
       end
 
       def log_changing_archive
-        @diff_hash[:change_archive].each do |group, flag|
+        Hash(@diff_hash[:change_archive]).each do |group, flag|
           @log << "[api] change group #{group.email} archive settings to #{flag}"
         end
       end
 
       def log_creating_groups
-        @diff_hash[:create_groups].each do |group, h|
+        Hash(@diff_hash[:create_groups]).each do |group, h|
           @log << "[api] create group #{group.email}"
           add_members_message(h, group)
           add_aliases_message(h, group)
@@ -82,63 +82,63 @@ module GoogleIntegration
       end
 
       def log_adding_memberships
-        @diff_hash[:add_membership].each do |group, _membership|
+        Hash(@diff_hash[:add_membership]).each do |group, _membership|
           @log << "[api] add domain membership to group #{group.email}"
-        end if @diff_hash[:add_membership]
+        end
       end
 
       def log_adding_members
-        @diff_hash[:add_members].each do |group, members|
+        Hash(@diff_hash[:add_members]).each do |group, members|
           members.each do |m|
             @log << "[api] add member #{m} to group #{group.email}"
           end
-        end if @diff_hash[:add_members]
+        end
       end
 
       def log_removing_memberships
-        @diff_hash[:remove_membership].each do |group, _membership|
+        Hash(@diff_hash[:remove_membership]).each do |group, _membership|
           @log << "[api] remove domain membership from group #{group.email}"
-        end if @diff_hash[:remove_membership]
+        end
       end
 
       def log_removing_members
-        @diff_hash[:remove_members].each do |group, members|
+        Hash(@diff_hash[:remove_members]).each do |group, members|
           members.each do |m|
             @log << "[api] remove member #{m} from group #{group.email}"
           end
-        end if @diff_hash[:remove_members]
+        end
       end
 
       def log_adding_aliases
-        @diff_hash[:add_aliases].each do |group, aliases|
+        Hash(@diff_hash[:add_aliases]).each do |group, aliases|
           aliases.each do |a|
             @log << "[api] add alias #{a} to group #{group.email}"
           end
-        end if @diff_hash[:add_aliases]
+        end
       end
 
       def log_removing_aliases
-        @diff_hash[:remove_aliases].each do |group, aliases|
+        Hash(@diff_hash[:remove_aliases]).each do |group, aliases|
           aliases.each do |a|
             @log << "[api] remove alias #{a} from group #{group.email}"
           end
-        end if @diff_hash[:remove_aliases]
+        end
       end
 
       def log_adding_user_aliases
-        @diff_hash[:add_user_aliases].each do |user, aliases|
+        Hash(@diff_hash[:add_user_aliases]).each do |user, aliases|
           aliases.each do |a|
             @log << "[api] add user alias #{a} to user #{user.id}"
           end
-        end if @diff_hash[:add_user_aliases]
+        end
       end
 
       def log_removing_user_aliases
-        @diff_hash[:remove_user_aliases].each do |user, aliases|
+        Hash(@diff_hash[:remove_user_aliases]).each do |user, aliases|
           aliases.each do |a|
             @log << "[api] remove user alias #{a} from user #{user.id}"
           end
-        end if @diff_hash[:remove_user_aliases]
+        end
       end
     end
   end

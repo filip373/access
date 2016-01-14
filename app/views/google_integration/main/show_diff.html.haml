@@ -4,10 +4,12 @@
   - if log_empty?(google_log)
     %h3 Move along, nothing to see here.
     = link_to "Wicked!", root_path, class: 'btn btn-primary btn-lg'
+    = link_to "Refresh cache!", google_refresh_cache_path, class: 'btn btn-primary btn-lg'
   - else
     = render "google_log"
-    = form_tag google_sync_path, method: :post do
+    = form_tag google_sync_path, class: 'inline', method: :post do
       = button_tag "Confirm changes", type: :submit, class: 'btn btn-primary btn-lg', 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> I\'m on it...".html_safe
+    = link_to "Refresh cache!", google_refresh_cache_path, class: 'btn btn-primary btn-lg', 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> I\'m on it...".html_safe
 
   - if missing_groups.any?
     %h2 Stranded groups
