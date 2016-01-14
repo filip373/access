@@ -17,10 +17,10 @@ describe GoogleWorkers::DiffWorker do
     expect(Rails.cache.read('google_performing_diff')).to eq(false)
   end
 
-  it 'saves the diff in the cache' do
+  it 'saves the diff hashes in the cache' do
     subject.perform(token)
-    expect(Rails.cache.read('google_calculated_diff')).not_to be_nil
-    expect(Rails.cache.read('google_calculated_diff')).to be_a Hash
-    expect(Rails.cache.read('google_calculated_diff')).not_to be_empty
+    expect(Rails.cache.read('google_diff_create_groups')).not_to be_nil
+    expect(Rails.cache.read('google_diff_create_groups')).to be_a Hash
+    expect(Rails.cache.read('google_diff_create_groups')).not_to be_empty
   end
 end

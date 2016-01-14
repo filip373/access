@@ -68,7 +68,24 @@ module GoogleIntegration
     end
 
     def calculated_diff
-      Rails.cache.fetch 'google_calculated_diff'
+      build_cached_diff
+    end
+
+    def build_cached_diff
+      {
+        errors: Rails.cache.read('google_diff_errors'),
+        create_groups: Rails.cache.read('google_diff_create_groups'),
+        add_members: Rails.cache.read('google_diff_add_members'),
+        change_privacy: Rails.cache.read('google_diff_change_privacy'),
+        remove_members: Rails.cache.read('google_diff_remove_members'),
+        add_aliases: Rails.cache.read('google_diff_add_aliases'),
+        remove_aliases: Rails.cache.read('google_diff_remove_aliases'),
+        add_membership: Rails.cache.read('google_diff_add_membership'),
+        remove_membership: Rails.cache.read('google_diff_remove_membership'),
+        change_archive: Rails.cache.read('google_diff_change_archive'),
+        add_user_aliases: Rails.cache.read('google_diff_add_user_aliases'),
+        remove_user_aliases: Rails.cache.read('google_diff_remove_user_aliases'),
+      }
     end
 
     def prepare_sync
