@@ -19,10 +19,36 @@ RSpec.describe GoogleIntegration::MainController do
       end
     end
 
+    describe 'GET calculate_diff' do
+      context 'with cache' do
+        it 'redirects to show_diff' do
+          Rails.cache.write('google_performing_diff', false)
+          get :calculate_diff
+          expect(response).to redirect_to(:google_show_diff)
+        end
+      end
+
+      context 'without cache' do
+        before do
+          Rails.cache.delete('google_performing_diff')
+        end
+
+        it 'renders calculate diff view' do
+          get :calculate_diff
+          expect(response).to render_template('calculate_diff')
+        end
+
+        it 'runs the worker' do
+          allow(GoogleWorkers::DiffWorker).to receive(:perform_later)
+          get :calculate_diff
+          expect(GoogleWorkers::DiffWorker).to have_received(:perform_later)
+        end
+      end
+    end
+
     describe 'GET show_diff' do
       before { get :show_diff }
 
-      it { expect(controller.google_log).to be_a Array }
       it { expect(controller.expected_groups).to be_a Array }
       it { expect(response).to render_template('show_diff') }
 
@@ -36,11 +62,12 @@ RSpec.describe GoogleIntegration::MainController do
         expect(Rails.cache.read('google_calculated_missing_accounts')).to_not be_empty
       end
 
-      it 'caches google_diff value' do
-        controller.google_log # Needs to use exposed variable since views are not rendered
-        expect(Rails.cache.read('google_calculated_diff')).to_not be_nil
-        expect(Rails.cache.read('google_calculated_diff')).to be_a Hash
-        expect(Rails.cache.read('google_calculated_diff')).to_not be_empty
+      context 'log is stored in cache' do
+        before do
+          Rails.cache.write('google_calculated_diff', {})
+        end
+
+        it { expect(controller.google_log).to be_a Array }
       end
     end
 
