@@ -3,6 +3,7 @@
   <apps:property name='from' value='*github.com'/>
   <apps:property name='label' value='github'/>
   <apps:property name='shouldArchive' value='true'/>
-  <apps:property name='neverSpam' value='true'/>
+  <apps:property name='shouldNeverSpam' value='true'/>
+  <apps:property name='shouldNeverMarkAsImportant' value='true'/>
 </atom:entry>
 
