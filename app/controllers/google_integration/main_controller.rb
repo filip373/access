@@ -18,12 +18,24 @@ module GoogleIntegration
     expose(:groups_from_google_api) { api_groups.map { |data| Group.from_google_api(data) } }
     expose(:user_repo) { UserRepository.new(data_guru.members.all) }
 
+    def calculate_diff
+      CalculateDiffStrategist.new(
+        controller: self,
+        label: :google,
+        data_guru: data_guru,
+        session_token: session[:credentials],
+      ).call
+    end
+
     def show_diff
-      reset_diff
-      data_guru.refresh
     end
 
     def show_groups
+    end
+
+    def refresh_cache
+      reset_diff
+      redirect_to google_calculate_diff_path
     end
 
     def sync
@@ -49,17 +61,14 @@ module GoogleIntegration
       Rails.cache.delete 'google_calculated_diff'
       Rails.cache.delete 'google_calculated_missing_accounts'
       Rails.cache.delete 'google_api_groups'
+      Rails.cache.delete 'google_performing_diff'
     end
 
     def calculated_diff
-      Rails.cache.fetch 'google_calculated_diff' do
-        @google_diff ||= Actions::Diff.new(expected_groups, google_api, user_repo)
-        @google_diff.now!
-      end
+      Rails.cache.fetch 'google_calculated_diff'
     end
 
     def prepare_sync
-      calculated_diff
       api_groups
     end
 
