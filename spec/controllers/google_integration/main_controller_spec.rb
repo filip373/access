@@ -20,7 +20,17 @@ RSpec.describe GoogleIntegration::MainController do
     end
 
     describe 'GET calculate_diff' do
+      let(:session) do
+        {
+          credentials: {},
+        }
+      end
+
       context 'with cache' do
+        before do
+          allow(controller).to receive(:session).and_return(session)
+        end
+
         it 'redirects to show_diff' do
           Rails.cache.write('google_performing_diff', false)
           get :calculate_diff
@@ -30,6 +40,7 @@ RSpec.describe GoogleIntegration::MainController do
 
       context 'without cache' do
         before do
+          allow(controller).to receive(:session).and_return(session)
           Rails.cache.delete('google_performing_diff')
         end
 

@@ -19,11 +19,14 @@ module GoogleIntegration
     expose(:user_repo) { UserRepository.new(data_guru.members.all) }
 
     def calculate_diff
+      credentials = session[:credentials].inject({}) do |h, (k, v)|
+        h[k] = v.to_s; h
+      end
       CalculateDiffStrategist.new(
         controller: self,
         label: :google,
         data_guru: data_guru,
-        session_token: session[:credentials],
+        session_token: credentials,
       ).call
     end
 
