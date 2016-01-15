@@ -1,14 +1,6 @@
 module GoogleWorkers
-  class Base < ActiveJob::Base
+  class Base < BaseWorker
     private
-
-    def data_guru
-      @data_guru ||= DataGuru::Client.new
-    end
-
-    def user_repo
-      @user_repo ||= UserRepository.new(data_guru.members.all)
-    end
 
     def expected_groups
       @expected_groups ||= GoogleIntegration::Group.all(data_guru.google_groups)
