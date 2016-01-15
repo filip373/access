@@ -1,7 +1,7 @@
 module HockeyAppIntegration
   class Client
     include HTTParty
-    base_url 'https://rink.hockeyapp.net/api/2'
+    base_uri 'https://rink.hockeyapp.net/api/2'
     headers 'Accept' => 'application/json',
             'X-HockeyAppToken' => AppConfig.hockey_app.token
 
