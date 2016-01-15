@@ -1,5 +1,5 @@
 class BaseWorker < ActiveJob::Base
-  private
+  protected
 
   def data_guru
     @data_guru ||= DataGuru::Client.new
