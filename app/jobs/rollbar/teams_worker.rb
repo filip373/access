@@ -3,7 +3,7 @@ module RollbarWorkers
     def perform(session_token)
       @session_token = session_token
       set_performing_flag
-      rollbar_teams
+      fetch_basic_teams
       calculated_diff
       unset_performing_flag
     end
@@ -16,22 +16,16 @@ module RollbarWorkers
 
     def calculated_diff
       Rails.cache.fetch('rollbar_calculated_teams') do
-        build_projects_for_teams
+        api_teams
       end
     end
 
     def set_performing_flag
-      Rails.cache.delete('rollbar_performing_teams')
-      Rails.cache.fetch('rollbar_performing_teams') do
-        true
-      end
+      Rails.cache.write('rollbar_performing_teams', true)
     end
 
     def unset_performing_flag
-      Rails.cache.delete('rollbar_performing_teams')
-      Rails.cache.fetch('rollbar_performing_teams') do
-        false
-      end
+      Rails.cache.write('rollbar_performing_teams', false)
     end
   end
 end
