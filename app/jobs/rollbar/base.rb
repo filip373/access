@@ -1,29 +1,21 @@
 module RollbarWorkers
-  class Base < ActiveJob::Base
+  class Base < BaseWorker
     private
 
-    def data_guru
-      @data_guru ||= DataGuru::Client.new
+    def expected_teams
+      @expected_teams ||= RollbarIntegration::Team.all_from_dataguru(data_guru.rollbar_teams)
     end
 
-    def user_repo
-      @user_repo ||= UserRepository.new(data_guru.members.all)
+    def fetch_basic_teams
+      @api_teams ||= RollbarIntegration::Team.all_from_api(api, user_repo)
     end
 
-    def dataguru_teams
-      @dataguru_teams ||= RollbarIntegration::Team.all_from_dataguru(data_guru.rollbar_teams)
+    def api_teams
+      @api_teams = RollbarIntegration::Team.add_projects(fetch_basic_teams, api)
     end
 
-    def rollbar_teams
-      @rollbar_teams ||= RollbarIntegration::Team.all_from_api(rollbar_api, user_repo)
-    end
-
-    def build_projects_for_teams
-      @rollbar_teams = RollbarIntegration::Team.add_projects(rollbar_teams, rollbar_api)
-    end
-
-    def rollbar_api
-      @rollbar_api ||= RollbarIntegration::Api.new
+    def api
+      @api ||= RollbarIntegration::Api.new
     end
   end
 end
