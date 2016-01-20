@@ -22,7 +22,7 @@ module TogglWorkers
       Rails.cache.fetch('toggl_calculated_diff') do
         @diff ||= TogglIntegration::Actions::Diff.new(
           expected_teams,
-          current_teams,
+          api_teams,
           user_repo,
           current_members_repository,
           current_tasks_repository)
