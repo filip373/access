@@ -64,10 +64,6 @@ development:
   <<: *defaults
   office_email:
 
-staging:
-  <<: *defaults
-  office_email:
-
 production:
   <<: *defaults
   office_email: office@netguru.pl
