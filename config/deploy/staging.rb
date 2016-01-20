@@ -3,3 +3,4 @@ set :deploy_to, ENV["STAGING_DEPLOY_PATH"]
 set :branch, "master"
 
 set :docker_dockerfile, "docker/staging/Dockerfile"
+set :docker_cpu_quota, "50000"

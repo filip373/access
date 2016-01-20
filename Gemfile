@@ -37,7 +37,7 @@ gem 'sidekiq'
 
 gem 'airbrussh', require: false
 gem 'capistrano'
-gem 'capistrano-docker', github: 'netguru/capistrano-docker', tag: 'v0.2.5'
+gem 'capistrano-docker', github: 'netguru/capistrano-docker', tag: 'v0.2.6'
 
 group :development do
   gem 'better_errors'
