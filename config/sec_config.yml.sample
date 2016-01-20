@@ -1,4 +1,6 @@
 development:
+  hockey_app:
+    token:
   dataguru:
     access_token:
     api_url:

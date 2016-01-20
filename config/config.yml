@@ -57,6 +57,8 @@ test:
       account_using_instruction: dummy
     groups_whitelist: [group1@netguru.pl]
   toggl_token: 'abcdefg'
+  hockey_app:
+    token: 'my name is token'
 
 development:
   <<: *defaults
