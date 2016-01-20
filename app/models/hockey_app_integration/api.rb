@@ -34,6 +34,10 @@ module HockeyAppIntegration
       client.get('/teams')
     end
 
+    def list_team_members(team_id)
+      client.get("/teams/#{team_id}")
+    end
+
     def remove_team_from_app(app_id, team_id)
       client.delete("/apps/#{app_id}/app_teams/#{team_id}")
     end
