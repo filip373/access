@@ -34,9 +34,9 @@ module HockeyAppIntegration
       def find_message(label, item, app_name)
         case label
         when :add_users
-          return "[api] add user #{item} to app #{app_name}"
+          return "[api] add user #{item.last.first} (group: #{item.first}) to app #{app_name}"
         when :remove_users
-          return "[api] remove user #{item} from app #{app_name}"
+          return "[api] remove user #{item.last.first} (group: #{item.first}) from app #{app_name}"
         when :add_teams
           return "[api] add team #{item} to app #{app_name}"
         when :remove_teams
