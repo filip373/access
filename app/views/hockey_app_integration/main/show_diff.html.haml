@@ -18,7 +18,7 @@
       Apps found in permissions repo and not in HockeyApp service:
     %ul.list-group
     - missing_apps_in_api.each do |app|
-      %li.list-group-item #{app}
+      %li.list-group-item= app
 
   - if missing_apps_in_dg.any?
     %h3 Missing apps in permissions repo
@@ -27,5 +27,5 @@
     %ul.list-group
     - missing_apps_in_dg.each do |app|
       %li.list-group-item
-        %a{href: app_link(app.optional_info[:id])}
+        %a{ href: app_link(app.optional_info[:id]) }
           #{app.name} / #{app.optional_info[:platform]} / #{app.optional_info[:custom_release_type]}
