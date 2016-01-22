@@ -11,6 +11,7 @@ Documentation:
 Metrics/ClassLength:
   Max: 150
 Metrics/LineLength:
+  Enabled: true
   Max: 100
 Rails/ActionFilter:
   Enabled: false
