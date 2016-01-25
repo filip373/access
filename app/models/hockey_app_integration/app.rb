@@ -43,9 +43,9 @@ module HockeyAppIntegration
           name: app['title'],
           public_identifier: app['public_identifier'],
           teams: find_app_teams(api, app['public_identifier']),
-          members: members,
-          testers: testers,
-          developers: developers,
+          members: members || [],
+          testers: testers || [],
+          developers: developers || [],
           optional_info: {
             id: app['id'],
             platform: app['platform'],
