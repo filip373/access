@@ -81,6 +81,26 @@ RSpec.shared_context 'data_guru' do
   let(:rollbar_teams) { [] }
   let(:toggl_teams) { [] }
   let(:errors) { [] }
+  let(:hockeyapp_apps) do
+    [
+      OpenStruct.new(
+        name: 'App1',
+        public_identifier: '1a2b3c',
+        teams: %w(Team1 Team2),
+        testers: ['second.member@mail.com'],
+        members: ['third.member@mail.com'],
+        developers: ['first.member@mail.com'],
+      ),
+      OpenStruct.new(
+        name: 'App2',
+        public_identifier: 'abc123',
+        teams: %w(Team1),
+        testers: [],
+        members: [],
+        developers: [],
+      ),
+    ]
+  end
 
   let(:data_guru) do
     double.tap do |dg|
@@ -90,6 +110,7 @@ RSpec.shared_context 'data_guru' do
       allow(dg).to receive(:google_groups) { google_groups }
       allow(dg).to receive(:rollbar_teams) { rollbar_teams }
       allow(dg).to receive(:toggl_teams) { toggl_teams }
+      allow(dg).to receive(:hockeyapp_apps) { hockeyapp_apps }
       allow(dg).to receive(:errors) { errors }
       allow(dg).to receive(:refresh) { true }
     end
