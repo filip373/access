@@ -4,11 +4,6 @@ RSpec.describe HockeyAppIntegration::Actions::Diff do
   include_context 'hockeyapp_api'
   include_context 'data_guru'
 
-  before(:each) do
-    allow(DataGuru::Client).to receive(:new).and_return(data_guru)
-    allow(HockeyAppIntegration::Api).to receive(:new).and_return(hockeyapp_api)
-  end
-
   let(:dg_apps) do
     HockeyAppIntegration::App.all_from_dataguru(data_guru.hockeyapp_apps)
   end

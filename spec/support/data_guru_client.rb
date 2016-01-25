@@ -1,4 +1,8 @@
 RSpec.shared_context 'data_guru' do
+  before(:each) do
+    allow(DataGuru::Client).to receive(:new).and_return(data_guru)
+  end
+
   let(:users) do
     [
       OpenStruct.new(

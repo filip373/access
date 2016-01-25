@@ -1,4 +1,8 @@
 RSpec.shared_context 'hockeyapp_api' do
+  before(:each) do
+    allow(HockeyAppIntegration::Api).to receive(:new).and_return(hockeyapp_api)
+  end
+
   let(:hockeyapp_api) do
     double.tap do |api|
       allow(api).to receive(:list_apps) { existing_apps }
