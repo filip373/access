@@ -20,12 +20,12 @@ module HockeyAppIntegration
     end
 
     def diff_users
-      diff_add_users(:testers)
-      diff_add_users(:members)
-      diff_add_users(:developers)
-      diff_remove_users(:developers)
-      diff_remove_users(:members)
-      diff_remove_users(:testers)
+      diff_users_with_role(:add_users, :testers)
+      diff_users_with_role(:add_users, :members)
+      diff_users_with_role(:add_users, :developers)
+      diff_users_with_role(:remove_users, :developers)
+      diff_users_with_role(:remove_users, :members)
+      diff_users_with_role(:remove_users, :testers)
     end
 
     def diff_add_teams
@@ -38,16 +38,18 @@ module HockeyAppIntegration
       diff_hash[:remove_teams][expected_app] = teams_to_remove if teams_to_remove.any?
     end
 
-    def diff_add_users(role)
-      users_to_add = expected_app.public_send(role) - api_app.public_send(role)
-      diff_hash[:add_users][expected_app] ||= {}
-      diff_hash[:add_users][expected_app][role] = users_to_add if users_to_add.any?
+    def diff_users_with_role(label, role)
+      users = arrayed_users(label, role)
+      diff_hash[label][expected_app] ||= {}
+      diff_hash[label][expected_app][role] = users if users.any?
     end
 
-    def diff_remove_users(role)
-      users_to_remove = api_app.public_send(role) - expected_app.public_send(role)
-      diff_hash[:remove_users][expected_app] ||= {}
-      diff_hash[:remove_users][expected_app][role] = users_to_remove if users_to_remove.any?
+    def arrayed_users(label, role)
+      if label == :add_users
+        return expected_app.public_send(role) - api_app.public_send(role)
+      elsif label == :remove_users
+        return api_app.public_send(role) - expected_app.public_send(role)
+      end
     end
   end
 end
