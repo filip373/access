@@ -45,7 +45,7 @@ module HockeyAppIntegration
       def generate_diff
         expected_apps.each do |expected_app|
           api_app = api_apps.detect { |a| a.public_identifier == expected_app.public_identifier }
-          AppDiff.new(expected_app, api_app, diff_hash).diff!
+          AppDiff.new(expected_app, api_app, diff_hash).diff! unless api_app.nil?
         end
         diff_hash
       end
