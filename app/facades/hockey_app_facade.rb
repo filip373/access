@@ -1,4 +1,4 @@
-class HockeyAppPresenter
+class HockeyAppFacade
   attr_reader :diff, :data_guru
 
   def initialize(diff, data_guru)

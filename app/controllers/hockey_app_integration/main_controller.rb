@@ -12,7 +12,7 @@ module HockeyAppIntegration
     end
 
     def show_diff
-      render locals: { presenter: ::HockeyAppPresenter.new(calculated_diff, data_guru) }
+      render locals: { facade: ::HockeyAppFacade.new(calculated_diff, data_guru) }
     end
 
     def refresh_cache
