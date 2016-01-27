@@ -39,7 +39,8 @@ module JiraIntegration
       end
 
       def role_members(link)
-        jira_api.role_members(link.gsub(AppConfig.jira.site, ''))
+        jira_api
+          .role_members(link.gsub(AppConfig.jira.site, ''))
           .fetch('actors') { [] }
           .select { |member| member['type'] == 'atlassian-user-role-actor' }
       end

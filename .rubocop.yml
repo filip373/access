@@ -21,3 +21,6 @@ Style/StringLiterals:
 Style/TrailingComma:
   EnforcedStyleForMultiline: comma
   Enabled: true
+Style/MultilineOperationIndentation:
+  EnforcedStyle: aligned
+  Enabled: true
