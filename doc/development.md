@@ -112,12 +112,26 @@ If any of the above commands don't work - consult this [link](https://developer.
 
 Next run the following command to run Jira:
 * `mkdir -p ~/jira && cd $_`
-* `atlas-standalone-run --product jira --context-path '/'`
+* `atlas-create-jira-plugin && cd $_` and follow the onscreen instructions (when entering groupId and artifactId remember not to use hyphens (-), because this is not a valid character for java packages and it will break the plugin)
+
+Now you need to tell Jira SDK that you want to use Jira Software for your plugin. In order to do that you need to modify `pom.xml` for your newly generated plugin. Open it in an editor and find `<groupId>com.atlassian.maven.plugins</groupId>`. A bit lower there will be a `<configuration>` tag. Inside this tag paste:
+```
+<applications>
+    <application>
+        <applicationKey>jira-software</applicationKey>
+        <version>7.0.5</version>
+    </application>
+</applications>
+```
+
+You are all set, now run `atlas-run --context-path '/'`
 
 The script will now download all the required packages (it may take a while).
 It is very important to include `--context-path '/'` - without it, the gems used for integration won't work, because jira will be mounted at `/jira` instead the root of the url.
 
 After Jira is compiled and deployed to Tomcat, you will see a url in the console. Open it in your browser, log in as `admin:admin` and update Jira Base Url when prompted by a popup (if the popup won't appear, then go to `Administration > System > Click 'Edit' button` and remove the `/jira` part).
+
+Now in the `Administration > Applications` you need to setup Jira Software - you need to create an account in Atlassian and you will have a 30-day trial.
 
 Next you need to generate a public/private key-pair. Run the following:
 ```
@@ -150,7 +164,7 @@ Now you can create an Application Link in order to obtain OAuth keys:
 * Press `Continue`
 
 After this, your Application link is ready. Now fill in the missing data in `sec_config.yml`:
-* `site` - your Jira Base Url
+* `site` - your Jira Base Url (if it generated a url using your machines name, and it doesn't work, you can use `localhost:PORT`)
 * `consumer_key` - the key you've entered into the form
 
 You are ready to launch Access and try to sign in via Jira, go to `localhost:3000/auth/jira` and do the OAuth dance.
