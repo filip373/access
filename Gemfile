@@ -25,6 +25,7 @@ gem 'sprockets'
 gem 'thin'
 gem 'togglv8'
 gem 'jira-ruby', require: 'jira'
+gem 'easy_diff'
 
 # Auth
 gem 'omniauth'

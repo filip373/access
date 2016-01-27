@@ -111,6 +111,7 @@ GEM
     descendants_tracker (0.0.4)
       thread_safe (~> 0.3, >= 0.3.1)
     diff-lcs (1.2.5)
+    easy_diff (0.0.7)
     erubis (2.7.0)
     eventmachine (1.0.8)
     execjs (2.5.2)
@@ -404,6 +405,7 @@ DEPENDENCIES
   celluloid
   data_guru
   decent_exposure
+  easy_diff
   font-awesome-rails
   github_api
   google-api-client
