@@ -1,5 +1,8 @@
 .jumbotron
   %h2 HockeyApp Apps
+  - if facade.repo_errors.any?
+    %h3 User Repository Errors
+    = render "hockeyapp_errors", facade: facade
 
   - if log_empty?(facade.log)
     %h3 Move along, nothing to see here.
