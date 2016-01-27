@@ -83,7 +83,7 @@ RSpec.shared_context 'data_guru' do
   let(:errors) { [] }
   let(:jira_projects) do
     [
-      OpenStruct.new(
+      ActiveStruct.new(
         name: 'AccessGuru',
         key: 'AG',
         developers: %w(dev.first dev.second),
@@ -92,7 +92,7 @@ RSpec.shared_context 'data_guru' do
         client_developers: %w(external/clientdev.first),
         clients: %w(external/client.first),
       ),
-      OpenStruct.new(
+      ActiveStruct.new(
         name: 'DataGuru',
         key: 'DG',
         developers: %w(dev.first dev.second),
