@@ -21,3 +21,6 @@ Style/StringLiterals:
 Style/TrailingComma:
   EnforcedStyleForMultiline: comma
   Enabled: true
+Style/DotPosition:
+  EnforcedStyle: leading
+  Enabled: true
