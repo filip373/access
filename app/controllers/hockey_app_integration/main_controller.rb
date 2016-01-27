@@ -1,10 +1,10 @@
 module HockeyAppIntegration
   class MainController < ApplicationController
     expose(:expected_apps) do
-      HockeyAppIntegration::App.all_from_dataguru(data_guru.hockeyapp_apps.all)
+      HockeyAppIntegration::App.all_from_dataguru(data_guru.hockeyapp_apps.all, user_repo)
     end
     expose(:hockeyapp_apps) do
-      HockeyAppIntegration::App.all_from_api(HockeyAppIntegration::Api.new)
+      HockeyAppIntegration::App.all_from_api(HockeyAppIntegration::Api.new, user_repo)
     end
 
     def calculate_diff
@@ -12,7 +12,7 @@ module HockeyAppIntegration
     end
 
     def show_diff
-      render locals: { facade: ::HockeyAppFacade.new(calculated_diff, data_guru) }
+      render locals: { facade: ::HockeyAppFacade.new(calculated_diff, data_guru, user_repo) }
     end
 
     def refresh_cache
@@ -25,8 +25,13 @@ module HockeyAppIntegration
 
     private
 
+    def user_repo
+      @user_repo ||= UserRepository.new(data_guru.members.all)
+    end
+
     def reset_cache
       Rails.cache.delete('hockeyapp_calculated_diff')
+      Rails.cache.delete('hockeyapp_repo_errors')
     end
 
     def calculated_diff
