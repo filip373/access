@@ -1,9 +1,10 @@
 class HockeyAppFacade
-  attr_reader :diff, :data_guru
+  attr_reader :diff, :data_guru, :user_repo
 
-  def initialize(diff, data_guru)
+  def initialize(diff, data_guru, user_repo)
     @diff = diff
     @data_guru = data_guru
+    @user_repo = user_repo
   end
 
   def missing_api_apps
@@ -20,5 +21,11 @@ class HockeyAppFacade
 
   def validation_errors
     data_guru.errors
+  end
+
+  def repo_errors
+    Rails.cache.fetch('hockeyapp_repo_errors') do
+      user_repo.errors.uniq
+    end
   end
 end
