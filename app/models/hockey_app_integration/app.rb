@@ -9,43 +9,48 @@ module HockeyAppIntegration
     end
 
     class << self
-      def all_from_dataguru(dataguru_apps)
+      def all_from_dataguru(dataguru_apps, user_repo)
         dataguru_apps.map do |dg_app|
-          params = build_params_from_dg(dg_app)
+          params = build_params_from_dg(dg_app, user_repo)
           new(params)
         end
       end
 
-      def all_from_api(hockeyapp_api)
+      def all_from_api(hockeyapp_api, user_repo)
         all_apps(hockeyapp_api).map do |api_app|
-          params = build_params_from_api(hockeyapp_api, api_app)
+          params = build_params_from_api(hockeyapp_api, api_app, user_repo)
           new(params)
         end
       end
 
       private
 
-      def build_params_from_dg(app)
+      def build_users(users, user_repo)
+        return [] if users.nil?
+        user_repo.find_many(users).map { |_k, v| v }
+      end
+
+      def build_params_from_dg(app, user_repo)
         {
           name: app.name,
           public_identifier: app.public_identifier,
           teams: app.teams,
-          developers: app.developers,
-          members: app.members,
-          testers: app.testers,
+          developers: build_users(app.developers, user_repo),
+          members: build_users(app.members, user_repo),
+          testers: build_users(app.testers, user_repo),
           optional_info: {},
         }
       end
 
-      def build_params_from_api(api, app)
+      def build_params_from_api(api, app, user_repo)
         developers, members, testers = find_app_users(api, app['public_identifier'])
         {
           name: app['title'],
           public_identifier: app['public_identifier'],
           teams: find_app_teams(api, app['public_identifier']),
-          members: members || [],
-          testers: testers || [],
-          developers: developers || [],
+          members: build_users(members, user_repo),
+          testers: build_users(testers, user_repo),
+          developers: build_users(developers, user_repo),
           optional_info: {
             id: app['id'],
             platform: app['platform'],
@@ -65,7 +70,7 @@ module HockeyAppIntegration
           role = find_role(u['role'])
           unless role == :owner
             roles_hash[role] ||= []
-            roles_hash[role] << u['email']
+            roles_hash[role] << u['email'].split('@').first
           end
         end.compact
         [users_with_roles[:developers], users_with_roles[:members], users_with_roles[:testers]]
