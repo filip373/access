@@ -1,7 +1,6 @@
 module JiraIntegration
   module Actions
     class Diff
-      # TODO: update jira sdk setup readme
       method_object :jira_api, :dataguru_api
 
       def call
