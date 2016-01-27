@@ -4,12 +4,13 @@ RSpec.describe HockeyAppIntegration::Actions::Diff do
   include_context 'hockeyapp_api'
   include_context 'data_guru'
 
+  let(:user_repo) { UserRepository.new(data_guru.members) }
   let(:dg_apps) do
-    HockeyAppIntegration::App.all_from_dataguru(data_guru.hockeyapp_apps)
+    HockeyAppIntegration::App.all_from_dataguru(data_guru.hockeyapp_apps, user_repo)
   end
 
   let(:api_apps) do
-    HockeyAppIntegration::App.all_from_api(hockeyapp_api)
+    HockeyAppIntegration::App.all_from_api(hockeyapp_api, user_repo)
   end
 
   subject do
@@ -22,14 +23,18 @@ RSpec.describe HockeyAppIntegration::Actions::Diff do
 
   context 'diffing members' do
     context 'from dataguru to hockeyapp' do
+      let(:user_emails) { subject[:add_users][dg_apps.first][:members].first.emails }
+
       it 'shows users that are not in hockeyapp' do
-        expect(subject[:add_users][dg_apps.first][:members]).to eq(['third.member@mail.com'])
+        expect(user_emails).to include('third.member@mail.com')
       end
     end
 
     context 'from hockeyapp to dataguru' do
+      let(:user_emails) { subject[:remove_users][dg_apps.first][:members].first.emails }
+
       it 'shows users that are not in data guru' do
-        expect(subject[:remove_users][dg_apps.first][:members]).to eq(['fourth.member@mail.com'])
+        expect(user_emails).to include('fourth.member@mail.com')
       end
     end
   end
