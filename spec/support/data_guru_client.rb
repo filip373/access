@@ -49,7 +49,7 @@ RSpec.shared_context 'data_guru' do
     [
       OpenStruct.new(
         id: 'team1',
-        members: ['second.member', 'third.member', 'fiveth.member'],
+        members: ['second.member', 'third.member', 'fifth.member'],
         repos: ['second-repo'],
         permission: 'push',
       ),
