@@ -10,3 +10,4 @@ set :stage,  "production"
 
 set :docker_dockerfile, "docker/production/Dockerfile"
 set :docker_additional_options, -> { "--env-file #{fetch(:deploy_to)}/shared/envfile --cpu-quota 100000" }
+set :docker_cpu_quota, "200000"

@@ -1,4 +1,0 @@
-#!/bin/bash
-
-cd /var/www/app
-exec bundle exec sidekiq --config ./config/sidekiq.yml

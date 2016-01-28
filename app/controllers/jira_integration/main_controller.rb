@@ -1,10 +1,7 @@
 module JiraIntegration
   class MainController < ApplicationController
     before_action :check_session
-    expose(:projects) { jira_client.Project.all }
-
-    def index
-    end
+    expose(:diff) { Actions::Diff.call(jira_api, data_guru) }
 
     private
 
@@ -17,6 +14,10 @@ module JiraIntegration
       @client.set_access_token(session[:jira_credentials][:token],
                                session[:jira_credentials][:secret])
       @client
+    end
+
+    def jira_api
+      @jira_api ||= Api.new(jira_client)
     end
 
     def check_session
