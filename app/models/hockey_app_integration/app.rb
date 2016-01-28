@@ -74,10 +74,8 @@ module HockeyAppIntegration
 
       def assign_role(hash, user)
         role = MainHelper.id_to_role(user['role'])
-        unless role == :owners
-          hash[role] ||= []
-          hash[role] << user['email'].split('@').first
-        end
+        hash[role] ||= []
+        hash[role] << user['email'].split('@').first unless role == :owners
       end
 
       def find_app_teams(hockeyapp_api, app_id)
