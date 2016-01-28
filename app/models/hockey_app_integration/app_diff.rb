@@ -47,7 +47,7 @@ module HockeyAppIntegration
     def arrayed_users(label, role)
       if label == :add_users
         return expected_app.public_send(role) - api_app.public_send(role)
-      elsif label == :remove_users
+      else
         return api_app.public_send(role) - expected_app.public_send(role)
       end
     end
