@@ -78,4 +78,13 @@ GithubApp::Application.routes.draw do
       delete :cleanup_teams
     end
   end
+
+  namespace :hockeyapp, module: :hockey_app_integration do
+    controller :main do
+      get :calculate_diff
+      get :show_diff
+      get :refresh_cache
+      post :sync
+    end
+  end
 end

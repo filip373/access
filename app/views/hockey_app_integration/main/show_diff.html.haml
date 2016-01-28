@@ -1,0 +1,39 @@
+.jumbotron
+  %h2 HockeyApp Apps
+  - if facade.repo_errors.any?
+    %h3 User Repository Errors
+    = render "hockeyapp_errors", facade: facade
+
+  - if log_empty?(facade.log)
+    %h3 Move along, nothing to see here.
+    = link_to "Wicked!", root_path, class: 'btn btn-primary btn-lg'
+    = link_to "Refresh cache!", hockeyapp_refresh_cache_path, class: 'btn btn-primary btn-lg'
+  - else
+    %h3 Please confirm changes below:
+    = render "hockeyapp_log", facade: facade
+    = form_tag hockeyapp_sync_path, class: 'inline', method: :post do
+      = button_tag "Confirm changes",
+        type: :submit,
+        class: 'btn btn-primary btn-lg',
+        'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> I\'m on it...".html_safe
+    = link_to "Refresh cache!", hockeyapp_refresh_cache_path,
+      class: 'btn btn-primary btn-lg',
+      'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> I\'m on it...".html_safe
+
+  - if facade.missing_api_apps.any?
+    %h3 Missing apps in HockeyApp service
+    %p
+      Apps found in permissions repo and not in HockeyApp service:
+    %ul.list-group
+    - facade.missing_api_apps.each do |app|
+      %li.list-group-item= app
+
+  - if facade.missing_dg_apps.any?
+    %h3 Missing apps in permissions repo
+    %p
+      Add those app in permissions repo or delete:
+    %ul.list-group
+    - facade.missing_dg_apps.each do |app|
+      %li.list-group-item
+        %a{ href: app_link(app.optional_info[:id]) }
+          #{app.name} / #{app.optional_info[:platform]} / #{app.optional_info[:custom_release_type]}
