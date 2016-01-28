@@ -67,7 +67,7 @@ module HockeyAppIntegration
         users = hockeyapp_api.list_app_users(app_id)['app_users']
         return [] if users.nil?
         users_with_roles = users.each_with_object({}) do |u, roles_hash|
-          role = MainHelper::id_to_role(u['role'])
+          role = MainHelper.id_to_role(u['role'])
           unless role == :owner
             roles_hash[role] ||= []
             roles_hash[role] << u['email'].split('@').first
@@ -77,11 +77,7 @@ module HockeyAppIntegration
       end
 
       def find_app_teams(hockeyapp_api, app_id)
-        teams = hockeyapp_api.list_app_teams(app_id)['teams']
-        return [] if teams.nil?
-        teams.map do |t|
-          t['name']
-        end
+        Array(hockeyapp_api.list_app_teams(app_id)['teams']).map { |t| t['name'] }
       end
     end
   end
