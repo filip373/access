@@ -51,11 +51,15 @@ module HockeyAppIntegration
           members: build_users(members, user_repo),
           testers: build_users(testers, user_repo),
           developers: build_users(developers, user_repo),
-          optional_info: {
-            id: app['id'],
-            platform: app['platform'],
-            custom_release_type: app['custom_release_type'],
-          },
+          optional_info: build_optional_info(app),
+        }
+      end
+
+      def build_optional_info(app)
+        {
+          id: app['id'],
+          platform: app['platform'],
+          custom_release_type: app['custom_release_type'],
         }
       end
 
