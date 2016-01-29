@@ -54,7 +54,7 @@ module HockeyAppIntegration
 
       def sync_add_users
         diff[:add_users].each do |app, users|
-          each_user(users, app) do |role_id, user_email, user_id|
+          each_user(users, app) do |role_id, user_email, _user_id|
             hockeyapp_api.invite_user_to_app(app.public_identifier, user_email, role_id)
           end
         end
