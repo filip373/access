@@ -1,13 +1,15 @@
+.row.with-margin-top
+  .col.s12.m6
+    = render 'github_integration'
+  .col.s12.m6
+    = render 'google_integration'
+  .col.s12.m6
+    = render 'rollbar_integration'
+  .col.s12.m6
+    = render 'toggl_integration'
+  .col.s12.m6
+    = render 'hockeyapp_integration'
+
 .jumbotron
-  = render "github_integration"
-.jumbotron
-  = render "google_integration"
-.jumbotron
-  = render "rollbar_integration"
-.jumbotron
-  = render "toggl_integration"
-.jumbotron
-  = render "hockeyapp_integration"
-- if Features.on?(:generate_permissions)
-  .jumbotron
+  - if Features.on?(:generate_permissions)
     = render "generate_integration"

@@ -1,8 +1,11 @@
-%h2
-  What about generating permissions repo?
-%hr
-  = link_to 'Generate users', generate_users_path, class: 'btn btn-primary btn-lg'
-  = link_to 'Generate github teams', github_generate_permissions_path, class: 'btn btn-primary btn-lg'
-  = link_to 'Generate google groups', google_generate_permissions_path, class: 'btn btn-primary btn-lg'
-  = link_to 'Generate rollbar teams', rollbar_generate_permissions_path, class: 'btn btn-primary btn-lg'
-  = link_to 'Generate toggl teams', toggl_generate_permissions_path, class: 'btn btn-primary btn-lg'
+.thumbnail.integration-cell
+  .caption
+    %h2
+      What about generating permissions repo?
+    Generate...
+    %hr
+      = link_to 'Users', generate_users_path, class: 'btn btn-primary btn-lg'
+      = link_to 'Github teams', github_generate_permissions_path, class: 'btn btn-primary btn-lg'
+      = link_to 'Google groups', google_generate_permissions_path, class: 'btn btn-primary btn-lg'
+      = link_to 'Rollbar teams', rollbar_generate_permissions_path, class: 'btn btn-primary btn-lg'
+      = link_to 'Toggl teams', toggl_generate_permissions_path, class: 'btn btn-primary btn-lg'

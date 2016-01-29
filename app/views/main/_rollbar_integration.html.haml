@@ -1,12 +1,15 @@
-%h2
-  Ready to sync rollbar teams?
-= link_to "Review last changes in permissions", AppConfig.permissions_repo.url, target: "_blank"
-%hr
-  - if validation_errors.empty?
-    = form_tag rollbar_calculate_diff_path, method: :get do
-      = button_tag "Show diff", type: :submit, class: 'btn btn-primary btn-lg', 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> I\'m on it...".html_safe
-  - else
-    %h3 Unable to parse following .yml files:
-    %ul.list-group
-    - validation_errors.each do |error|
-      %li.list-group-item.list-group-item-danger #{error}
+.card.blue.lighten-5.hoverable
+  .card-content.black-text
+    %span.card-title
+      Ready to sync rollbar teams?
+    %p
+      = link_to "Review last changes in permissions", AppConfig.permissions_repo.url, target: "_blank"
+  .card-action
+    - if validation_errors.empty?
+      = form_tag rollbar_calculate_diff_path, method: :get do
+        = button_tag "Show diff", type: :submit, class: 'btn btn-primary btn-lg', 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> I\'m on it...".html_safe
+    - else
+      %h3 Unable to parse following .yml files:
+      %ul.list-group
+      - validation_errors.each do |error|
+        %li.list-group-item.list-group-item-danger #{error}
