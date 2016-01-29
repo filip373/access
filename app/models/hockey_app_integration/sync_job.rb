@@ -12,7 +12,7 @@ module HockeyAppIntegration
       notification_ping! 'Synchronization done! High Five!'
     end
 
-    def notification_ping(message)
+    def notification_ping!(message)
       SlackNotification.new(message: message).ping!
     end
   end
