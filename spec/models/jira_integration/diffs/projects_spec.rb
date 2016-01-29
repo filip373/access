@@ -9,13 +9,13 @@ RSpec.describe JiraIntegration::Diffs::Projects do
 
     it 'calculates missing projects in Jira' do
       expect(diff.last).to eq(
-        'AG' => { name: 'AccessGuru' },
+        'PER' => { name: 'Permissions' },
       )
     end
 
     it 'calculates zombie projects in Jira' do
       expect(diff.first).to eq(
-        'PER' => { name: 'Permissions' },
+        'NFG' => { name: 'NETGURU FLOW' },
       )
     end
   end

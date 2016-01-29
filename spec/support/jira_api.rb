@@ -1,8 +1,9 @@
 RSpec.shared_context 'jira_api' do
   let(:projects) do
     [
+      OpenStruct.new(name: 'AccessGuru', key: 'AG') { define_method(:attributes) { to_h } },
       OpenStruct.new(name: 'DataGuru', key: 'DG') { define_method(:attributes) { to_h } },
-      OpenStruct.new(name: 'Permissions', key: 'PER') { define_method(:attributes) { to_h } },
+      OpenStruct.new(name: 'NETGURU FLOW', key: 'NFG') { define_method(:attributes) { to_h } },
     ]
   end
 

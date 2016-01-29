@@ -132,6 +132,15 @@ RSpec.shared_context 'data_guru' do
         client_developers: [],
         clients: %w(external/client.first),
       ),
+      ActiveStruct.new(
+        name: 'Permissions',
+        key: 'PER',
+        developers: %w(dev.first dev.second),
+        qas: [],
+        pms: %w(pm.second),
+        client_developers: [],
+        clients: %w(external/client.first),
+      ),
     ]
   end
 
