@@ -1,11 +1,12 @@
 @import 'font-awesome';
-@import 'netguru-theme';
+@import 'materialize';
 
-body {
-  padding-top: 70px;
+nav {
+  @extend .blue, .darken-3;
 }
 
-.navbar-logo {
+.brand-logo {
+  margin-left: 15px;
   font-size: 18px;
   font-weight: bold;
 }
@@ -17,4 +18,8 @@ body {
 
 .inline {
   display: inline;
+}
+
+.with-margin-top {
+  margin-top: 13px;
 }
