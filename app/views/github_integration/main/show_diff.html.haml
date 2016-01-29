@@ -1,30 +1,30 @@
 - if Features.on?(:generate_permissions)
-  .jumbotron
-    %h2 Do you want to generate github teams yaml files for permissions?
+  .card-panel.with-margin-top
+    %h4 Do you want to generate github teams yaml files for permissions?
     = form_tag github_generate_permissions_path, method: :get do
       = button_tag "Generate permissions", type: :submit, class: 'btn btn-primary btn-lg'
 
-.jumbotron
+.card-panel
   = render 'insecure_users', users: insecure_users
 
-  %h2 Github teams
+  %h4 Github teams
   - if diff_errors.present?
     = render 'errors'
 
   - if log_empty?(gh_log)
-    %h3 Move along, nothing to see here.
+    %h4 Move along, nothing to see here.
     = link_to "Wicked!", root_path, class: 'btn btn-primary btn-lg'
     = link_to "Refresh cache!", github_refresh_cache_path, class: 'btn btn-primary btn-lg'
   - else
-    %h3 Please confirm changes below:
+    %h4 Please confirm changes below:
     = render "gh_log"
     = form_tag github_sync_path, class: 'inline', method: :post do
       = button_tag "Confirm changes", type: :submit, class: 'btn btn-primary btn-lg', 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> I\'m on it...".html_safe
     = link_to "Refresh sync", github_refresh_cache_path, class: 'btn btn-primary btn-lg', 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> I\'m on it...".html_safe
 
   - if validation_errors.empty? && missing_teams.any?
-    %h2 Stranded teams
-    %h3 Following teams are on GitHub, but can't be found in permissions repository - they most likely should be deleted.
+    %h4 Stranded teams
+    %h4 Following teams are on GitHub, but can't be found in permissions repository - they most likely should be deleted.
     %ul.list-group
       - missing_teams.each do |team|
         = link_to team.name, github_team_path(team.name), class: 'list-group-item'
