@@ -1,24 +1,24 @@
-.jumbotron
-  %h2 Toggl teams
+.card-panel
+  %h4 Toggl teams
 
   - if diff_errors.present?
     = render 'errors'
 
   - if log_empty?(toggl_log)
-    %h3 Move along, nothing to see here.
+    %h4 Move along, nothing to see here.
     = link_to "Wicked!", root_path, class: 'btn btn-primary btn-lg'
     = link_to "Refresh cache!", toggl_refresh_cache_path, class: 'btn btn-primary btn-lg'
   - else
-    %h3 Please confirm changes below:
+    %h4 Please confirm changes below:
     = render "toggl_log"
     = form_tag toggl_sync_path, class: 'inline', method: :post do
       = button_tag "Confirm changes", type: :submit, class: 'btn btn-primary btn-lg', 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> I\'m on it...".html_safe
     = link_to "Refresh cache!", toggl_refresh_cache_path, class: 'btn btn-primary btn-lg', 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> I\'m on it...".html_safe
 
   - if validation_errors.empty? && missing_teams.any?
-    %h2 Stranded teams
-    %h3 Following teams are on Toggl, but can't be found in permissions repository - they most likely should be archived.
-    %ul.list-group
+    %h4 Stranded teams
+    %h5 Following teams are on Toggl, but can't be found in permissions repository - they most likely should be archived.
+    %ul.collection
       - missing_teams.each do |team|
         = link_to team.name, toggl_project_path(workspace_id, team.id), class: 'list-group-item'
     = form_tag toggl_cleanup_teams_path, method: :delete do
