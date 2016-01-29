@@ -43,22 +43,20 @@ module HockeyAppIntegration
       end
 
       def sync_remove_teams
-        each_team(diff[:remove_teams]) do |app_id, team_id|
+        each_team(diff[:remove_teams]) do |_app_id, team_id|
           hockeyapp_api.remove_team_from_app(app.public_identifier, team_id)
         end
       end
 
       def sync_add_users
         each_user(diff[:add_users]) do |role_id, user_email, _user_id, app_id|
-          binding.pry
           hockeyapp_api.invite_user_to_app(app_id, user_email, role_id)
         end
       end
 
       def sync_remove_users
         each_user(diff[:remove_users]) do |_role_id, _user_email, user_id, app_id|
-          binding.pry
-          hockeyapp_api.remove_user_from_app(app_d, user_id)
+          hockeyapp_api.remove_user_from_app(app_id, user_id)
         end
       end
 
