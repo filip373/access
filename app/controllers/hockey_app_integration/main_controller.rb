@@ -21,7 +21,7 @@ module HockeyAppIntegration
     end
 
     def sync
-      HockeyAppIntegration::SyncJob.new(hockeyapp_api, calculated_diff)
+      HockeyAppIntegration::SyncJob.new.perform(hockeyapp_api, calculated_diff)
       reset_cache
     end
 
