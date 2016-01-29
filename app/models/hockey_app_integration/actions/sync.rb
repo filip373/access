@@ -11,7 +11,7 @@ module HockeyAppIntegration
         sync_add_teams
         sync_remove_teams
         sync_add_users
-        sync_remove_uers
+        sync_remove_users
       end
 
       private
@@ -27,7 +27,7 @@ module HockeyAppIntegration
       end
 
       def all_app_users(app)
-        @all_app_users ||= hockeyapp_api.list_app_users(app.public_identifier)
+        hockeyapp_api.list_app_users(app.public_identifier)['app_users']
       end
 
       def find_user_id(app, user_email)
@@ -38,8 +38,7 @@ module HockeyAppIntegration
 
       def sync_add_teams
         diff[:add_teams].each do |app, teams|
-          teams.each do |team|
-            team_id = find_team_id(team)
+          each_team(teams) do |team_id|
             hockeyapp_api.add_team_to_app(app.public_identifier, team_id)
           end
         end
@@ -47,8 +46,7 @@ module HockeyAppIntegration
 
       def sync_remove_teams
         diff[:remove_teams].each do |app, teams|
-          teams.each do |team|
-            team_id = find_team_id(team)
+          each_team(teams) do |team_id|
             hockeyapp_api.remove_team_from_app(app.public_identifier, team_id)
           end
         end
@@ -56,19 +54,32 @@ module HockeyAppIntegration
 
       def sync_add_users
         diff[:add_users].each do |app, users|
-          users.each do |role, user|
-            role_id = role_to_id(role)
-            hockeyapp_api.invite_user_to_app(app.public_identifier, user.emails.first, role_id)
+          each_user(users, app) do |role_id, user_email, user_id|
+            hockeyapp_api.invite_user_to_app(app.public_identifier, user_email, role_id)
           end
         end
       end
 
       def sync_remove_users
         diff[:remove_users].each do |app, users|
-          users.each do |_role, user|
-            user_id = find_user_id(user.emails.first)
+          each_user(users, app) do |_role_id, _user_email, user_id|
             hockeyapp_api.remove_user_from_app(app.public_identifier, user_id)
           end
+        end
+      end
+
+      def each_team(teams)
+        teams.each do |team|
+          yield find_team_id(team)
+        end
+      end
+
+      def each_user(users, app)
+        users.each do |role, user|
+          role_id = MainHelper.role_to_id(role)
+          user_email = user.first.emails.first
+          user_id = find_user_id(app, user_email)
+          yield role_id, user_email, user_id
         end
       end
     end
