@@ -40,6 +40,8 @@ defaults: &defaults
     consumer_key: 'get a key'
     private_key_path: '/path/to/your/private/key'
     site: 'https://your-jira-address'
+  hockey_app:
+    token: 'my name is token'
 
 test:
   <<: *defaults
@@ -57,8 +59,6 @@ test:
       account_using_instruction: dummy
     groups_whitelist: [group1@netguru.pl]
   toggl_token: 'abcdefg'
-  hockey_app:
-    token: 'my name is token'
 
 development:
   <<: *defaults
