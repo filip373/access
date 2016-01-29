@@ -33,5 +33,10 @@ RSpec.describe JiraIntegration::Diffs::Memberships do
         },
       )
     end
+
+    it 'does not include projects that are missing in Jira' do
+      expect(subject.first).to_not have_key('PER')
+      expect(subject.last).to_not have_key('PER')
+    end
   end
 end
