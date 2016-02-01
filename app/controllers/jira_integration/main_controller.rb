@@ -1,5 +1,6 @@
 module JiraIntegration
   class MainController < ApplicationController
+    include JiraApi
     before_action :check_session
     expose(:diff) { JiraFacade.new(data_guru, cached_diff) }
 
@@ -34,23 +35,12 @@ module JiraIntegration
       Rails.cache.fetch('jira_calculated_diff')
     end
 
-    def jira_client
-      return @client if @client
-      @client ||= JIRA::Client.new(private_key_file: AppConfig.jira.private_key_path,
-                                   consumer_key: AppConfig.jira.consumer_key,
-                                   site: AppConfig.jira.site,
-                                   context_path: '')
-      @client.set_access_token(session[:jira_credentials][:token],
-                               session[:jira_credentials][:secret])
-      @client
-    end
-
-    def jira_api
-      @jira_api ||= Api.new(jira_client)
-    end
-
     def check_session
       redirect_to '/auth/jira' if jira_credentials.nil?
+    end
+
+    def jira_credentials
+      session[:jira_credentials]
     end
   end
 end

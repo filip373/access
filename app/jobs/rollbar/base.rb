@@ -1,5 +1,9 @@
 module RollbarWorkers
   class Base < BaseWorker
+    def self.diff_key
+      'rollbar_performing_teams'
+    end
+
     private
 
     def expected_teams
