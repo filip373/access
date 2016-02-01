@@ -10,7 +10,7 @@
   - if diff.log_empty?
     %h3 Move along, nothing to see here.
     = link_to "Wicked!", root_path, class: 'btn btn-primary btn-lg'
-    -# = link_to "Refresh cache!", github_refresh_cache_path, class: 'btn btn-primary btn-lg'
+    = link_to "Refresh cache!", jira_refresh_cache_path, class: 'btn btn-primary btn-lg'
   - else
     %h3 Please confirm changes below:
     %ul.list-group

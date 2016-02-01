@@ -38,6 +38,7 @@ GithubApp::Application.routes.draw do
     controller :main do
       get :show_diff
       get :calculate_diff
+      get :refresh_cache
       post :sync
     end
   end

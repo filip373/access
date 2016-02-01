@@ -4,6 +4,7 @@ class CalculateDiffStrategist
     ::GithubWorkers::DiffWorker,
     ::GoogleWorkers::DiffWorker,
     ::RollbarWorkers::TeamsWorker,
+    ::JiraWorkers::DiffWorker,
   ].freeze
   private_constant :WORKERS
 
@@ -38,6 +39,8 @@ class CalculateDiffStrategist
       return 'rollbar_performing_teams'
     when :google
       return 'google_performing_diff'
+    when :jira
+      return 'jira_performing_diff'
     end
   end
 
