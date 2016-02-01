@@ -6,7 +6,7 @@ module JiraIntegration
 
     def sync
       sync = SyncJob.new.perform(AuditedApi.new(jira_api, current_user), raw_diff)
-      return render(:sync_error, locals: { errors: sync.errors })if sync.errors.any?
+      return render(:sync_error, locals: { errors: sync.errors }) if sync.errors.any?
     end
 
     private
