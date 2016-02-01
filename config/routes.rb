@@ -36,7 +36,9 @@ GithubApp::Application.routes.draw do
 
   namespace :jira, module: :jira_integration do
     controller :main do
-      get :index
+      get :show_diff
+      get :calculate_diff
+      post :sync
     end
   end
 

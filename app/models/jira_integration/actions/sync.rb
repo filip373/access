@@ -1,7 +1,7 @@
 module JiraIntegration
   module Actions
     class Sync
-      method_object :diff, :jira_api, :dataguru_api
+      method_object :diff, :jira_api
       attr_accessor :errors
       attr_reader :users_repo
       MEMBER_NOT_FOUND = ->(member) { "Member #{member} not found in JIRA" }
@@ -18,16 +18,18 @@ module JiraIntegration
       private
 
       def add_members(projects)
-        each_member(projects) do |project_role_ids, key, name, member|
-          response = jira_api.add_member_to_role(key, project_role_ids[name], member)
+        MemberIterator.new(projects).each do |key, role, member|
+          member = users_repo.find(member)
+          response = jira_api.add_member(key, role_ids(key)[role], member.id)
           handle_error(response, MEMBER_NOT_FOUND[member])
         end
       end
 
       def remove_members(projects)
-        each_member(projects) do |project_role_ids, key, name, member|
-          response = jira_api.remove_member_from_role(key, project_role_ids[name], member)
-          handle_error(response, MEMBER_NOT_FOUND[member.id])
+        MemberIterator.new(projects).each do |key, role, member|
+          member = users_repo.find(member)
+          response = jira_api.remove_member(key, role_ids(key)[role], member.id)
+          handle_error(response, MEMBER_NOT_FOUND[member])
         end
       end
 
@@ -39,15 +41,6 @@ module JiraIntegration
 
       def handle_error(response, error_message)
         errors << error_message if response == :error
-      end
-
-      def each_member(projects)
-        projects.each do |(key, roles)|
-          project_role_ids = role_ids(key)
-          roles.each do |name, members|
-            members.each { |member| yield project_role_ids, key, name, user_repo.find(member) }
-          end
-        end
       end
     end
   end

@@ -1,0 +1,30 @@
+- if Features.on?(:generate_permissions)
+  .jumbotron
+    %h2 Do you want to generate github teams yaml files for permissions?
+    -# = form_tag github_generate_permissions_path, method: :get do
+    -#   = button_tag "Generate permissions", type: :submit, class: 'btn btn-primary btn-lg'
+
+.jumbotron
+
+  %h2 JIRA projects
+  - if diff.log_empty?
+    %h3 Move along, nothing to see here.
+    = link_to "Wicked!", root_path, class: 'btn btn-primary btn-lg'
+    -# = link_to "Refresh cache!", github_refresh_cache_path, class: 'btn btn-primary btn-lg'
+  - else
+    %h3 Please confirm changes below:
+    %ul.list-group
+      - diff.log.each do |line|
+        %li.list-group-item= line
+      = form_tag jira_sync_path, class: 'inline', method: :post do
+        = button_tag "Confirm changes", type: :submit, class: 'btn btn-primary btn-lg', 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> I\'m on it...".html_safe
+  - if diff.missing_projects.any?
+    %h3 Projects missing in JIRA
+    %ul.list-group
+      - diff.missing_projects.each do |key, project|
+        %li.list-group-item= [key, project[:name]].join(' - ')
+  - if diff.zombie_projects.any?
+    %h3 Zombie projects in JIRA
+    %ul.list-group
+      - diff.zombie_projects.each do |key, project|
+        %li.list-group-item= [key, project[:name]].join(' - ')
