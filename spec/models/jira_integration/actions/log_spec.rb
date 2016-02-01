@@ -2,14 +2,6 @@ require 'rails_helper'
 
 RSpec.describe JiraIntegration::Actions::Log do
   describe '.call' do
-    before do
-      translations = {
-        add_member: 'Add %{member} to %{role} in %{key}',
-        remove_member: 'Remove %{member} from %{role} in %{key}',
-      }
-      I18n.backend.store_translations(:en, jira: translations)
-    end
-
     subject(:log) { described_class.call(diff) }
     let(:diff) do
       {
@@ -18,12 +10,12 @@ RSpec.describe JiraIntegration::Actions::Log do
             developers: %w(dev.first),
           },
           'DG': {
-            developers: %w(dev.second),
+            developers: %w(dev.third),
           },
         },
         remove_members: {
           'AG': {
-            developers: %w(dev.second),
+            developers: %w(dev.third),
             qas: %w(qa.first),
           },
           'DG': {
@@ -37,11 +29,11 @@ RSpec.describe JiraIntegration::Actions::Log do
     end
 
     it { expect(subject.length).to eq 6 }
-    it { is_expected.to include '[api] Add dev.first to developers in AG' }
-    it { is_expected.to include '[api] Add dev.second to developers in DG' }
-    it { is_expected.to include '[api] Remove dev.second from developers in AG' }
-    it { is_expected.to include '[api] Remove qa.first from qas in AG' }
-    it { is_expected.to include '[api] Remove dev.first from developers in DG' }
-    it { is_expected.to include '[api] Remove pm.first from pms in PEM' }
+    it { is_expected.to include '[api] add member dev.first to role developers in project AG' }
+    it { is_expected.to include '[api] add member dev.third to role developers in project DG' }
+    it { is_expected.to include '[api] remove member dev.third from role developers in project AG' }
+    it { is_expected.to include '[api] remove member qa.first from role qas in project AG' }
+    it { is_expected.to include '[api] remove member dev.first from role developers in project DG' }
+    it { is_expected.to include '[api] remove member pm.first from role pms in project PEM' }
   end
 end

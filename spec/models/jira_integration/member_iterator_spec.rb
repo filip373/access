@@ -31,7 +31,7 @@ RSpec.describe JiraIntegration::MemberIterator do
       end
 
       it 'fails with JiraIntegration::InvalidProjectsObject error' do
-        expect { |b| subject.each(&b) }.to raise_error JiraIntegration::InvalidProjectsObject
+        expect { |b| subject.each(&b) }.to raise_error StandardError
       end
     end
   end
