@@ -1,7 +1,13 @@
 module JiraIntegration
   class MainController < ApplicationController
     before_action :check_session
-    expose(:diff) { Actions::Diff.call(jira_api, data_guru) }
+    expose(:raw_diff) { JiraIntegration::Actions::Diff.call(jira_api, data_guru) }
+    expose(:diff) { JiraFacade.new(data_guru, raw_diff) }
+
+    def sync
+      sync = SyncJob.new.perform(AuditedApi.new(jira_api, current_user), raw_diff)
+      return render(:sync_error, locals: { errors: sync.errors }) if sync.errors.any?
+    end
 
     private
 

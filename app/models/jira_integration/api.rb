@@ -2,6 +2,10 @@ module JiraIntegration
   class Api
     attr_private_initialize :jira_client
 
+    def namespace
+      :jira
+    end
+
     def user(name)
       jira_client.User.find(name)
     end
@@ -21,15 +25,15 @@ module JiraIntegration
       JSON.parse(jira_client.get(link).body)
     end
 
-    def add_member_to_role(project_key, role_id, member)
-      jira_client.post(role_link(project_key, role_id), { user: [member] }.to_json)
+    def add_member(key, role, member)
+      jira_client.post(role_link(key, role), { user: [member] }.to_json)
     rescue JIRA::HTTPError
       Rollbar.info("There is no JIRA member with username #{member}")
       :error
     end
 
-    def remove_member_from_role(project_key, role_id, member)
-      jira_client.delete(role_link(project_key, role_id) + "?user=#{member}")
+    def remove_member(key, role, member)
+      jira_client.delete(role_link(key, role) + "?user=#{member}")
     rescue JIRA::HTTPError
       Rollbar.info("There is no JIRA member with username #{member}")
       :error
