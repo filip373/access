@@ -14,8 +14,6 @@ module JiraIntegration
           members.each { |member| yield key, role, member }
         end
       end
-    rescue StandardError
-      fail InvalidProjectsObject
     end
 
     private

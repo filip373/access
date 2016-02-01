@@ -8,8 +8,9 @@ module JiraIntegration
 
     def ping_messages
       notification_ping! 'Synchronizing JIRA teams...'
-      yield
+      response = yield
       notification_ping! 'Synchronization done! High Five!'
+      response
     end
 
     def notification_ping!(msg)

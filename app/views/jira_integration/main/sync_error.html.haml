@@ -1,0 +1,8 @@
+.jumbotron
+  %h2 Errors occured while syncing:
+  %ul.list-group
+    - errors.each do |line|
+      %li.list-group-item= line
+
+
+  = link_to "Take me back!", root_path, class: 'btn btn-primary btn-lg'

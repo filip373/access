@@ -4,7 +4,7 @@ module JiraIntegration
       method_object :diff, :jira_api
       attr_accessor :errors
       attr_reader :users_repo
-      MEMBER_NOT_FOUND = ->(member) { "Member #{member} not found in JIRA" }
+      MEMBER_NOT_FOUND = ->(member) { "Member #{member.id} not found in JIRA" }
 
       def call
         @errors = []
