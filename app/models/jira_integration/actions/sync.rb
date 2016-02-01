@@ -18,18 +18,14 @@ module JiraIntegration
       private
 
       def add_members(projects)
-        MemberIterator.new(projects).each do |key, role, member|
-          member = users_repo.find(member)
-          response = jira_api.add_member(key, role_ids(key)[role], member.id)
-          handle_error(response, MEMBER_NOT_FOUND[member])
+        each_member(projects) do |key, role, member|
+          jira_api.add_member(key, role_ids(key)[role], member.id)
         end
       end
 
       def remove_members(projects)
-        MemberIterator.new(projects).each do |key, role, member|
-          member = users_repo.find(member)
-          response = jira_api.remove_member(key, role_ids(key)[role], member.id)
-          handle_error(response, MEMBER_NOT_FOUND[member])
+        each_member(projects) do |key, role, member|
+          jira_api.remove_member(key, role_ids(key)[role], member.id)
         end
       end
 
@@ -41,6 +37,14 @@ module JiraIntegration
 
       def handle_error(response, error_message)
         errors << error_message if response == :error
+      end
+
+      def each_member(projects)
+        MemberIterator.new(projects).each do |key, role, member|
+          member = users_repo.find(member)
+          response = yield key, role, member
+          handle_error(response, MEMBER_NOT_FOUND[member])
+        end
       end
     end
   end
