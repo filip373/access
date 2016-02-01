@@ -8,13 +8,13 @@ module JiraIntegration
       @projects = projects
     end
 
-    def each(&block)
+    def each
       projects.each do |key, roles|
         roles.each do |role, members|
-          members.each { |member| block.call(key, role, member) }
+          members.each { |member| yield key, role, member }
         end
       end
-    rescue StandardError => e
+    rescue StandardError
       fail InvalidProjectsObject
     end
 
