@@ -1,5 +1,9 @@
 module TogglWorkers
   class Base < BaseWorker
+    def self.diff_key
+      'toggl_performing_diff'
+    end
+
     private
 
     def current_members_repository

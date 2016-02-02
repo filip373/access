@@ -4,6 +4,7 @@ class CalculateDiffStrategist
     ::GithubWorkers::DiffWorker,
     ::GoogleWorkers::DiffWorker,
     ::RollbarWorkers::TeamsWorker,
+    ::JiraWorkers::DiffWorker,
   ].freeze
   private_constant :WORKERS
 
@@ -29,16 +30,7 @@ class CalculateDiffStrategist
   private
 
   def diff_key_strategy
-    case label
-    when :toggl
-      return 'toggl_performing_diff'
-    when :github
-      return 'github_performing_diff'
-    when :rollbar
-      return 'rollbar_performing_teams'
-    when :google
-      return 'google_performing_diff'
-    end
+    worker_strategy.diff_key
   end
 
   def worker_strategy

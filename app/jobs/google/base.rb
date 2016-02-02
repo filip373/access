@@ -1,5 +1,9 @@
 module GoogleWorkers
   class Base < BaseWorker
+    def self.diff_key
+      'google_performing_diff'
+    end
+
     private
 
     def expected_groups
