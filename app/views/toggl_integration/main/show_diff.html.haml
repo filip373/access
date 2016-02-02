@@ -12,8 +12,8 @@
     %h3 Please confirm changes below:
     = render "toggl_log"
     = form_tag toggl_sync_path, class: 'inline', method: :post do
-      = button_tag "Confirm changes", type: :submit, class: 'btn btn-primary btn-lg', 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> I\'m on it...".html_safe
-    = link_to "Refresh cache!", toggl_refresh_cache_path, class: 'btn btn-primary btn-lg', 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> I\'m on it...".html_safe
+      = button_tag "Confirm changes", type: :submit, class: 'btn btn-primary btn-lg', 'data-disable-with' => disable_text
+    = link_to "Refresh cache!", toggl_refresh_cache_path, class: 'btn btn-primary btn-lg', 'data-disable-with' => disable_text
 
   - if validation_errors.empty? && missing_teams.any?
     %h2 Stranded teams
@@ -22,4 +22,4 @@
       - missing_teams.each do |team|
         = link_to team.name, toggl_project_path(workspace_id, team.id), class: 'list-group-item'
     = form_tag toggl_cleanup_teams_path, method: :delete do
-      = button_tag "Ok, it makes sense to archive these teams!", type: :submit, class: 'btn btn-primary btn-lg', 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> I\'m on it...".html_safe
+      = button_tag "Ok, it makes sense to archive these teams!", type: :submit, class: 'btn btn-primary btn-lg', 'data-disable-with' => disable_text

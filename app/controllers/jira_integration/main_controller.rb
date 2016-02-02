@@ -1,7 +1,7 @@
 module JiraIntegration
   class MainController < ApplicationController
-    include JiraApi
-    before_action :check_session
+    include JiraApi, JiraProtectedEndpoint
+
     expose(:diff) { JiraFacade.new(data_guru, cached_diff) }
 
     def calculate_diff
@@ -33,14 +33,6 @@ module JiraIntegration
 
     def cached_diff
       Rails.cache.fetch('jira_calculated_diff')
-    end
-
-    def check_session
-      redirect_to '/auth/jira' if jira_credentials.nil?
-    end
-
-    def jira_credentials
-      session[:jira_credentials]
     end
   end
 end

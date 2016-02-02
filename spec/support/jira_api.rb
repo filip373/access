@@ -23,6 +23,13 @@ RSpec.shared_context 'jira_api' do
         'Client Dev' => 'DG-client-devs',
         'Clients' => 'DG-clients',
       },
+      'NFG' => {
+        'Developers' => 'NFG-developers',
+        'PM Team' => 'NFG-pms',
+        'QA Team' => 'NFG-qas',
+        'Client Dev' => 'NFG-client-devs',
+        'Clients' => 'NFG-clients',
+      },
     }
   end
 
@@ -61,6 +68,12 @@ RSpec.shared_context 'jira_api' do
       'DG-clients' => {
         'actors' => [],
       },
+
+      'NFG-developers' => { 'actors' => [] },
+      'NFG-qas' => { 'actors' => [] },
+      'NFG-pms' => { 'actors' => [] },
+      'NFG-client-devs' => { 'actors' => [] },
+      'NFG-clients' => { 'actors' => [] },
     }
   end
 
