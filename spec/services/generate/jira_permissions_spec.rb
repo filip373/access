@@ -30,7 +30,7 @@ describe Generate::JiraPermissions do
     end
 
     it 'sets AccessGuru project attributes' do
-      expect(accessguru_yaml).to eq(
+      expect(accessguru_yaml.symbolize_keys).to eq(
         name: 'AccessGuru',
         key: 'AG',
         developers: %w(dev.third),
@@ -42,7 +42,7 @@ describe Generate::JiraPermissions do
     end
 
     it 'sets DataGuru project attributes' do
-      expect(dataguru_yaml).to eq(
+      expect(dataguru_yaml.symbolize_keys).to eq(
         name: 'DataGuru',
         key: 'DG',
         developers: %w(dev.second),
@@ -54,7 +54,7 @@ describe Generate::JiraPermissions do
     end
 
     it 'sets NETGURU FLOW project attributes' do
-      expect(netguru_flow_yaml).to eq(
+      expect(netguru_flow_yaml.symbolize_keys).to eq(
         name: 'NETGURU FLOW',
         key: 'NFG',
         developers: [],
