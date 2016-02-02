@@ -12,4 +12,8 @@ module ApplicationHelper
 
     content_tag(:span, value, class: "label label-#{css_class}")
   end
+
+  def disable_text
+    "<i class='fa fa-spinner fa-spin'></i> I\'m on it...".html_safe
+  end
 end
