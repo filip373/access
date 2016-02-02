@@ -41,6 +41,7 @@ GithubApp::Application.routes.draw do
       get :refresh_cache
       post :sync
     end
+    get 'generate_permissions', to: 'generate#permissions'
   end
 
   ## INTEGRATIONS
