@@ -54,7 +54,7 @@ module GithubIntegration
 
       def create_teams(teams_to_create)
         teams_to_create.each do |team, h|
-          @gh_api.create_team(team.name, h[:add_permissions]) do |created_team|
+          @gh_api.create_team(team.name, h[:add_permissions]).tap do |created_team|
             new_team_add_members(h[:add_members], created_team)
             new_team_add_repos(h[:add_repos], created_team)
             new_team_add_permissions(h[:add_permissions], created_team)
