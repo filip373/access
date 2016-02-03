@@ -47,10 +47,10 @@ RSpec.shared_context 'jira_api' do
         'actors' => [{ 'name' => 'pm.first', 'type' => user_type }],
       },
       'AG-client-devs' => {
-        'actors' => [{ 'name' => 'external/clientdev.first', 'type' => user_type }],
+        'actors' => [{ 'name' => 'clientdev.first', 'type' => user_type }],
       },
       'AG-clients' => {
-        'actors' => [{ 'name' => 'external/client.first', 'type' => user_type }],
+        'actors' => [{ 'name' => 'client.first', 'type' => user_type }],
       },
 
       'DG-developers' => {
