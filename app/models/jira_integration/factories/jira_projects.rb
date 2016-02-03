@@ -13,7 +13,13 @@ module JiraIntegration
 
       def project_roles(project)
         roles_for(project.key).each_with_object({}) do |(role, link), roles|
-          roles[Constants::ROLES_MAPPING[role]] = role_members(link).map { |member| member['name'] }
+          roles[Constants::ROLES_MAPPING[role]] = role_members(link).map do |member|
+            if [:clients, :client_developers].include?(Constants::ROLES_MAPPING[role])
+              'external/' + member['name']
+            else
+              member['name']
+            end
+          end
         end
       end
 
