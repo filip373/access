@@ -1,0 +1,11 @@
+%h2
+  Ready to sync JIRA teams?
+= link_to "Review last changes in permissions", AppConfig.permissions_repo.url, target: "_blank"
+%hr
+  - if validation_errors.empty?
+    = link_to "Show diff", jira_calculate_diff_path, class: 'btn btn-primary btn-lg'
+  - else
+    %h3 Unable to parse following .yml files:
+    %ul.list-group
+    - validation_errors.each do |error|
+      %li.list-group-item.list-group-item-danger= error

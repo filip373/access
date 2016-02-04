@@ -14,8 +14,8 @@ module HockeyAppIntegration
       client.post('/apps/new', options)
     end
 
-    def invite_user_to_app(app_id, user_email)
-      client.post("/apps/#{app_id}/app_users", email: user_email)
+    def invite_user_to_app(app_id, user_email, role_id)
+      client.post("/apps/#{app_id}/app_users", email: user_email, role: role_id)
     end
 
     def list_apps

@@ -7,7 +7,7 @@ module JiraIntegration
 
     def create
       session[:jira_credentials] = auth_hash[:credentials] if auth_hash[:provider] == 'jira'
-      redirect_to jira_index_path
+      redirect_to(session.delete(:requested_route) || root_path)
     end
   end
 end

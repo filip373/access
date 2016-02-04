@@ -4,7 +4,7 @@ module HockeyAppIntegration
       HockeyAppIntegration::App.all_from_dataguru(data_guru.hockeyapp_apps.all, user_repo)
     end
     expose(:hockeyapp_apps) do
-      HockeyAppIntegration::App.all_from_api(HockeyAppIntegration::Api.new, user_repo)
+      HockeyAppIntegration::App.all_from_api(hockeyapp_api, user_repo)
     end
 
     def calculate_diff
@@ -21,9 +21,15 @@ module HockeyAppIntegration
     end
 
     def sync
+      HockeyAppIntegration::SyncJob.new.perform(hockeyapp_api, calculated_diff)
+      reset_cache
     end
 
     private
+
+    def hockeyapp_api
+      @hockeyapp_api ||= HockeyAppIntegration::Api.new
+    end
 
     def user_repo
       @user_repo ||= UserRepository.new(data_guru.members.all)

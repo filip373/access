@@ -1,0 +1,29 @@
+- with_options(class: 'btn btn-primary btn-lg') do |opts|
+  - if Features.on?(:generate_permissions)
+    .jumbotron
+      %h2 Do you want to generate JIRA projects yaml files for permissions?
+      = opts.link_to 'Generate permissions', jira_generate_permissions_path
+
+  .jumbotron
+    %h2 JIRA projects
+    - if diff.log_empty?
+      %h3 Move along, nothing to see here.
+      = opts.link_to "Wicked!", root_path
+      = opts.link_to "Refresh cache!", jira_refresh_cache_path
+    - else
+      %h3 Please confirm changes below:
+      %ul.list-group
+        - diff.log.each do |line|
+          %li.list-group-item= line
+      = form_tag jira_sync_path, class: 'inline', method: :post do
+        = opts.button_tag "Confirm changes", type: :submit, data: { 'disable_with' => disable_text }
+    - if diff.missing_projects.any?
+      %h3 Projects missing in JIRA
+      %ul.list-group
+        - diff.missing_projects.each do |key, project|
+          %li.list-group-item= [key, project[:name]].join(' - ')
+    - if diff.zombie_projects.any?
+      %h3 Zombie projects in JIRA
+      %ul.list-group
+        - diff.zombie_projects.each do |key, project|
+          %li.list-group-item= [key, project[:name]].join(' - ')

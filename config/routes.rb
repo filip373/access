@@ -36,8 +36,12 @@ GithubApp::Application.routes.draw do
 
   namespace :jira, module: :jira_integration do
     controller :main do
-      get :index
+      get :show_diff
+      get :calculate_diff
+      get :refresh_cache
+      post :sync
     end
+    get 'generate_permissions', to: 'generate#permissions'
   end
 
   ## INTEGRATIONS
