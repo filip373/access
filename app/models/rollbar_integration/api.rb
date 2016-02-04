@@ -43,7 +43,6 @@ module RollbarIntegration
     def create_team(name, access_level = 'standard')
       options = { body: { name: name, access_level: access_level } }
       team = client.post('/api/1/teams', options)
-      yield team
     end
 
     def create_project(name)
