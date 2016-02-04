@@ -50,7 +50,7 @@ RSpec.shared_context 'rollbar_api' do
       end
       allow(api).to receive(:create_team) do
         existing_teams.push(new_team)
-      end.and_yield(created_new_team)
+      end.and_return(created_new_team)
       allow(api).to receive(:list_account_projects) { all_projects }
     end
   end
