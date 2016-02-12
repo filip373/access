@@ -1,5 +1,9 @@
 module GithubWorkers
   class Base < BaseWorker
+    def self.diff_key
+      'github_performing_diff'
+    end
+
     private
 
     def expected_teams

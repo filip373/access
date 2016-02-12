@@ -15,10 +15,10 @@
       = button_tag "Confirm changes",
         type: :submit,
         class: 'btn btn-primary btn-lg',
-        'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> I\'m on it...".html_safe
+        'data-disable-with' => disable_text
     = link_to "Refresh cache!", hockeyapp_refresh_cache_path,
       class: 'btn btn-primary btn-lg',
-      'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> I\'m on it...".html_safe
+      'data-disable-with' => disable_text
 
 - if facade.missing_api_apps.any?
   .card-panel

@@ -46,7 +46,7 @@ module RollbarIntegration
 
       def create_teams(teams_to_create)
         teams_to_create.each do |team, h|
-          @rollbar_api.create_team(team.name) do |created_team|
+          @rollbar_api.create_team(team.name).tap do |created_team|
             new_team_add_members(h[:add_members], created_team)
             new_team_add_projects(h[:add_projects], created_team)
           end

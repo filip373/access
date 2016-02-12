@@ -9,6 +9,8 @@
     = render 'toggl_integration'
   .col.s12.m6
     = render 'hockeyapp_integration'
+  .col.s12.m6
+    = render "jira_integration"
 
 .jumbotron
   - if Features.on?(:generate_permissions)
