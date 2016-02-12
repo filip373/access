@@ -20,7 +20,7 @@ RSpec.describe GithubIntegration::Actions::Sync do
       end
       allow(api).to receive(:create_team) do
         existing_teams.push(new_team)
-      end.and_yield(new_team)
+      end.and_return(new_team)
     end
   end
   let(:team) do
