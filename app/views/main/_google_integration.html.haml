@@ -3,7 +3,8 @@
     %span.card-title
       How about syncing google directory?
     %p
-      = link_to "Review last changes in permissions", AppConfig.permissions_repo.url, target: "_blank"
+      = link_to "Review last changes in permissions", AppConfig.permissions_repo.url,
+        target: "_blank"
   .card-action
     - if validation_errors.empty?
       = link_to "Show diff", google_calculate_diff_path, class: 'btn btn-primary btn-lg'
