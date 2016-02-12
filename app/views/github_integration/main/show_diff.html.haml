@@ -1,5 +1,5 @@
 - if Features.on?(:generate_permissions)
-  .card-panel.with-margin-top
+  .card-panel
     %h4 Do you want to generate github teams yaml files for permissions?
     = form_tag github_generate_permissions_path, method: :get do
       = button_tag "Generate permissions", type: :submit, class: 'btn btn-primary btn-lg'
