@@ -19,14 +19,23 @@
     %h4 Please confirm changes below:
     = render "gh_log"
     = form_tag github_sync_path, class: 'inline', method: :post do
-      = button_tag "Confirm changes", type: :submit, class: 'btn btn-primary btn-lg', 'data-disable-with' => disable_text
-    = link_to "Refresh sync", github_refresh_cache_path, class: 'btn btn-primary btn-lg', 'data-disable-with' => disable_text
+      = button_tag "Confirm changes",
+        type: :submit,
+        class: 'btn btn-primary btn-lg',
+        'data-disable-with' => disable_text
+    = link_to "Refresh sync", github_refresh_cache_path,
+      class: 'btn btn-primary btn-lg',
+      'data-disable-with' => disable_text
 
   - if validation_errors.empty? && missing_teams.any?
     %h4 Stranded teams
-    %h4 Following teams are on GitHub, but can't be found in permissions repository - they most likely should be deleted.
+    %h4 Following teams are on GitHub, but can't be found in permissions repository
+    - they most likely should be deleted.
     %ul.list-group
       - missing_teams.each do |team|
         = link_to team.name, github_team_path(team.name), class: 'list-group-item'
     = form_tag github_cleanup_teams_path, method: :delete do
-      = button_tag "Ok, it makes sense to remove these teams!", type: :submit, class: 'btn btn-primary btn-lg', 'data-disable-with' => disable_text
+      = button_tag "Ok, it makes sense to remove these teams!",
+        type: :submit,
+        class: 'btn btn-primary btn-lg',
+        'data-disable-with' => disable_text

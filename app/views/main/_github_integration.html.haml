@@ -3,11 +3,15 @@
     %span.card-title
       Ready to sync github teams?
     %p
-      = link_to "Review last changes in permissions", AppConfig.permissions_repo.url, target: "_blank"
+      = link_to "Review last changes in permissions", AppConfig.permissions_repo.url,
+        target: "_blank"
   .card-action
     - if validation_errors.empty?
       = form_tag github_calculate_diff_path, method: :get do
-        = button_tag "Show diff", type: :submit, class: 'btn btn-primary btn-lg', 'data-disable-with' => disable_text
+        = button_tag "Show diff",
+          type: :submit,
+          class: 'btn btn-primary btn-lg',
+          'data-disable-with' => disable_text
     - else
       %h3 Unable to parse following .yml files:
       %ul.list-group
