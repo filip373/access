@@ -55,7 +55,7 @@ module GithubIntegration
     end
 
     def list_org_members(org_name)
-      client.organizations.members.all(org_name)
+      @users ||= client.organizations.members.all(org_name)
     end
 
     def list_org_members_without_2fa(org_name)
