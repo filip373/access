@@ -1,27 +1,30 @@
 module GithubIntegration
   module Actions
     class ListUsers
-      attr_accessor :github_users, :users, :gh_teams, :category
+      attr_accessor :github_users, :dg_users, :gh_teams, :category
 
-      def initialize(github_users, users, gh_teams, category)
+      def initialize(github_users, dg_users, gh_teams, category)
         self.github_users = github_users
-        self.users = users
+        self.dg_users = dg_users
         self.gh_teams = gh_teams
         self.category = category
       end
 
       def call
         return [] if github_users.empty?
-        convert_members_to_users.tap do |users|
+        users = Hash.new
+        users[category], users[:missing_from_dg] = convert_members_to_users.tap do |users|
           users.reject!{|u| !u.github_teams.empty?} if list_teamless_users?
-        end.sort_by { |u| u.name.to_s.downcase }
+        end.sort_by {|u| u.name.to_s.downcase }
+          .partition{ |u| u.instance_of?(ListedUser) }
+        users
       end
 
       private
 
       def convert_members_to_users
         github_users.map do |gh_member|
-          dg_user = users.find do |user|
+          dg_user = dg_users.find do |user|
             user.github.to_s.downcase == gh_member['login'].downcase
           end
           build_user(dg_user, gh_member)
