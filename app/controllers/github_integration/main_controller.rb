@@ -13,10 +13,18 @@ module GithubIntegration
     expose(:diff_errors) { @diff_errors }
     expose(:user_repo) { UserRepository.new(data_guru.members.all) }
     expose(:insecure_users) do
-      Actions::ListInsecureUsers.new(
+      Actions::ListUsers.new(
         gh_api.list_org_members_without_2fa(AppConfig.company),
         data_guru.members,
-        data_guru.github_teams).call
+        data_guru.github_teams,
+        :unsecure).call
+    end
+    expose(:teamless_users) do
+      Actions::ListUsers.new(
+        gh_api.list_teamless_members,
+        data_guru.members,
+        data_guru.github_teams,
+        :teamless).call
     end
 
     after_filter :clean_diff_actor
