@@ -1,22 +1,30 @@
+%h2 Teamless users
 - if users.any?
-  %h2 Teamless users
-  %p Following users are not assigned to any team on GitHub. You should probably remove them.
-  %table.table
-    %thead
-      %tr
-        %th Name
-        %th Github handle
-        %th Email
-    %tbody
-      - users.each do |u|
+  - if users.fetch(:teamless).any?
+    %p Following users are not assigned to any team on GitHub. You should probably remove them.
+    %table.table
+      %thead
         %tr
-          %td
-            = u.name
-          %td
-            = link_to u.github, u.html_url
-          %td
-            = u.email
+          %th Name
+          %th Github handle
+          %th Email
+      %tbody
+        - users.fetch(:teamless).each do |u|
+          %tr
+            %td
+              = u.name
+            %td
+              = link_to u.github, u.html_url
+            %td
+              = u.email
+
+  - if users.fetch(:missing_from_dg).any?
+    %p
+      Following users are teamless and also missing from permissions repo:
+      - users.fetch(:missing_from_dg).each do |u|
+        %span
+          = link_to u.github, u.html_url
+
 - else
-  %h2 Teamless users
   %p There are no users without a team on GitHub. Great job!
 

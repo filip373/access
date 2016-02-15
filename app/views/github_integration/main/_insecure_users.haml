@@ -1,23 +1,31 @@
 - if users.any?
   %h2 Insecure users - let them know about missing 2FA
-  %table.table
-    %thead
-      %tr
-        %th Name
-        %th Github handle
-        %th Email
-        %th Projects
-    %tbody
-      - users.each do |u|
+  - if users.fetch(:unsecure).any?
+    %table.table
+      %thead
         %tr
-          %td
-            = u.name
-          %td
-            = link_to u.github, u.html_url
-          %td
-            = u.email
-          %td
-            = u.github_teams
+          %th Name
+          %th Github handle
+          %th Email
+          %th Projects
+      %tbody
+        - users.fetch(:unsecure).each do |u|
+          %tr
+            %td
+              = u.name
+            %td
+              = link_to u.github, u.html_url
+            %td
+              = u.email
+            %td
+              = u.github_teams
+
+  - if users.fetch(:missing_from_dg).any?
+    %p Following users don't have 2FA enabled and are also missing from permissions repo:
+    - users.fetch(:missing_from_dg).each do |u|
+      %span
+        = link_to u.github, u.github_url
+
 - else
   %h2 Insecure users
   %p All users have enabled 2FA. Great work!
