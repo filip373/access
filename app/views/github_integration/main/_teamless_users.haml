@@ -1,12 +1,12 @@
 - if users.any?
-  %h2 Insecure users - let them know about missing 2FA
+  %h2 Teamless users
+  %p Following users are not assigned to any team on GitHub. You should probably remove them.
   %table.table
     %thead
       %tr
         %th Name
         %th Github handle
         %th Email
-        %th Projects
     %tbody
       - users.each do |u|
         %tr
@@ -16,8 +16,7 @@
             = link_to u.github, u.html_url
           %td
             = u.email
-          %td
-            = u.github_teams
 - else
-  %h2 Insecure users
-  %p All users have enabled 2FA. Great work!
+  %h2 Teamless users
+  %p There are no users without a team on GitHub. Great job!
+
