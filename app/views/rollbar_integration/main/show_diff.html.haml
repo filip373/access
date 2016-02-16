@@ -21,8 +21,8 @@
   - if validation_errors.empty? && missing_teams.any?
     %h4 Stranded teams
     %h5
-      Following teams are on Rollbar, but can't be found in permissions repository
-      - they most likely should be deleted.
+      Following teams are on Rollbar, but can't be found in permissions repository -
+      they most likely should be deleted.
     %ul.collection
       - missing_teams.each do |team|
         = link_to team.name, rollbar_team_path(team.id), class: 'collection-item'

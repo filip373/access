@@ -18,8 +18,8 @@
   - if validation_errors.empty? && missing_teams.any?
     %h4 Stranded teams
     %h5
-      Following teams are on Toggl, but can't be found in permissions repository
-      - they most likely should be archived.
+      Following teams are on Toggl, but can't be found in permissions repository -
+      they most likely should be archived.
     %ul.collection
       - missing_teams.each do |team|
         = link_to team.name, toggl_project_path(workspace_id, team.id), class: 'list-group-item'

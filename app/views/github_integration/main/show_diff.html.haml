@@ -29,8 +29,9 @@
 
   - if validation_errors.empty? && missing_teams.any?
     %h4 Stranded teams
-    %h4 Following teams are on GitHub, but can't be found in permissions repository
-    - they most likely should be deleted.
+    %h4
+      Following teams are on GitHub, but can't be found in permissions repository -
+      they most likely should be deleted.
     %ul.list-group
       - missing_teams.each do |team|
         = link_to team.name, github_team_path(team.name), class: 'list-group-item'

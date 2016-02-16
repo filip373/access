@@ -31,8 +31,9 @@
 
   - if missing_accounts.any?
     %h4 Missing user's account
-    %h5 Following users are in permissions repository, but can't be found in google api
-    - they most likely should be created.
+    %h5
+      Following users are in permissions repository, but can't be found in google api -
+      they most likely should be created.
     = render 'missing_accounts_log'
     = form_tag google_create_accounts_path, method: :post do
       = button_tag "Create accounts",
