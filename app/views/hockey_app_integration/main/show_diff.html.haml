@@ -37,7 +37,4 @@
     %ul.collection
       - facade.missing_dg_apps.each do |app|
         %li.collection-item
-          %a{ href: app_link(app.optional_info[:id]) }
-            #{app.name} /
-            #{app.optional_info[:platform]} /
-            #{app.optional_info[:custom_release_type]}
+          = link_to app_link_desc(app), app_link(app.optional_info[:id])
