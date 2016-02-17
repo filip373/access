@@ -7,50 +7,37 @@ RSpec.describe GithubIntegration::Actions::ListUsers do
     described_class.new(github_users, dg_users, gh_teams, category).call
   end
 
-  context 'listing no 2fa users' do
-    let(:category) { :unsecure }
+  let(:github_users) { [{'login' => 'user1', 'html_url' => 'asdf'}] }
+  let(:dg_users) { users }
+  let(:gh_teams) { github_teams }
+  let(:category) { :category }
 
-    let(:github_users) do
-      [{'login' => 'unsecure', 'html_url' => 'github_link'},
-       {'login' => 'unsecure2', 'html_url' => 'some_link'},
-       {'login' => 'unsecure3', 'html_url' =>  'another_link'}]
-    end
-
-    let(:dg_users) do
-      users.push(OpenStruct.new(
-        id: 'unsecure.user',
-        name: 'Unsecure Dude',
-        github: 'unsecure',
-        emails: ['unsecure.dude@mail.com']
-      ), OpenStruct.new(
-        id: 'unsecure.user2',
-        name: 'Another User',
-        github: 'unsecure2',
-      ))
-    end
-
-    let(:gh_teams) do
-      github_teams << OpenStruct.new(
-        id: 'team5',
-        members: ['unsecure.user'],
-        repos: ['some_repo'],
-        permissions: 'push'
-      )
-    end
-
-    it 'returns users without 2fa' do
-      expect(subject.count).to eq 3
-    end
-
+  context 'github users are empty' do
+    let(:github_users) { [] }
+    it { expect(subject).to be_a Array }
+    it { expect(subject).to be_empty }
   end
 
-  context 'list teamless users' do
-    let(:category) { :teamless }
+  context 'github users are not empty' do
+    it { expect(subject).to be_a Hash }
+    it { expect(subject).not_to be_empty }
 
-    let(:github_users) do
-      [{'login' => 'teamless', 'html_url' => 'github_link'}]
+    it 'returned hash has two items' do
+      expect(subject.count).to eq 2
     end
 
+    it 'returned hash contains category key' do
+      expect(subject).to have_key(category)
+    end
+
+    it 'returned hash contains users missing from dataguru' do
+      expect(subject).to have_key(:missing_from_dg)
+    end
+  end
+
+  context 'listing teamless users' do
+    let(:category) { :teamless }
+    let(:github_users) { [{'login' => 'teamless', 'html_url' => 'github_link'}] }
     let(:dg_users) do
       users << OpenStruct.new(
         id: 'teamless.user',
@@ -60,78 +47,93 @@ RSpec.describe GithubIntegration::Actions::ListUsers do
       )
     end
 
-    let(:gh_teams) do
-      github_teams
+    context 'when user is not assigned to team in dataguru' do
+      let(:teamless_user) do
+        ListedUser.new(
+          github: 'teamless',
+          name: 'Teamless Dude',
+          emails: ['teamless.dude@mail.com']
+        )
+      end
+
+      before do
+        teamless_user.html_url = 'github_link'
+        teamless_user.github_teams = ''
+      end
+
+      it 'returns teamless users' do
+        teamless_users = subject.fetch(:teamless)
+        expect(teamless_users.count).to eq 1
+        expect(teamless_users.first.as_json).to eq teamless_user.as_json
+      end
+
+      it 'uses proper class for listed user' do
+        expect(subject.fetch(:teamless).first).to be_a ListedUser
+      end
     end
 
-    let(:teamless_user) do
-      ListedUser.new(
-        github: 'teamless',
-        name: 'Teamless Dude',
-        emails: ['teamless.dude@mail.com'],
+    context 'when user is assigned to team in dataguru' do
+      before do
+        gh_teams << OpenStruct.new(
+          id: 'team3',
+          members: ['teamless.user'],
+          repos: ['random_repo'],
+          permissions: 'push'
+        )
+      end
+
+      it 'does not list this user' do
+        expect(subject.fetch(:teamless)).to be_empty
+      end
+    end
+
+    context 'when user is missing from dataguru' do
+      before { dg_users.reject!{|u| u.github == 'teamless'} }
+
+      it 'lists that user' do
+        expect(subject.fetch(:missing_from_dg).count).to eq 1
+      end
+
+      it 'uses proper class for that user' do
+        expect(subject.fetch(:missing_from_dg).first)
+          .to be_a DataGuruNilUser
+      end
+    end
+  end
+
+  context 'listing different category' do
+    let(:category) { :unsecure }
+    let(:github_users) do
+      [{'login' => 'unsecure1', 'html_url' => 'github_link1'},
+       {'login' => 'unsecure2', 'html_url' => 'github_link2'}
+      ]
+    end
+    let(:dg_users) do
+      users.push(OpenStruct.new(
+        id: 'unsecure.user1',
+        name: 'Another Dude',
+        github: 'unsecure1',
+        emails: ['unsecure.dude1@mail.com'],
+      ), OpenStruct.new(
+        id: 'unsecure.user2',
+        name: 'Random Dude',
+        github: 'unsecure2',
+        emails: ['unsecure.dude2@mail.com']
+      )
       )
     end
 
-    context 'with user teamless on github' do
-      context 'and teamless in data_guru' do
-        before do
-          teamless_user.html_url = 'github_link'
-          teamless_user.github_teams = ''
-        end
-
-        it 'returns teamless users' do
-          teamless_users = subject
-          expect(teamless_users.count).to eq 1
-          expect(teamless_users.first.as_json).to eq teamless_user.as_json
-        end
-
-        it 'returns an array' do
-          expect(subject).to be_an_instance_of(Array)
-        end
-
-        it 'returned array contains TeamlessUser instances' do
-          expect(subject.first)
-            .to be_an_instance_of(ListedUser)
-        end
-      end
-
-      context 'and assigned to team in data_guru' do
-        before do
-          gh_teams << OpenStruct.new(
-            id: 'team3',
-            members: ['teamless.user'],
-            repos: ['random_repo'],
-            permissions: 'push'
-          )
-        end
-
-        it 'does not list this user' do
-          expect(subject.count).to eq 0
-        end
-      end
-
-      context 'user not in data_guru' do
-        before do
-          dg_users.reject!{|u| u.github == 'teamless'}
-        end
-
-        it 'lists that user' do
-          expect(subject.count).to eq 1
-        end
-
-        it 'returns data guru nil user' do
-          expect(subject.first)
-            .to be_an_instance_of(DataGuruNilUser)
-        end
-      end
+    before do
+      gh_teams << OpenStruct.new(
+        id: 'team3',
+        members: ['unsecure.user1'],
+        repos: ['random_repo'],
+        permissions: 'push'
+      )
     end
 
-    context 'user is assigned to team on github' do
-      let(:github_users) { [] }
-
-      it 'does not list this user' do
-        expect(subject.count).to eq 0
-      end
+    it 'does not reject users assigned to teams in dataguru' do
+      expect(subject.fetch(category).count).to eq 2
     end
   end
 end
