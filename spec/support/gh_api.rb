@@ -40,7 +40,7 @@ RSpec.shared_context 'gh_api' do
         gh_org_members
       end
       allow(api).to receive(:remove_member_from_org) do |login|
-        gh_org_members.reject!{ |u| u.fetch('login') == login }
+        gh_org_members.reject! { |u| u.fetch('login') == login }
       end
     end
   end

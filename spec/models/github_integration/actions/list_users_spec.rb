@@ -7,7 +7,7 @@ RSpec.describe GithubIntegration::Actions::ListUsers do
     described_class.new(github_users, dg_users, gh_teams, category).call
   end
 
-  let(:github_users) { [{'login' => 'user1', 'html_url' => 'asdf'}] }
+  let(:github_users) { [{ 'login' => 'user1', 'html_url' => 'asdf'} ] }
   let(:dg_users) { users }
   let(:gh_teams) { github_teams }
   let(:category) { :category }
@@ -37,7 +37,7 @@ RSpec.describe GithubIntegration::Actions::ListUsers do
 
   context 'listing teamless users' do
     let(:category) { :teamless }
-    let(:github_users) { [{'login' => 'teamless', 'html_url' => 'github_link'}] }
+    let(:github_users) { [{ 'login' => 'teamless', 'html_url' => 'github_link' }] }
     let(:dg_users) do
       users << OpenStruct.new(
         id: 'teamless.user',
@@ -88,7 +88,7 @@ RSpec.describe GithubIntegration::Actions::ListUsers do
     end
 
     context 'when user is missing from dataguru' do
-      before { dg_users.reject!{|u| u.github == 'teamless'} }
+      before { dg_users.reject! { |u| u.github == 'teamless' } }
 
       it 'lists that user' do
         expect(subject.fetch(:missing_from_dg).count).to eq 1
@@ -104,32 +104,31 @@ RSpec.describe GithubIntegration::Actions::ListUsers do
   context 'listing different category' do
     let(:category) { :unsecure }
     let(:github_users) do
-      [{'login' => 'unsecure1', 'html_url' => 'github_link1'},
-       {'login' => 'unsecure2', 'html_url' => 'github_link2'}
+      [{ 'login' => 'unsecure1', 'html_url' => 'github_link1' },
+       { 'login' => 'unsecure2', 'html_url' => 'github_link2' }
       ]
     end
     let(:dg_users) do
-      users.push(OpenStruct.new(
-        id: 'unsecure.user1',
-        name: 'Another Dude',
-        github: 'unsecure1',
-        emails: ['unsecure.dude1@mail.com'],
-      ), OpenStruct.new(
-        id: 'unsecure.user2',
-        name: 'Random Dude',
-        github: 'unsecure2',
-        emails: ['unsecure.dude2@mail.com']
-      )
+      users.push(
+        OpenStruct.new(
+          id: 'unsecure.user1',
+          name: 'Another Dude',
+          github: 'unsecure1',
+          emails: ['unsecure.dude1@mail.com']),
+        OpenStruct.new(
+          id: 'unsecure.user2',
+          name: 'Random Dude',
+          github: 'unsecure2',
+          emails: ['unsecure.dude2@mail.com'])
       )
     end
 
     before do
       gh_teams << OpenStruct.new(
-        id: 'team3',
-        members: ['unsecure.user1'],
-        repos: ['random_repo'],
-        permissions: 'push'
-      )
+                    id: 'team3',
+                    members: ['unsecure.user1'],
+                    repos: ['random_repo'],
+                    permissions: 'push')
     end
 
     it 'does not reject users assigned to teams in dataguru' do

@@ -16,7 +16,7 @@ module GithubIntegration
         members[category], members[:missing_from_dg] = convert_members_to_users.tap do |users|
           users.reject!{ |u| !u.github_teams.empty? } if list_teamless_users?
         end.sort_by { |u| u.name.to_s.downcase }
-          .partition{ |u| u.instance_of?(ListedUser) }
+          .partition { |u| u.instance_of?(ListedUser) }
         members
       end
 
