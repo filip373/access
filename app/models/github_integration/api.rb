@@ -99,7 +99,7 @@ module GithubIntegration
 
     def list_teamless_members
       list_org_members(company_name).body - list_teams
-        .each_with_object(Array.new) do |team, members|
+        .each_with_object([]) do |team, members|
         members << list_team_members(team.fetch(:id)).body
         members
       end.flatten.uniq
