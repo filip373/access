@@ -94,5 +94,29 @@ RSpec.describe GithubIntegration::MainController do
     it 'does not raise any errors' do
       expect { subject }.to_not raise_error
     end
+
+    it 'redirects to cleanup_complete path' do
+      subject
+      expect( response ).to redirect_to(:github_cleanup_complete)
+    end
+  end
+
+  describe 'DELETE cleanup_members' do
+    before do
+      allow(controller).to receive(:teamless_users)
+        .and_return({teamless: [], missing_from_dg: []})
+    end
+
+    subject { delete :cleanup_members }
+    it 'initialize CleanupMembers class' do
+      allow_any_instance_of(GithubIntegration::Actions::CleanupMembers).to receive(:now!)
+      subject
+      expect(controller.members_cleanup).to have_received(:now!)
+    end
+
+    it 'redirects to cleanup_complete path' do
+      subject
+      expect( response ).to redirect_to(:github_cleanup_complete)
+    end
   end
 end
