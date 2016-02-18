@@ -24,6 +24,8 @@
       - users.fetch(:missing_from_dg).each do |u|
         %span
           = link_to u.github, u.html_url
+    = form_tag github_cleanup_members_path, method: :delete do
+      = button_tag "Show them the door!", type: :submit, class: 'btn btn-primary btn-lg'
 
 - else
   %p There are no users without a team on GitHub. Great job!
