@@ -4,6 +4,7 @@ en:
     remove_team: "remove team %{team}"
     add_member: "add member %{member} to team %{team}"
     remove_member: "remove member %{member} from team %{team}"
+    remove_member_from_org: "remove member %{member} from %{company}"
     add_repo: "add repo %{repo} to team %{team}"
     remove_repo: "remove repo %{repo_name} from team %{team}"
     add_permission: "add permissions %{team} - %{permission}"
