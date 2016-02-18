@@ -39,6 +39,10 @@ module GithubIntegration
       client.delete_request("/teams/#{team.id}/memberships/#{member}")
     end
 
+    def remove_member_from_org(member, company = company_name)
+      client.delete_request("/orgs/#{company}/members/#{member}")
+    end
+
     def add_repo(repo, team)
       find_or_create_repo(repo)
       client.orgs.teams.add_repo(team.id, company_name, repo)
