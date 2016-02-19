@@ -97,14 +97,14 @@ RSpec.describe GithubIntegration::MainController do
 
     it 'redirects to cleanup_complete path' do
       subject
-      expect( response ).to redirect_to(:github_cleanup_complete)
+      expect(response).to redirect_to(:github_cleanup_complete)
     end
   end
 
   describe 'DELETE cleanup_members' do
     before do
       allow(controller).to receive(:teamless_users)
-        .and_return({teamless: [], missing_from_dg: []})
+        .and_return(teamless: [], missing_from_dg: [])
     end
 
     subject { delete :cleanup_members }
