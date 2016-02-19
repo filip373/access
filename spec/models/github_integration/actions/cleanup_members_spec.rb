@@ -8,27 +8,27 @@ RSpec.describe GithubIntegration::Actions::CleanupMembers do
 
   describe '#now!' do
     let(:stranded_users) do
-      [DataGuruNilUser.new({
+      [DataGuruNilUser.new(
         'login' => 'user1',
-        'html_url' => 'link'}),
-       DataGuruNilUser.new({
+        'html_url' => 'link'),
+       DataGuruNilUser.new(
         'login' => 'user2',
-        'html_url' => 'link2'}),
+        'html_url' => 'link2'),
       ]
     end
 
     let(:gh_org_members) do
       [{ 'login' => 'user1',
-        'email' => 'user1@mail.com',
-        'name' => 'User One'
+          'email' => 'user1@mail.com',
+          'name' => 'User One'
        },
        { 'login' => 'user2',
-        'email' => 'user2@mail.com',
-        'name' => 'User Two'
+          'email' => 'user2@mail.com',
+          'name' => 'User Two'
        },
        { 'login' => 'user3',
-        'email' => 'user3@mail.com',
-        'name' => 'User Three'
+          'email' => 'user3@mail.com',
+          'name' => 'User Three'
        }
       ]
     end

@@ -116,7 +116,7 @@ RSpec.describe GithubIntegration::MainController do
 
     it 'redirects to cleanup_complete path' do
       subject
-      expect( response ).to redirect_to(:github_cleanup_complete)
+      expect(response).to redirect_to(:github_cleanup_complete)
     end
   end
 end

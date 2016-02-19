@@ -7,7 +7,7 @@ RSpec.describe GithubIntegration::Actions::ListUsers do
     described_class.new(github_users, dg_users, gh_teams, category).call
   end
 
-  let(:github_users) { [{ 'login' => 'user1', 'html_url' => 'asdf'} ] }
+  let(:github_users) { [{ 'login' => 'user1', 'html_url' => 'asdf' }] }
   let(:dg_users) { users }
   let(:gh_teams) { github_teams }
   let(:category) { :category }
