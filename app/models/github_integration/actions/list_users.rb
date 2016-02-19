@@ -13,14 +13,19 @@ module GithubIntegration
       def call
         return [] if github_users.empty?
         members = {}
-        members[category], members[:missing_from_dg] = convert_members_to_users.tap do |users|
-          users.reject!{ |u| !u.github_teams.empty? } if list_teamless_users?
-        end.sort_by { |u| u.name.to_s.downcase }
-          .partition { |u| u.instance_of?(ListedUser) }
+        members[category], members[:missing_from_dg] = build_users_list.partition {
+          |u| u.instance_of?(ListedUser)
+        }
         members
       end
 
       private
+
+      def build_users_list
+        convert_members_to_users.tap do |users|
+          users.reject! { |u| !u.github_teams.empty? } if list_teamless_users?
+        end.sort_by { |u| u.name.to_s.downcase }
+      end
 
       def convert_members_to_users
         github_users.map do |gh_member|
