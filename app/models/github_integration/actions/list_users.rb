@@ -22,9 +22,9 @@ module GithubIntegration
       private
 
       def build_users_list
-        convert_members_to_users.tap do |users|
+        convert_members_to_users.sort_by { |u| u.name.to_s.downcase } .tap do |users|
           users.reject! { |u| !u.github_teams.empty? } if list_teamless_users?
-        end.sort_by { |u| u.name.to_s.downcase }
+        end
       end
 
       def convert_members_to_users
