@@ -98,11 +98,11 @@ module GithubIntegration
     end
 
     def list_teamless_members
-      list_org_members(company_name).body - list_teams
-        .each_with_object([]) do |team, members|
+      all_teams_members = list_teams.each_with_object([]) do |team, members|
         members << list_team_members(team.fetch(:id)).body
         members
-      end.flatten.uniq
+      end
+      list_org_members(company_name).body - all_teams_members.flatten.uniq
     end
 
     private

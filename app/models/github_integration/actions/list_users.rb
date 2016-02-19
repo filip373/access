@@ -30,7 +30,7 @@ module GithubIntegration
       def convert_members_to_users
         github_users.map do |gh_member|
           dg_user = dg_users.find do |user|
-            user.github.to_s.downcase == gh_member['login'].downcase
+            user.github.to_s.casecmp(gh_member['login']).zero?
           end
           build_user(dg_user, gh_member)
         end
