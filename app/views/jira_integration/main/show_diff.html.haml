@@ -6,10 +6,10 @@
 
   .jumbotron
     %h2 JIRA projects
+    = opts.link_to "Refresh cache!", jira_refresh_cache_path
     - if diff.log_empty?
       %h3 Move along, nothing to see here.
       = opts.link_to "Wicked!", root_path
-      = opts.link_to "Refresh cache!", jira_refresh_cache_path
     - else
       %h3 Please confirm changes below:
       %ul.list-group

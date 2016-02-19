@@ -1,29 +1,43 @@
-.jumbotron
-  %h2 Please confirm changes below:
+.card-panel
+  %h4 Please confirm changes below:
 
   - if log_empty?(google_log)
-    %h3 Move along, nothing to see here.
+    %h4 Move along, nothing to see here.
     = link_to "Wicked!", root_path, class: 'btn btn-primary btn-lg'
     = link_to "Refresh cache!", google_refresh_cache_path, class: 'btn btn-primary btn-lg'
   - else
     = render "google_log"
     = form_tag google_sync_path, class: 'inline', method: :post do
-      = button_tag "Confirm changes", type: :submit, class: 'btn btn-primary btn-lg', 'data-disable-with' => disable_text
-    = link_to "Refresh cache!", google_refresh_cache_path, class: 'btn btn-primary btn-lg', 'data-disable-with' => disable_text
+      = button_tag "Confirm changes",
+        type: :submit,
+        class: 'btn btn-primary btn-lg',
+        'data-disable-with' => disable_text
+    = link_to "Refresh cache!", google_refresh_cache_path,
+      class: 'btn btn-primary btn-lg',
+      'data-disable-with' => disable_text
 
   - if missing_groups.any?
-    %h2 Stranded groups
-    %h3 Following groups are in Google Apps, but can't be found in permissions repository - they most likely should be deleted.
-    %ul.list-group
+    %h4 Stranded groups
+    %h5 Following groups are in Google Apps, but can't be found in permissions repository
+    - they most likely should be deleted.
+    %ul.collection
       - missing_groups.each do |group|
-        %li= group.email
+        %li.collection-item= group.email
     = form_tag google_cleanup_groups_path, method: :delete do
-      = button_tag "Ok, it makes sense to remove these groups!", type: :submit, class: 'btn btn-primary btn-lg', 'data-disable-with' => disable_text
+      = button_tag "Ok, it makes sense to remove these groups!",
+        type: :submit,
+        class: 'btn btn-primary btn-lg',
+        'data-disable-with' => disable_text
 
   - if missing_accounts.any?
-    %h2 Missing user's account
-    %h3 Following users are in permissions repository, but can't be found in google api - they most likely should be created.
+    %h4 Missing user's account
+    %h5
+      Following users are in permissions repository, but can't be found in google api -
+      they most likely should be created.
     = render 'missing_accounts_log'
     = form_tag google_create_accounts_path, method: :post do
-      = button_tag "Create accounts", type: :submit, class: 'btn btn-primary btn-lg', 'data-disable-with' => disable_text
+      = button_tag "Create accounts",
+        type: :submit,
+        class: 'btn btn-primary btn-lg',
+        'data-disable-with' => disable_text
 
