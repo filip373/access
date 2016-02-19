@@ -12,29 +12,29 @@ RSpec.describe GithubIntegration::Actions::CleanupMembers do
         'login' => 'user1',
         'html_url' => 'link'),
        DataGuruNilUser.new(
-        'login' => 'user2',
-        'html_url' => 'link2'),
+         'login' => 'user2',
+         'html_url' => 'link2'),
       ]
     end
 
     let(:gh_org_members) do
       [{ 'login' => 'user1',
-          'email' => 'user1@mail.com',
-          'name' => 'User One'
+         'email' => 'user1@mail.com',
+         'name' => 'User One',
        },
        { 'login' => 'user2',
-          'email' => 'user2@mail.com',
-          'name' => 'User Two'
+         'email' => 'user2@mail.com',
+         'name' => 'User Two',
        },
        { 'login' => 'user3',
-          'email' => 'user3@mail.com',
-          'name' => 'User Three'
-       }
+         'email' => 'user3@mail.com',
+         'name' => 'User Three',
+       },
       ]
     end
 
     it 'removes stranded users from github' do
-      expect{ subject.now! }.to change{ gh_api.list_org_members.count }.from(3).to(1)
+      expect { subject.now! }.to change { gh_api.list_org_members.count }.from(3).to(1)
     end
 
     it 'uses remove_member_from_org on github api' do

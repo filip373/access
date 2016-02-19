@@ -52,7 +52,7 @@ RSpec.describe GithubIntegration::Actions::ListUsers do
         ListedUser.new(
           github: 'teamless',
           name: 'Teamless Dude',
-          emails: ['teamless.dude@mail.com']
+          emails: ['teamless.dude@mail.com'],
         )
       end
 
@@ -78,7 +78,7 @@ RSpec.describe GithubIntegration::Actions::ListUsers do
           id: 'team3',
           members: ['teamless.user'],
           repos: ['random_repo'],
-          permissions: 'push'
+          permissions: 'push',
         )
       end
 
@@ -105,7 +105,7 @@ RSpec.describe GithubIntegration::Actions::ListUsers do
     let(:category) { :unsecure }
     let(:github_users) do
       [{ 'login' => 'unsecure1', 'html_url' => 'github_link1' },
-       { 'login' => 'unsecure2', 'html_url' => 'github_link2' }
+       { 'login' => 'unsecure2', 'html_url' => 'github_link2' },
       ]
     end
     let(:dg_users) do
@@ -119,16 +119,16 @@ RSpec.describe GithubIntegration::Actions::ListUsers do
           id: 'unsecure.user2',
           name: 'Random Dude',
           github: 'unsecure2',
-          emails: ['unsecure.dude2@mail.com'])
+          emails: ['unsecure.dude2@mail.com']),
       )
     end
 
     before do
       gh_teams << OpenStruct.new(
-                    id: 'team3',
-                    members: ['unsecure.user1'],
-                    repos: ['random_repo'],
-                    permissions: 'push')
+        id: 'team3',
+        members: ['unsecure.user1'],
+        repos: ['random_repo'],
+        permissions: 'push')
     end
 
     it 'does not reject users assigned to teams in dataguru' do

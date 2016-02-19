@@ -13,9 +13,9 @@ module GithubIntegration
       def call
         return [] if github_users.empty?
         members = {}
-        members[category], members[:missing_from_dg] = build_users_list.partition {
-          |u| u.instance_of?(ListedUser)
-        }
+        members[category], members[:missing_from_dg] = build_users_list.partition do |user|
+          user.instance_of?(ListedUser)
+        end
         members
       end
 
