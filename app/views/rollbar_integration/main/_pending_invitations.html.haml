@@ -1,5 +1,5 @@
-%h2 Pending Invitations
+%h4 Pending Invitations
 %p Following members were invited to teams, but still have not accepted it.
-%ul.list-group
+%ul.collection
   - pending_invitations.each do |invitation|
-    %li.list-group-item #{invitation[:member_email]} in team #{invitation[:team_name]}
+    %li.collection-item #{invitation[:member_email]} in team #{invitation[:team_name]}

@@ -12,6 +12,10 @@ module HockeyAppIntegration
       "https://rink.hockeyapp.net/manage/apps/#{app_id}"
     end
 
+    def app_link_desc(app)
+      "#{app.name} / #{app.optional_info[:platform]} / #{app.optional_info[:custom_release_type]}"
+    end
+
     def self.role_to_id(role)
       ROLES_HASH[role]
     end

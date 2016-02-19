@@ -204,6 +204,8 @@ GEM
     lumberjack (1.0.9)
     mail (2.6.3)
       mime-types (>= 1.16, < 3)
+    materialize-sass (0.97.5)
+      sass (~> 3.3)
     memoist (0.12.0)
     method_source (0.8.2)
     mime-types (2.99)
@@ -418,6 +420,7 @@ DEPENDENCIES
   jquery-rails
   konf
   letter_opener
+  materialize-sass
   netguru_theme
   omniauth
   omniauth-github
