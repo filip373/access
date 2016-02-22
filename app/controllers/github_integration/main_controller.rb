@@ -9,14 +9,28 @@ module GithubIntegration
     expose(:teams_cleanup) do
       Actions::CleanupTeams.new(expected_teams, gh_teams, AuditedApi.new(gh_api, current_user))
     end
+    expose(:members_cleanup) do
+      Actions::CleanupMembers.new(
+        teamless_users.fetch(:missing_from_dg),
+        AuditedApi.new(gh_api, current_user),
+        AppConfig.company)
+    end
     expose(:missing_teams) { teams_cleanup.stranded_teams }
     expose(:diff_errors) { @diff_errors }
     expose(:user_repo) { UserRepository.new(data_guru.members.all) }
     expose(:insecure_users) do
-      Actions::ListInsecureUsers.new(
+      Actions::ListUsers.new(
         gh_api.list_org_members_without_2fa(AppConfig.company),
         data_guru.members,
-        data_guru.github_teams).call
+        data_guru.github_teams,
+        :unsecure).call
+    end
+    expose(:teamless_users) do
+      Actions::ListUsers.new(
+        gh_api.list_teamless_members,
+        data_guru.members,
+        data_guru.github_teams,
+        :teamless).call
     end
 
     after_filter :clean_diff_actor
@@ -33,6 +47,9 @@ module GithubIntegration
     def show_diff
     end
 
+    def cleanup_complete
+    end
+
     def sync
       SyncJob.new.perform(AuditedApi.new(gh_api, current_user), calculated_diff)
       reset_diff
@@ -40,6 +57,12 @@ module GithubIntegration
 
     def cleanup_teams
       teams_cleanup.now!
+      redirect_to github_cleanup_complete_path
+    end
+
+    def cleanup_members
+      members_cleanup.now!
+      redirect_to github_cleanup_complete_path
     end
 
     def refresh_cache

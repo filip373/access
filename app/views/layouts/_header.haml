@@ -1,9 +1,6 @@
-%nav.navbar.navbar-default.navbar-fixed-top
-  .container
-    .navbar-header
-      = link_to 'Access app', root_path, class: 'navbar-logo'
-    .collapse.navbar-collapse
-      %ul.nav.navbar-nav
-      %ul.nav.navbar-nav.navbar-right
-        %li= link_to 'Todays logs', todays_logs_path
-        %li= link_to 'relogin google', google_oauth2_path if session[:credentials].present?
+%nav
+  .nav-wrapper
+    = link_to 'Access app', root_path, class: 'brand-logo'
+    %ul.right.hide-on-med-and-down
+      %li= link_to 'Todays logs', todays_logs_path
+      %li= link_to 'relogin google', google_oauth2_path if session[:credentials].present?

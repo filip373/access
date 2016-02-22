@@ -1,3 +1,6 @@
-%ul.list-group.gh_log
+%ul.collection.with-header
+  %li.collection-header
+    %h4
+      User Repository Errors
   - facade.repo_errors.each do |line|
-    %li.list-group-item= line
+    %li.collection-item= line
