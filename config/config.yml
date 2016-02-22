@@ -25,6 +25,7 @@ defaults: &defaults
   features:
     generate_permissions: true
     use_service_account: true
+    list_teamless_github_users: false
   google:
     <<: *google_defaults
   github:
