@@ -7,6 +7,10 @@
 .card-panel
   = render 'insecure_users', users: insecure_users
 
+.card-panel
+  = render 'teamless_users', users: teamless_users
+
+.card-panel
   %h4 Github teams
   - if diff_errors.present?
     = render 'errors'

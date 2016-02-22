@@ -28,8 +28,10 @@ GithubApp::Application.routes.draw do
       get :show_diff
       get :calculate_diff
       get :refresh_cache
+      get :cleanup_complete
       post :sync
       delete :cleanup_teams
+      delete :cleanup_members
     end
     get 'generate_permissions', to: 'generate#permissions'
   end

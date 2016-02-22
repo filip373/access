@@ -39,6 +39,10 @@ module GithubIntegration
       client.delete_request("/teams/#{team.id}/memberships/#{member}")
     end
 
+    def remove_member_from_org(member, company = company_name)
+      client.delete_request("/orgs/#{company}/members/#{member}")
+    end
+
     def add_repo(repo, team)
       find_or_create_repo(repo)
       client.orgs.teams.add_repo(team.id, company_name, repo)
@@ -55,7 +59,7 @@ module GithubIntegration
     end
 
     def list_org_members(org_name)
-      client.organizations.members.all(org_name)
+      @users ||= client.organizations.members.all(org_name)
     end
 
     def list_org_members_without_2fa(org_name)
@@ -91,6 +95,14 @@ module GithubIntegration
       @organization_id ||= client.get_request("/teams/#{team_id}").organization[:id]
     rescue Github::Error::NotFound
       false
+    end
+
+    def list_teamless_members
+      all_teams_members = list_teams.each_with_object([]) do |team, members|
+        members << list_team_members(team.fetch(:id)).body
+        members
+      end
+      list_org_members(company_name).body - all_teams_members.flatten.uniq
     end
 
     private
