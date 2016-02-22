@@ -7,8 +7,9 @@
 .card-panel
   = render 'insecure_users', users: insecure_users
 
-.card-panel
-  = render 'teamless_users', users: teamless_users
+- if list_teamless_users?
+  .card-panel
+    = render 'teamless_users', users: teamless_users
 
 .card-panel
   %h4 Github teams
