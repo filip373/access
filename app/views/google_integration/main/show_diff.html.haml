@@ -18,8 +18,9 @@
 
   - if missing_groups.any?
     %h4 Stranded groups
-    %h5 Following groups are in Google Apps, but can't be found in permissions repository
-    - they most likely should be deleted.
+    %h5
+      Following groups are in Google Apps, but can't be found in permissions repository
+      they most likely should be deleted.
     %ul.collection
       - missing_groups.each do |group|
         %li.collection-item= group.email
