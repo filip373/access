@@ -31,3 +31,17 @@ nav {
     margin-bottom: 13px;
   }
 }
+
+table.highlight > tbody > tr:nth-child(odd) {
+  background-color: #90caf9;
+}
+
+table.bordered > thead,
+table.bordered > thead > tr,
+table.bordered > tbody > tr {
+  border-bottom: 1px solid #1565c0;
+}
+
+table.bordered > tbody > tr:hover {
+  background-color: #e3f2fd;
+}

@@ -1,27 +1,27 @@
 - if Features.on?(:generate_permissions)
-  .card-panel
-    %h4 Do you want to generate github teams yaml files for permissions?
+  .card-panel.blue.lighten-4
+    %h5 Do you want to generate github teams yaml files for permissions?
     = form_tag github_generate_permissions_path, method: :get do
       = button_tag "Generate permissions", type: :submit, class: 'btn btn-primary btn-lg'
 
-.card-panel
+.card-panel.blue.lighten-4
   = render 'insecure_users', users: insecure_users
 
 - if list_teamless_users?
   .card-panel
     = render 'teamless_users', users: teamless_users
 
-.card-panel
+.card-panel.blue.lighten-4
   %h4 Github teams
   - if diff_errors.present?
     = render 'errors'
 
   - if log_empty?(gh_log)
-    %h4 Move along, nothing to see here.
+    %h5 Move along, nothing to see here.
     = link_to "Wicked!", root_path, class: 'btn btn-primary btn-lg'
     = link_to "Refresh cache!", github_refresh_cache_path, class: 'btn btn-primary btn-lg'
   - else
-    %h4 Please confirm changes below:
+    %h5 Please confirm changes below:
     = render "gh_log"
     = form_tag github_sync_path, class: 'inline', method: :post do
       = button_tag "Confirm changes",
@@ -34,12 +34,13 @@
 
   - if validation_errors.empty? && missing_teams.any?
     %h4 Stranded teams
-    %h4
+    %h5
       Following teams are on GitHub, but can't be found in permissions repository -
       they most likely should be deleted.
-    %ul.list-group
+    %ul.collection
       - missing_teams.each do |team|
-        = link_to team.name, github_team_path(team.name), class: 'list-group-item'
+        %li.collection-item
+          = link_to team.name, github_team_path(team.name)
     = form_tag github_cleanup_teams_path, method: :delete do
       = button_tag "Ok, it makes sense to remove these teams!",
         type: :submit,
