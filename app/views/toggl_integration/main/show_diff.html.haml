@@ -1,15 +1,15 @@
-.card-panel
+.card-panel.blue.lighten-4
   %h4 Toggl teams
 
   - if diff_errors.present?
     = render 'errors'
 
   - if log_empty?(toggl_log)
-    %h4 Move along, nothing to see here.
+    %h5 Move along, nothing to see here.
     = link_to "Wicked!", root_path, class: 'btn btn-primary btn-lg'
     = link_to "Refresh cache!", toggl_refresh_cache_path, class: 'btn btn-primary btn-lg'
   - else
-    %h4 Please confirm changes below:
+    %h5 Please confirm changes below:
     = render "toggl_log"
     = form_tag toggl_sync_path, class: 'inline', method: :post do
       = button_tag "Confirm changes", type: :submit, class: 'btn btn-primary btn-lg', 'data-disable-with' => disable_text
@@ -22,6 +22,7 @@
       they most likely should be archived.
     %ul.collection
       - missing_teams.each do |team|
-        = link_to team.name, toggl_project_path(workspace_id, team.id), class: 'list-group-item'
+        %li.collection-item
+          = link_to team.name, toggl_project_path(workspace_id, team.id)
     = form_tag toggl_cleanup_teams_path, method: :delete do
       = button_tag "Ok, it makes sense to archive these teams!", type: :submit, class: 'btn btn-primary btn-lg', 'data-disable-with' => disable_text
