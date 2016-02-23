@@ -1,9 +1,9 @@
-.card-panel
+.card-panel.blue.lighten-4
   %h4 HockeyApp Apps
   - if facade.repo_errors.any?
     = render "hockeyapp_errors", facade: facade
 
-.card-panel
+.card-panel.blue.lighten-4
   - if log_empty?(facade.log)
     %h4 Move along, nothing to see here.
     = link_to "Wicked!", root_path, class: 'btn btn-primary btn-lg'
@@ -21,7 +21,7 @@
       'data-disable-with' => disable_text
 
 - if facade.missing_api_apps.any?
-  .card-panel
+  .card-panel.blue.lighten-4
     %h4 Missing apps in HockeyApp service
     %p
       Apps found in permissions repo and not in HockeyApp service:
@@ -30,7 +30,7 @@
         %li.collection-item= app
 
 - if facade.missing_dg_apps.any?
-  .card-panel
+  .card-panel.blue.lighten-4
     %h4 Missing apps in permissions repo
     %p
       Add those app in permissions repo or delete:
