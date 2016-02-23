@@ -20,3 +20,14 @@ nav {
 .inline {
   display: inline;
 }
+
+.buttons {
+  display: flex;
+  flex-flow: row;
+  justify-content: space-around;
+
+  .btn {
+    width: 30%;
+    margin-bottom: 13px;
+  }
+}
