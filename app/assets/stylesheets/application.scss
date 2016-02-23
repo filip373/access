@@ -31,21 +31,21 @@ nav {
   justify-content: space-around;
 
   .btn {
-    width: 30%;
     margin-bottom: 13px;
+    width: 30%;
   }
 }
 
-table.highlight > tbody > tr:nth-child(odd) {
-  background-color: $blue-lighten-3;
+.blue-table-header,
+.blue-table-header > tr,
+.blue-table-body > tr {
+  border-bottom: 1px solid $blue-darken-3 !important;
 }
 
-table.bordered > thead,
-table.bordered > thead > tr,
-table.bordered > tbody > tr {
-  border-bottom: 1px solid $blue-darken-3;
+.blue-table-body > tr:nth-child(odd) {
+  background-color: $blue-lighten-3 !important;
 }
 
-table.bordered > tbody > tr:hover {
-  background-color: $blue-lighten-5;
+.blue-table-body > tr:hover {
+  background-color: $blue-lighten-5 !important;
 }
