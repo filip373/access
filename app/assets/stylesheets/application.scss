@@ -1,6 +1,10 @@
 @import 'font-awesome';
 @import 'materialize';
 
+$blue-lighten-5: #e3f2fd;
+$blue-lighten-3: #90caf9;
+$blue-darken-3: #1565c0;
+
 nav {
   @extend .blue, .darken-3;
   margin-bottom: 13px;
@@ -33,15 +37,15 @@ nav {
 }
 
 table.highlight > tbody > tr:nth-child(odd) {
-  background-color: #90caf9;
+  background-color: $blue-lighten-3;
 }
 
 table.bordered > thead,
 table.bordered > thead > tr,
 table.bordered > tbody > tr {
-  border-bottom: 1px solid #1565c0;
+  border-bottom: 1px solid $blue-darken-3;
 }
 
 table.bordered > tbody > tr:hover {
-  background-color: #e3f2fd;
+  background-color: $blue-lighten-5;
 }
