@@ -67,6 +67,7 @@ module RollbarIntegration
         user = OpenStruct.new(
           username: user_repo.find_by_email(rollbar_user.email).id,
           id: rollbar_user.id,
+          status: rollbar_user.status,
         )
       rescue
         Rollbar.info("There is no user with email: #{rollbar_user.email}")
