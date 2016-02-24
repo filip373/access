@@ -1,14 +1,14 @@
 - if users.any?
-  %h2 Insecure users - let them know about missing 2FA
+  %h5 Insecure users - let them know about missing 2FA
   - if users.fetch(:unsecure).any?
     %table.bordered.striped.highlight
-      %thead
+      %thead.blue-table-header
         %tr
           %th Name
           %th Github handle
           %th Email
           %th Projects
-      %tbody
+      %tbody.blue-table-body
         - users.fetch(:unsecure).each do |u|
           %tr
             %td
@@ -27,5 +27,5 @@
         = link_to u.github, u.github_url
 
 - else
-  %h2 Insecure users
+  %h5 Insecure users
   %p All users have enabled 2FA. Great work!

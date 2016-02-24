@@ -1,4 +1,4 @@
-.card-panel
+.card-panel.blue.lighten-4
   %h4 Rollbar teams
 
   - if pending_invitations.any?
@@ -8,11 +8,11 @@
     = render 'errors'
 
   - if log_empty?(rollbar_log)
-    %h4 Move along, nothing to see here.
+    %h5 Move along, nothing to see here.
     = link_to "Wicked!", root_path, class: 'btn btn-primary btn-lg'
     = link_to 'Refresh cache!', rollbar_refresh_cache_path, class: 'btn btn-primary btn-lg'
   - else
-    %h4 Please confirm changes below:
+    %h5 Please confirm changes below:
     = render "rollbar_log"
     = form_tag rollbar_sync_path, class: 'inline', method: :post do
       = button_tag "Confirm changes", type: :submit, class: 'btn btn-primary btn-lg', 'data-disable-with' => disable_text
@@ -25,6 +25,7 @@
       they most likely should be deleted.
     %ul.collection
       - missing_teams.each do |team|
-        = link_to team.name, rollbar_team_path(team.id), class: 'collection-item'
+        %li.collection-item
+          = link_to team.name, rollbar_team_path(team.id)
     = form_tag rollbar_cleanup_teams_path, method: :delete do
       = button_tag "Ok, it makes sense to remove these teams!", type: :submit, class: 'btn btn-primary btn-lg', 'data-disable-with' => disable_text

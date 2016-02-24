@@ -12,6 +12,6 @@
   .col.s12.m6
     = render "jira_integration"
 
-.jumbotron
+.row
   - if Features.on?(:generate_permissions)
     = render "generate_integration"
