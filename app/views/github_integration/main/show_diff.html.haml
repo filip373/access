@@ -7,10 +7,6 @@
 .card-panel.blue.lighten-4
   = render 'insecure_users', users: insecure_users
 
-- if list_teamless_users?
-  .card-panel.blue.lighten-4
-    = render 'teamless_users', users: teamless_users
-
 .card-panel.blue.lighten-4
   %h4 Github teams
   - if diff_errors.present?
