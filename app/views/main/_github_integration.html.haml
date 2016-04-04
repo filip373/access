@@ -10,8 +10,9 @@
       = form_tag github_calculate_diff_path, method: :get do
         = button_tag "Show diff",
           type: :submit,
-          class: 'btn btn-primary btn-lg',
+          class: 'btn btn-primary btn-lg diff',
           'data-disable-with' => disable_text
+      = link_to "Teamless users", github_list_teamless_users_path, class: 'btn btn-primary btn-lg'
     - else
       %h3 Unable to parse following .yml files:
       %ul.list-group
