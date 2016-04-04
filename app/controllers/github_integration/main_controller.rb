@@ -44,6 +44,9 @@ module GithubIntegration
       ).call
     end
 
+    def list_teamless_users
+    end
+
     def show_diff
     end
 

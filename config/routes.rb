@@ -29,6 +29,7 @@ GithubApp::Application.routes.draw do
       get :calculate_diff
       get :refresh_cache
       get :cleanup_complete
+      get :list_teamless_users
       post :sync
       delete :cleanup_teams
       delete :cleanup_members
