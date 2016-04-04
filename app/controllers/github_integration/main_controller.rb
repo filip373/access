@@ -6,7 +6,6 @@ module GithubIntegration
     expose(:expected_teams) { GithubIntegration::Team.all(data_guru.github_teams) }
     expose(:gh_teams) { gh_api.list_teams }
     expose(:gh_log) { Actions::Log.new(calculated_diff).now! }
-    expose(:list_teamless_users?) { AppConfig.features.list_teamless_github_users }
     expose(:teams_cleanup) do
       Actions::CleanupTeams.new(expected_teams, gh_teams, AuditedApi.new(gh_api, current_user))
     end
