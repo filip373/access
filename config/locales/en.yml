@@ -16,7 +16,7 @@ en:
     create_group: "create group %{name}"
     remove_group: "remove group %{group_id}"
     add_alias: "add alias %{google_alias} to group %{group_id}"
-    add_user_alias: "add alias %{google_alias} to user %{user}"
+    add_user_alias: "add alias %{google_user} to user %{user}"
     remove_alias: "remove alias %{google_alias} from group %{group_id}"
     change_group_privacy_setting: "change group %{group} privacy settings to %{privacy}"
     change_group_archive_setting: "change group %{group} archive settings to %{flag}"
