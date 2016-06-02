@@ -37,7 +37,7 @@ Please, see at [development documentation](https://github.com/netguru/access/blo
 ## Github
 
 #### Adding new user
-In order to create new github user, create a file in `members` directory (it can be also `users`, more details below)
+In order to create new github user, create a file in `members` directory.
 The file should be named using this pattern `first_name.last_name.yml`.
 More details, and some example [here](https://github.com/netguru/access-permissions-sample/blob/master/members/netguru/readme.md)
 
