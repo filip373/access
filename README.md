@@ -10,6 +10,7 @@ Sample permissions directory looks like this: https://github.com/netguru/access-
 
 - [Setup] (#setup)
 - [Github] (#github)
+  - [Adding new user] (#adding-new-user)
   - [Adding / editing github teams] (#adding--editing-github-teams)
   - [User naming within permissions repo] (#user-naming-within-permissions-repo)
   - [Adding new repositories] (#adding-new-repositories)
@@ -34,6 +35,11 @@ Sample permissions directory looks like this: https://github.com/netguru/access-
 Please, see at [development documentation](https://github.com/netguru/access/blob/master/doc/development.md).
 
 ## Github
+
+#### Adding new user
+In order to create new github user, create a file in `members` directory.
+The file should be named using this pattern `first_name.last_name.yml`.
+More details, and some example [here](https://github.com/netguru/access-permissions-sample/blob/master/members/netguru/readme.md)
 
 #### Adding / editing github teams
 
