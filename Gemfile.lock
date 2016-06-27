@@ -198,6 +198,10 @@ GEM
     logging (2.0.0)
       little-plugger (~> 1.1)
       multi_json (~> 1.10)
+    lograge (0.3.4)
+      actionpack (>= 3)
+      activesupport (>= 3)
+      railties (>= 3)
     loofah (2.0.3)
       nokogiri (>= 1.5.9)
     lumberjack (1.0.9)
@@ -419,6 +423,7 @@ DEPENDENCIES
   jquery-rails
   konf
   letter_opener
+  lograge
   materialize-sass
   netguru_theme
   omniauth

@@ -13,7 +13,11 @@ GithubApp::Application.configure do
   config.log_formatter = ::Logger::Formatter.new
   config.active_job.queue_adapter = :sidekiq
 
-
+  # Lograge config
+  config.lograge.enabled = true
+  config.lograge.custom_options = lambda do |event|
+    { params: event.payload[:params].reject { |k| %w(controller action).include? k } }
+  end
 
   if AppConfig.smtp?
     config.action_mailer.delivery_method = :smtp
@@ -26,6 +30,4 @@ GithubApp::Application.configure do
       :authentication => "plain"
     }
   end
-
-
 end

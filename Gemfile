@@ -27,6 +27,7 @@ gem 'togglv8'
 gem 'jira-ruby', require: 'jira'
 gem 'easy_diff'
 gem 'materialize-sass'
+gem 'lograge'
 
 # Auth
 gem 'omniauth'
