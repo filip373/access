@@ -4,9 +4,6 @@
     = form_tag github_generate_permissions_path, method: :get do
       = button_tag "Generate permissions", type: :submit, class: 'btn btn-primary btn-lg'
 
-.card-panel.blue.lighten-4
-  = render 'insecure_users', users: insecure_users
-
 - if list_teamless_users?
   .card-panel.blue.lighten-4
     = render 'teamless_users', users: teamless_users
