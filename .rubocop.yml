@@ -19,7 +19,7 @@ SignalException:
   Enabled: false
 Style/StringLiterals:
   EnforcedStyle: single_quotes
-Style/TrailingComma:
+Style/TrailingCommaInLiteral:
   EnforcedStyleForMultiline: comma
   Enabled: true
 Style/DotPosition:
