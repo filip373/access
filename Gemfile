@@ -24,7 +24,6 @@ gem 'slack-notifier'
 gem 'sprockets'
 gem 'thin'
 gem 'togglv8'
-gem 'jira-ruby', require: 'jira'
 gem 'easy_diff'
 gem 'materialize-sass'
 gem 'lograge'
@@ -32,7 +31,6 @@ gem 'lograge'
 # Auth
 gem 'omniauth'
 gem 'omniauth-github'
-gem 'omniauth-jira'
 
 gem 'sinatra', require: false
 gem 'sidekiq'

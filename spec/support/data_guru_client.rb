@@ -112,37 +112,6 @@ RSpec.shared_context 'data_guru' do
       ),
     ]
   end
-  let(:jira_projects) do
-    [
-      ActiveStruct.new(
-        name: 'AccessGuru',
-        key: 'AG',
-        developers: %w(dev.first dev.second),
-        qas: %w(qa.first),
-        pms: %w(pm.first),
-        client_developers: %w(external/clientdev.first),
-        clients: %w(external/client.first),
-      ),
-      ActiveStruct.new(
-        name: 'DataGuru',
-        key: 'DG',
-        developers: %w(dev.first dev.second),
-        qas: [],
-        pms: %w(pm.second),
-        client_developers: [],
-        clients: %w(external/client.first),
-      ),
-      ActiveStruct.new(
-        name: 'Permissions',
-        key: 'PER',
-        developers: %w(dev.first dev.second),
-        qas: [],
-        pms: %w(pm.second),
-        client_developers: [],
-        clients: %w(external/client.first),
-      ),
-    ]
-  end
 
   let(:data_guru) do
     double.tap do |dg|
@@ -153,7 +122,6 @@ RSpec.shared_context 'data_guru' do
       allow(dg).to receive(:rollbar_teams) { rollbar_teams }
       allow(dg).to receive(:toggl_teams) { toggl_teams }
       allow(dg).to receive(:hockeyapp_apps) { hockeyapp_apps }
-      allow(dg).to receive(:jira_projects) { jira_projects }
       allow(dg).to receive(:errors) { errors }
       allow(dg).to receive(:refresh) { true }
     end
