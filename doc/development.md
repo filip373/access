@@ -6,7 +6,6 @@
   - [Configure DataGuru gem](#configure-dataguru-gem)
   - [Configure access](#configure-access)
   - [Setting up permissions](#setting-up-permissions)]
-  - [Setting Jira SDK](#setup-jira-sdk)
 - [Adding / editing users](#adding--editing-users)
 
 ## Setup
@@ -101,73 +100,6 @@ After it, you can run `bin/rails server` and check it at `http://localhost:3000`
 
 ### Setting up permissions
 Permissions is a repository in which we store information about privileges, which are saved as YML files. You should be allowed to create your own teams and users as well.
-
-### Setting up Jira SDK
-To run a Jira instance locally you first need to download the SDK. Homebrew is required to do this:
-* `brew tap atlassian/tap`
-* `brew install atlassian/tap/atlassian-plugin-sdk`
-Confirm that everything is working by running `atlas-version`
-
-If any of the above commands don't work - consult this [link](https://developer.atlassian.com/docs/getting-started/set-up-the-atlassian-plugin-sdk-and-build-a-project/install-the-atlassian-sdk-on-a-linux-or-mac-system).
-
-Next run the following command to run Jira:
-* `mkdir -p ~/jira && cd $_`
-* `atlas-create-jira-plugin && cd $_` and follow the onscreen instructions (when entering groupId and artifactId remember not to use hyphens (-), because this is not a valid character for java packages and it will break the plugin)
-
-Now you need to tell Jira SDK that you want to use Jira Software for your plugin. In order to do that you need to modify `pom.xml` for your newly generated plugin. Open it in an editor and find `<groupId>com.atlassian.maven.plugins</groupId>`. A bit lower there will be a `<configuration>` tag. Inside this tag paste:
-```
-<applications>
-    <application>
-        <applicationKey>jira-software</applicationKey>
-        <version>7.0.5</version>
-    </application>
-</applications>
-```
-
-You are all set, now run `atlas-run --context-path '/'`
-
-The script will now download all the required packages (it may take a while).
-It is very important to include `--context-path '/'` - without it, the gems used for integration won't work, because jira will be mounted at `/jira` instead the root of the url.
-
-After Jira is compiled and deployed to Tomcat, you will see a url in the console. Open it in your browser, log in as `admin:admin` and update Jira Base Url when prompted by a popup (if the popup won't appear, then go to `Administration > System > Click 'Edit' button` and remove the `/jira` part).
-
-Now in the `Administration > Applications` you need to setup Jira Software - you need to create an account in Atlassian and you will have a 30-day trial.
-
-Next you need to generate a public/private key-pair. Run the following:
-```
-cd config
-openssl req -x509 -nodes -days 365 -newkey rsa:1024 -sha1 -keyout jira_private_key.pem -out jira_x509_certificate.pem
-openssl x509 -pubkey -noout -in jira_x509_certificate.pem > jira_public_key.key
-cd ..
-```
-
-And update the path to you private key (`jira_private_key.pem`) in `sec_config.yml@jira/private_key_path`.
-
-Now you can create an Application Link in order to obtain OAuth keys:
-* visit `Administration > Applications > Applications links`
-* type in `localhost:3000` in the input and press `Create new link`
-* a popup will appear, press `Continue`
-* another form will appear, fill it as following:
-  * `Application Name` - name of your OAuth app, eg. accessguru
-  * `Application Type` - generic
-  * `Service Provider Name` - name of provider (not important), eg. accessguru
-  * `Consumer key` - OAuth consumer key, eg. access-jira-test (write it down somewhere)
-  * `Shared secret` - generate one using `openssl rand -base64 32`
-  * `Request Token URL` - your Jira Base Url + `/plugins/servlet/oauth/request-token`
-  * `Access token URL` - your Jira Base Url + `/plugins/servlet/oauth/access-token`
-  * `Authorize URL` - your Jira Base Url + `/plugins/servlet/oauth/authorize`
-  * `Create incoming link` - check it
-* fill out the next form:
-  * `Consumer key` - same as in the previous form
-  * `Consumer name` - same as `Application Name`
-  * `Public key` - copy & paste the public key you generated earlier - `cat jira_public_key.key | pbcopy`
-* Press `Continue`
-
-After this, your Application link is ready. Now fill in the missing data in `sec_config.yml`:
-* `site` - your Jira Base Url (if it generated a url using your machines name, and it doesn't work, you can use `localhost:PORT`)
-* `consumer_key` - the key you've entered into the form
-
-You are ready to launch Access and try to sign in via Jira, go to `localhost:3000/auth/jira` and do the OAuth dance.
 
 ## Adding / editing users
 Before you add a team to Google group or GitHub team, you have to first create a data file for this user:

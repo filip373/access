@@ -40,6 +40,3 @@ en:
     create_team: "create team %{team}"
     add_task_to_project: "add task %{task_name} to project %{project_id}"
     remove_tasks_from_project: "remove tasks %{tasks_ids}"
-  jira:
-    add_member: "add member %{member} to role %{role} in project %{key}"
-    remove_member: "remove member %{member} from role %{role} in project %{key}"

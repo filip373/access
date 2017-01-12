@@ -14,7 +14,7 @@ module GoogleWorkers
     private
 
     def set_performing_flag
-      Rails.cache.write('gooogle_performing_diff', true)
+      Rails.cache.write('google_performing_diff', true)
     end
 
     def calculate_diff
