@@ -5,7 +5,7 @@ google_defaults: &google_defaults
     group:
       archive: true
       private: false
-  groups_whitelist: [/.*/]
+  groups_blacklist: [blacklisted@test.email]
   main_domain: netguru.pl
   managers:
     groups: [support_group]
@@ -56,7 +56,6 @@ test:
     domain_member_id: dummy
     email:
       account_using_instruction: dummy
-    groups_whitelist: [group1@netguru.pl]
   toggl_token: 'abcdefg'
 
 development:
