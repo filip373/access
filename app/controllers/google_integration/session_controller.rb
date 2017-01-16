@@ -1,10 +1,15 @@
 module GoogleIntegration
   class SessionController < ApplicationController
+    include ::GoogleApi
+
     skip_before_filter :gh_auth_required, only: [:create]
-    skip_before_filter :google_auth_required, only: [:create]
+    skip_before_filter :unauthorized_access
+    skip_before_filter :google_auth_required
 
     def new
       session.delete(:credentials)
+      Rails.cache.delete('permitted_members')
+
       redirect_to authorization_uri
     end
 
@@ -16,6 +21,10 @@ module GoogleIntegration
         redirect_uri: auth_client.redirect_uri,
         token_credential_uri: auth_client.token_credential_uri,
       }
+      session[:credentials].merge!(
+        email: google_api.user_email,
+        is_admin: google_api.admin?
+      )
       redirect_to google_show_diff_path
     end
 
