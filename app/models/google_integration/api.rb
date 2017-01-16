@@ -6,8 +6,6 @@ module GoogleIntegration
   class Api
     attr_reader :errors, :authorization_client
 
-    MAX_RESULTS_LIMIT = 500
-
     def initialize(credentials, authorization: UserAccountAuthorization)
       @errors = {}
       @credentials = credentials
@@ -39,40 +37,51 @@ module GoogleIntegration
     end
 
     def set_domain_membership(group_id)
-      force_user_authorization do
-        request(
-          api_method: directory_api.members.insert,
-          parameters: { groupKey: group_id },
-          body_object: { id: AppConfig.google.domain_member_id, role: 'MEMBER' },
-        )
-      end
+      request(
+        api_method: directory_api.members.insert,
+        parameters: { groupKey: group_id },
+        body_object: { id: AppConfig.google.domain_member_id, role: 'MEMBER' },
+      )
     end
 
     def unset_domain_membership(group_id)
-      force_user_authorization do
-        request(
-          api_method: directory_api.members.delete,
-          parameters: { groupKey: group_id, memberKey: AppConfig.google.domain_member_id },
-        )
-      end
+      request(
+        api_method: directory_api.members.delete,
+        parameters: { groupKey: group_id, memberKey: AppConfig.google.domain_member_id },
+      )
     end
 
     def list_groups
       @groups ||= request(
         api_method: directory_api.groups.list,
-        parameters: { domain: AppConfig.google.main_domain, maxResults: MAX_RESULTS_LIMIT },
+        parameters: {
+          domain: AppConfig.google.main_domain,
+          maxResults: AppConfig.google.max_results_size
+        }
       ).fetch('groups')
     end
 
     def list_members(group_id)
-      request(
+      members = []
+
+      request = {
         api_method: directory_api.members.list,
         parameters: {
           groupKey: group_id,
           domain: AppConfig.google.main_domain,
-          maxResults: MAX_RESULTS_LIMIT,
-        },
-      ).fetch('members')
+          maxResults: AppConfig.google.max_results_size
+        }
+      }
+      loop do
+        result = client.execute(request)
+        body = JSON.parse(result.body) || {}
+
+        members.concat(body['members'] || [])
+        break unless result.next_page_token
+        request = result.next_page
+      end
+
+      members
     end
 
     def list_groups_full_info
@@ -97,12 +106,11 @@ module GoogleIntegration
     end
 
     def remove_group(group_id)
-      force_user_authorization do
-        request(
-          api_method: directory_api.groups.delete,
-          parameters: { groupKey: group_id },
-        )
-      end
+      return unless GroupPolicy.edit?(group_id, admin?)
+      request(
+        api_method: directory_api.groups.delete,
+        parameters: { groupKey: group_id },
+      )
     end
 
     def add_alias(group_id, google_alias)
@@ -191,7 +199,7 @@ module GoogleIntegration
     def list_users
       request(
         api_method: directory_api.users.list,
-        parameters: { domain: AppConfig.google.main_domain, maxResults: MAX_RESULTS_LIMIT },
+        parameters: { domain: AppConfig.google.main_domain, maxResults: AppConfig.google.max_results_size }
       ).fetch('users')
     end
 

@@ -68,12 +68,17 @@ class GoogleIntegration::Api
     def members_list_batch_request!(group, batch)
       return if group[:members].present?
       group[:errors] = nil
+      group[:members] = []
 
-      batch.add(members_list_request(group)) do |result|
-        body = JSON.parse(result.body) || {}
-
-        add_members_error(group, body['error'])
-        group[:members] = body['members'] || []
+      request = members_list_request(group)
+      batch.add(request) do |result|
+        loop do
+          body = JSON.parse(result.body) || {}
+          add_members_error(group, body['error'])
+          group[:members].concat(body['members'] || [])
+          break unless result.next_page_token
+          result = client.execute(result.next_page)
+        end
       end
     end
 
@@ -98,8 +103,13 @@ class GoogleIntegration::Api
     end
 
     def members_list_request(group)
-      { api_method: directory_api.members.list,
-        parameters: { 'groupKey' => group['id'] } }
+      {
+        api_method: directory_api.members.list,
+        parameters: {
+          'groupKey' => group['id'],
+          'maxResults' => AppConfig.google.max_results_size
+        }
+      }
     end
   end
 end
