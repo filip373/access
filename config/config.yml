@@ -18,6 +18,8 @@ google_defaults: &google_defaults
     - 'https://www.googleapis.com/auth/admin.directory.user'
     - 'https://www.googleapis.com/auth/admin.directory.group'
     - 'https://www.googleapis.com/auth/admin.directory.user.security'
+  max_results_size: 500
+  new_user_password: test_password
 
 defaults: &defaults
   cache_data: true

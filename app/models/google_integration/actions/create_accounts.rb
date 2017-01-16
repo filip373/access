@@ -35,7 +35,7 @@ module GoogleIntegration
           first_name: user.name.split(' ').first,
           last_name: user.name.split(' ').last,
           email: "#{login}@#{AppConfig.google.main_domain}",
-          password: SecureRandom.hex(8),
+          password: AppConfig.google.new_user_password,
           login: login,
         }
         @google_api.create_user(params)

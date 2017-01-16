@@ -12,14 +12,14 @@ RSpec.describe GoogleIntegration::Actions::CreateAccounts do
         first_name: 'First',
         last_name: 'Member',
         email: 'first.member@netguru.pl',
-        password: 'abcdefgh',
+        password: 'test_password',
         login: 'first.member',
       },
       {
         first_name: 'Second',
         last_name: 'Member',
         email: 'second.member@netguru.pl',
-        password: 'abcdefgh',
+        password: 'test_password',
         login: 'second.member',
       },
     ]
@@ -28,7 +28,6 @@ RSpec.describe GoogleIntegration::Actions::CreateAccounts do
   before do
     allow_any_instance_of(described_class).to receive(:sleep)
     allow(DataGuru::Client).to receive(:new).and_return(data_guru)
-    allow(SecureRandom).to receive(:hex).and_return('abcdefgh')
   end
   it { is_expected.to be_a Hash }
   it { is_expected.to_not be_empty }

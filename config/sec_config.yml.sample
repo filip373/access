@@ -20,6 +20,7 @@ development:
     scope:
     service_account_email:
     supporter_email:
+    new_user_password:
   permissions_repo:
     url:
     checkout_dir:
