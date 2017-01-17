@@ -106,9 +106,9 @@ class GoogleIntegration::Api
       {
         api_method: directory_api.members.list,
         parameters: {
-          'groupKey' => group['id'],
-          'maxResults' => AppConfig.google.max_results_size
-        }
+          groupKey: group['id'],
+          maxResults: AppConfig.google.max_results_size,
+        },
       }
     end
   end

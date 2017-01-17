@@ -56,7 +56,7 @@ module GoogleIntegration
         api_method: directory_api.groups.list,
         parameters: {
           domain: AppConfig.google.main_domain,
-          maxResults: AppConfig.google.max_results_size
+          maxResults: AppConfig.google.max_results_size,
         }
       ).fetch('groups')
     end
@@ -69,8 +69,8 @@ module GoogleIntegration
         parameters: {
           groupKey: group_id,
           domain: AppConfig.google.main_domain,
-          maxResults: AppConfig.google.max_results_size
-        }
+          maxResults: AppConfig.google.max_results_size,
+        },
       }
       loop do
         result = client.execute(request)
@@ -199,7 +199,10 @@ module GoogleIntegration
     def list_users
       request(
         api_method: directory_api.users.list,
-        parameters: { domain: AppConfig.google.main_domain, maxResults: AppConfig.google.max_results_size }
+        parameters: {
+          domain: AppConfig.google.main_domain,
+          maxResults: AppConfig.google.max_results_size,
+        }
       ).fetch('users')
     end
 
