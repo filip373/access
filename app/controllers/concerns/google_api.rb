@@ -21,9 +21,9 @@ module GoogleApi
 
     return false if credentials.nil?
     return true if permitted_members.empty?
-    return true if google_api.admin?
+    return true if credentials[:is_admin]
 
-    permitted_members.include? google_api.user_email
+    permitted_members.include? credentials[:email]
   end
 
   def unauthorized_access
@@ -63,7 +63,9 @@ module GoogleApi
 
   def permitted_members
     return [] unless AppConfig.google.managers?
-    prepare_permitted_memerbs.compact.uniq
+    Rails.cache.fetch('permitted_members') do
+      prepare_permitted_memerbs.compact.uniq
+    end
   end
 
   def prepare_permitted_memerbs

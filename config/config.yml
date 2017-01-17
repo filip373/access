@@ -5,7 +5,7 @@ google_defaults: &google_defaults
     group:
       archive: true
       private: false
-  groups_whitelist: [/.*/]
+  groups_blacklist: [blacklisted@test.email]
   main_domain: netguru.pl
   managers:
     groups: [support_group]
@@ -18,6 +18,8 @@ google_defaults: &google_defaults
     - 'https://www.googleapis.com/auth/admin.directory.user'
     - 'https://www.googleapis.com/auth/admin.directory.group'
     - 'https://www.googleapis.com/auth/admin.directory.user.security'
+  max_results_size: 500
+  new_user_password: test_password
 
 defaults: &defaults
   cache_data: true
@@ -54,7 +56,6 @@ test:
     domain_member_id: dummy
     email:
       account_using_instruction: dummy
-    groups_whitelist: [group1@netguru.pl]
   toggl_token: 'abcdefg'
 
 development:

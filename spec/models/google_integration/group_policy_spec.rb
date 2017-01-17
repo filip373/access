@@ -9,14 +9,14 @@ module GoogleIntegration
 
       context 'user can edit the group' do
         context 'group is identified by email' do
-          let(:group_identifier) { 'group1@netguru.pl' }
+          let(:group_identifier) { 'not-blacklisted@test.email' }
           it { is_expected.to be_truthy }
         end
       end
 
       context "user can't edit the group" do
         context 'group is identified by email' do
-          let(:group_identifier) { 'new_group@netguru.pl' }
+          let(:group_identifier) { 'blacklisted@test.email' }
           it { is_expected.to be_falsey }
         end
       end

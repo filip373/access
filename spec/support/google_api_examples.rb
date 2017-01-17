@@ -1,27 +1,24 @@
 shared_examples 'a google_api' do
   describe '#google_authorized?' do
     before do
-      allow(controller.google_api).to receive(:user_email) { user.email }
-      allow(controller.google_api).to receive(:admin?) { admin? }
+      controller.session[:credentials] = { admin: false }
       allow(controller).to receive(:permitted_members) { permitted_members }
     end
     let(:mock_authorization) { GoogleIntegration::Api::MockAccountAuthorization }
-    let(:admin?) { false }
     let(:permitted_members) { [members.first.email] }
 
     subject { controller.google_authorized? }
 
     if Features.on?(:use_service_account)
       context 'user is authorized' do
-        before { session[:credentials] = { some: :valid_credentials } }
 
         context 'user is s an admin' do
-          let(:admin?) { true }
+          before { controller.session[:credentials][:is_admin] = true }
           it { is_expected.to be_truthy }
         end
 
         context 'user is permitted to manage google groups' do
-          let(:user) { members.first }
+          before { controller.session[:credentials][:email] = members.first.email }
           it { is_expected.to be_truthy }
 
           context 'managers are not set' do
@@ -30,13 +27,13 @@ shared_examples 'a google_api' do
         end
 
         context 'managers are not set' do
-          let(:user) { members.second }
+          before { controller.session[:credentials][:email] = members.second.email }
           let(:permitted_members) { [] }
           it { is_expected.to be_truthy }
         end
 
         context 'user is not permitted to manage google groups' do
-          let(:user) { members.second }
+          before { controller.session[:credentials][:email] = members.second.email }
           it { is_expected.to be_falsy }
         end
       end
