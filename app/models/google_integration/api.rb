@@ -52,18 +52,20 @@ module GoogleIntegration
     end
 
     def list_groups
-      @groups ||= request(
+      request = {
         api_method: directory_api.groups.list,
         parameters: {
           domain: AppConfig.google.main_domain,
           maxResults: AppConfig.google.max_results_size,
-        }
-      ).fetch('groups')
+        },
+      }
+
+      @groups ||= fetch_with_pagination(request) do |result, body|
+        result.concat(body.fetch('groups'))
+      end
     end
 
     def list_members(group_id)
-      members = []
-
       request = {
         api_method: directory_api.members.list,
         parameters: {
@@ -72,16 +74,10 @@ module GoogleIntegration
           maxResults: AppConfig.google.max_results_size,
         },
       }
-      loop do
-        result = client.execute(request)
-        body = JSON.parse(result.body) || {}
 
-        members.concat(body['members'] || [])
-        break unless result.next_page_token
-        request = result.next_page
+      fetch_with_pagination(request) do |result, body|
+        result.concat(body.fetch('members'))
       end
-
-      members
     end
 
     def list_groups_full_info
@@ -264,6 +260,24 @@ module GoogleIntegration
       response = JSON.parse(result.response.body)
       fail ApiError, response['error'].to_s if response.key? 'error'
       response
+    end
+
+    def fetch_with_pagination(first_page_request)
+      full_result = []
+
+      request = first_page_request
+      loop do
+        result = client.execute(request)
+        body = JSON.parse(result.body) || {}
+        fail ApiError, body['error'].to_s if body.key? 'error'
+
+        yield full_result, body
+
+        break unless result.next_page_token
+        request = result.next_page
+      end
+
+      full_result
     end
 
     def force_user_authorization(&block)
